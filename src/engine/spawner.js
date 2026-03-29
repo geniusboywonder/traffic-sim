@@ -53,6 +53,17 @@ export function corridorDensity(corridorId, vehicles) {
   return cap > 0 ? cur / cap : 0;
 }
 
+// Returns 0.0 (free flow) → 1.0 (fully stalled) for the corridor's main route.
+// Minimum 3 vehicles required for a reliable signal.
+export function corridorCongestionScore(corridorId, vehicles) {
+  const mainRouteId = CORRIDOR_ROUTES[corridorId]?.main;
+  if (!mainRouteId) return 0;
+  const onMain = vehicles.filter(v => v.routeId === mainRouteId && v.state === 'inbound');
+  if (onMain.length < 3) return 0;
+  const stalled = onMain.filter(v => v.v < 0.5).length;
+  return stalled / onMain.length;
+}
+
 let _nextId = 1;
 export function resetVehicleIds() { _nextId = 1; }
 

@@ -11,7 +11,7 @@ export const JUNCTIONS = {
   1:  { lat: -34.055818, lng: 18.460897, name: 'Main Rd / Dreyersdal Rd',              control: 'priority_stop' },
   2:  { lat: -34.055213, lng: 18.459043, name: 'Dreyersdal Rd / Dreyersdal Farm Rd',   control: 'yield' },
   3:  { lat: -34.055697, lng: 18.456319, name: 'Dreyersdal Farm Rd / Starke Rd south', control: 'yield' },
-  4:  { lat: -34.049908, lng: 18.451617, name: 'Starke Rd / Christopher Rd',           control: 'priority_stop' },
+  4:  { lat: -34.049908, lng: 18.451617, name: 'Starke Rd / Christopher Rd',           control: 'stop' },
   5:  { lat: -34.050291, lng: 18.451102, name: 'Christopher Rd / Vineyard Rd',         control: 'yield' },
   6:  { lat: -34.050232, lng: 18.447228, name: 'Vineyard Rd / Leyden Rd',              control: 'yield' },
   7:  { lat: -34.051039, lng: 18.447309, name: 'School Ingress — Leyden Rd / Ruskin Rd', control: 'critical' },
@@ -40,7 +40,7 @@ export const JUNCTIONS = {
 };
 
 // ── 12 junction IDs shown on the map as markers ───────────────────────────────
-export const VISIBLE_JUNCTIONS = [1, 4, 5, 6, 7, 8, 9, 10, 13, 18, 20, 26, 28];
+export const VISIBLE_JUNCTIONS = [1, 4, 5, 6, 7, 8, 9, 10, 13, 18, 20, 26, 28, 29];
 
 // ── Control type visual styles ────────────────────────────────────────────────
 export const CTRL_STYLE = {
@@ -86,8 +86,31 @@ export function snapSegment(from, to) {
   return (best && best.length >= 2 && bestScore < 0.000010) ? best : [from, to];
 }
 
+// Lazily extract internal school road geometry from GeoJSON (J7→J20).
+// Returns [[lat,lon], ...] in the inbound direction (J7 is entry, J20 is exit).
+let _internalRoadGeom = null;
+function getInternalRoadGeometry() {
+  if (_internalRoadGeom) return _internalRoadGeom;
+  const feat = ROAD_LINES.find(f => f.properties?.name === 'Tokai High School Internal Road');
+  if (!feat) return null;
+  // GeoJSON coords are [lon, lat] — convert to [lat, lon]
+  const coords = feat.geometry.coordinates.map(([lon, lat]) => [lat, lon]);
+  // Ensure direction: J7 is the ingress end, J20 is the egress end.
+  // Check which end is closer to J7.
+  const j7 = JUNCTIONS[7];
+  const j20 = JUNCTIONS[20];
+  const first = coords[0];
+  const last  = coords[coords.length - 1];
+  const d7first  = (first[0] - j7.lat) ** 2 + (first[1] - j7.lng) ** 2;
+  const d7last   = (last[0]  - j7.lat) ** 2 + (last[1]  - j7.lng) ** 2;
+  // If J20 is closer to the first coord, reverse so J7 is the start.
+  _internalRoadGeom = d7first <= d7last ? coords : [...coords].reverse();
+  return _internalRoadGeom;
+}
+
 // Chain snapSegment calls for a full multi-junction route.
 // waypoints: array of junction IDs.
+// Special case: J7→J20 always uses the internal school road geometry.
 export function roadRoute(waypoints) {
   if (waypoints.length < 2) return waypoints.map((id) => {
     const j = JUNCTIONS[id];
@@ -95,9 +118,24 @@ export function roadRoute(waypoints) {
   });
   const pts = [];
   for (let i = 0; i < waypoints.length - 1; i++) {
-    const a = JUNCTIONS[waypoints[i]];
-    const b = JUNCTIONS[waypoints[i + 1]];
-    const seg = snapSegment([a.lat, a.lng], [b.lat, b.lng]);
+    const fromId = waypoints[i];
+    const toId   = waypoints[i + 1];
+
+    let seg;
+    // Use actual school road geometry for the internal J7↔J20 segment
+    if ((fromId === 7 && toId === 20) || (fromId === 20 && toId === 7)) {
+      const internalGeom = getInternalRoadGeometry();
+      if (internalGeom) {
+        seg = (fromId === 7) ? internalGeom : [...internalGeom].reverse();
+      }
+    }
+
+    if (!seg) {
+      const a = JUNCTIONS[fromId];
+      const b = JUNCTIONS[toId];
+      seg = snapSegment([a.lat, a.lng], [b.lat, b.lng]);
+    }
+
     if (i > 0 && pts.length) pts.pop(); // avoid duplicating join point
     pts.push(...seg);
   }

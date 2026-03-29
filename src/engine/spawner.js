@@ -4,115 +4,70 @@
 import { ROUTE_CONFIG, CORRIDOR_ROUTES, EGRESS_ROUTES, estimateRouteLength } from './routes';
 import { PARKING_CAPACITY, getParkingOccupancy } from './idm';
 
-// ── Scenario definitions ──────────────────────────────────────────────────────
 export const SCENARIO_CONFIG = {
-  L: { totalTrips: 500, peakWindowMin: 75, ratRunThreshold: 0.25 },
-  M: { totalTrips: 650, peakWindowMin: 60, ratRunThreshold: 0.20 },
-  H: { totalTrips: 840, peakWindowMin: 45, ratRunThreshold: 0.15 },
+  L: { totalTrips: 500, peakWindowMin: 75, ratRunThreshold: 0.10 },
+  M: { totalTrips: 650, peakWindowMin: 60, ratRunThreshold: 0.08 },
+  H: { totalTrips: 840, peakWindowMin: 45, ratRunThreshold: 0.06 },
 };
 
-export const DWELL_S = 45; // fixed drop-off dwell time
+export const DWELL_S = 45; 
 
 const RAW = { '1A': 11, '2A': 21, '2B': 25, '3A': 12 };
 const SUM  = Object.values(RAW).reduce((a, b) => a + b, 0);
+export const CORRIDOR_SPLITS = Object.fromEntries(Object.entries(RAW).map(([k, v]) => [k, v / SUM]));
 
-export const CORRIDOR_SPLITS = Object.fromEntries(
-  Object.entries(RAW).map(([k, v]) => [k, v / SUM]),
-);
+export const CORRIDOR_ROAD_CLASS = { '1A': 'arterial', '2A': 'collector', '2B': 'collector', '3A': 'collector' };
 
-export const CORRIDOR_ROAD_CLASS = {
-  '1A':    'arterial',
-  '2A':    'collector',
-  '2B':    'collector',
-  '3A':    'collector',
-  'egress':'local',
-};
+const PEAK_PARAMS = { H: { centre: 3600, sigma: 1200 }, M: { centre: 3600, sigma: 1500 }, L: { centre: 3600, sigma: 1737 } };
 
-const PEAK_PARAMS = {
-  H: { centre: 1200, sigma: 900  },
-  M: { centre: 1800, sigma: 1100 },
-  L: { centre: 2100, sigma: 1350 },
-};
-
-function gaussianRate(t, centre, sigma) {
-  return Math.exp(-0.5 * ((t - centre) / sigma) ** 2);
-}
-
+function gaussianRate(t, centre, sigma) { return Math.exp(-0.5 * ((t - centre) / sigma) ** 2); }
 function computeNorm(scenario) {
   const { centre, sigma } = PEAK_PARAMS[scenario];
   let sum = 0;
-  for (let i = 0; i <= 720; i++) {
-    sum += gaussianRate(i * 10, centre, sigma) * 10;
-  }
+  for (let i = 0; i <= 720; i++) sum += gaussianRate(i * 10, centre, sigma) * 10;
   return sum;
 }
-
 const NORMS = { H: computeNorm('H'), M: computeNorm('M'), L: computeNorm('L') };
 
 export function spawnRate(simTimeSec, scenario) {
   const cfg  = SCENARIO_CONFIG[scenario];
   const { centre, sigma } = PEAK_PARAMS[scenario];
-  const rate = gaussianRate(simTimeSec, centre, sigma);
-  return (cfg.totalTrips / NORMS[scenario]) * rate;
+  return (cfg.totalTrips / NORMS[scenario]) * gaussianRate(simTimeSec, centre, sigma);
 }
 
 export function assignRoute(corridorId, scenario, corridorDensity) {
-  const cfg      = SCENARIO_CONFIG[scenario];
-  const crConfig = CORRIDOR_ROUTES[corridorId];
-  if (!crConfig) return corridorId;
+  const cfg = SCENARIO_CONFIG[scenario], crConfig = CORRIDOR_ROUTES[corridorId];
   if (corridorDensity >= cfg.ratRunThreshold && crConfig.ratRuns.length > 0) {
-    if (Math.random() < 0.40) {
-      const idx = Math.floor(Math.random() * crConfig.ratRuns.length);
-      return crConfig.ratRuns[idx];
-    }
+    if (Math.random() < 0.40) return crConfig.ratRuns[Math.floor(Math.random() * crConfig.ratRuns.length)];
   }
   return crConfig.main;
 }
 
 export function corridorDensity(corridorId, vehicles) {
-  const routes = [
-    CORRIDOR_ROUTES[corridorId]?.main,
-    ...(CORRIDOR_ROUTES[corridorId]?.ratRuns ?? []),
-  ].filter(Boolean);
-  let current = 0, capacity = 0;
-  for (const routeId of routes) {
-    const route = ROUTE_CONFIG[routeId];
-    if (!route) continue;
-    capacity += route.maxVehicles;
-    current  += vehicles.filter(v => v.routeId === routeId && v.state === 'inbound').length;
+  const routes = [CORRIDOR_ROUTES[corridorId]?.main, ...(CORRIDOR_ROUTES[corridorId]?.ratRuns ?? [])].filter(Boolean);
+  let cur = 0, cap = 0;
+  for (const rid of routes) {
+    cap += ROUTE_CONFIG[rid]?.maxVehicles || 0;
+    cur += vehicles.filter(v => v.routeId === rid && v.state === 'inbound').length;
   }
-  return capacity > 0 ? current / capacity : 0;
+  return cap > 0 ? cur / cap : 0;
 }
 
 let _nextId = 1;
 export function resetVehicleIds() { _nextId = 1; }
 
 export function spawnTick(state, simTimeSec, dt, scenario, vehicles) {
-  const newVehicles = [];
-  const rate        = spawnRate(simTimeSec, scenario);
-  for (const corridorId of Object.keys(CORRIDOR_SPLITS)) {
-    const corridorRate = rate * CORRIDOR_SPLITS[corridorId];
-    state.accumulators[corridorId] = (state.accumulators[corridorId] ?? 0) + corridorRate * dt;
-    while (state.accumulators[corridorId] >= 1) {
-      state.accumulators[corridorId] -= 1;
-      const density = corridorDensity(corridorId, vehicles);
-      const routeId = assignRoute(corridorId, scenario, density);
-      const route   = ROUTE_CONFIG[routeId];
-      if (!route) continue;
+  const newVehicles = [], rate = spawnRate(simTimeSec, scenario);
+  for (const cid of Object.keys(CORRIDOR_SPLITS)) {
+    state.accumulators[cid] = (state.accumulators[cid] ?? 0) + rate * CORRIDOR_SPLITS[cid] * dt;
+    while (state.accumulators[cid] >= 1) {
+      state.accumulators[cid] -= 1;
+      const rid = assignRoute(cid, scenario, corridorDensity(cid, vehicles));
       newVehicles.push({
-        id:        _nextId++,
-        routeId,
-        corridorId,
-        pos:       0,
-        v:         0,
-        state:     'inbound',
-        roadClass: CORRIDOR_ROAD_CLASS[corridorId] ?? 'local',
-        routeLen:  estimateRouteLength(route.geometry),
-        spawnTime:       simTimeSec,
-        dwellStart:      null,
-        holdUntil:       null,
-        simTime:         simTimeSec,
-        lastJunctionIdx: 0,
+        id: _nextId++, routeId: rid, corridorId: cid, pos: 0, v: 0, state: 'inbound',
+        roadClass: CORRIDOR_ROAD_CLASS[cid] ?? 'local',
+        routeLen: estimateRouteLength(ROUTE_CONFIG[rid]?.geometry),
+        spawnTime: simTimeSec, dwellStart: null, lastJunctionIdx: 0, allJunctions: null, holdUntil: null
       });
     }
   }
@@ -121,40 +76,31 @@ export function spawnTick(state, simTimeSec, dt, scenario, vehicles) {
 
 export function processDwell(vehicle, simTimeSec, vehicles) {
   if (vehicle.state !== 'dwell') return;
+  
   if (vehicle.dwellStart === null) {
     vehicle.dwellStart = simTimeSec;
-    const parking = getParkingOccupancy(vehicles);
-    vehicle.parkingType = (!parking.onSiteFull) ? 'on-site' : 'on-street';
+    // Assign parking type based on current occupancy
+    const p = getParkingOccupancy(vehicles);
+    vehicle.parkingType = (p.onSite < PARKING_CAPACITY.ON_SITE) ? 'on-site' : 'on-street';
   }
+
   if (simTimeSec - vehicle.dwellStart >= DWELL_S) {
-    const egress = pickEgressRoute();
-    const route  = ROUTE_CONFIG[egress];
-    const routeLen = estimateRouteLength(route?.geometry ?? []);
+    // Resume journey as outbound, keeping ORIGINAL corridorId for stats
     vehicle.state            = 'outbound';
-    vehicle.routeId          = egress;
-    vehicle.pos              = 0;
     vehicle.v                = 0;
-    vehicle.roadClass        = 'local';
-    vehicle.routeLen         = routeLen;
-    vehicle.lastJunctionIdx  = 0;
-    vehicle.allJunctions     = null;
     vehicle.holdUntil        = null;
     vehicle.holdingAt        = null;
-    vehicle.parkingType      = null;
-    vehicle.schoolEndPos     = Math.min(300 / routeLen, 0.20);
+    vehicle.parkingType      = null; // release the bay
+    vehicle.isParking        = false;
   }
 }
 
-function pickEgressRoute() {
+export function pickEgressRoute() {
   const r = Math.random();
-  let cumulative = 0;
-  for (const route of EGRESS_ROUTES) {
-    cumulative += route.weight;
-    if (r < cumulative) return route.id;
-  }
+  let cum = 0;
+  for (const rt of EGRESS_ROUTES) { cum += rt.weight; if (r < cum) return rt.id; }
   return EGRESS_ROUTES[EGRESS_ROUTES.length - 1].id;
 }
 
-export function createSpawnerState() {
-  return { accumulators: { '1A': 0, '2A': 0, '2B': 0, '3A': 0 } };
-}
+export { estimateRouteLength };
+export function createSpawnerState() { return { accumulators: { '1A': 0, '2A': 0, '2B': 0, '3A': 0 } }; }

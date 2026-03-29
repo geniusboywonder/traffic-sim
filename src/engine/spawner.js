@@ -53,8 +53,9 @@ export function corridorDensity(corridorId, vehicles) {
   return cap > 0 ? cur / cap : 0;
 }
 
-// Returns 0.0 (free flow) → 1.0 (fully stalled) for the corridor's main route.
-// Minimum 3 vehicles required for a reliable signal.
+// Returns 0.0 (free flow) → 1.0 (fully stalled) for the corridor's MAIN route only
+// (rat-run vehicles excluded). v.v is in m/s; <0.5 m/s (~1.8 km/h) = effectively stopped.
+// Minimum 3 vehicles required for a reliable signal; returns 0 when below threshold.
 export function corridorCongestionScore(corridorId, vehicles) {
   const mainRouteId = CORRIDOR_ROUTES[corridorId]?.main;
   if (!mainRouteId) return 0;

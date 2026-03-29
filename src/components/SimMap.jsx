@@ -141,19 +141,19 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, onSimUp
     const t = simTimeRef.current;
     if (t >= 9000) { drawFrame(); onAutoStop(); return; }
 
-    const newV = spawnTick(spawnerStateRef.current, t, dt, scenarioRef.current, vehiclesRef.current);
-    newV.forEach(v => {
+    const { newVehicles, congestionScores } = spawnTick(spawnerStateRef.current, t, dt, scenarioRef.current, vehiclesRef.current);
+    newVehicles.forEach(v => {
       corridorTotalsRef.current[v.corridorId]++;
       logEvent('SPAWN', v, { simTime: t, detail: `route=${v.routeId}` });
       if (ROUTE_CONFIG[v.routeId]?.type === 'ratrun') {
-        logEvent('RAT_RUN', v, { simTime: t, detail: `corridor=${v.corridorId} route=${v.routeId}` });
+        const cScore = congestionScores[v.corridorId] ?? 0;
+        const prob   = Math.min(0.15 + cScore * 0.70, 0.85);
+        logEvent('RAT_RUN', v, { simTime: t, detail: `corridor=${v.corridorId} route=${v.routeId} congestion=${cScore.toFixed(2)} prob=${prob.toFixed(2)}` });
       }
     });
-    vehiclesRef.current.push(...newV);
+    vehiclesRef.current.push(...newVehicles);
 
-    junctionStateRef.current.forEach(s => s.frameReleases = 0);
-    stepAllVehicles(vehiclesRef.current, dt, ROUTE_CONFIG, t);
-
+    // 1. Update State Machine & Junction Indices BEFORE Physics
     vehiclesRef.current.forEach(v => {
       if (v.state === 'dwell') {
         processDwell(v, t, vehiclesRef.current);
@@ -192,7 +192,7 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, onSimUp
             const jid = juncs[v.lastJunctionIdx+1].junctionId, j = JUNCTIONS[jid];
             if (j && !['egress','roundabout_planned'].includes(j.control)) {
               const s = junctionStateRef.current.get(jid) ?? { lastRelease: 0, frameReleases: 0 };
-              const h = junctionHoldDuration(j.control, t, s.frameReleases, s.lastRelease, v.routeId, v.corridorId);
+              const h = junctionHoldDuration(jid, j.control, t, s.lastRelease, v.routeId, v.corridorId);
               if (h > 0) {
                 v.holdUntil = t + h; v.holdingAt = jid;
                 junctionStateRef.current.set(jid, s);
@@ -200,7 +200,7 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, onSimUp
                 break;
               }
               logEvent('JUNCTION_PASS', v, { simTime: t, detail: `J${jid}(${j.control})` });
-              s.lastRelease = t; s.frameReleases++; junctionStateRef.current.set(jid, s);
+              s.lastRelease = t; junctionStateRef.current.set(jid, s);
             }
             v.lastJunctionIdx++;
           }
@@ -212,7 +212,7 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, onSimUp
         v.pos = 1.0; v.v = 0;
         if (v.holdUntil === null) {
           const s = junctionStateRef.current.get(7) ?? { lastRelease: 0 };
-          const h = junctionHoldDuration('critical', t, 0, s.lastRelease);
+          const h = junctionHoldDuration(7, 'critical', t, s.lastRelease);
           if (h > 0) {
             v.holdUntil = t + h;
             logEvent('AT_J7_WAITING', v, { simTime: t, detail: `hold=${h.toFixed(1)}s` });
@@ -262,6 +262,11 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, onSimUp
       }
     });
 
+    // 2. Physics Step
+    junctionStateRef.current.forEach(s => s.frameReleases = 0);
+    stepAllVehicles(vehiclesRef.current, dt, ROUTE_CONFIG, t);
+
+    // 3. Cleanup & Rendering
     const remaining = [];
     vehiclesRef.current.forEach(v => {
       if (v.state === 'outbound' && v.pos >= 1.0) {
@@ -282,7 +287,7 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, onSimUp
       const active = vehiclesRef.current.filter(v => v.state !== 'dwell').length;
       const total = Object.values(corridorTotalsRef.current).reduce((a,b) => a+b, 0);
       onSimUpdate(t, active, total);
-      onStatsUpdate(computeStats(vehiclesRef.current, corridorTotalsRef.current, corridorExitsRef.current, inboundDelayRef.current, outboundDelayRef.current));
+      onStatsUpdate(computeStats(vehiclesRef.current, corridorTotalsRef.current, corridorExitsRef.current, inboundDelayRef.current, outboundDelayRef.current, congestionScores));
       
       pulsePhaseRef.current = (pulsePhaseRef.current + 1) % 4;
       VISIBLE_JUNCTIONS.forEach(jid => {

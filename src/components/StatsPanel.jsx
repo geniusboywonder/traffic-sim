@@ -12,9 +12,6 @@ function loadClass(current, max) {
 export default function StatsPanel({ statsData, activeVehicles, totalVehicles, activeRoutes, onToggleRoute }) {
   const { corridors, bottlenecks, parking } = statsData;
 
-  const onSitePct = parking ? Math.round((parking.onSite / 98) * 100) : 0;
-  const onStreetPct = parking ? Math.round((parking.onStreet / 22) * 100) : 0;
-
   return (
     <aside className="stats-panel">
 
@@ -27,46 +24,6 @@ export default function StatsPanel({ statsData, activeVehicles, totalVehicles, a
         <div className="mobile-count-item">
           <span className="count-label">Total vehicles</span>
           <span className="count-value">{totalVehicles}</span>
-        </div>
-      </div>
-
-      {/* ── Parking Occupancy ──────────────────────────────────────────────── */}
-      <div className="stats-section-title">Drop-off Occupancy</div>
-      <div className="stat-cards-grid" style={{ marginBottom: '16px' }}>
-        <div className={`stat-card ${onSitePct > 90 ? 'load-high' : onSitePct > 60 ? 'load-mid' : 'load-low'}`}>
-          <div className="stat-card-label">On-site (Internal)</div>
-          <div className="stat-grid">
-            <div className="stat-item">
-              <div className="stat-item-label">Occupied</div>
-              <div className="stat-item-value">{parking?.onSite || 0}</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-item-label">Capacity</div>
-              <div className="stat-item-value">98</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-item-label">Utilization</div>
-              <div className="stat-item-value">{onSitePct}%</div>
-            </div>
-          </div>
-        </div>
-
-        <div className={`stat-card ${onStreetPct > 90 ? 'load-high' : onStreetPct > 60 ? 'load-mid' : 'load-low'}`}>
-          <div className="stat-card-label">On-street (Ruskin)</div>
-          <div className="stat-grid">
-            <div className="stat-item">
-              <div className="stat-item-label">Occupied</div>
-              <div className="stat-item-value">{parking?.onStreet || 0}</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-item-label">Capacity</div>
-              <div className="stat-item-value">22</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-item-label">Utilization</div>
-              <div className="stat-item-value">{onStreetPct}%</div>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -103,6 +60,21 @@ export default function StatsPanel({ statsData, activeVehicles, totalVehicles, a
                 <div className="stat-item-small" style={{ color: c.avgOutDelay > 120 ? '#ef4444' : c.avgOutDelay > 60 ? '#eab308' : '#64748b' }}>
                   avg {c.avgOutDelay}s
                 </div>
+              </div>
+            </div>
+            <div style={{ marginTop: 4 }}>
+              <div style={{ fontSize: 8, color: '#94a3b8', marginBottom: 2 }}>MAIN ROUTE CONGESTION</div>
+              <div style={{ height: 4, background: '#1e3a5f', borderRadius: 2, overflow: 'hidden' }}>
+                <div style={{
+                  height: '100%',
+                  width: `${Math.round((c.congestion ?? 0) * 100)}%`,
+                  background: c.congestion > 0.7 ? '#ef4444' : c.congestion > 0.4 ? '#f59e0b' : '#10b981',
+                  transition: 'width 0.3s ease',
+                }} />
+              </div>
+              <div style={{ fontSize: 8, color: '#64748b', marginTop: 1 }}>
+                {Math.round((c.congestion ?? 0) * 100)}% stalled
+                {' · '}rat-run: {Math.round(Math.min(0.15 + (c.congestion ?? 0) * 0.70, 0.85) * 100)}%
               </div>
             </div>
           </div>

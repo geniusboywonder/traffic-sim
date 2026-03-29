@@ -35,10 +35,13 @@ export function spawnRate(simTimeSec, scenario) {
   return (cfg.totalTrips / NORMS[scenario]) * gaussianRate(simTimeSec, centre, sigma);
 }
 
-export function assignRoute(corridorId, scenario, corridorDensity) {
+export function assignRoute(corridorId, scenario, density, congestionScore = 0) {
   const cfg = SCENARIO_CONFIG[scenario], crConfig = CORRIDOR_ROUTES[corridorId];
-  if (corridorDensity >= cfg.ratRunThreshold && crConfig.ratRuns.length > 0) {
-    if (Math.random() < 0.40) return crConfig.ratRuns[Math.floor(Math.random() * crConfig.ratRuns.length)];
+  if (!crConfig || crConfig.ratRuns.length === 0) return crConfig?.main ?? corridorId;
+  if (density < cfg.ratRunThreshold) return crConfig.main;
+  const ratRunProb = Math.min(0.15 + congestionScore * 0.70, 0.85);
+  if (Math.random() < ratRunProb) {
+    return crConfig.ratRuns[Math.floor(Math.random() * crConfig.ratRuns.length)];
   }
   return crConfig.main;
 }
@@ -74,7 +77,9 @@ export function spawnTick(state, simTimeSec, dt, scenario, vehicles) {
     state.accumulators[cid] = (state.accumulators[cid] ?? 0) + rate * CORRIDOR_SPLITS[cid] * dt;
     while (state.accumulators[cid] >= 1) {
       state.accumulators[cid] -= 1;
-      const rid = assignRoute(cid, scenario, corridorDensity(cid, vehicles));
+      const density = corridorDensity(cid, vehicles);
+      const congestion = corridorCongestionScore(cid, vehicles);
+      const rid = assignRoute(cid, scenario, density, congestion);
       newVehicles.push({
         id: _nextId++, routeId: rid, corridorId: cid, pos: 0, v: 0, state: 'inbound',
         roadClass: CORRIDOR_ROAD_CLASS[cid] ?? 'local',

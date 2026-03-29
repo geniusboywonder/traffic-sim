@@ -6,6 +6,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added — 2026-03-30 Dynamic Rat-Run Congestion Routing
+- `corridorCongestionScore(corridorId, vehicles)` in `spawner.js`: measures fraction of inbound vehicles on the main route that are stalled (v < 0.5 m/s). Requires ≥3 vehicles for a reliable signal; returns 0.0 below threshold.
+- `assignRoute()` updated: rat-run probability now scales dynamically with congestion score — `ratRunProb = 0.15 + congestionScore × 0.70` (clamped 15%–85%). Replaces fixed 40%. Density threshold gate still applies first.
+- `spawnTick()` now returns `{ newVehicles, congestionScores }` with per-corridor scores computed once per frame.
+- `congestionScoresRef` in `SimMap.jsx` tracks latest scores each frame; `computeStats` exposes `congestion` (0.0–1.0) per corridor in the stats object.
+- StatsPanel corridor cards show a live congestion bar (green <40% / amber 40–70% / red >70%) and the current effective rat-run probability percentage.
+- `RAT_RUN` log events now include `congestion=X.XX prob=X.XX` in the detail field.
+
+### Fixed — 2026-03-29 Vineyard Road Stall & Physics Race Condition
+- **Root cause 1 (Race Condition):** The simulation loop in `SimMap.jsx` calculated physics movement before updating vehicle junction indices. Vehicles crossing an intersection would temporarily have a negative distance to their target, triggering a "panic brake" glitch in the IDM engine.
+- **Root cause 2 (Directional Priority):** Junction 5 (Christopher/Vineyard) applied a yield hold to all vehicles regardless of direction, causing Vineyard Rd through-traffic to brake unnecessarily.
+- **Fix 1:** Reordered the simulation loop in `SimMap.jsx` to ensure junction indices and state transitions are updated *before* the physics calculation.
+- **Fix 2:** Implemented directional awareness in `idm.js`. Yields and stops now only apply to vehicles approaching from specific restricted junctions (e.g., J5 yield now only applies to traffic from Christopher Rd).
+
+### Fixed — 2026-03-29 ReferenceError: JUNCTIONS not defined in idm.js
+- **Root cause:** `JUNCTIONS` and `ROUTE_CONFIG` were being used in the newly refactored `junctionHoldDuration` function in `idm.js` but were not imported from the routes engine.
+- **Fix:** Added `import { JUNCTIONS, ROUTE_CONFIG } from './routes'` to `src/engine/idm.js`.
+
+### Fixed — 2026-03-29 TypeError: newV.forEach is not a function in SimMap.jsx
+- **Root cause:** `spawnTick` in `spawner.js` was updated to return an object `{ newVehicles, congestionScores }`, but the call site in `SimMap.jsx` was still treating the return value as a simple array.
+- **Fix:** Updated `SimMap.jsx` to destructure the return object and pass `congestionScores` to the statistics update function.
+
+### Added — 2026-03-29 Directional Junction Controls
+- **Engine Awareness:** `junctionHoldDuration` in `idm.js` is now direction-aware. It uses `direction_only` metadata from the junction configuration to check if a vehicle is approaching from a restricted minor road before applying a hold.
+- **Starke Rd Optimization:** Starke Rd is now "stop-free" for through-traffic at J4 (Christopher), J22 (Airlie), and J24 (Clement). Controls at these intersections now only apply to vehicles entering from the side streets.
+- **T-Junction Refinement:** Junctions 6, 14, 18, 19, 21, and 25 are now marked as `control: 'none'`. They serve as physical sequence markers for the IDM engine but no longer apply artificial stop/yield delays, reflecting natural T-junction flow.
+- **Metadata Synchronization:** `simulation-data.json` and `routes.js` are updated to version 2.1.0 with comprehensive `direction_only` constraints and updated junction naming (J12: Firgrove Service Rd).
+
+### Changed — 2026-03-29 UI & Project Cleanup
+- **Dashboard Cleanup:** Removed the "Drop-off Occupancy" section from `StatsPanel.jsx` to focus on corridor throughput and bottleneck stats.
+- **Feature Removal:** Deleted the Sankey Flow Diagram feature, including `SankeyView.jsx`, `sankeyEngine.js`, and the Multi-Page App (MPA) build configuration, to restore the project's original single-page architecture.
+
 ### Fixed — 2026-03-29 Direction State Filter Missing from Look-ahead Search 2
 - **Root cause:** Search 2 `pot` selection filtered `!o.isParking` but lacked `o.state === v.state`. The route-type filters (lines 100–101) restrict which junctions are added to `nextTargetJids`, but `approaches.get(nid)` contains all vehicles targeting that junction regardless of travel direction. An outbound vehicle at J6 could be picked as `pot` by an inbound vehicle's look-ahead, causing phantom braking.
 - **Fix:** Added `o.state === v.state` to the `pot` filter. Search 2 now matches Search 1: both require `!o.isParking && o.state === v.state`.

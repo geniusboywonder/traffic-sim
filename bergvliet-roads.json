@@ -294,7 +294,7 @@
                 "speed_kmh": 40,
                 "capacity_veh_hr": 600,
                 "sim_role": "routes 1A, 1A-RR1/RR2/RR6, 2A, 2A-RR1, 2B, 2B-RR2, 3A, 3A-RR1; final approach J6→J5 and cut-through via J19",
-                "notes": "Vineyard Road from J6 (Leyden/Vineyard) through J5 (Christopher/Vineyard) to J19 (Vineyard east/Airlie); stop-controlled; used by majority of ingress routes on final approach segment"
+                "notes": "Vineyard Road from J6 (Leyden/Vineyard) through J5 (Christopher/Vineyard) to J19 (Vineyard east/Airlie); yield-controlled at J5; used by majority of ingress routes on final approach segment"
             },
             "geometry": {
                 "type": "LineString",

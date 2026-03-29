@@ -10,7 +10,10 @@ function loadClass(current, max) {
 }
 
 export default function StatsPanel({ statsData, activeVehicles, totalVehicles, activeRoutes, onToggleRoute }) {
-  const { corridors, bottlenecks } = statsData;
+  const { corridors, bottlenecks, parking } = statsData;
+
+  const onSitePct = parking ? Math.round((parking.onSite / 98) * 100) : 0;
+  const onStreetPct = parking ? Math.round((parking.onStreet / 22) * 100) : 0;
 
   return (
     <aside className="stats-panel">
@@ -24,6 +27,46 @@ export default function StatsPanel({ statsData, activeVehicles, totalVehicles, a
         <div className="mobile-count-item">
           <span className="count-label">Total vehicles</span>
           <span className="count-value">{totalVehicles}</span>
+        </div>
+      </div>
+
+      {/* ── Parking Occupancy ──────────────────────────────────────────────── */}
+      <div className="stats-section-title">Drop-off Occupancy</div>
+      <div className="stat-cards-grid" style={{ marginBottom: '16px' }}>
+        <div className={`stat-card ${onSitePct > 90 ? 'load-high' : onSitePct > 60 ? 'load-mid' : 'load-low'}`}>
+          <div className="stat-card-label">On-site (Internal)</div>
+          <div className="stat-grid">
+            <div className="stat-item">
+              <div className="stat-item-label">Occupied</div>
+              <div className="stat-item-value">{parking?.onSite || 0}</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-item-label">Capacity</div>
+              <div className="stat-item-value">98</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-item-label">Utilization</div>
+              <div className="stat-item-value">{onSitePct}%</div>
+            </div>
+          </div>
+        </div>
+
+        <div className={`stat-card ${onStreetPct > 90 ? 'load-high' : onStreetPct > 60 ? 'load-mid' : 'load-low'}`}>
+          <div className="stat-card-label">On-street (Ruskin)</div>
+          <div className="stat-grid">
+            <div className="stat-item">
+              <div className="stat-item-label">Occupied</div>
+              <div className="stat-item-value">{parking?.onStreet || 0}</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-item-label">Capacity</div>
+              <div className="stat-item-value">22</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-item-label">Utilization</div>
+              <div className="stat-item-value">{onStreetPct}%</div>
+            </div>
+          </div>
         </div>
       </div>
 

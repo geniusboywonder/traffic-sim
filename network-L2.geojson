@@ -135,7 +135,7 @@
                 "type": "stop-critical",
                 "studied": false,
                 "critical": true,
-                "notes": "PRIMARY INGRESS BOTTLENECK — all 840 peak vehicles pass through — stop-controlled — UNSTUDIED",
+                "notes": "PRIMARY INGRESS BOTTLENECK — all 840 peak vehicles pass through — yield-controlled — UNSTUDIED",
                 "marker-color": "#ef4444",
                 "marker-size": "large",
                 "marker-symbol": "danger"

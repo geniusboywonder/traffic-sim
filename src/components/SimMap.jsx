@@ -6,7 +6,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import {
   JUNCTIONS, VISIBLE_JUNCTIONS, CTRL_STYLE, ROAD_LINES, ROUTE_CONFIG,
-  getWaypointPositions,
+  getWaypointPositions, getRouteJunctions,
 } from '../engine/routes';
 import { stepAllVehicles, junctionHoldDuration } from '../engine/idm';
 import {
@@ -154,6 +154,9 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, onSimUp
       (v) => egressRoutes.includes(v.routeId) && v.state === 'outbound',
     ).length;
 
+    const parkingOnSite = vehicles.filter(v => v.state === 'dwell' && v.parkingType === 'on-site').length;
+    const parkingOnStreet = vehicles.filter(v => v.state === 'dwell' && v.parkingType === 'on-street').length;
+
     return {
       corridors: {
         '1A': { label: 'Dreyersdal Rd N', current: corridors['1A']?.current ?? 0, total: corridors['1A']?.total ?? 0, exited: corridors['1A']?.exited ?? 0, maxVehicles: corridors['1A']?.maxVehicles ?? 50, avgInDelay: corridors['1A']?.avgInDelay ?? 0, avgOutDelay: corridors['1A']?.avgOutDelay ?? 0 },
@@ -166,6 +169,10 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, onSimUp
         ruskin:      { label: 'Ruskin Rd (ingress)',   queued: ruskinQueued,        maxVehicles: 20 },
         aristea:     { label: 'Aristea Rd (egress)',   current: aristeaCurrent,     maxVehicles: 10 },
       },
+      parking: {
+        onSite: parkingOnSite,
+        onStreet: parkingOnStreet
+      }
     };
   }, []);
 
@@ -176,7 +183,10 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, onSimUp
     if (!map || !canvas) return;
 
     const ctx    = canvas.getContext('2d');
-    const radius = vehicleRadiusRef.current;
+    
+    // Fixed radius for visual clarity
+    const radius = 4;
+    
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Optional: Draw route overlays
@@ -225,8 +235,6 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, onSimUp
         colour = COLOUR.delayed;
       } else if (v.state === 'dwell') {
         colour = COLOUR.dwell;
-      } else if (v.state === 'outbound') {
-        colour = COLOUR.egress.base;
       } else {
         const pal = COLOUR[v.corridorId] || COLOUR['1A'];
         const isRR = ROUTE_CONFIG[v.routeId]?.type === 'ratrun';
@@ -237,6 +245,24 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, onSimUp
       ctx.arc(pt.x, pt.y, radius, 0, Math.PI * 2);
       ctx.fillStyle = colour;
       ctx.fill();
+    }
+
+    // Always draw internal school road as a grey dotted line
+    const internalRoad = ROAD_LINES.find(f => f.properties.name === 'Tokai High School Internal Road');
+    if (internalRoad) {
+      ctx.beginPath();
+      ctx.strokeStyle = '#64748b';
+      ctx.lineWidth   = 2.0;
+      ctx.setLineDash([4, 4]);
+      ctx.globalAlpha = 0.6;
+      internalRoad.geometry.coordinates.forEach((lonlat, idx) => {
+        const pt = map.latLngToContainerPoint(L.latLng(lonlat[1], lonlat[0]));
+        if (idx === 0) ctx.moveTo(pt.x, pt.y);
+        else ctx.lineTo(pt.x, pt.y);
+      });
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.globalAlpha = 1.0;
     }
   }, []);
 
@@ -274,12 +300,12 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, onSimUp
     const t = simTimeRef.current;
 
     // Physics step
-    stepAllVehicles(vehiclesRef.current, dt);
+    stepAllVehicles(vehiclesRef.current, dt, ROUTE_CONFIG);
 
     // Process dwell → outbound transitions
     for (const v of vehiclesRef.current) {
       if (v.state === 'dwell') {
-        processDwell(v, simTimeRef.current);
+        processDwell(v, simTimeRef.current, vehiclesRef.current);
       }
     }
 
@@ -289,10 +315,15 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, onSimUp
       // Keep simTime in sync for junction hold checks inside stepVehicle
       v.simTime = t;
 
-      // Waypoint-based junction holds for inbound/outbound vehicles
+      // Cache all junction positions for robust indexing
+      if (!v.allJunctions) {
+        v.allJunctions = getRouteJunctions(v.routeId);
+      }
+
+      // Junction-based holds and physical segment tracking
       if (v.state === 'inbound' || v.state === 'outbound') {
-        const wps = getWaypointPositions(v.routeId);
-        if (v.lastWaypointIdx === undefined) v.lastWaypointIdx = 0;
+        const junctions = v.allJunctions;
+        if (v.lastJunctionIdx === undefined) v.lastJunctionIdx = 0;
 
         // Release a held vehicle when its timer expires
         if (v.holdUntil !== null && v.holdUntil <= t) {
@@ -300,24 +331,30 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, onSimUp
           v.holdingAt  = null;
         }
 
-        // Detect new waypoint crossings (only when not already held)
+        // Detect new physical junction crossings (tracks which segment we are in)
         if (v.holdUntil === null) {
-          while (v.lastWaypointIdx < wps.length && v.pos >= wps[v.lastWaypointIdx].pos) {
-            const wp  = wps[v.lastWaypointIdx];
-            const j   = JUNCTIONS[wp.junctionId];
-            if (j) {
-              const jState = junctionStateRef.current.get(wp.junctionId) ?? { lastRelease: 0 };
-              const hold   = junctionHoldDuration(j.control, t, 0, jState.lastRelease);
+          // Increment index as we pass each physical junction coordinate
+          while (v.lastJunctionIdx < junctions.length - 1 && v.pos >= junctions[v.lastJunctionIdx + 1].pos) {
+            const nextJid = junctions[v.lastJunctionIdx + 1].junctionId;
+            const j = JUNCTIONS[nextJid];
+            
+            // Only apply hold logic if it's a controlled junction (skipping free-flow/egress)
+            if (j && !['critical', 'egress', 'roundabout_planned'].includes(j.control)) {
+              const jState = junctionStateRef.current.get(nextJid) ?? { lastRelease: 0 };
+              
+              // Directional logic requires knowing the vehicle's route/corridor
+              const hold = junctionHoldDuration(j.control, t, 0, jState.lastRelease, v.routeId, v.corridorId);
+              
               if (hold > 0) {
                 v.holdUntil  = t + hold;
-                v.holdingAt  = wp.junctionId;
-                junctionStateRef.current.set(wp.junctionId, { lastRelease: t });
-                v.lastWaypointIdx++;
-                break; // hold at this waypoint; advance index after hold expires next frame
+                v.holdingAt  = nextJid;
+                junctionStateRef.current.set(nextJid, { lastRelease: t });
+                // Stop advancing indices while held at this junction
+                break; 
               }
-              junctionStateRef.current.set(wp.junctionId, { lastRelease: t });
+              junctionStateRef.current.set(nextJid, { lastRelease: t });
             }
-            v.lastWaypointIdx++;
+            v.lastJunctionIdx++;
           }
         }
       }
@@ -382,18 +419,23 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, onSimUp
       for (const jid of VISIBLE_JUNCTIONS) {
         const entry = junctionMarkersRef.current[jid];
         if (!entry) continue;
+
+        const j = JUNCTIONS[jid];
+        const isPointOfEntry = [1, 8, 9, 13, 20].includes(jid);
+
         // Count vehicles currently held at this junction
         const queuedHere = vehiclesRef.current.filter(
           (v) => v.holdingAt === jid,
         ).length;
         const isBottleneck = queuedHere >= 2;
+
         entry.marker.setStyle({
           color:     isBottleneck ? '#ef4444' : entry.baseColor,
-          opacity:   isBottleneck ? 1.0 : 0.6,
-          weight:    isBottleneck ? 3.0 : 1.5,
+          opacity:   isBottleneck ? 1.0 : (isPointOfEntry ? 1.0 : 0.6),
+          weight:    isBottleneck ? 3.0 : (isPointOfEntry ? 2.0 : 1.5),
           fill:      true,
-          fillColor: isBottleneck ? '#ef4444' : 'transparent',
-          fillOpacity: isBottleneck ? 0.35 : 0
+          fillColor: isBottleneck ? '#ef4444' : (isPointOfEntry ? entry.baseColor : 'transparent'),
+          fillOpacity: isBottleneck ? 0.35 : (isPointOfEntry ? 0.8 : 0)
         });
         entry.marker.setRadius(isBottleneck ? pulseRadius : 7);
       }
@@ -551,7 +593,6 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, onSimUp
           [COLOUR['2A'].base, 'Homestead'],
           [COLOUR['2B'].base, "Children's Way"],
           [COLOUR['3A'].base, 'Firgrove Way'],
-          [COLOUR.egress.base, 'Outbound'],
           [COLOUR.delayed, 'Delayed'],
           [COLOUR.dwell, 'Parked'],
         ].map(([color, label]) => (

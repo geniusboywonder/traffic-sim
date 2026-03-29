@@ -17,6 +17,10 @@ const INITIAL_STATS = {
     ruskin:      { label: 'Ruskin Rd (ingress)',     queued: 0,  maxVehicles: 20 },
     aristea:     { label: 'Aristea Rd (egress)',     current: 0, maxVehicles: 10 },
   },
+  parking: {
+    onSite: 0,
+    onStreet: 0
+  }
 };
 
 export default function App() {
@@ -27,7 +31,7 @@ export default function App() {
   const [activeVehicles, setActiveVehicles] = useState(0);
   const [totalVehicles, setTotalVehicles]   = useState(0);
   const [statsData, setStatsData]           = useState(INITIAL_STATS);
-  const [activeRoutes, setActiveRoutes]     = useState(new Set(['1A', '2A', '2B', '3A']));
+  const [activeRoutes, setActiveRoutes]     = useState(new Set([]));
 
   const handleToggleRoute = useCallback((id) => {
     setActiveRoutes(prev => {

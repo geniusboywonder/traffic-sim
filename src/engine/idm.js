@@ -1,175 +1,177 @@
 // ── idm.js ────────────────────────────────────────────────────────────────────
 // IDM/ACC (Intelligent Driver Model) physics engine.
-// Pure JS — no React dependency. Re-implemented from the movsim/traffic-simulation.de
-// blueprint.
-//
-// Unit conventions
-//   position  : fractional progress along route [0, 1]
-//   velocity  : m/s
-//   accel     : m/s²
-//   dt        : simulated seconds
-//   route len : approximated from geometry or defaulted to routeLengthM
+// Refactored for global look-ahead and merge-point stability.
 
 // ── Road-class IDM parameters ─────────────────────────────────────────────────
-// From spec §4.3
 export const IDM_PARAMS = {
-  arterial: {
-    v0:  60 / 3.6,  // desired speed  (m/s)
-    T:   1.5,        // time headway   (s)
-    a:   1.4,        // max accel      (m/s²)
-    b:   2.0,        // comfortable decel (m/s²)
-    s0:  2.0,        // minimum gap    (m)
-    len: 4.5,        // vehicle length (m)
-  },
-  collector: {
-    v0:  40 / 3.6,
-    T:   1.5,
-    a:   1.2,
-    b:   1.8,
-    s0:  2.0,
-    len: 4.5,
-  },
-  local: {
-    v0:  30 / 3.6,
-    T:   1.8,
-    a:   1.0,
-    b:   1.5,
-    s0:  2.5,
-    len: 4.5,
-  },
-  // School driveway / internal road — 10 km/h, cautious spacing
-  schoolyard: {
-    v0:  10 / 3.6,
-    T:   2.5,
-    a:   0.6,
-    b:   1.0,
-    s0:  3.0,
-    len: 4.5,
-  },
+  arterial:   { v0: 60/3.6, T: 1.5, a: 1.4, b: 2.0, s0: 2.0, len: 4.5 },
+  collector:  { v0: 40/3.6, T: 1.5, a: 1.2, b: 1.8, s0: 2.0, len: 4.5 },
+  local:      { v0: 30/3.6, T: 1.8, a: 1.0, b: 1.5, s0: 2.5, len: 4.5 },
+  ruskin:     { v0: 30/3.6, T: 2.0, a: 0.8, b: 1.2, s0: 3.0, len: 4.5 },
+  internal:   { v0: 20/3.6, T: 2.5, a: 0.6, b: 1.0, s0: 3.0, len: 4.5 },
+  schoolyard: { v0: 10/3.6, T: 2.5, a: 0.6, b: 1.0, s0: 3.0, len: 4.5 },
 };
 
-// ── IDM acceleration formula ──────────────────────────────────────────────────
-// v    : current speed (m/s)
-// dv   : approach rate to leader (v - v_leader), positive when closing
-// s    : net gap to leader (m)  — must be > 0
-// p    : IDM_PARAMS entry
+// ── Parking / Drop-off Management ──────────────────────────────────────────────
+export const PARKING_CAPACITY = {
+  ON_SITE: 98,
+  ON_STREET: 22,
+  TOTAL: 120
+};
+
+export function getParkingOccupancy(vehicles) {
+  const count = vehicles.filter(v => v.state === 'dwell').length;
+  return {
+    count,
+    isFull: count >= PARKING_CAPACITY.TOTAL,
+    onSiteFull: vehicles.filter(v => v.state === 'dwell' && v.parkingType === 'on-site').length >= PARKING_CAPACITY.ON_SITE,
+    onStreetFull: vehicles.filter(v => v.state === 'dwell' && v.parkingType === 'on-street').length >= PARKING_CAPACITY.ON_STREET
+  };
+}
+
 export function idmAccel(v, dv, s, p) {
+  const gap = Math.max(s, 0.1); 
   const sStar = p.s0 + Math.max(0, v * p.T + (v * dv) / (2 * Math.sqrt(p.a * p.b)));
-  const gap   = Math.max(s, 0.01); // avoid division by zero
-  return p.a * (1 - Math.pow(v / p.v0, 4) - Math.pow(sStar / gap, 2));
+  const accel = p.a * (1 - Math.pow(v / p.v0, 4) - Math.pow(sStar / gap, 2));
+  
+  // Creep logic: If stopped or nearly stopped but gap is opening up, 
+  // allow a small positive acceleration to prevent numerical deadlock.
+  if (v < 0.2 && s > 1.5) return 0.5;
+
+  return Math.max(accel, -8.0);
 }
 
-// ── Single-vehicle step ───────────────────────────────────────────────────────
-// vehicle : { pos, v, routeLen, roadClass, holdUntil }
-// leader  : { pos, v, routeLen } | null
-// dt      : time step (s)
-// Mutates vehicle in place.
-export function stepVehicle(vehicle, leader, dt) {
-  // Use schoolyard params while still on the internal school driveway segment
-  const inSchoolZone = vehicle.schoolEndPos !== undefined && vehicle.pos < vehicle.schoolEndPos;
-  const p = inSchoolZone ? IDM_PARAMS.schoolyard : (IDM_PARAMS[vehicle.roadClass] ?? IDM_PARAMS.local);
-
-  // Junction hold — vehicle is stopped at a controlled junction
-  if (vehicle.holdUntil !== undefined && vehicle.holdUntil > vehicle.simTime) {
-    vehicle.v = 0;
-    return;
+export function junctionHoldDuration(junctionControl, simTime, queueDepth, lastReleaseTime, routeId = '', corridorId = '') {
+  const gap = simTime - (lastReleaseTime ?? 0);
+  
+  // Directional logic for complex intersections
+  if (junctionControl === 'stop_directional') {
+    // J22: Stop Starke Rd (1A), let Airlie flow
+    if (corridorId === '1A') return gap >= 5.0 ? 0 : 5.0 - gap;
+    // J27: Stop Children's Way (2B), let Starke flow
+    if (corridorId === '2B') return gap >= 5.0 ? 0 : 5.0 - gap;
+    return 0; 
   }
 
-  let accel;
-  if (leader) {
-    // Gap in metres between front of follower and rear of leader
-    const followerFrontPos  = vehicle.pos * vehicle.routeLen;
-    const leaderRearPos     = leader.pos  * leader.routeLen - p.len;
-    const gap               = Math.max(leaderRearPos - followerFrontPos, 0.01);
-    const dv                = vehicle.v - leader.v;
-    accel = idmAccel(vehicle.v, dv, gap, p);
-  } else {
-    // Free-flow: no leader, accelerate toward desired speed
-    accel = idmAccel(vehicle.v, 0, 9999, p);
-  }
-
-  // Euler integration
-  const newV = Math.max(0, Math.min(vehicle.v + accel * dt, p.v0));
-  vehicle.v   = newV;
-  vehicle.pos = vehicle.pos + (newV * dt) / vehicle.routeLen;
-}
-
-// ── Junction hold logic ───────────────────────────────────────────────────────
-// Called by the simulation loop when a vehicle crosses a junction waypoint.
-// Returns hold duration in simulated seconds (0 = no hold, vehicle proceeds).
-//
-// junctionControl : control type string from JUNCTIONS
-// simTime         : current simulation time (s)
-// queueDepth      : number of vehicles currently queued at this junction
-// lastReleaseTime : simTime of last released vehicle (for all-way stop gap)
-
-export function junctionHoldDuration(junctionControl, simTime, queueDepth, lastReleaseTime) {
   switch (junctionControl) {
     case 'traffic_signal': {
-      // Fixed cycle: 30s green / 30s red.
-      // Vehicle must wait until next green window.
       const cyclePos = simTime % 60;
-      if (cyclePos < 30) return 0; // currently green
-      return 60 - cyclePos;        // wait for next green
+      return cyclePos < 30 ? 0 : 60 - cyclePos;
     }
-    case '4way_stop': {
-      // All-way stop: FIFO, one vehicle per 4s gap
-      const gap = simTime - (lastReleaseTime ?? 0);
-      return gap >= 4 ? 0 : 4 - gap;
-    }
-    case 'priority_stop': {
-      // Minor-road stop: must wait for a gap in main-road traffic.
-      // Rush-hour: model as ~12s average wait before acceptable gap.
-      const gap = simTime - (lastReleaseTime ?? 0);
-      return gap >= 12 ? 0 : 12 - gap;
-    }
-    case 'stop': {
-      // Simple stop sign: brief pause then proceed (~5s).
-      const gap = simTime - (lastReleaseTime ?? 0);
-      return gap >= 5 ? 0 : 5 - gap;
-    }
-    case 'yield': {
-      // Yield: minimal pause (~2s).
-      const gap = simTime - (lastReleaseTime ?? 0);
-      return gap >= 2 ? 0 : 2 - gap;
-    }
-    case 'critical': {
-      // School ingress — one vehicle per 8s (realistic single-lane drop-off throughput)
-      const gap = simTime - (lastReleaseTime ?? 0);
-      return gap >= 8 ? 0 : 8 - gap;
-    }
-    case 'roundabout_planned':
-      return 0;
-    default:
-      return 0;
+    case '4way_stop':     return gap >= 4.0 ? 0 : 4.0 - gap;
+    case 'priority_stop': return gap >= 8.0 ? 0 : 8.0 - gap; // slightly faster throughput
+    case 'stop':          return gap >= 4.0 ? 0 : 4.0 - gap;
+    case 'yield':         return gap >= 1.5 ? 0 : 1.5 - gap;
+    case 'critical':      return gap >= 4.3 ? 0 : 4.3 - gap; 
+    case 'merge':         return 0; 
+    default: return 0;
   }
 }
 
-// ── Multi-vehicle step loop ───────────────────────────────────────────────────
-// vehicles : array of vehicle objects (mutated in place)
-// dt       : simulated seconds for this frame
-// junctionState : Map<junctionId, { lastRelease, queue }> (mutated)
-//
-// Sub-step cap: dtSub = min(dt/4, 0.25) per spec §4.3.
-// Vehicles are sorted front-to-back before each sub-step.
-export function stepAllVehicles(vehicles, dt) {
+export function stepAllVehicles(vehicles, dt, routeConfigs) {
   const dtSub = Math.min(dt / 4, 0.25);
   const steps = Math.round(dt / dtSub);
 
+  const parking = getParkingOccupancy(vehicles);
+
   for (let step = 0; step < steps; step++) {
-    // Sort front-to-back within each route (highest pos first)
-    const byRoute = new Map();
+    // 1. Map physical location: which cars are approaching which junction?
+    const approaches = new Map(); // targetJid -> [vehicles]
+    
     for (const v of vehicles) {
       if (v.state !== 'inbound' && v.state !== 'outbound') continue;
-      if (!byRoute.has(v.routeId)) byRoute.set(v.routeId, []);
-      byRoute.get(v.routeId).push(v);
+      const route = routeConfigs[v.routeId];
+      if (!route?.junctions) continue;
+
+      const junctions = v.allJunctions || [];
+      const targetJunc = junctions[v.lastJunctionIdx + 1];
+      const targetPos = targetJunc ? targetJunc.pos : 1.0;
+      const toJid = route.junctions[v.lastJunctionIdx + 1] || route.junctions[route.junctions.length - 1];
+
+      v.distToTarget = (targetPos - v.pos) * v.routeLen;
+      
+      const fromJunc = junctions[v.lastJunctionIdx];
+      const fromPos  = fromJunc ? fromJunc.pos : 0;
+      v.distFromStart = (v.pos - fromPos) * v.routeLen;
+
+      if (!approaches.has(toJid)) approaches.set(toJid, []);
+      approaches.get(toJid).push(v);
     }
-    for (const group of byRoute.values()) {
-      group.sort((a, b) => b.pos - a.pos);
-      for (let i = 0; i < group.length; i++) {
-        const v      = group[i];
-        const leader = i > 0 ? group[i - 1] : null;
-        stepVehicle(v, leader, dtSub);
+
+    // 2. Physics Step
+    for (const v of vehicles) {
+      if (v.state !== 'inbound' && v.state !== 'outbound') continue;
+      
+      const route = routeConfigs[v.routeId];
+      const toJid = route.junctions[v.lastJunctionIdx + 1];
+      
+      // Find the leader
+      let leader = null;
+      let gap = 9999;
+
+      // Search 1: Same segment (heading to same junction)
+      const group = approaches.get(toJid) || [];
+      const sameSegmentLeaders = group
+        .filter(other => other !== v && other.distToTarget < v.distToTarget)
+        .sort((a, b) => b.distToTarget - a.distToTarget); // closest first
+
+      if (sameSegmentLeaders.length > 0) {
+        leader = sameSegmentLeaders[sameSegmentLeaders.length - 1];
+        gap = v.distToTarget - leader.distToTarget - 4.5;
+      } else if (toJid) {
+        // Search 2: Global Look-ahead
+        const nextTargetJids = [];
+        for (const r of Object.values(routeConfigs)) {
+          const idx = r.junctions?.indexOf(toJid);
+          if (idx !== -1 && idx < r.junctions.length - 1) {
+            nextTargetJids.push(r.junctions[idx + 1]);
+          }
+        }
+
+        let bestNextLeader = null;
+        let bestNextGap = 9999;
+
+        for (const nid of nextTargetJids) {
+          const nextGroup = approaches.get(nid) || [];
+          const potential = nextGroup.sort((a, b) => a.distFromStart - b.distFromStart)[0];
+          if (potential) {
+            const potentialGap = v.distToTarget + potential.distFromStart - 4.5;
+            if (potentialGap < bestNextGap) {
+              bestNextGap = potentialGap;
+              bestNextLeader = potential;
+            }
+          }
+        }
+        
+        if (bestNextLeader) {
+          leader = bestNextLeader;
+          gap = bestNextGap;
+        }
+      }
+
+      // 3. Acceleration calculation
+      const inSchoolZone = v.schoolEndPos !== undefined && v.pos < v.schoolEndPos;
+      
+      let roadClass = v.roadClass;
+      if (toJid === 20 || (v.state === 'outbound' && v.lastJunctionIdx === 0)) {
+        roadClass = 'internal';
+      } else if (toJid === 7) {
+        roadClass = 'ruskin';
+      }
+
+      const p = inSchoolZone ? IDM_PARAMS.schoolyard : (IDM_PARAMS[roadClass] ?? IDM_PARAMS.local);
+
+      // Junction holds and PARKING BLOCK logic
+      if (v.holdUntil !== null && v.holdUntil > v.simTime) {
+        v.v = 0;
+      } else if (toJid === 7 && parking.isFull && v.distToTarget < 10) {
+        // If parking is full, block the entrance at J7
+        v.v = 0;
+      } else {
+        const dv = leader ? (v.v - leader.v) : 0;
+        const accel = idmAccel(v.v, dv, gap, p);
+        v.v = Math.max(0, Math.min(v.v + accel * dtSub, p.v0));
+        v.pos = v.pos + (v.v * dtSub) / v.routeLen;
       }
     }
   }

@@ -12,29 +12,29 @@ export const JUNCTIONS = {
   2:  { lat: -34.055213, lng: 18.459043, name: 'Dreyersdal Rd / Dreyersdal Farm Rd',   control: 'yield' },
   3:  { lat: -34.055697, lng: 18.456319, name: 'Dreyersdal Farm Rd / Starke Rd south', control: 'yield' },
   4:  { lat: -34.049908, lng: 18.451617, name: 'Starke Rd / Christopher Rd',           control: 'priority_stop' },
-  5:  { lat: -34.050291, lng: 18.451102, name: 'Christopher Rd / Vineyard Rd',         control: 'stop' },
-  6:  { lat: -34.050232, lng: 18.447228, name: 'Vineyard Rd / Leyden Rd',              control: 'stop' },
+  5:  { lat: -34.050291, lng: 18.451102, name: 'Christopher Rd / Vineyard Rd',         control: 'yield' },
+  6:  { lat: -34.050232, lng: 18.447228, name: 'Vineyard Rd / Leyden Rd',              control: 'yield' },
   7:  { lat: -34.051039, lng: 18.447309, name: 'School Ingress — Leyden Rd / Ruskin Rd', control: 'critical' },
   8:  { lat: -34.051193, lng: 18.457989, name: "Ladies Mile / Children's Way",         control: 'traffic_signal' },
   9:  { lat: -34.044112, lng: 18.451770, name: 'Ladies Mile / Homestead Ave',          control: 'priority_stop' },
   10: { lat: -34.045008, lng: 18.448799, name: 'Homestead Ave / Starke Rd',            control: '4way_stop' },
   11: { lat: -34.042601, lng: 18.444545, name: 'Firgrove Way west entry',              control: 'yield' },
-  12: { lat: -34.042366, lng: 18.445805, name: 'Starke Rd north / Firgrove Rd',        control: 'stop' },
+  12: { lat: -34.042366, lng: 18.445805, name: 'Starke Rd north / Firgrove Rd',        control: 'merge' },
   13: { lat: -34.041334, lng: 18.448684, name: 'Firgrove Way / Dreyersdal Rd',         control: 'priority_stop' },
   14: { lat: -34.053536, lng: 18.451861, name: 'Airlie Rd south / Dante Rd south',     control: 'yield' },
   15: { lat: -34.051531, lng: 18.455003, name: 'Airlie Rd / Dreyersdal Rd',            control: 'stop' },
   16: { lat: -34.051581, lng: 18.452230, name: 'Dante Rd / Vineyard Rd',               control: 'stop' },
-  17: { lat: -34.051969, lng: 18.451382, name: 'Dante Rd / Ruskin Rd',                 control: 'stop' },
-  18: { lat: -34.049272, lng: 18.452509, name: 'Dreyersdal Rd / Christopher Rd east',  control: 'stop' },
-  19: { lat: -34.052900, lng: 18.453026, name: 'Vineyard Rd east / Airlie Rd',         control: 'stop' },
+  17: { lat: -34.051969, lng: 18.451382, name: 'Dante Rd / Ruskin Rd',                 control: 'yield' },
+  18: { lat: -34.049272, lng: 18.452509, name: 'Dreyersdal Rd / Christopher Rd east',  control: 'yield' },
+  19: { lat: -34.052900, lng: 18.453026, name: 'Vineyard Rd east / Airlie Rd',         control: 'yield' },
   20: { lat: -34.052454, lng: 18.450016, name: 'School Egress — Aristea Rd',           control: 'egress' },
   21: { lat: -34.055798, lng: 18.455408, name: 'Dreyersdal Farm Rd / Tussendal Avenue',control: 'yield' },
-  22: { lat: -34.052339, lng: 18.453965, name: 'Starke Rd / Airlie Rd',                control: 'stop' },
-  23: { lat: -34.053159, lng: 18.452619, name: 'Tussendal Avenue / Airlie Rd',         control: 'stop' },
+  22: { lat: -34.052339, lng: 18.453965, name: 'Starke Rd / Airlie Rd',                control: 'stop_directional' },
+  23: { lat: -34.053159, lng: 18.452619, name: 'Tussendal Avenue / Airlie Rd',         control: 'yield' },
   24: { lat: -34.048973, lng: 18.450967, name: 'Starke Rd / Clement Rd',               control: 'stop' },
-  25: { lat: -34.049384, lng: 18.447158, name: 'Clement Rd / Leyden Rd',               control: 'stop' },
+  25: { lat: -34.049384, lng: 18.447158, name: 'Clement Rd / Leyden Rd',               control: 'yield' },
   26: { lat: -34.052626, lng: 18.456216, name: "Children's Way / Dreyersdal Rd",       control: '4way_stop' },
-  27: { lat: -34.053388, lng: 18.454687, name: "Children's Way / Starke Rd",           control: 'stop' },
+  27: { lat: -34.053388, lng: 18.454687, name: "Children's Way / Starke Rd",           control: 'stop_directional' },
   28: { lat: -34.044726, lng: 18.449741, name: 'Homestead Ave / Dreyersdal Rd',        control: '4way_stop' },
   29: { lat: -34.051135, lng: 18.450243, name: 'Ruskin Rd / Aristea Rd — roundabout', control: 'roundabout_planned' },
 };
@@ -132,18 +132,20 @@ const RAW_ROUTES = {
   '2B-RR3': { name: "Rat-run 2B-3: →Starke→Vineyard→Ruskin", corridor: '2B', type: 'ratrun', junctions: [8,26,27,22,19,16,17,7], maxVehicles: 25 },
 
   // ── Corridor 3A — Firgrove Way (entry J13) ───────────────────────────────
-  '3A':     { name: 'Route 3A — Firgrove Way',         corridor: '3A', type: 'main',   junctions: [13,28,18,4,5,6,7],             maxVehicles: 40 },
-  '3A-RR1': { name: 'Rat-run 3A-1: →Homestead/Starke→Clement→Leyden', corridor: '3A', type: 'ratrun', junctions: [13,28,10,24,25,6,7], maxVehicles: 20 },
-  '3A-RR2': { name: 'Rat-run 3A-2: →Starke/Firgrove→Homestead/Starke→Clement', corridor: '3A', type: 'ratrun', junctions: [13,12,10,24,25,6,7], maxVehicles: 20 },
+  '3A':     { name: 'Route 3A — Firgrove Way',         corridor: '3A', type: 'main',   junctions: [13,12,10,24,4,5,6,7],          maxVehicles: 40 },
+  '3A-RR1': { name: 'Rat-run 3A-1: →Starke→Clement→Leyden', corridor: '3A', type: 'ratrun', junctions: [13,12,10,24,25,6,7],       maxVehicles: 20 },
+  '3A-RR2': { name: 'Rat-run 3A-2: →Starke→Christopher→Vineyard', corridor: '3A', type: 'ratrun', junctions: [13,12,10,24,4,5,16,17,7], maxVehicles: 20 },
 
   // ── Egress routes (post drop-off) ─────────────────────────────────────────
   // All start at J7 (school gate) → J20 (Aristea exit) → J29 (roundabout) → right onto Dante
-  // EG-A (50%): Dante → Vineyard → Airlie → Starke → Children's Way → Ladies Mile
+  // EG-A (40%): Dante → Vineyard → Airlie → Starke → Children's Way → Ladies Mile
   'EG-A':   { name: "Egress A — Dante→Vineyard→Children's Way", corridor: 'egress', type: 'egress', junctions: [7,20,29,17,16,19,22,26,8], maxVehicles: 30 },
-  // EG-B (30%): Dante → Vineyard → Airlie → Dreyersdal Rd → Main Rd
+  // EG-B (25%): Dante → Vineyard → Airlie → Dreyersdal Rd → Main Rd
   'EG-B':   { name: 'Egress B — Dante→Vineyard→Airlie→Main Rd', corridor: 'egress', type: 'egress', junctions: [7,20,29,17,16,19,15,2,1], maxVehicles: 20 },
-  // EG-C (20%): Dante south → Tussendal Ave → Dreyersdal Farm Rd → Main Rd
+  // EG-C (15%): Dante south → Tussendal Ave → Dreyersdal Farm Rd → Main Rd
   'EG-C':   { name: 'Egress C — Dante→Tussendal→Main Rd',       corridor: 'egress', type: 'egress', junctions: [7,20,29,17,14,23,21,2,1], maxVehicles: 15 },
+  // EG-D (20%): Dante → Starke → Firgrove Service Rd
+  'EG-D':   { name: 'Egress D — Dante→Starke→Firgrove',         corridor: 'egress', type: 'egress', junctions: [7,20,29,17,16,5,4,24,10,12,13], maxVehicles: 20 },
 };
 
 // Build route config with lazy geometry computation
@@ -171,6 +173,44 @@ export const CORRIDOR_ROUTES = {
   '2B': { main: '2B',  ratRuns: ['2B-RR1','2B-RR2','2B-RR3'] },
   '3A': { main: '3A',  ratRuns: ['3A-RR1','3A-RR2'] },
 };
+
+// ── Route Junction Positions ────────────────────────────────────────────────
+// Returns [{junctionId, pos}] for EVERY junction on the route (including start/end).
+const _routeJidCache = {};
+export function getRouteJunctions(routeId) {
+  if (_routeJidCache[routeId]) return _routeJidCache[routeId];
+  const route = ROUTE_CONFIG[routeId];
+  if (!route?.junctions || !route.geometry || route.geometry.length < 2) return [];
+
+  const geom = route.geometry;
+  const R    = 6371000;
+  const cumDist = [0];
+  for (let i = 1; i < geom.length; i++) {
+    const [lat1, lon1] = geom[i - 1];
+    const [lat2, lon2] = geom[i];
+    const dlat = (lat2 - lat1) * (Math.PI / 180);
+    const dlon = (lon2 - lon1) * (Math.PI / 180);
+    const a = Math.sin(dlat / 2) ** 2
+      + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dlon / 2) ** 2;
+    cumDist.push(cumDist[i - 1] + R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+  }
+  const totalLen = cumDist[cumDist.length - 1];
+
+  const result = route.junctions.map((jid, ji) => {
+    if (ji === 0) return { junctionId: jid, pos: 0 };
+    if (ji === route.junctions.length - 1) return { junctionId: jid, pos: 1.0 };
+    
+    const j = JUNCTIONS[jid];
+    let bestIdx = 0, bestDist = Infinity;
+    for (let i = 0; i < geom.length; i++) {
+      const d = (geom[i][0] - j.lat) ** 2 + (geom[i][1] - j.lng) ** 2;
+      if (d < bestDist) { bestDist = d; bestIdx = i; }
+    }
+    return { junctionId: jid, pos: totalLen > 0 ? cumDist[bestIdx] / totalLen : ji / (route.junctions.length - 1) };
+  });
+
+  return (_routeJidCache[routeId] = result);
+}
 
 // ── Waypoint positions along each route ──────────────────────────────────────
 // Returns [{junctionId, pos}] for every intermediate junction on the route
@@ -216,8 +256,26 @@ export function getWaypointPositions(routeId) {
   return (_waypointPosCache[routeId] = result);
 }
 
+// ── Route length estimation ───────────────────────────────────────────────────
+export function estimateRouteLength(geometry) {
+  if (!geometry || geometry.length < 2) return 1000;
+  let len = 0;
+  const R = 6371000;
+  for (let i = 0; i < geometry.length - 1; i++) {
+    const [lat1, lon1] = geometry[i];
+    const [lat2, lon2] = geometry[i + 1];
+    const dlat = (lat2 - lat1) * Math.PI / 180;
+    const dlon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dlat / 2) ** 2
+      + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dlon / 2) ** 2;
+    len += R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  }
+  return Math.max(len, 50);
+}
+
 export const EGRESS_ROUTES = [
-  { id: 'EG-A', weight: 0.50 },
-  { id: 'EG-B', weight: 0.30 },
-  { id: 'EG-C', weight: 0.20 },
+  { id: 'EG-A', weight: 0.40 },
+  { id: 'EG-B', weight: 0.25 },
+  { id: 'EG-C', weight: 0.15 },
+  { id: 'EG-D', weight: 0.20 },
 ];

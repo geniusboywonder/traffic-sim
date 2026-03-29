@@ -294,7 +294,7 @@
                 "speed_kmh": 40,
                 "capacity_veh_hr": 600,
                 "sim_role": "routes 1A, 1A-RR1/RR2/RR6, 2A, 2A-RR1, 2B, 2B-RR2, 3A, 3A-RR1; final approach J6→J5 and cut-through via J19",
-                "notes": "Vineyard Road from J6 (Leyden/Vineyard) through J5 (Christopher/Vineyard) to J19 (Vineyard east/Airlie); stop-controlled; used by majority of ingress routes on final approach segment"
+                "notes": "Vineyard Road from J6 (Leyden/Vineyard) through J5 (Christopher/Vineyard) to J19 (Vineyard east/Airlie); yield-controlled at J5 and J6; used by majority of ingress routes on final approach segment"
             },
             "geometry": {
                 "type": "LineString",
@@ -622,7 +622,7 @@
                 "speed_kmh": 30,
                 "capacity_veh_hr": 500,
                 "sim_role": "partial — Leyden Rd south section; not directly on modelled routes (J25 segment via Clement handled separately)",
-                "notes": "Leyden Road southern section; J25 (Clement/Leyden) is the terminus for rat runs 2A-RR1, 3A-RR1 via Clement Rd"
+                "notes": "Leyden Road southern section; J25 (Clement/Leyden) is yield-controlled terminus for rat runs 2A-RR1, 3A-RR1 via Clement Rd"
             },
             "geometry": {
                 "type": "LineString",
@@ -1035,7 +1035,7 @@
                 "speed_kmh": 30,
                 "capacity_veh_hr": 500,
                 "sim_role": "routes 1A, 1A-RR2/6, 2A, 2A-RR1, 2B, 2B-RR1/2, 3A, 3A-RR1 — J6 to J7 ingress final segment",
-                "notes": "Leyden Road from J6 (Vineyard/Leyden) to J7 (school ingress, Leyden/Ruskin); final approach segment used by all main routes and most rat runs on ingress path"
+                "notes": "Leyden Road from J6 (Vineyard/Leyden) to J7 (school ingress, Leyden/Ruskin); yield-controlled at J6; final approach segment used by all main routes and most rat runs on ingress path"
             },
             "geometry": {
                 "type": "LineString",
@@ -1077,7 +1077,7 @@
                 "speed_kmh": 30,
                 "capacity_veh_hr": 400,
                 "sim_role": "rat runs 2A-RR1, 3A-RR1 (J25→J24); 2A-RR2 passes J24 on Starke",
-                "notes": "Clement Road from J25 (Clement/Leyden) to J24 (Starke/Clement); used by rat-run routes 2A-RR1 and 3A-RR1 to bypass J4/J5 funnel approaching school via Leyden Rd; stop-controlled at both ends"
+                "notes": "Clement Road from J25 (Clement/Leyden) to J24 (Starke/Clement); used by rat-run routes 2A-RR1 and 3A-RR1 to bypass J4/J5 funnel approaching school via Leyden Rd; yield-controlled at J25"
             },
             "geometry": {
                 "type": "LineString",

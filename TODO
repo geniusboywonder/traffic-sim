@@ -1,0 +1,83 @@
+TODO
+update the requirement/spec/plan with the changes we made.
+5) would it be possible and realistic to add in the delays due to traffic from Sweet Valley school without the data? what would those look like?
+6) in mobile view the map should start zoomed into the highlighted square and not show any of the darkened map
+7) could we add a sankey version of this flow? so not on a map - but a sankey diagram? what plan would we need
+
+DONE
+Lets update the plan and continue with the traffic simulator from @Tokai_HS_Traffic_Simulator_Plan.md and add to the existing pages.
+
+I think we need to keep the UI really simple for end users - 3 scenarios: L,M,H.
+traffic build up stats at the 4 entry/exit points to the area and build up vehicle stats at Christopher Rd and the Ingress and Egress points.
+Showing morning school-run traffic from 6:30 to 8:30 am
+Show show current vehicles and then a total vehicles count
+
+the simulator also needs to run on mobile.
+
+Eventially I will launch this site on https://traffic.adamson.co.za
+
+I want to run google ads at a sensible place on the site. Suggest how and where this can happen.
+Here is the ad sense code:
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4744444280795001"
+     crossorigin="anonymous"></script>
+<!-- Traffic -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-4744444280795001"
+     data-ad-slot="2095203571"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+I also want to track usage using Google Tags my google analytics id is
+Tag Manager: Adamson: 60147474  
+Properties & Apps: adamson.co.za : 514042177
+
+
+3 changes to the spec:
+1) the colour when a car is paused/stopped should be something highly visible (not grey) to highlight a hold up.
+2) the egress routes are not as clearly defined. Given the egress from the school is in Aristea Rd. the likely route out is likely via Childrens Way / Ladies Mile or Dreysersdal / Main Rd. The traffic via Homestead / ladies Mile and Dreysdal / Firgrove will be compounded by Sweet Valley school traffic and will most likely be chaotic. But sinc ewe dont have the Sweet Valley traffic data, it is hard to model these 2 exits diffently.
+3) i dont really want all the junction points visible. they must be there for the simulation, but just not show. perhaps the ones with the controlled stops or all-stops, and the new traffic calming measure and the ingress / egress at the school. Keep these juntions: 7, 20, 6, 5, 4, 18, 28, 10, 13, 9, 8, 1. the label should just state the junction between the roads, and the control measure.
+
+
+
+- i am still not happy with the school drop off. The egress road from teh school entrance to the exit is no longer visible. it used to be a grey dotted line. Then it is along this line that parent will drop off there kids. So these things will need to be modelled:
+1) delay to enter the school gate if there is traffic at the ingress.
+2) 20km/h speed while on the grey school rd
+3) there are drop off parking all along the grey line. however, once those are full, cars will wait for free spots and start to block the ingress/egress rd.
+4) 45s delay for drop off
+5) Ruskin and Aristea will need to be an appropriate speed for around a school, but likely below 60km/h
+6) The following information must be part of the calculation:
+    - Inside school grounds (on-site): 98 bays
+    - Outside on Ruskin Road (on-street): 22 bays
+ the stop-and-drop rate is calculated at 1 bay per 20 learners for 1,120 learners — that's a 56-bay drop-off requirement just for the stop-and-drop facility. plot this along the grey school line
+ 7) the outside bays can be used for drop and go too and needs to be modelled on Ruskin Rd and its impact on the traffic.
+ 
+assumption - cars enter and leave the area via the same point
+
+- lets fix the colours on the map:
+1) use the entry/exit colours to match the vehicle dots in the simulator
+2) use a lighter shade of that colour for rat-runs
+3) use grey for parked/drop off
+4) use red for delayed
+
+- the Entry/Exit corridors text are not well laid out. Make the values and and titles the same size for Active (In & Out total), Delayed In, Delayed Out
+then under that in small text the avg seconds delayed under the Delayed In, Delayed Out numbers.
+- then the bottlenecks can show the same info.
+
+- although the map is full width, we only need a small window of that at the start. it doens make sense to have so much "darkened" map showing. how can we optimise the space. think about this in relation to the next point too. Why have we lost the Route overlays? this feature is part of the education/ analysis and needs to be an option on the map.
+
+- the main ingress form Firgrove needs to change. due to the traffic from Sweet Valley school it is unlikely that Dreyersdal will be the main road used. It is more likely that cars will enter Dreyserdal, turn right onto Firgrove service road, and then left into Starke road and proceed from there. this needs to be updated on the routes. similarly on the egress route the Firgrove Service Rd will be use rather than Dreyersdal.
+
+- are the dots the correct size and representative of a vehicle length - becuase the size and gap should create "backlog" that stretches up the rd? i am not seeing this modelled correctly. is this possible?
+
+1) speed on the school egress rd will be very slow.
+2) cars travelling on Dante Rd are not snapping to the road correctly.
+3) cars egressing via Dante Rd will likely turn right into Vineyard, and then out via Airlie to Dreyersdal or Starke to Childrnes Way. or continue onto Main Rd ((maybe via the rat run on Tussendal). most cars will not turn left into Ruskin to leave the area.
+4) are cars egressing pausing enough when exiting to Main Rd, Childrens Way / ladies Mile (traffic lights), Firgrove Rd and Homestead / Ladies Mile. given these roads will have rush-hour traffic, so entering these roads will be slow.
+5) i am not seeing cars staying red.
+6) can we make any junction glow and pulse red when there is a bottleneck?
+6b) can we add a delay counter to each of the Entry/exit points when cars are delayed at any point?
+7) why are none of the rat-runs activating?

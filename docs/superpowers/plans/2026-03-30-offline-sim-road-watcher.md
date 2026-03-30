@@ -29,6 +29,19 @@ These differ from the UXsim docs referenced during design — use these exact fo
 
 ---
 
+## Rat-run handling — decision recorded 2026-03-30
+
+The IDM live engine (frontend) models rat-runs explicitly: 13 named routes, congestion-triggered probability, vehicles tagged `state: "rat_run"`. UXsim uses Dynamic User Equilibrium (DUE) — it does not model named rat-run routes. Residential shortcuts will be used naturally if DUE routing finds them cheaper, but they will never be tagged `"rat_run"` in the output.
+
+**Decision:** Do not explicitly configure rat-runs in UXsim. DUE-emergent routing through residential streets is acceptable. The priority is that the Road Watcher ("my street view") correctly reports traffic on *any* road — including streets that receive diverted traffic — so residents can see what volume passes their street regardless of whether it is a designated rat-run or an emergent one.
+
+**Implications for implementation:**
+- `VehicleState.state` in playback mode will be `"inbound"` or `"outbound"` only — never `"rat_run"`. Rendering code (Task 14) must not assume `"rat_run"` is present in Results mode.
+- Road Watcher (Task 13) works identically for rat-run streets and main roads — it reports whatever volume UXsim placed on that road. No special casing needed.
+- Future: if explicit rat-run suppression or what-if controls are added, the correct approach is to add a road-closure/capacity-reduction constraint in `network_builder.py` per scenario, not to post-label vehicles.
+
+---
+
 ## Scope note — two independent phases
 
 Phase A (Tasks 1–8) is the **Python pipeline**. It produces JSON files and can be built and tested without touching the frontend.

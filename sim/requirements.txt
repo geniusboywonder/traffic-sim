@@ -1,0 +1,11 @@
+# Python 3.14 — install with: pip install -r requirements.txt
+uxsim>=1.13.0
+pandas>=2.0
+shapely>=2.0
+pytest>=8.0
+eclipse-sumo>=1.26.0
+
+# SUMO binary (sumo.exe, netconvert.exe etc.) is installed separately at:
+#   C:\Program Files (x86)\Eclipse\Sumo\bin\
+# Add that directory to PATH, or use full paths in scripts.
+# The eclipse-sumo pip package provides sumolib and traci Python bindings.

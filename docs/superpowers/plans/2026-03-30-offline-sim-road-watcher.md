@@ -6,7 +6,26 @@
 
 **Architecture:** A Python script reads enriched OSM GeoJSON, runs UXsim, and writes pre-computed scenario JSON files to `public/sim-results/`. The frontend gains a `PlaybackSource` class (in `src/engine/playback.js`) that loads these files and serves vehicle positions and road stats through the same interface as the existing live engine. A new `RoadWatcher` component renders per-road stats when the user clicks a road segment on the map.
 
-**Tech Stack:** Python 3.10+, UXsim, pandas, shapely, pytest; React 19, Vite 8, Vitest, @testing-library/react, Leaflet
+**Tech Stack:** Python 3.14, UXsim 1.13, pandas 3, shapely 2, pytest; React 19, Vite 8, Vitest, @testing-library/react, Leaflet
+
+## Environment (verified 2026-03-30)
+
+- Python 3.14, pip user install path: `C:\Users\neill\AppData\Roaming\Python\Python314\site-packages`
+- SUMO 1.26.0 installed at `C:\Program Files (x86)\Eclipse\Sumo\` — binary is **not** on PATH; use full path `C:/Program Files (x86)/Eclipse/Sumo/bin/sumo.exe` or add `C:/Program Files (x86)/Eclipse/Sumo/bin` to PATH
+- SUMO Python bindings (`sumolib`, `traci`) available via `eclipse-sumo` pip package — import works without extra sys.path manipulation after pip install
+
+## UXsim 1.13 API notes (verified against installed version)
+
+These differ from the UXsim docs referenced during design — use these exact forms:
+
+| Item | Correct form |
+|---|---|
+| `World` constructor | No `dt` or `tau` params — use `reaction_time=1.5` |
+| Trigger Edie-state computation | Call `W.analyzer.compute_edie_state()` **before** `link_traffic_state_to_pandas()` |
+| Vehicle position column | `x` (metres from link start, not 0–1) — normalise: `progress = x / link.length` |
+| Vehicle columns | `name, dn, orig, dest, t, link, x, s, v` |
+| Link state columns | `link, t, x, delta_t, delta_x, q, k, v` |
+| Link agg columns | `link, start_node, end_node, traffic_volume, vehicles_remain, free_travel_time, average_travel_time, stddiv_travel_time, delay_ratio, length` |
 
 ---
 

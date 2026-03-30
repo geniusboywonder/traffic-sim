@@ -1,0 +1,1276 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/4323165",
+                "bridge": "yes",
+                "highway": "motorway",
+                "lanes": "2",
+                "layer": "1",
+                "lit": "no",
+                "maxspeed": "100",
+                "name": "Simon van der Stel Freeway",
+                "oneway": "yes",
+                "ref": "M3",
+                "source:maxspeed": "sign",
+                "surface": "asphalt",
+                "road_class": "Class 1 — National Freeway",
+                "speed_kmh": 100,
+                "capacity_veh_hr": null,
+                "sim_role": "boundary — M3 freeway bridge over study area",
+                "notes": "M3 motorway bridge; not on any modelled school route; forms northern boundary of study zone"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.446656, -34.053877],
+                    [18.446743, -34.054195]
+                ]
+            },
+            "id": "way/4323165"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/5054687",
+                "foot": "no",
+                "highway": "secondary",
+                "lanes": "2",
+                "name": "Main Road",
+                "ref": "M4",
+                "surface": "asphalt",
+                "road_class": "Class 2 — District Arterial",
+                "speed_kmh": 60,
+                "capacity_veh_hr": 1800,
+                "sim_role": "boundary — M4 arterial; entry point J1 (TIA Int.4)",
+                "notes": "M4 Main Road; J1 right-turn from Dreyersdal operates at LOS F in AM and PM peaks; 11% of school trips enter via this junction"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.461452, -34.053060],
+                    [18.461466, -34.052971]
+                ]
+            },
+            "id": "way/5054687"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/25867240",
+                "highway": "residential",
+                "name": "Childrens Way",
+                "surface": "asphalt",
+                "road_class": "Class 4 — Local Collector",
+                "speed_kmh": 60,
+                "capacity_veh_hr": 800,
+                "sim_role": "routes 2B, 2B-RR1/RR2/RR3 westbound from J8 signal (TIA Int.3) to J26/J27",
+                "notes": "Children's Way western section from J27 to J26; residential collector; 25% of school trips enter via this road from Ladies Mile signal"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.454683, -34.053394],
+                    [18.455770, -34.052856],
+                    [18.456094, -34.052695],
+                    [18.456215, -34.052629],
+                    [18.456623, -34.052317],
+                    [18.457540, -34.051566]
+                ]
+            },
+            "id": "way/25867240"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/27669865",
+                "highway": "residential",
+                "lit": "yes",
+                "name": "Tussendal Avenue",
+                "surface": "asphalt",
+                "road_class": "Class 5 — Local Access Road",
+                "speed_kmh": 30,
+                "capacity_veh_hr": 400,
+                "sim_role": "rat runs 1A-RR4/RR5/RR6 from J23 (Tussendal/Airlie) south to J21 (Farm Rd/Tussendal)",
+                "notes": "Tussendal Avenue full length merged from two OSM features (way/27669865 + way/690833052); runs from J23 [18.452612,-34.053158] to J21 [18.455408,-34.055798]; quiet residential street used as rat run"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.452612, -34.053158],
+                    [18.453296, -34.053931],
+                    [18.453745, -34.054430],
+                    [18.453981, -34.054677],
+                    [18.454011, -34.054709],
+                    [18.454092, -34.054782],
+                    [18.454698, -34.055259],
+                    [18.455276, -34.055706],
+                    [18.455408, -34.055798]
+                ]
+            },
+            "id": "way/27669865"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/27669867",
+                "highway": "residential",
+                "name": "Starke Road",
+                "surface": "asphalt",
+                "road_class": "Class 4 — Local Collector",
+                "speed_kmh": 40,
+                "capacity_veh_hr": 800,
+                "traffic_calming": "speed_humps",
+                "sim_role": "routes 1A main (J27/J22→J4); 1A-RR2/3/4/5/6; 2A-RR1/RR2; 2B-RR1; 3A-RR1/RR2",
+                "notes": "Starke Road full north-south spine from J12 (Firgrove/Starke) to J3 (Farm Rd south); passes through J27 (Children's Way), J22 (Airlie Rd), J24 (Clement Rd), J10 (Homestead Ave), J4 (Christopher Rd); carries highest rat-run volumes in study area; SPEED HUMPS present along route (local knowledge) — reduces effective speed and increases travel time for rat-run traffic"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.445805, -34.042366],
+                    [18.445763, -34.042391],
+                    [18.445741, -34.042410],
+                    [18.445735, -34.042431],
+                    [18.445733, -34.042455],
+                    [18.445736, -34.042482],
+                    [18.445746, -34.042506],
+                    [18.446062, -34.042867],
+                    [18.446191, -34.042996],
+                    [18.446459, -34.043201],
+                    [18.447038, -34.043556],
+                    [18.447192, -34.043640],
+                    [18.447681, -34.043958],
+                    [18.447911, -34.044121],
+                    [18.447978, -34.044173],
+                    [18.448209, -34.044379],
+                    [18.448287, -34.044457],
+                    [18.448799, -34.045008],
+                    [18.449132, -34.045392],
+                    [18.449410, -34.045743],
+                    [18.449760, -34.046287],
+                    [18.450096, -34.046810],
+                    [18.450302, -34.047115],
+                    [18.450465, -34.047399],
+                    [18.450515, -34.047519],
+                    [18.450554, -34.047734],
+                    [18.450556, -34.047885],
+                    [18.450559, -34.048039],
+                    [18.450576, -34.048163],
+                    [18.450589, -34.048221],
+                    [18.450615, -34.048302],
+                    [18.450646, -34.048380],
+                    [18.450688, -34.048464],
+                    [18.450974, -34.048966],
+                    [18.451050, -34.049082],
+                    [18.451398, -34.049661],
+                    [18.451490, -34.049775],
+                    [18.451617, -34.049908],
+                    [18.451735, -34.050007],
+                    [18.451870, -34.050105],
+                    [18.451996, -34.050183],
+                    [18.452060, -34.050222],
+                    [18.452141, -34.050263],
+                    [18.452317, -34.050337],
+                    [18.452554, -34.050432],
+                    [18.452689, -34.050502],
+                    [18.452801, -34.050578],
+                    [18.452870, -34.050636],
+                    [18.452928, -34.050705],
+                    [18.452972, -34.050769],
+                    [18.453075, -34.050920],
+                    [18.453323, -34.051290],
+                    [18.453794, -34.052050],
+                    [18.453942, -34.052289],
+                    [18.453952, -34.052310],
+                    [18.453967, -34.052344],
+                    [18.453976, -34.052377],
+                    [18.453990, -34.052405],
+                    [18.454020, -34.052460],
+                    [18.454167, -34.052673],
+                    [18.454683, -34.053394],
+                    [18.455112, -34.054006],
+                    [18.455249, -34.054201],
+                    [18.455451, -34.054467],
+                    [18.456082, -34.055346],
+                    [18.456321, -34.055702]
+                ]
+            },
+            "id": "way/27669867"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/27669873",
+                "highway": "residential",
+                "name": "Christopher Road",
+                "surface": "asphalt",
+                "road_class": "Class 5 — Local Access Road",
+                "speed_kmh": 40,
+                "capacity_veh_hr": 600,
+                "sim_role": "routes 1A, 1A-RR1, 2A, 2A-RR2, 2B, 3A; final approach J5→J4→J18",
+                "notes": "Christopher Road connects J5 (Vineyard/Christopher) through J4 (Starke/Christopher, TIA Int.5 all-way stop) to J18 (Dreyersdal/Christopher east); terminal funnel junction for most main routes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.451102, -34.050291],
+                    [18.451617, -34.049908],
+                    [18.452509, -34.049272]
+                ]
+            },
+            "id": "way/27669873"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/27669888",
+                "highway": "residential",
+                "name": "Ruskin Road",
+                "surface": "asphalt",
+                "road_class": "Class 5 — Local Access Road",
+                "speed_kmh": 30,
+                "capacity_veh_hr": 400,
+                "sim_role": "school ingress final approach J7→J17; rat runs 1A-RR3/RR4, 2B-RR3",
+                "notes": "Ruskin Road; 30 km/h speed limit; 400 veh/hr capacity (TIA); 22 on-street parking bays proposed; raised intersection at J7 (school ingress) proposed"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.447309, -34.051039],
+                    [18.448267, -34.050978],
+                    [18.448940, -34.050939],
+                    [18.449473, -34.050911],
+                    [18.449525, -34.050911],
+                    [18.449571, -34.050913],
+                    [18.449633, -34.050922],
+                    [18.449687, -34.050933],
+                    [18.449725, -34.050942],
+                    [18.449825, -34.050980],
+                    [18.450018, -34.051054],
+                    [18.450243, -34.051135],
+                    [18.450646, -34.051307],
+                    [18.450854, -34.051394],
+                    [18.450898, -34.051418],
+                    [18.450978, -34.051474],
+                    [18.451070, -34.051547],
+                    [18.451153, -34.051641],
+                    [18.451257, -34.051784],
+                    [18.451382, -34.051969]
+                ]
+            },
+            "id": "way/27669888"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/27669893",
+                "highway": "residential",
+                "name": "Alban Road",
+                "road_class": "Class 5 — Local Access Road",
+                "speed_kmh": 30,
+                "capacity_veh_hr": 400,
+                "sim_role": "local road — not on modelled routes",
+                "notes": "Short residential road; not part of any modelled school route"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.449870, -34.049226],
+                    [18.449970, -34.050166]
+                ]
+            },
+            "id": "way/27669893"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/27669894",
+                "highway": "residential",
+                "name": "Vineyard Road",
+                "surface": "asphalt",
+                "road_class": "Class 5 — Local Access Road",
+                "speed_kmh": 40,
+                "capacity_veh_hr": 600,
+                "sim_role": "routes 1A, 1A-RR1/RR2/RR6, 2A, 2A-RR1, 2B, 2B-RR2, 3A, 3A-RR1; final approach J6→J5 and cut-through via J19",
+                "notes": "Vineyard Road from J6 (Leyden/Vineyard) through J5 (Christopher/Vineyard) to J19 (Vineyard east/Airlie); stop-controlled; used by majority of ingress routes on final approach segment"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.447228, -34.050232],
+                    [18.449833, -34.050177],
+                    [18.449970, -34.050166],
+                    [18.450281, -34.050134],
+                    [18.450342, -34.050129],
+                    [18.450453, -34.050119],
+                    [18.450684, -34.050101],
+                    [18.450732, -34.050098],
+                    [18.450774, -34.050096],
+                    [18.450806, -34.050098],
+                    [18.450842, -34.050106],
+                    [18.450875, -34.050116],
+                    [18.450901, -34.050128],
+                    [18.450930, -34.050145],
+                    [18.450960, -34.050165],
+                    [18.450984, -34.050186],
+                    [18.451102, -34.050291],
+                    [18.451360, -34.050549],
+                    [18.451822, -34.050993],
+                    [18.451881, -34.051052],
+                    [18.451932, -34.051116],
+                    [18.451981, -34.051185],
+                    [18.452230, -34.051581],
+                    [18.453026, -34.052900]
+                ]
+            },
+            "id": "way/27669894"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/27669895",
+                "highway": "residential",
+                "name": "Aristea Road",
+                "surface": "asphalt",
+                "road_class": "Class 6 — Cul-de-sac / Access",
+                "speed_kmh": 20,
+                "capacity_veh_hr": 350,
+                "sim_role": "school egress J20 (Aristea Rd); egress-only route",
+                "notes": "Aristea Road; 20 km/h speed limit; 350 veh/hr capacity (TIA); cul-de-sac on school side; raised intersection proposed at J20; proposed mini-roundabout at Ruskin/Aristea junction; sidewalk on school side proposed"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.450016, -34.052454],
+                    [18.450005, -34.052294],
+                    [18.449996, -34.052034],
+                    [18.449995, -34.051900],
+                    [18.450000, -34.051829],
+                    [18.450009, -34.051770],
+                    [18.450022, -34.051713],
+                    [18.450039, -34.051638],
+                    [18.450064, -34.051549],
+                    [18.450104, -34.051431],
+                    [18.450161, -34.051294],
+                    [18.450201, -34.051206],
+                    [18.450222, -34.051170],
+                    [18.450243, -34.051135],
+                    [18.450314, -34.051009],
+                    [18.450384, -34.050918],
+                    [18.450497, -34.050777],
+                    [18.450596, -34.050677]
+                ]
+            },
+            "id": "way/27669895"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/27669903",
+                "highway": "residential",
+                "name": "Brian Road",
+                "surface": "asphalt",
+                "road_class": "Class 5 — Local Access Road",
+                "speed_kmh": 30,
+                "capacity_veh_hr": 400,
+                "sim_role": "local road — not on modelled routes",
+                "notes": "Brian Road; short residential cul-de-sac area; not part of any modelled school route"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.453323, -34.051290],
+                    [18.453576, -34.051191],
+                    [18.453861, -34.051044],
+                    [18.454092, -34.050884],
+                    [18.454203, -34.050796]
+                ]
+            },
+            "id": "way/27669903"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/27669907",
+                "highway": "residential",
+                "lit": "yes",
+                "name": "Dante Road",
+                "surface": "asphalt",
+                "road_class": "Class 5 — Local Access Road",
+                "speed_kmh": 30,
+                "capacity_veh_hr": 400,
+                "sim_role": "rat runs 1A-RR3/RR4/RR5 and 2B-RR3 to J17 (Dante/Ruskin); 1A-RR2/RR6 and 2B-RR2 via J16 (Dante/Vineyard)",
+                "notes": "Dante Road from J14 (Airlie/Dante south) through J17 (Dante/Ruskin) to J16 (Dante/Vineyard); quiet residential; used by multiple rat-run routes to bypass J5/J6 congestion"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.451861, -34.053536],
+                    [18.451843, -34.053531],
+                    [18.451827, -34.053524],
+                    [18.451817, -34.053519],
+                    [18.451808, -34.053512],
+                    [18.451794, -34.053500],
+                    [18.451779, -34.053483],
+                    [18.451335, -34.052924],
+                    [18.450860, -34.052392],
+                    [18.450836, -34.052357],
+                    [18.450824, -34.052328],
+                    [18.450819, -34.052303],
+                    [18.450820, -34.052278],
+                    [18.450825, -34.052255],
+                    [18.450834, -34.052237],
+                    [18.450857, -34.052214],
+                    [18.450887, -34.052196],
+                    [18.451382, -34.051969],
+                    [18.452230, -34.051581]
+                ]
+            },
+            "id": "way/27669907"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/27669908",
+                "highway": "residential",
+                "lit": "yes",
+                "name": "Airlie Road",
+                "surface": "asphalt",
+                "road_class": "Class 5 — Local Access Road",
+                "speed_kmh": 30,
+                "capacity_veh_hr": 500,
+                "sim_role": "main route 2B (J15→J18); rat runs 1A-RR2/3/4/5/6 and 2B-RR2/3 (J14→J23→J19→J15)",
+                "notes": "Airlie Road from J14 (Airlie/Dante south) through J23 (Tussendal/Airlie), J19 (Vineyard east/Airlie) to J15 (Airlie/Dreyersdal); key cut-through corridor used by multiple rat-run variants"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.451861, -34.053536],
+                    [18.451884, -34.053541],
+                    [18.451895, -34.053542],
+                    [18.451905, -34.053543],
+                    [18.451917, -34.053542],
+                    [18.451931, -34.053541],
+                    [18.451948, -34.053537],
+                    [18.451961, -34.053533],
+                    [18.451978, -34.053526],
+                    [18.452125, -34.053442],
+                    [18.452612, -34.053158],
+                    [18.453026, -34.052900],
+                    [18.453967, -34.052344],
+                    [18.454951, -34.051587],
+                    [18.456588, -34.050299]
+                ]
+            },
+            "id": "way/27669908"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/27669910",
+                "created_by": "Potlatch 0.10f",
+                "highway": "residential",
+                "name": "Gumtree Road",
+                "surface": "asphalt",
+                "road_class": "Class 5 — Local Access Road",
+                "speed_kmh": 30,
+                "capacity_veh_hr": 400,
+                "sim_role": "local road — not on modelled routes",
+                "notes": "Gumtree Road (south segment); not part of any modelled school route"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.454092, -34.054782],
+                    [18.455249, -34.054201]
+                ]
+            },
+            "id": "way/27669910"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/27669912",
+                "highway": "residential",
+                "name": "Gumtree Road",
+                "surface": "asphalt",
+                "road_class": "Class 5 — Local Access Road",
+                "speed_kmh": 30,
+                "capacity_veh_hr": 400,
+                "sim_role": "local road — not on modelled routes",
+                "notes": "Gumtree Road (north segment); not part of any modelled school route"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.455451, -34.054467],
+                    [18.456209, -34.054086],
+                    [18.457247, -34.053573]
+                ]
+            },
+            "id": "way/27669912"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/27669931",
+                "foot": "no",
+                "highway": "secondary",
+                "lanes": "2",
+                "name": "Ladies Mile Road",
+                "oneway": "yes",
+                "ref": "M39",
+                "surface": "asphalt",
+                "road_class": "Class 2 — District Arterial (dual carriageway)",
+                "speed_kmh": 60,
+                "capacity_veh_hr": 1800,
+                "sim_role": "boundary — M39 northbound; entry point for routes 2A (J9) and 3A (J13)",
+                "notes": "Ladies Mile Road M39 northbound carriageway; dual carriageway with bicycle lanes and sidewalks; carries 21% (Homestead Ave J9) + 12% (Firgrove Way J13) of school trip demand"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.450252, -34.040851],
+                    [18.451688, -34.043989],
+                    [18.452526, -34.045630],
+                    [18.452877, -34.046430],
+                    [18.453361, -34.047198],
+                    [18.456651, -34.049972],
+                    [18.456886, -34.050168],
+                    [18.457410, -34.050592]
+                ]
+            },
+            "id": "way/27669931"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/27669932",
+                "foot": "no",
+                "highway": "secondary",
+                "lanes": "1",
+                "name": "Ladies Mile Road",
+                "oneway": "yes",
+                "ref": "M39",
+                "surface": "asphalt",
+                "road_class": "Class 2 — District Arterial (dual carriageway)",
+                "speed_kmh": 60,
+                "capacity_veh_hr": 900,
+                "sim_role": "boundary — M39 southbound near J1 (Main/Dreyersdal)",
+                "notes": "Ladies Mile Road M39 southbound carriageway near J1; slip lane segment"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.461452, -34.053060],
+                    [18.461350, -34.053045],
+                    [18.460900, -34.052979],
+                    [18.460616, -34.052926],
+                    [18.460486, -34.052896],
+                    [18.460226, -34.052825]
+                ]
+            },
+            "id": "way/27669932"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/27669933",
+                "foot": "no",
+                "highway": "secondary_link",
+                "lanes": "1",
+                "oneway": "yes",
+                "surface": "asphalt",
+                "name": "Dreyersdal Road Slip (M4/M39 interchange)",
+                "road_class": "Class 2 — Secondary Link (slip road)",
+                "speed_kmh": 40,
+                "capacity_veh_hr": 900,
+                "sim_role": "slip road at J1 — connects M4/M39 interchange to Dreyersdal Rd",
+                "notes": "Slip road connecting Main Road / Ladies Mile interchange to Dreyersdal Rd at J1; used by route 1A entry from north"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.461265, -34.054025],
+                    [18.461273, -34.053880],
+                    [18.461269, -34.053776],
+                    [18.461251, -34.053684],
+                    [18.461232, -34.053619],
+                    [18.461185, -34.053512],
+                    [18.461108, -34.053358],
+                    [18.461082, -34.053314],
+                    [18.461007, -34.053212],
+                    [18.460954, -34.053159],
+                    [18.460888, -34.053106],
+                    [18.460819, -34.053068],
+                    [18.460659, -34.052995],
+                    [18.460471, -34.052920],
+                    [18.460226, -34.052825]
+                ]
+            },
+            "id": "way/27669933"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/27669963",
+                "highway": "residential",
+                "name": "Leyden Road",
+                "road_class": "Class 5 — Local Access Road",
+                "speed_kmh": 30,
+                "capacity_veh_hr": 500,
+                "sim_role": "partial — Leyden Rd south section; not directly on modelled routes (J25 segment via Clement handled separately)",
+                "notes": "Leyden Road southern section; J25 (Clement/Leyden) is the terminus for rat runs 2A-RR1, 3A-RR1 via Clement Rd"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.446954, -34.048872],
+                    [18.447152, -34.049384],
+                    [18.447206, -34.049976],
+                    [18.447228, -34.050232]
+                ]
+            },
+            "id": "way/27669963"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/686737473",
+                "bicycle": "yes",
+                "bridge": "yes",
+                "foot": "yes",
+                "highway": "cycleway",
+                "layer": "1",
+                "segregated": "no",
+                "surface": "asphalt",
+                "name": "M3 Cycleway Bridge",
+                "road_class": "N/A — Shared Cycleway/Footway",
+                "speed_kmh": null,
+                "capacity_veh_hr": null,
+                "sim_role": "cycle infrastructure — not on modelled vehicle routes",
+                "notes": "Shared cycleway/footway bridge over M3; active travel infrastructure only"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.444962, -34.054246],
+                    [18.445018, -34.054269]
+                ]
+            },
+            "id": "way/686737473"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/687674678",
+                "highway": "residential",
+                "lanes": "2",
+                "name": "Dreyersdal Road",
+                "surface": "asphalt",
+                "road_class": "Class 3 — Collector Road",
+                "speed_kmh": 60,
+                "capacity_veh_hr": 1200,
+                "traffic_calming": "speed_humps",
+                "sim_role": "main routes 2B (J26→J15→J18), 3A (J13→J28); rat runs 1A-RR1 (J1→J15→J18); primary north-south collector in study area",
+                "notes": "Dreyersdal Road full length from J13 (Firgrove/Dreyersdal, TIA Int.1) through J26 (Children's Way), J15 (Airlie/Dreyersdal), J18 (Christopher east), J28 (Homestead Ave) to J1 (Main Rd, TIA Int.4); 2-lane undivided collector; carries significant school trip volumes; SPEED HUMPS present along route (local knowledge) — reduces effective speed and increases travel time despite higher posted speed limit"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.448684, -34.041334],
+                    [18.448813, -34.041632],
+                    [18.448868, -34.041767],
+                    [18.448902, -34.041897],
+                    [18.448924, -34.042007],
+                    [18.448941, -34.042190],
+                    [18.448943, -34.042275],
+                    [18.448940, -34.042716],
+                    [18.448948, -34.042802],
+                    [18.448961, -34.042945],
+                    [18.448984, -34.043130],
+                    [18.449015, -34.043274],
+                    [18.449058, -34.043443],
+                    [18.449110, -34.043594],
+                    [18.449148, -34.043706],
+                    [18.449179, -34.043781],
+                    [18.449251, -34.043937],
+                    [18.449301, -34.044030],
+                    [18.449353, -34.044115],
+                    [18.449747, -34.044727],
+                    [18.450179, -34.045396],
+                    [18.450731, -34.046258],
+                    [18.451046, -34.046756],
+                    [18.451294, -34.047264],
+                    [18.451559, -34.047849],
+                    [18.451768, -34.048306],
+                    [18.451908, -34.048564],
+                    [18.452026, -34.048747],
+                    [18.452138, -34.048879],
+                    [18.452233, -34.048993],
+                    [18.452330, -34.049102],
+                    [18.452429, -34.049197],
+                    [18.452509, -34.049272],
+                    [18.452614, -34.049369],
+                    [18.452709, -34.049446],
+                    [18.453291, -34.049971],
+                    [18.453865, -34.050497],
+                    [18.454203, -34.050796],
+                    [18.454443, -34.051016],
+                    [18.455013, -34.051539],
+                    [18.455624, -34.052087],
+                    [18.456215, -34.052629],
+                    [18.456353, -34.052758],
+                    [18.456733, -34.053102],
+                    [18.456875, -34.053232],
+                    [18.457247, -34.053573],
+                    [18.457470, -34.053765],
+                    [18.458086, -34.054329],
+                    [18.458708, -34.054890],
+                    [18.458858, -34.055031],
+                    [18.459200, -34.055350],
+                    [18.459384, -34.055493],
+                    [18.459486, -34.055561],
+                    [18.459620, -34.055629],
+                    [18.460897, -34.055818]
+                ]
+            },
+            "id": "way/687674678"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/687674681",
+                "foot": "no",
+                "highway": "residential",
+                "lanes": "2",
+                "name": "Childrens Way",
+                "surface": "asphalt",
+                "road_class": "Class 4 — Local Collector",
+                "speed_kmh": 60,
+                "capacity_veh_hr": 800,
+                "sim_role": "junction segment at J8 (Ladies Mile / Children's Way signal, TIA Int.3)",
+                "notes": "Short Children's Way segment immediately adjacent to J8 signal; 2 lanes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.457992, -34.051192],
+                    [18.458070, -34.051124]
+                ]
+            },
+            "id": "way/687674681"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/687674682",
+                "foot": "no",
+                "highway": "secondary",
+                "lanes": "2",
+                "name": "Ladies Mile Road",
+                "oneway": "yes",
+                "ref": "M39",
+                "surface": "asphalt",
+                "road_class": "Class 2 — District Arterial (dual carriageway)",
+                "speed_kmh": 60,
+                "capacity_veh_hr": 1800,
+                "sim_role": "boundary — M39 westbound from J8 towards J9",
+                "notes": "Ladies Mile Road M39 westbound carriageway from J8 (Children's Way signal) toward J9 (Homestead Ave)"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.457992, -34.051192],
+                    [18.457887, -34.051108],
+                    [18.457155, -34.050522],
+                    [18.456688, -34.050140],
+                    [18.456307, -34.049826],
+                    [18.456029, -34.049553],
+                    [18.455797, -34.049273]
+                ]
+            },
+            "id": "way/687674682"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/687674683",
+                "highway": "residential",
+                "lanes": "2",
+                "name": "Childrens Way",
+                "surface": "asphalt",
+                "road_class": "Class 4 — Local Collector",
+                "speed_kmh": 60,
+                "capacity_veh_hr": 800,
+                "sim_role": "junction segment at J8 approach",
+                "notes": "Children's Way segment approaching J8 signal from east; 2 lanes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.457819, -34.051331],
+                    [18.457935, -34.051237],
+                    [18.457992, -34.051192]
+                ]
+            },
+            "id": "way/687674683"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/687801584",
+                "highway": "residential",
+                "name": "Childrens Way",
+                "surface": "asphalt",
+                "road_class": "Class 4 — Local Collector",
+                "speed_kmh": 60,
+                "capacity_veh_hr": 800,
+                "sim_role": "routes 2B-RR1/RR2/RR3 from J27 (Children's Way/Starke) east to J8 signal",
+                "notes": "Children's Way segment from J27 to J8 area; connects Starke Rd with Ladies Mile signal; used by rat-run routes from 2B group"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.457540, -34.051566],
+                    [18.457819, -34.051331]
+                ]
+            },
+            "id": "way/687801584"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/687801586",
+                "foot": "no",
+                "highway": "secondary",
+                "lanes": "2",
+                "maxspeed": "60",
+                "name": "Main Road",
+                "ref": "M4",
+                "source:maxspeed": "sign",
+                "surface": "asphalt",
+                "road_class": "Class 2 — District Arterial",
+                "speed_kmh": 60,
+                "capacity_veh_hr": 1800,
+                "sim_role": "boundary — M4 south of J1",
+                "notes": "Main Road M4 south of J1 junction; forms southern approach boundary; not on modelled school routes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.461505, -34.052791],
+                    [18.461113, -34.054779],
+                    [18.460669, -34.056954]
+                ]
+            },
+            "id": "way/687801586"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/687801587",
+                "foot": "no",
+                "highway": "secondary",
+                "lanes": "2",
+                "name": "Ladies Mile Road",
+                "oneway": "yes",
+                "ref": "M39",
+                "surface": "asphalt",
+                "road_class": "Class 2 — District Arterial (dual carriageway)",
+                "speed_kmh": 60,
+                "capacity_veh_hr": 1800,
+                "sim_role": "boundary — M39 eastbound approach to J1 (Main/Dreyersdal, TIA Int.4)",
+                "notes": "Ladies Mile Road M39 eastbound carriageway approaching J1 from west"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.460226, -34.052825],
+                    [18.460118, -34.052785],
+                    [18.459909, -34.052692],
+                    [18.459817, -34.052642],
+                    [18.459682, -34.052555],
+                    [18.459494, -34.052418],
+                    [18.459237, -34.052208],
+                    [18.458616, -34.051696]
+                ]
+            },
+            "id": "way/687801587"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/689367619",
+                "foot": "no",
+                "highway": "secondary",
+                "lanes": "2",
+                "name": "Ladies Mile Road",
+                "oneway": "yes",
+                "ref": "M39",
+                "surface": "asphalt",
+                "road_class": "Class 2 — District Arterial (dual carriageway)",
+                "speed_kmh": 60,
+                "capacity_veh_hr": 1800,
+                "sim_role": "boundary — M39 southbound from J8 (Children's Way signal) toward J1",
+                "notes": "Ladies Mile Road M39 southbound carriageway from J8 signal area toward J1"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.458070, -34.051124],
+                    [18.458151, -34.051187],
+                    [18.458786, -34.051704],
+                    [18.459308, -34.052123],
+                    [18.459545, -34.052315],
+                    [18.459677, -34.052417],
+                    [18.459796, -34.052500],
+                    [18.459909, -34.052569],
+                    [18.460013, -34.052623],
+                    [18.460124, -34.052674],
+                    [18.460257, -34.052727],
+                    [18.460415, -34.052782]
+                ]
+            },
+            "id": "way/689367619"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/746028290",
+                "foot": "no",
+                "highway": "secondary",
+                "lanes": "3",
+                "name": "Ladies Mile Road",
+                "oneway": "yes",
+                "placement": "left_of:2",
+                "ref": "M39",
+                "surface": "asphalt",
+                "turn:lanes": "left;through|through|right",
+                "road_class": "Class 2 — District Arterial (dual carriageway)",
+                "speed_kmh": 60,
+                "capacity_veh_hr": 2700,
+                "sim_role": "boundary — M39 at J8 (Children's Way signal, TIA Int.3); 3-lane approach",
+                "notes": "Ladies Mile Road M39 3-lane approach to J8 Children's Way signal; turn lanes: left+through | through | right"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.458616, -34.051696],
+                    [18.458072, -34.051257],
+                    [18.457992, -34.051192]
+                ]
+            },
+            "id": "way/746028290"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/746028291",
+                "foot": "no",
+                "highway": "secondary",
+                "lanes": "2",
+                "name": "Ladies Mile Road",
+                "oneway": "yes",
+                "ref": "M39",
+                "surface": "asphalt",
+                "turn:lanes": "left|right",
+                "road_class": "Class 2 — District Arterial (dual carriageway)",
+                "speed_kmh": 60,
+                "capacity_veh_hr": 1800,
+                "sim_role": "boundary — M39 at J1 approach; 2-lane turn approach",
+                "notes": "Ladies Mile Road M39 2-lane approach to J1 with turn lanes: left|right"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.460415, -34.052782],
+                    [18.460520, -34.052811],
+                    [18.460684, -34.052849],
+                    [18.460920, -34.052892],
+                    [18.461170, -34.052930],
+                    [18.461367, -34.052956],
+                    [18.461466, -34.052971]
+                ]
+            },
+            "id": "way/746028291"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/746029576",
+                "foot": "no",
+                "highway": "secondary",
+                "lanes": "3",
+                "name": "Ladies Mile Road",
+                "oneway": "yes",
+                "ref": "M39",
+                "surface": "asphalt",
+                "turn:lanes": "left;through|through|right",
+                "road_class": "Class 2 — District Arterial (dual carriageway)",
+                "speed_kmh": 60,
+                "capacity_veh_hr": 2700,
+                "sim_role": "boundary — M39 at J9 (Homestead Ave, TIA Int.2); 3-lane approach",
+                "notes": "Ladies Mile Road M39 3-lane approach to J9 Homestead Ave junction; 21% of school trips enter here; turn lanes: left+through | through | right"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.457410, -34.050592],
+                    [18.457966, -34.051043],
+                    [18.458070, -34.051124]
+                ]
+            },
+            "id": "way/746029576"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/821487355",
+                "highway": "residential",
+                "name": "Leyden Road",
+                "road_class": "Class 5 — Local Access Road",
+                "speed_kmh": 30,
+                "capacity_veh_hr": 500,
+                "sim_role": "routes 1A, 1A-RR2/6, 2A, 2A-RR1, 2B, 2B-RR1/2, 3A, 3A-RR1 — J6 to J7 ingress final segment",
+                "notes": "Leyden Road from J6 (Vineyard/Leyden) to J7 (school ingress, Leyden/Ruskin); final approach segment used by all main routes and most rat runs on ingress path"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.447228, -34.050232],
+                    [18.447261, -34.050614],
+                    [18.447285, -34.051015],
+                    [18.447292, -34.051031],
+                    [18.447309, -34.051039]
+                ]
+            },
+            "id": "way/821487355"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Firgrove Way Service Road",
+                "highway": "service",
+                "road_class": "Class 5 — Local Access Road",
+                "speed_kmh": 30,
+                "capacity_veh_hr": 400,
+                "sim_role": "rat run 3A-RR2 — J12 (Starke/Firgrove) to J13 (Firgrove/Dreyersdal)",
+                "notes": "Firgrove Way service road connecting J12 to J13; used by rat run 3A-RR2 to bypass Dreyersdal Rd entirely and access school via Starke Rd north"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.445796, -34.042362],
+                    [18.448746, -34.041478]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Clement Road",
+                "highway": "residential",
+                "road_class": "Class 5 — Local Access Road",
+                "speed_kmh": 30,
+                "capacity_veh_hr": 400,
+                "sim_role": "rat runs 2A-RR1, 3A-RR1 (J25→J24); 2A-RR2 passes J24 on Starke",
+                "notes": "Clement Road from J25 (Clement/Leyden) to J24 (Starke/Clement); used by rat-run routes 2A-RR1 and 3A-RR1 to bypass J4/J5 funnel approaching school via Leyden Rd; stop-controlled at both ends"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.447152, -34.049384],
+                    [18.449076, -34.049273],
+                    [18.450461, -34.049180],
+                    [18.450972, -34.048969]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Dreyersdal Farm Road",
+                "highway": "residential",
+                "road_class": "Class 5 — Local Access Road",
+                "speed_kmh": 30,
+                "capacity_veh_hr": 400,
+                "sim_role": "routes 1A, 1A-RR2/RR3/RR4/RR5/RR6 from J2 (Dreyersdal/Farm Rd) to J3 (Farm Rd/Starke south) and J21 (Farm Rd/Tussendal)",
+                "notes": "Dreyersdal Farm Road from J2 [18.459043,-34.055213] through J3 [18.456319,-34.055697] to J21 [18.455408,-34.055798]; key decision point for all Route 1A variants; yield-controlled at J2; J3 node inserted to ensure accurate road-snap routing"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.459047, -34.055209],
+                    [18.458952, -34.055274],
+                    [18.457585, -34.055577],
+                    [18.456319, -34.055697],
+                    [18.455408, -34.055798]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Tokai High School Internal Road",
+                "highway": "service",
+                "road_class": "Class 6 — School Private Road",
+                "speed_kmh": 10,
+                "capacity_veh_hr": null,
+                "sim_role": "school internal — connects J7 ingress (Leyden/Ruskin) through school grounds to J20 egress (Aristea Rd)",
+                "notes": "Tokai High School internal access road; not a public road; connects ingress point J7 to egress point J20; proposed raised intersections at both terminal junctions"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.447300, -34.051034],
+                    [18.449009, -34.052830],
+                    [18.450016, -34.052454]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Firgrove Way",
+                "highway": "tertiary",
+                "road_class": "Class 4 — Local Collector",
+                "speed_kmh": 40,
+                "capacity_veh_hr": 800,
+                "sim_role": "routes 3A, 3A-RR1/RR2 entry from J11 (Firgrove Way west) to J9 area (Ladies Mile roundabout)",
+                "notes": "Firgrove Way east-west collector linking J11 (west entry) to Ladies Mile roundabout; 12% of school trips enter via J13 (TIA Int.1); bicycle lanes noted in TIA report"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.444545, -34.042601],
+                    [18.450252, -34.040851]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Ladies Mile Roundabout",
+                "highway": "mini_roundabout",
+                "road_class": "N/A — Junction Point",
+                "speed_kmh": null,
+                "capacity_veh_hr": null,
+                "sim_role": "junction point — Ladies Mile M39 / Firgrove Way interchange",
+                "notes": "Ladies Mile roundabout at north end of Firgrove Way and M39; entry point for routes 3A, 3A-RR1, 3A-RR2 from south"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [18.450252, -34.040851]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Homestead Avenue",
+                "highway": "residential",
+                "road_class": "Class 5 — Local Access Road",
+                "speed_kmh": 40,
+                "capacity_veh_hr": 600,
+                "sim_role": "routes 2A, 2A-RR1/RR2 and 3A from J9 (Ladies Mile/Homestead) through J28 (Homestead/Dreyersdal) to J10 (Homestead/Starke)",
+                "notes": "Homestead Avenue from J9 [18.451770,-34.044112] through J28 [18.449741,-34.044726] to J10 [18.448799,-34.045008] and west; 21% of school trips enter via J9 (TIA Int.2); J28 node inserted to ensure accurate road-snap routing"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.451753, -34.044119],
+                    [18.449741, -34.044726],
+                    [18.448802, -34.045012],
+                    [18.448669, -34.045023],
+                    [18.448521, -34.045023],
+                    [18.448244, -34.044995],
+                    [18.447706, -34.044951],
+                    [18.446633, -34.044860]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Timber Way",
+                "highway": "residential",
+                "road_class": "Class 5 — Local Access Road",
+                "speed_kmh": 30,
+                "capacity_veh_hr": 400,
+                "sim_role": "local road — not on modelled routes",
+                "notes": "Timber Way residential street; not part of any modelled school route"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.447493, -34.044929],
+                    [18.447476, -34.045160],
+                    [18.447541, -34.045387],
+                    [18.447718, -34.045827],
+                    [18.448084, -34.046712]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Pekalmy Road",
+                "highway": "residential",
+                "road_class": "Class 5 — Local Access Road",
+                "speed_kmh": 30,
+                "capacity_veh_hr": 400,
+                "sim_role": "local road — not on modelled routes",
+                "notes": "Pekalmy Road residential street; not part of any modelled school route"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.447254, -34.046964],
+                    [18.449440, -34.046295]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Lakeview Road",
+                "highway": "residential",
+                "road_class": "Class 5 — Local Access Road",
+                "speed_kmh": 30,
+                "capacity_veh_hr": 400,
+                "sim_role": "local road — not on modelled routes",
+                "notes": "Lakeview Road residential street; not part of any modelled school route"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.447725, -34.046817],
+                    [18.448346, -34.048154],
+                    [18.448391, -34.048587]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Midwood Avenue",
+                "highway": "residential",
+                "road_class": "Class 5 — Local Access Road",
+                "speed_kmh": 30,
+                "capacity_veh_hr": 400,
+                "sim_role": "local road — not on modelled routes",
+                "notes": "Midwood Avenue residential street; not part of any modelled school route"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.446953, -34.048872],
+                    [18.447621, -34.048629],
+                    [18.448391, -34.048587]
+                ]
+            }
+        }
+    ]
+}

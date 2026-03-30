@@ -85,6 +85,7 @@ export function junctionHoldDuration(jid, junctionControl, simTime, lastReleaseT
     case 'stop':          return gap >= 4.0 ? 0 : 4.0 - gap;
     case 'yield':         return gap >= 1.5 ? 0 : 1.5 - gap;
     case 'critical':      return gap >= 4.5 ? 0 : 4.5 - gap; 
+    case 'speed_hump':    return gap >= 1.2 ? 0 : 1.2 - gap;
     default: return 0;
   }
 }

@@ -37,6 +37,34 @@ export const JUNCTIONS = {
   27: { lat: -34.053388, lng: 18.454687, name: "Children's Way / Starke Rd",           control: 'stop_directional' },
   28: { lat: -34.044726, lng: 18.449741, name: 'Homestead Ave / Dreyersdal Rd',        control: '4way_stop' },
   29: { lat: -34.051135, lng: 18.450243, name: 'Ruskin Rd / Aristea Rd — roundabout', control: 'roundabout_planned' },
+  101: { lat: -34.0478486, lng: 18.4515591, name: 'Speed Hump (node/303887567)', control: 'speed_hump' },
+  102: { lat: -34.0487467, lng: 18.4520261, name: 'Speed Hump (node/303887579)', control: 'speed_hump' },
+  103: { lat: -34.0556745, lng: 18.4598811, name: 'Speed Hump (node/303887630)', control: 'speed_hump' },
+  104: { lat: -34.0428669, lng: 18.4460618, name: 'Speed Hump (node/303887725)', control: 'speed_hump' },
+  105: { lat: -34.0478846, lng: 18.4505564, name: 'Speed Hump (node/303887760)', control: 'speed_hump' },
+  106: { lat: -34.0490817, lng: 18.4510499, name: 'Speed Hump (node/303887767)', control: 'speed_hump' },
+  107: { lat: -34.049661, lng: 18.4513977, name: 'Speed Hump (node/303887772)', control: 'speed_hump' },
+  108: { lat: -34.0507691, lng: 18.4529715, name: 'Speed Hump (node/303887785)', control: 'speed_hump' },
+  109: { lat: -34.04923, lng: 18.4638388, name: 'Speed Hump (node/305465140)', control: 'speed_hump' },
+  110: { lat: -34.0462875, lng: 18.44976, name: 'Speed Hump (node/6433352123)', control: 'speed_hump' },
+  111: { lat: -34.0470253, lng: 18.4604906, name: 'Speed Hump (node/6438131288)', control: 'speed_hump' },
+  112: { lat: -34.050338, lng: 18.4646285, name: 'Speed Hump (node/6439161039)', control: 'speed_hump' },
+  113: { lat: -34.04359, lng: 18.4621378, name: 'Speed Hump (node/6440650960)', control: 'speed_hump' },
+  114: { lat: -34.0392425, lng: 18.4629896, name: 'Speed Hump (node/6440650961)', control: 'speed_hump' },
+  115: { lat: -34.0391111, lng: 18.4619034, name: 'Speed Hump (node/6440650962)', control: 'speed_hump' },
+  116: { lat: -34.0386453, lng: 18.4636554, name: 'Speed Hump (node/6440650969)', control: 'speed_hump' },
+  117: { lat: -34.0385374, lng: 18.4625886, name: 'Speed Hump (node/6440650970)', control: 'speed_hump' },
+  118: { lat: -34.0493688, lng: 18.4526142, name: 'Speed Hump (node/6440726237)', control: 'speed_hump' },
+  119: { lat: -34.0550308, lng: 18.4588576, name: 'Speed Hump (node/6440726242)', control: 'speed_hump' },
+  120: { lat: -34.0540064, lng: 18.4551122, name: 'Speed Hump (node/6440726253)', control: 'speed_hump' },
+  121: { lat: -34.0439578, lng: 18.4476814, name: 'Speed Hump (node/6440726259)', control: 'speed_hump' },
+  122: { lat: -34.0428018, lng: 18.4489478, name: 'Speed Hump (node/6440726261)', control: 'speed_hump' },
+  123: { lat: -34.0468225, lng: 18.4590753, name: 'Speed Hump (node/6459561581)', control: 'speed_hump' },
+  124: { lat: -34.0456919, lng: 18.4595419, name: 'Speed Hump (node/6469974489)', control: 'speed_hump' },
+  125: { lat: -34.0510601, lng: 18.4622123, name: 'Speed Hump (node/6721983339)', control: 'speed_hump' },
+  126: { lat: -34.0510313, lng: 18.4623623, name: 'Speed Hump (node/6721983340)', control: 'speed_hump' },
+  127: { lat: -34.0474927, lng: 18.4643195, name: 'Speed Hump (node/7549159791)', control: 'speed_hump' },
+  128: { lat: -34.0481588, lng: 18.4641681, name: 'Speed Hump (node/7549159792)', control: 'speed_hump' },
 };
 
 // ── 12 junction IDs shown on the map as markers ───────────────────────────────
@@ -52,6 +80,7 @@ export const CTRL_STYLE = {
   critical:           { color: '#ef4444', symbol: '▼' },
   egress:             { color: '#3b82f6', symbol: '○' },
   roundabout_planned: { color: '#c084fc', symbol: '◎' },
+  speed_hump:         { color: '#94a3b8', symbol: '〰' },
 };
 
 // ── Road geometry ─────────────────────────────────────────────────────────────
@@ -254,7 +283,7 @@ export function getRouteJunctions(routeId) {
 // Returns [{junctionId, pos}] for every intermediate junction on the route
 // (skips first junction and junctions with no-hold control types).
 // Used by the sim loop to apply holds when vehicles cross junction waypoints.
-const _SKIP_WP_CONTROLS = new Set(['critical', 'egress', 'roundabout_planned']);
+const _SKIP_WP_CONTROLS = new Set(['critical', 'egress', 'roundabout_planned', 'none', 'merge']);
 const _waypointPosCache  = {};
 
 export function getWaypointPositions(routeId) {

@@ -1,0 +1,12 @@
+[    2825ms] TagError: adsbygoogle.push() error: No slot size for availableWidth=0
+    at Vo (https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4744444280795001:162:364)
+    at Uo (https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4744444280795001:161:146)
+    at bp (https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4744444280795001:165:172)
+    at jp (https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4744444280795001:181:15)
+    at lp (https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4744444280795001:182:342)
+    at yr (https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4744444280795001:232:66)
+    at g.client (https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4744444280795001:222:47)
+    at bk.g (https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4744444280795001:79:555)
+    at ik (https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4744444280795001:80:706)
+    at tr (https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4744444280795001:222:35)
+[   55898ms] [WARNING] Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently @ :13

@@ -46,6 +46,7 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, onSimUp
   const inboundDelayRef = useRef({ '1A': { total: 0, count: 0 }, '2A': { total: 0, count: 0 }, '2B': { total: 0, count: 0 }, '3A': { total: 0, count: 0 } });
   const outboundDelayRef = useRef({ '1A': { total: 0, count: 0 }, '2A': { total: 0, count: 0 }, '2B': { total: 0, count: 0 }, '3A': { total: 0, count: 0 } });
   const pulsePhaseRef = useRef(0);
+  const congestionScoresRef = useRef({ '1A': 0, '2A': 0, '2B': 0, '3A': 0 });
 
   const scenarioRef = useRef(scenario), speedRef = useRef(speed), activeRoutesRef = useRef(activeRoutes);
   useEffect(() => { scenarioRef.current = scenario; }, [scenario]);
@@ -69,7 +70,7 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, onSimUp
     canvasRef.current.height = containerRef.current.offsetHeight;
   }, []);
 
-  const computeStats = useCallback((vehicles, totals, exits, inDelays, outDelays) => {
+  const computeStats = useCallback((vehicles, totals, exits, inDelays, outDelays, congScores) => {
     const res = { corridors: {}, bottlenecks: {}, parking: {} };
     ['1A','2A','2B','3A'].forEach(cid => {
       const current = vehicles.filter(v => v.corridorId === cid && v.state === 'inbound').length;
@@ -78,7 +79,8 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, onSimUp
         label: cid === '1A' ? 'Dreyersdal N' : cid === '2A' ? 'Homestead' : cid === '2B' ? "Children's Way" : 'Firgrove Way',
         current, total: totals[cid], exited: exits[cid], maxVehicles: 50,
         avgInDelay: inD.count > 0 ? Math.round(inD.total / inD.count) : 0,
-        avgOutDelay: outD.count > 0 ? Math.round(outD.total / outD.count) : 0
+        avgOutDelay: outD.count > 0 ? Math.round(outD.total / outD.count) : 0,
+        congestion: congScores?.[cid] ?? 0,
       };
     });
     res.bottlenecks = {
@@ -142,6 +144,7 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, onSimUp
     if (t >= 9000) { drawFrame(); onAutoStop(); return; }
 
     const { newVehicles, congestionScores } = spawnTick(spawnerStateRef.current, t, dt, scenarioRef.current, vehiclesRef.current);
+    Object.assign(congestionScoresRef.current, congestionScores);
     newVehicles.forEach(v => {
       corridorTotalsRef.current[v.corridorId]++;
       logEvent('SPAWN', v, { simTime: t, detail: `route=${v.routeId}` });
@@ -287,7 +290,7 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, onSimUp
       const active = vehiclesRef.current.filter(v => v.state !== 'dwell').length;
       const total = Object.values(corridorTotalsRef.current).reduce((a,b) => a+b, 0);
       onSimUpdate(t, active, total);
-      onStatsUpdate(computeStats(vehiclesRef.current, corridorTotalsRef.current, corridorExitsRef.current, inboundDelayRef.current, outboundDelayRef.current, congestionScores));
+      onStatsUpdate(computeStats(vehiclesRef.current, corridorTotalsRef.current, corridorExitsRef.current, inboundDelayRef.current, outboundDelayRef.current, congestionScoresRef.current));
       
       pulsePhaseRef.current = (pulsePhaseRef.current + 1) % 4;
       VISIBLE_JUNCTIONS.forEach(jid => {

@@ -2,7 +2,13 @@ TODO
 update the requirement/spec/plan with the changes we made.
 5) would it be possible and realistic to add in the delays due to traffic from Sweet Valley school without the data? what would those look like?
 6) in mobile view the map should start zoomed into the highlighted square and not show any of the darkened map
-7) could we add a sankey version of this flow? so not on a map - but a sankey diagram? what plan would we need
+
+got a wierd stall happendin
+corner of Dante & Airlie, the typical Vineyard "braking" corner and Airlie into the bottom of Vineyard
+Airlie into Vineyard long before Christopher and
+
+check the stall when turning right into Dreyersdal from Childrens Way
+
 
 DONE
 Lets update the plan and continue with the traffic simulator from @Tokai_HS_Traffic_Simulator_Plan.md and add to the existing pages.
@@ -32,7 +38,7 @@ Here is the ad sense code:
 </script>
 
 I also want to track usage using Google Tags my google analytics id is
-Tag Manager: Adamson: 60147474  
+Tag Manager: Adamson: 60147474
 Properties & Apps: adamson.co.za : 514042177
 
 
@@ -54,7 +60,7 @@ Properties & Apps: adamson.co.za : 514042177
     - Outside on Ruskin Road (on-street): 22 bays
  the stop-and-drop rate is calculated at 1 bay per 20 learners for 1,120 learners — that's a 56-bay drop-off requirement just for the stop-and-drop facility. plot this along the grey school line
  7) the outside bays can be used for drop and go too and needs to be modelled on Ruskin Rd and its impact on the traffic.
- 
+
 assumption - cars enter and leave the area via the same point
 
 - lets fix the colours on the map:
@@ -81,3 +87,6 @@ then under that in small text the avg seconds delayed under the Delayed In, Dela
 6) can we make any junction glow and pulse red when there is a bottleneck?
 6b) can we add a delay counter to each of the Entry/exit points when cars are delayed at any point?
 7) why are none of the rat-runs activating?
+
+8) convert time in seconds to minutes on the delay dashboard.
+9) add features to enable rat-runs once pressure builds.(WIP with Claude)

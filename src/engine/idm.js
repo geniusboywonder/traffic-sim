@@ -3,6 +3,8 @@
 // Refactored: Dwelling vehicles are OFF-ROAD (invisible to physics).
 // Outbound vehicles act as leaders for Inbound vehicles on shared school road.
 
+import { JUNCTIONS, ROUTE_CONFIG } from './routes';
+
 export const IDM_PARAMS = {
   arterial:   { v0: 60/3.6, T: 1.5, a: 1.4, b: 2.0, s0: 2.0, len: 4.5 },
   collector:  { v0: 40/3.6, T: 1.5, a: 1.2, b: 1.8, s0: 2.0, len: 4.5 },
@@ -28,17 +30,55 @@ export function idmAccel(v, dv, s, p, holdActive = false) {
   return Math.max(accel, -9.0);
 }
 
-export function junctionHoldDuration(junctionControl, simTime, frameReleases = 0, lastReleaseTime, routeId = '', corridorId = '') {
+export function junctionHoldDuration(jid, junctionControl, simTime, lastReleaseTime, routeId = '', corridorId = '') {
+  const j = JUNCTIONS[jid];
   const gap = simTime - (lastReleaseTime ?? 0);
-  if (frameReleases > 0 && junctionControl !== 'merge') {
-    const minInterVehicleGap = 3.0 * frameReleases;
-    if (gap < minInterVehicleGap) return minInterVehicleGap - gap;
+
+  // Directional logic for specific junctions
+  if (j?.direction_only) {
+    const route = ROUTE_CONFIG[routeId];
+    if (route) {
+      const idx = route.junctions.indexOf(parseInt(jid));
+      const fromJid = idx > 0 ? route.junctions[idx - 1] : null;
+      
+      switch (j.direction_only) {
+        case 'from_farm_rd':
+          if (fromJid !== 21) return 0; // J2 yield only from Farm Rd
+          break;
+        case 'from_starke_south':
+          if (fromJid !== 22) return 0; // J3 yield only from Starke south
+          break;
+        case 'from_christopher':
+          if (![18, 5].includes(fromJid)) return 0; // J4 priority_stop only from Christopher
+          break;
+        case 'from_christopher_to_vineyard':
+          if (fromJid !== 4) return 0; // J5 yield only from Christopher
+          break;
+        case 'from_dante':
+          if (fromJid !== 14) return 0; // J16 stop only from Dante
+          break;
+        case 'from_ruskin':
+          if (fromJid !== 29) return 0; // J17 yield only from Ruskin
+          break;
+        case 'starke_onto_airlie':
+          if (![4, 24].includes(fromJid)) return 0; // J22 stop only when turning from Starke
+          break;
+        case 'from_tussendal':
+          if (fromJid !== 21) return 0; // J23 yield only from Tussendal
+          break;
+        case 'from_clement':
+          if (fromJid !== 25) return 0; // J24 stop only from Clement
+          break;
+      }
+    }
   }
+
   if (junctionControl === 'stop_directional') {
     if (corridorId === '1A' || corridorId === '2B') return gap >= 5.0 ? 0 : 5.0 - gap;
     return 0;
   }
   switch (junctionControl) {
+    case 'none':          return 0;
     case 'traffic_signal': return (simTime % 60) < 30 ? 0 : 60 - (simTime % 60);
     case '4way_stop':     return gap >= 4.0 ? 0 : 4.0 - gap;
     case 'priority_stop': return gap >= 8.0 ? 0 : 8.0 - gap;

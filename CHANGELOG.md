@@ -43,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Metadata Synchronization:** `simulation-data.json` and `routes.js` are updated to version 2.1.0 with comprehensive `direction_only` constraints and updated junction naming (J12: Firgrove Service Rd).
 
 ### Changed — 2026-03-29 UI & Project Cleanup
+- **Time Metrics:** Converted all dashboard delay and duration metrics from seconds to minutes/seconds format (`M:SSm`) for better readability.
 - **Dashboard Cleanup:** Removed the "Drop-off Occupancy" section from `StatsPanel.jsx` to focus on corridor throughput and bottleneck stats.
 - **Feature Removal:** Deleted the Sankey Flow Diagram feature, including `SankeyView.jsx`, `sankeyEngine.js`, and the Multi-Page App (MPA) build configuration, to restore the project's original single-page architecture.
 

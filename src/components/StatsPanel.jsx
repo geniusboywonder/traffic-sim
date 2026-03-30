@@ -9,6 +9,13 @@ function loadClass(current, max) {
   return 'load-low';
 }
 
+function formatMin(sec) {
+  if (!sec || isNaN(sec)) return '--m';
+  const m = Math.floor(sec / 60);
+  const s = Math.round(sec % 60);
+  return `${m}:${s.toString().padStart(2, '0')}m`;
+}
+
 export default function StatsPanel({ statsData, activeVehicles, totalVehicles, activeRoutes, onToggleRoute }) {
   const { corridors, bottlenecks, parking } = statsData;
 
@@ -51,14 +58,14 @@ export default function StatsPanel({ statsData, activeVehicles, totalVehicles, a
                 <div className="stat-item-label">Delayed In</div>
                 <div className="stat-item-value">{c.total}</div>
                 <div className="stat-item-small" style={{ color: c.avgInDelay > 300 ? '#ef4444' : c.avgInDelay > 150 ? '#eab308' : '#64748b' }}>
-                  avg {c.avgInDelay}s
+                  avg {formatMin(c.avgInDelay)}
                 </div>
               </div>
               <div className="stat-item">
                 <div className="stat-item-label">Delayed Out</div>
                 <div className="stat-item-value">{c.exited}</div>
                 <div className="stat-item-small" style={{ color: c.avgOutDelay > 120 ? '#ef4444' : c.avgOutDelay > 60 ? '#eab308' : '#64748b' }}>
-                  avg {c.avgOutDelay}s
+                  avg {formatMin(c.avgOutDelay)}
                 </div>
               </div>
             </div>
@@ -95,7 +102,7 @@ export default function StatsPanel({ statsData, activeVehicles, totalVehicles, a
             <div className="stat-item">
               <div className="stat-item-label">Delayed In</div>
               <div className="stat-item-value">{bottlenecks.christopher.current}</div>
-              <div className="stat-item-small">avg --s</div>
+              <div className="stat-item-small">avg --m</div>
             </div>
             <div className="stat-item">
               <div className="stat-item-label">Delayed Out</div>
@@ -125,7 +132,7 @@ export default function StatsPanel({ statsData, activeVehicles, totalVehicles, a
             <div className="stat-item">
               <div className="stat-item-label">Delayed Out</div>
               <div className="stat-item-value">--</div>
-              <div className="stat-item-small">avg --s</div>
+              <div className="stat-item-small">avg --m</div>
             </div>
           </div>
         </div>
@@ -141,7 +148,7 @@ export default function StatsPanel({ statsData, activeVehicles, totalVehicles, a
             <div className="stat-item">
               <div className="stat-item-label">Delayed In</div>
               <div className="stat-item-value">--</div>
-              <div className="stat-item-small">avg --s</div>
+              <div className="stat-item-small">avg --m</div>
             </div>
             <div className="stat-item">
               <div className="stat-item-label">Delayed Out</div>
@@ -156,7 +163,7 @@ export default function StatsPanel({ statsData, activeVehicles, totalVehicles, a
       <div className="stats-section-title">TIA Assumptions</div>
       <div className="tia-card">
         <div className="tia-card-title">Drop-off dwell time</div>
-        45 s <em>(TIA assumption — fixed for all scenarios)</em>
+        0:45m <em>(TIA assumption — fixed for all scenarios)</em>
       </div>
       <div className="tia-card">
         <div className="tia-card-title">On-street parking (Ruskin Rd)</div>

@@ -73,12 +73,14 @@ export function resetVehicleIds() { _nextId = 1; }
 
 export function spawnTick(state, simTimeSec, dt, scenario, vehicles) {
   const newVehicles = [], rate = spawnRate(simTimeSec, scenario);
+  const congestionScores = {};
   for (const cid of Object.keys(CORRIDOR_SPLITS)) {
     state.accumulators[cid] = (state.accumulators[cid] ?? 0) + rate * CORRIDOR_SPLITS[cid] * dt;
+    const density = corridorDensity(cid, vehicles);
+    const congestion = corridorCongestionScore(cid, vehicles);
+    congestionScores[cid] = congestion;
     while (state.accumulators[cid] >= 1) {
       state.accumulators[cid] -= 1;
-      const density = corridorDensity(cid, vehicles);
-      const congestion = corridorCongestionScore(cid, vehicles);
       const rid = assignRoute(cid, scenario, density, congestion);
       newVehicles.push({
         id: _nextId++, routeId: rid, corridorId: cid, pos: 0, v: 0, state: 'inbound',
@@ -88,7 +90,7 @@ export function spawnTick(state, simTimeSec, dt, scenario, vehicles) {
       });
     }
   }
-  return newVehicles;
+  return { newVehicles, congestionScores };
 }
 
 export function processDwell(vehicle, simTimeSec, vehicles) {

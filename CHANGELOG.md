@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed — 2026-03-30 Congestion Bar Always Zero
+- **Root cause:** Three compounding bugs: (1) `computeStats` was defined with 5 parameters — the 6th `congScores` argument passed at the call site was silently dropped; (2) `congestionScoresRef` was never created; (3) the call site was passing the spawnTick-local `congestionScores` variable (only valid in that scope) instead of a persistent ref.
+- **Fix:** Added `congestionScoresRef`, update it via `Object.assign` each frame after spawnTick, added `congScores` as 6th param to `computeStats`, and write `congestion: congScores?.[cid] ?? 0` to each corridor result. Bars now correctly fill green→amber→red during peak.
+
+### Fixed — 2026-03-30 J4 Christopher Rd Hold Reverted to 4s
+- **Root cause:** Another agent changed J4 from `stop` (4s) back to `priority_stop` (8s). At peak instantaneous demand (~463 veh/hr via Christopher Rd), the 8s cap of 450 veh/hr caused backpressure onto Airlie/Dreyersdal, starving J7 of arrivals and reducing school gate throughput from ~800 to ~576 veh/hr.
+- **Fix:** Restored `control: 'stop'` (4s, 900 veh/hr cap) on J4. `direction_only: 'from_christopher'` retained so Starke Rd through-traffic is unaffected.
+
 ### Added — 2026-03-30 Dynamic Rat-Run Congestion Routing
 - `corridorCongestionScore(corridorId, vehicles)` in `spawner.js`: measures fraction of inbound vehicles on the main route that are stalled (v < 0.5 m/s). Requires ≥3 vehicles for a reliable signal; returns 0.0 below threshold.
 - `assignRoute()` updated: rat-run probability now scales dynamically with congestion score — `ratRunProb = 0.15 + congestionScore × 0.70` (clamped 15%–85%). Replaces fixed 40%. Density threshold gate still applies first.

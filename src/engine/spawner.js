@@ -74,11 +74,13 @@ export function resetVehicleIds() { _nextId = 1; }
 export function spawnTick(state, simTimeSec, dt, scenario, vehicles) {
   const newVehicles = [], rate = spawnRate(simTimeSec, scenario);
   const congestionScores = {};
+  
   for (const cid of Object.keys(CORRIDOR_SPLITS)) {
-    state.accumulators[cid] = (state.accumulators[cid] ?? 0) + rate * CORRIDOR_SPLITS[cid] * dt;
-    const density = corridorDensity(cid, vehicles);
+    const density    = corridorDensity(cid, vehicles);
     const congestion = corridorCongestionScore(cid, vehicles);
     congestionScores[cid] = congestion;
+
+    state.accumulators[cid] = (state.accumulators[cid] ?? 0) + rate * CORRIDOR_SPLITS[cid] * dt;
     while (state.accumulators[cid] >= 1) {
       state.accumulators[cid] -= 1;
       const rid = assignRoute(cid, scenario, density, congestion);

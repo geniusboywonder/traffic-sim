@@ -1,499 +1,394 @@
-# Tokai High School — Morning Traffic Simulator: Planning Document
+# Tokai HS Traffic Simulator v2 — Implementation Plan
 
-**Project:** Visual Traffic Impact Simulator — Erf 1061, Bergvliet, Cape Town  
-**Basis:** TIA Report ITS 4839 (July 2025) + Independent Review (March 2026)  
-**Focus:** AM Peak School Run (07:00–08:30)  
-**Status:** Planning Draft v4 — OSM-Validated Road Network  
+> **Build status: ✅ All phases implemented — `npm run lint` passes (0 errors), `npm run build` passes.**
+> Remaining Phase 7 items (mobile QA, performance check, FTP deploy) are user-facing verification tasks.
 
----
-
-## 1. Purpose & Scope
-
-This document plans the build of an interactive, browser-based traffic flow simulator that visualises the morning school run impact on local roads around the proposed Tokai High School site. The simulator is designed to:
-
-- Make the abstract TIA data tangible and communicable to non-technical stakeholders
-- Let users test High / Medium / Low traffic scenarios with adjustable variables
-- Highlight the roads and intersections the TIA **failed to study** (the Class 5 local streets)
-- Show "rat-run" alternative routes residents will likely use to avoid the main congestion points
-- Display real-time vehicle counts, queue build-up, and estimated wait times per zone
-- Clearly distinguish between **what the TIA modelled** and **what it left out**, via a two-layer UI
+**Spec:** `docs/superpowers/specs/2026-03-28-simulator-v2-design.md`
+**Branch:** `simulator-v2`
+**Deploy target:** https://traffic.adamson.co.za
+**Stack:** React 19 + Vite → static `dist/`
 
 ---
 
-## 2. Source Data Summary
+## Prerequisites
 
-### 2.1 School Parameters
-| Parameter | Value |
-|---|---|
-| Learners | 1,120 |
-| AM Peak Vehicle Trips (TIA figure) | **840 trips** |
-| AM Midday Trips | 392 |
-| AM Peak Window | ~07:15–08:15 (assumed 60-min peak) |
-| Ingress road | Ruskin Road (via Ruskin/Leyden Rd intersection) |
-| Egress road | Aristea Road (currently a cul-de-sac — to be converted) |
-| On-site parking | 98 bays |
-| On-street parking (Ruskin Rd) | 22 bays |
+Before Phase 1 begins:
 
-### 2.2 Trip Distribution (from TIA §13)
-
-| Origin Corridor | Share | % of 840 trips | Vehicles |
-|---|---|---|---|
-| North via Dreyersdal Rd | 11% | External | ~92 |
-| East via Homestead Ave (Main Rd M4) | 21% | External | ~176 |
-| East via Children's Way (Ladies Mile MR127) | 25% | External | ~210 |
-| South via Dreyersdal Rd (Main Rd northbound) | 13% | External | ~109 |
-| Christopher Road (local) | 4% | Local | ~34 |
-| Starke Road – north | 10% | Local | ~84 |
-| Starke Road – south | 12% | Local | ~101 |
-| Leyden Road – north | 3% | Local | ~25 |
-| Ruskin Road – east | 1% | Local | ~8 |
-
-**Key insight:** 70% of all trips (external) all funnel through **Starke Road or Christopher Road** before reaching Ruskin Road — both Class 5 local streets the TIA never formally analysed.
-
-### 2.3 Known Failure Points (from TIA + Review)
-| Location | Issue | LOS |
-|---|---|---|
-| Main Rd / Dreyersdal Rd intersection | v/c = 1.25, critical failure | **F** |
-| Ruskin Road (ingress) | 840 trips + 22 parking bays on Class 5 street, no queue analysis | Unstudied |
-| Ruskin Rd / Leyden Rd intersection | Primary ingress point — never studied | Unstudied |
-| Starke Road | Carries ~185 vehicles, Class 5, unstudied | Unstudied |
-| Christopher Road | Carries ~143 vehicles, Class 5, unstudied | Unstudied |
-| Aristea Road (egress) | Cul-de-sac conversion, no geometry analysis | Unstudied |
+- [x] Install Leaflet: `npm install leaflet`
+- [x] Verify `public/bergvliet-roads.json` is present and valid (LineString features)
+- [x] Verify `public/junctions.geojson` is present and valid
+- [x] Confirm `vite.config.js` has `base: '/'` (Vite default — check before first deploy)
 
 ---
 
-## 3. Road Network for the Simulator
+## Phase 1 — Project Scaffold & Static Shell
 
-All roads OSM-validated via OpenStreetMap at https://www.openstreetbrowser.org/#map=16/-34.0476/18.4565. Roads are grouped by simulation priority tier. Note: Ladies Mile Road is labelled **Lantern Road** on OSM in this section — naming discrepancy to carry through to simulator labels.
+Goal: app renders with correct layout, routing data loads, no simulation yet.
 
-### 3.1 Primary Roads — Must Model (TIA studied)
-| Road | OSM Confirmed | TIA Road Class | Sim Role | TIA Coverage |
-|---|---|---|---|---|
-| Main Road (M4) | ✅ | Class 3 Minor Arterial | North-south spine, LOS E/F at Dreyersdal | ✅ Studied (Int. 4) |
-| Ladies Mile Rd / Lantern Rd (MR127) | ✅ ⚠️ naming discrepancy | Class 3 Minor Arterial | Primary east approach feeder | ✅ Studied (Int. 2 & 3) |
-| Dreyersdal Road | ✅ | Class 4 Collector | North & south approach corridor, 24% of trips | ✅ Studied (Int. 1 & 4) |
-| Homestead Avenue | ✅ | Class 5 Local | East approach, 21% of trips | ✅ Studied (Int. 2) |
-| Children's Way | ✅ | Class 5 Local | East approach, 25% of trips | ✅ Studied (Int. 3) |
-| Firgrove Way | ✅ | Class 4 Collector | Northern connector, 11% of trips | ✅ Studied (Int. 1) |
+### 1.1 — Clean up scaffold
 
-### 3.2 Local Streets — The "Last Mile" (critical, unstudied)
-All 100% of school-bound vehicles must pass through this tier for the final approach. None formally analysed in the TIA.
+- [x] Delete or archive `TokaiTrafficSim.jsx` from project root (Phase 1 prototype — not part of v2 build)
+- [x] Clear `src/App.jsx` and `src/App.css` to blank starting points
+- [x] Remove unused assets from `src/assets/`
 
-| Road | OSM Confirmed | Class | Sim Role | TIA Coverage |
-|---|---|---|---|---|
-| Ruskin Road | ✅ | Class 5 Local | **School ingress — 100% of AM trips** | ❌ Never studied |
-| Aristea Road | ✅ | Class 5 Local | **School egress — 100% of AM trips** | ❌ Never studied |
-| Starke Road | ✅ | Class 5 Local | Primary local collector, ~22% of trips N+S | ❌ Never studied |
-| Christopher Road | ✅ | Class 5 Local | Secondary local collector, ~17% of trips | ❌ Never studied |
-| Leyden Road | ✅ | Class 5 Local | Ingress junction arm, 3% of trips | ❌ Never studied |
-| Vineyard Road | ✅ | Class 5 Local | North-south connector between Ruskin and Dreyersdal — direct cut-through to ingress | ❌ Not mentioned in TIA |
-| Dante Road | ✅ | Class 5 Local | Runs parallel to Aristea Rd one block east — immediate egress overflow route | ❌ Not mentioned in TIA |
-| Dante Close | ✅ | Class 5 Local (cul-de-sac) | Dead-end off Dante Rd opposite school southern boundary — deadlock risk | ❌ Not mentioned in TIA |
-| Airlie Road | ✅ | Class 5 Local | East-west cut between Aristea and Dante — direct rat-run linking egress to residential grid | ❌ Not mentioned in TIA |
+### 1.2 — `index.html` — head tags
 
-### 3.3 Secondary Residential Feeders — Model as Origin/Overflow (unstudied)
-These roads feed traffic into the primary and last-mile networks. They will carry overflow when principal routes saturate. None mentioned in the TIA.
+- [x] Add GTM `<script>` head snippet immediately after opening `<head>` tag (container `GTM-60147474`)
+- [x] Add AdSense `<script async>` in `<head>` (pub `ca-pub-4744444280795001`)
+- [x] Set `<title>Tokai HS — Morning Traffic Simulator</title>`
+- [x] Confirm `<meta name="viewport" content="width=device-width, initial-scale=1.0">`
 
-| Road | OSM Confirmed | Direction | Overflow Role | TIA Coverage |
-|---|---|---|---|---|
-| Clement Way | ✅ | East-west, off Dreyersdal | Residential connector feeding Dreyersdal from the east | ❌ Not mentioned |
-| Protea Road | ✅ | East-west, Homestead Ave area | Links Homestead Ave catchment to Dreyersdal | ❌ Not mentioned |
-| Pekalmy Road | ✅ | Short north-south, off Homestead | Feeds Homestead Ave from northern residential | ❌ Not mentioned |
-| Timber Road | ✅ | Off Homestead Ave | Short residential feeder into Homestead Ave | ❌ Not mentioned |
-| Mutual Way | ✅ | Off Homestead Ave area | Residential connector into Homestead Ave catchment | ❌ Not mentioned |
-| Kelvin Road | ✅ | Southern, feeds Children's Way | Southern approach into Children's Way catchment | ❌ Not mentioned |
-| Silverhurst Way / Silverway | ✅ | Eastern connector | Eastern approach feeding into Children's Way / Main Rd corridor | ❌ Not mentioned |
+### 1.3 — `index.html` — body tags
 
-### 3.4 Rat-Run Routes — Confirmed via OSM (model as triggered overflow)
-Activated in simulation when primary route v/c exceeds threshold. Ordered by likelihood of use.
+- [x] Add GTM `<noscript><iframe>` snippet immediately after opening `<body>` tag, before `<div id="root">`
 
-| Rat-Run Route | OSM Confirmed | Trigger | Mechanism | Risk |
-|---|---|---|---|---|
-| Aristea Rd → **Dante Rd** (parallel egress) | ✅ | Aristea Rd egress backs up | Drivers exit Aristea, loop one block east onto Dante Rd southbound | Pushes egress overflow deep into residential grid; Dante Close creates deadlock |
-| **Airlie Rd** cut (Aristea↔Dante shortcut) | ✅ | Aristea Rd or Dante Rd congestion | East-west cut directly between the two egress-parallel roads | Concentrates conflict at both junctions simultaneously |
-| Starke Rd → Christopher Rd → Ruskin Rd | ✅ | Main Rd / Dreyersdal congestion | 70% external traffic funnels off collector network onto Class 5 streets | Overloads three unstudied roads simultaneously |
-| **Vineyard Rd** → Ruskin Rd (ingress shortcut) | ✅ | Starke Rd / Christopher Rd backup | North-south shortcut directly to ingress, bypasses Starke Rd queue | Narrows to single-file; no capacity data |
-| Homestead Ave → Protea Rd / Clement Way → Dreyersdal | ✅ | Homestead Ave backup from Ladies Mile | Drivers cut through residential grid to rejoin Dreyersdal north of the jam | Spreads congestion across multiple unstudied residential streets |
-| Pekalmy Rd / Timber Rd / Mutual Way → Homestead Ave | ✅ | Homestead Ave queue building from east | Drivers approach Homestead Ave via parallel residential connectors | Turns quiet residential streets into school-run cut-throughs |
-| Kelvin Rd → Children's Way (southern approach) | ✅ | Children's Way queue at Ladies Mile | Southern approach into Children's Way avoids the Ladies Mile junction | Uncontrolled merge onto already-loaded collector |
-| Silverhurst Way → Main Rd / Children's Way | ✅ | Eastern approach congestion | Alternative eastern access toward school via Silverhurst corridor | Adds load to unstudied eastern residential grid |
-| Ladies Mile → estate alternate entries | ✅ | Children's Way queue | Drivers seek alternate entries south of the Ladies Mile / Children's Way junction | Displaces congestion into southern residential neighbourhood |
-| Simon van der Stel Freeway (M3) off-ramp redistribution | ✅ | M3 not modelled but relevant | M3 is the primary western boundary feeder — congestion on Main Rd (M4) may push drivers to use M3 off-ramps and approach from the west | Adds an unmodelled external demand vector |
+### 1.4 — File structure
 
-### 3.5 OSM Validation Notes
-| Item | Status |
-|---|---|
-| All 20 roads above confirmed present on OSM at zoom level 16 | ✅ |
-| Ladies Mile Rd labelled "Lantern Road" on OSM | ⚠️ Naming discrepancy — simulator to show both names |
-| Dante Close confirmed as cul-de-sac (dead end) | ✅ Deadlock risk confirmed |
-| Airlie Road confirmed east-west between Aristea and Dante | ✅ Rat-run confirmed viable |
-| Vineyard Road confirmed north-south Ruskin↔Dreyersdal | ✅ Ingress shortcut confirmed viable |
-| Simon van der Stel Freeway (M3) western boundary | ✅ Visible — origin feeder, not modelled as road segment |
+Create all empty placeholder files so imports resolve:
 
----
+- [x] `src/components/Header.jsx`
+- [x] `src/components/SimMap.jsx`
+- [x] `src/components/StatsPanel.jsx`
+- [x] `src/components/AdSlot.jsx`
+- [x] `src/engine/idm.js`
+- [x] `src/engine/routes.js`
+- [x] `src/engine/spawner.js`
 
-## 4. Simulator Engine Selection
+### 1.5 — `src/App.jsx` — layout grid + state
 
-### 4.1 Open-Source Simulator Research Summary
+- [x] Render `<Header>`, `<AdSlot>`, map+panel grid, `<StatsPanel>`
+- [x] Desktop grid: map column fluid + stats panel 260px fixed, sharing remaining viewport height below ad strip
+- [x] Mobile (<768px): single column; map ~55vh; stats panel full-width scrollable below
+- [x] `scenario` state (`'L' | 'M' | 'H'`) — passed to Header, SimMap, StatsPanel
+- [x] `playing` state (boolean) — passed to SimMap
+- [x] `speed` state (`1 | 2 | 5 | 10`) — passed to SimMap
+- [x] `simTime` state (seconds since 06:30) — lifted from SimMap to Header for clock display
+- [x] `activeVehicles` / `totalVehicles` state — passed to Header (desktop) and StatsPanel (mobile)
+- [x] Wire `dataLayer` event pushes: `scenario_change`, `simulation_play`, `simulation_reset`
 
-Seven open-source traffic simulators were evaluated for fit. The full comparison is below:
+### 1.6 — `src/App.css` — responsive grid + dark theme
 
-| Simulator | Tech | Browser? | Embeddable? | Traffic Model | Fit |
-|---|---|---|---|---|---|
-| **traffic-simulation.de** (movsim) | JavaScript + HTML5 Canvas | ✅ Yes | ✅ Yes — pure JS | IDM/ACC + MOBIL lane-change | ⭐⭐⭐⭐⭐ |
-| **A/B Street** | Rust → WASM | ✅ Yes | ⚠️ Complex 50MB+ bundle | Agent-based, OSM-driven | ⭐⭐⭐⭐ |
-| **Eclipse SUMO** | C++ / Python | ❌ Desktop | ❌ Not feasible | Full microscopic, industry standard | ⭐⭐ |
-| **CityFlow** | C++ + Python API | ❌ Backend | ❌ Not feasible | RL signal-control focused | ⭐ |
-| **OpenTrafficSim** | Java (TU Delft) | ❌ Desktop | ❌ Not feasible | Multi-level micro/macro | ⭐ |
-| **MovSim (Java)** | Java + XML | ❌ Desktop | ❌ Not feasible | IDM/ACC multi-model | ⭐ |
-| **JSTrafficSimulator** | JavaScript | ✅ Yes | ✅ Yes | IDM/ACC (movsim-based) | ⭐⭐⭐ |
+- [x] Dark background theme
+- [x] Header: full-width, fixed height desktop / two-row mobile
+- [x] Ad strip: full-width between header and content area
+- [x] Content area: flex row (desktop) / flex column (mobile)
+- [x] Map container: flex-grow 1, `position: relative` (needed for canvas overlay)
+- [x] Stats panel: `width: 260px` desktop / `width: 100%` mobile; overflow-y scroll
 
-### 4.2 Recommended Engine: traffic-simulation.de (movsim/traffic-simulation-de)
+### 1.7 — `src/components/Header.jsx`
 
-**Repository:** https://github.com/movsim/traffic-simulation-de  
-**License:** GPL-3.0  
-**Stars:** ~1,000 ⭐ | **Last active:** 2024
+- [x] Logo: `🏫 Tokai HS — Morning Traffic`
+- [x] `[L]` `[M]` `[H]` scenario buttons — calls `onScenarioChange` prop; active state highlighted
+- [x] Play / Pause / Reset icons — calls `onPlay`, `onPause`, `onReset` props
+- [x] Clock display — formats `simTime` prop as `HH:MM AM/PM` from 06:30 baseline
+- [x] Speed multiplier buttons `1× 2× 5× 10×` — calls `onSpeedChange` prop
+- [x] Active + Total vehicle counts — hidden on mobile (rendered in StatsPanel instead)
+- [x] Desktop: single row. Mobile: two rows per spec §3 table
 
-This is the clear winner. Key reasons:
+### 1.8 — `src/components/AdSlot.jsx`
 
-- **Pure JavaScript + HTML5 Canvas** — drops directly into a browser artifact with zero install, no backend, and no WASM complexity. The entire engine is ~1,500 lines of JS
-- **Academically rigorous physics** — implements the **Intelligent Driver Model (IDM/ACC)** and **MOBIL lane-change model**, the same car-following framework used in professional traffic engineering and referenced in the textbook *Traffic Flow Dynamics* (Treiber & Kesting, 2013) — the same theoretical basis underpinning the TIA methodology
-- **Built-in interactive controls** — sliders for inflow rate, desired speed, time headway, truck percentage etc. map directly to our H/M/L scenario parameters and What if... toggles
-- **Road network objects** — supports links, on-ramps, intersections, and conflict zones that directly model our Ruskin Rd / Starke Rd / Dreyersdal Rd / Main Rd network topology
-- **Proven embeddability** — the same author's site (traffic-simulation.de) runs it in-browser with no server dependency; multiple academic forks confirm its adaptability
+- [x] `React.memo` wrapper
+- [x] `<ins class="adsbygoogle">` with `data-ad-client="ca-pub-4744444280795001"`, `data-ad-slot="2095203571"`, `data-ad-format="auto"`, `data-full-width-responsive="true"`
+- [x] `useEffect([], () => { (adsbygoogle = window.adsbygoogle || []).push({}) })` — fires exactly once
 
-**Why not A/B Street (the next best):** A/B Street would give us actual OSM streets of Bergvliet with real geometry, which is compelling. However it compiles to a 50MB+ Rust/WASM bundle that cannot be embedded in a React artifact and requires a separate web server to host. It remains a viable option if the project evolves to a standalone hosted tool.
+### 1.9 — `src/components/StatsPanel.jsx` — static layout
 
-**Why not SUMO:** The industry gold standard for professional traffic engineering, but it is a desktop C++ application with no browser deployment path — completely wrong for this use case.
+- [x] 4 entry point cards (Dreyersdal Rd N, Homestead Ave, Children's Way, Firgrove Way) — placeholder zeros
+- [x] 3 bottleneck cards (Christopher Rd J4→J5, Ruskin Rd J6→J7, Aristea Rd J20→J29) — placeholder zeros
+- [x] 4 TIA assumption info cards (dwell 45s, 22 parking bays, Ruskin Class 5, 0% modal split)
+- [x] "What-if scenario controls — coming soon" label
+- [x] Active / Total vehicle count block — visible only on mobile (hidden on desktop via CSS)
 
-### 4.3 Integration Approach: IDM Core Re-implemented in React
-
-Rather than embedding the traffic-simulation.de files directly (they require a local file server for asset loading and use global JS variables incompatible with React's module system), the implementation approach is to **re-implement the IDM/ACC model core natively in the React artifact** — approximately 150 lines of JavaScript — using traffic-simulation.de's road network architecture as the direct blueprint.
-
-This gives us:
-- Full control over the Bergvliet road layout without adapting foreign HTML/canvas scaffolding
-- The H/M/L + What if... UI wired directly to IDM parameters
-- No external dependencies, no CORS issues, no asset loading
-- The same physics that traffic-simulation.de uses, with attribution to Treiber/Kesting
-
-### 4.4 IDM Parameter Mapping to Our Simulation Variables
-
-The IDM model governs each vehicle's acceleration based on five parameters. Each maps directly to one or more of our TIA variables and What if... toggles:
-
-| IDM Parameter | Meaning | TIA Baseline Value | What if... Toggle Effect |
-|---|---|---|---|
-| `v0` — desired speed | Free-flow target speed | Arterial: 60 km/h; Class 5: 30 km/h | Narrow carriageway: reduces to 20 km/h |
-| `T` — time headway | Gap a driver keeps to the car ahead | 1.5s (standard) | Parking conflict: increases to 2.5s (merging delays) |
-| `a` — max acceleration | How fast vehicles speed up | 1.4 m/s² | Marshal toggle: improves junction throughput |
-| `b` — comfortable deceleration | How hard drivers brake | 2.0 m/s² | Pedestrian conflict: reduces to 1.2 m/s² (cautious driving) |
-| `s0` — minimum gap | Bumper-to-bumper gap at standstill | 2.0m | Narrow carriageway: increases to 3.5m (passing constraint) |
-
-The **inflow rate** (vehicles/hour entering each road from its origin) is set directly from the TIA trip distribution percentages × total peak trips for the active scenario.
-
-### 4.5 Tech Stack
-
-| Layer | Technology | Notes |
-|---|---|---|
-| Frontend framework | React + Tailwind CSS | Single `.jsx` artifact — no separate files |
-| Simulation engine | IDM/ACC (re-implemented from traffic-simulation.de blueprint) | ~150 lines of JS, in-memory only |
-| Rendering | HTML5 Canvas via `useRef` + `requestAnimationFrame` | Vehicles as coloured dots; roads as canvas paths |
-| Road network | Custom JS road segment objects (traffic-simulation.de architecture) | Hardcoded to Bergvliet network topology |
-| State management | React `useState` / `useReducer` | No `localStorage` — all in-memory |
-| Map tiles | None | Stylised schematic only — no licensing issues |
+**Phase 1 acceptance:** `npm run dev` renders dark-themed page with correct two-column layout, all header controls visible, ad strip placeholder, stats panel with static cards. No console errors.
 
 ---
 
-## 5. Two-Layer UI Architecture
+## Phase 2 — Engine: Routes & Junction Data
 
-The simulator has two distinct layers that operate simultaneously. The layer model is the central design principle — it lets any audience immediately see the gap between the official TIA picture and reality.
+Goal: `routes.js` exports all route geometry and junction data; Leaflet map renders roads and junction markers.
 
-### 5.1 Layer Model
+### 2.1 — `src/engine/routes.js` — junction coordinates
 
-| | Layer 1: TIA Baseline | Layer 2: "What if..." |
-|---|---|---|
-| **What it shows** | The TIA as submitted — official figures, no missing variables applied | The three groups of variables the TIA omitted, toggled on top of Layer 1 |
-| **Controls** | H / M / L scenario selector | Three expandable toggle groups |
-| **State** | Always visible; cannot be hidden | Each group independently on/off; individual items within groups also toggled |
-| **Combined states** | 3 scenarios | Up to 6 combinations (each scenario × What if... overlay active or not) |
-| **Visual indicator** | Clean simulation, road colours per TIA LOS | Overlay badge: "⚠ What if active" + changed roads pulse/highlight |
+- [x] Define all junction objects: `{ id, lat, lng, name, control }`
+- [x] Include all 12 visible junctions (J1, J4, J5, J6, J7, J8, J9, J10, J13, J18, J20, J28) plus any routing-only junctions needed by ROUTE_CONFIG
 
-The **6 possible combinations** are:
+### 2.2 — `src/engine/routes.js` — CTRL_STYLE
 
-| Combination | Description |
-|---|---|
-| H + No What if | TIA worst case, as submitted |
-| H + What if ON | TIA worst case + reality corrections applied |
-| M + No What if | TIA medium case, as submitted |
-| M + What if ON | TIA medium case + reality corrections |
-| L + No What if | TIA optimistic case, as submitted |
-| L + What if ON | TIA optimistic case + reality corrections |
+- [x] Export `CTRL_STYLE` with all 8 control types from spec §4.1:
+  `traffic_signal`, `priority_stop`, `4way_stop`, `stop`, `yield`, `critical`, `egress`, `roundabout_planned`
 
-### 5.2 Layout
+### 2.3 — `src/engine/routes.js` — road geometry helpers
+
+- [x] Export `ROAD_LINES` — filtered LineString features from `bergvliet-roads.json` (Vite JSON import)
+- [x] Implement `snapSegment(from, to)` — finds closest road feature and extracts sub-path between two junction waypoints
+- [x] Implement `roadRoute(waypoints)` — chains `snapSegment` calls for full multi-junction route; returns `[[lat, lng], ...]`
+
+### 2.4 — `src/engine/routes.js` — ROUTE_CONFIG (17 inbound + 2 outbound)
+
+Each route object: `{ id, corridor, type, waypoints, maxVehicles }`
+
+**Corridor 1A — Main Rd / Dreyersdal N (entry J1):**
+- [x] `1A` — main route
+- [x] `1A-RR1` through `1A-RR6` — 6 rat-run variants
+
+**Corridor 2A — Homestead Ave (entry J9):**
+- [x] `2A` — main route
+- [x] `2A-RR1`, `2A-RR2`
+
+**Corridor 2B — Children's Way (entry J8):**
+- [x] `2B` — main route
+- [x] `2B-RR1`, `2B-RR2`, `2B-RR3`
+
+**Corridor 3A — Firgrove Way (entry J13):**
+- [x] `3A` — main route
+- [x] `3A-RR1`, `3A-RR2`
+
+**Egress:**
+- [x] `EG-A` — Aristea → Children's Way → Ladies Mile J8; 60% split
+- [x] `EG-B` — Aristea → Christopher → Dreyersdal → Main Rd J1; 40% split
+
+### 2.5 — `src/components/SimMap.jsx` — Leaflet initialisation
+
+- [x] Import `leaflet` and `leaflet/dist/leaflet.css`
+- [x] `useEffect([], () => { ... })` — initialise Leaflet map in `mapContainerRef`
+- [x] Base tiles: OpenStreetMap
+- [x] `map.fitBounds([[-34.0568, 18.4465], [-34.0400, 18.4625]], { padding: [18, 18] })`
+- [x] Draw `ROAD_LINES` as Leaflet polylines (neutral dark style, below vehicle canvas)
+
+### 2.6 — `src/components/SimMap.jsx` — junction markers
+
+- [x] Render 12 visible junctions as Leaflet `CircleMarker` styled per `CTRL_STYLE` (ring colour, radius 8)
+- [x] No junction number label on marker
+- [x] Click/tap popup: road names + control type only
+
+**Phase 2 acceptance:** Map renders with correct bounds; road geometry drawn; 12 junction markers visible with correct colours; clicking a marker shows road name and control type.
+
+---
+
+## Phase 3 — Engine: IDM Physics
+
+Goal: `idm.js` exports a working vehicle physics engine. No React dependency.
+
+### 3.1 — `src/engine/idm.js` — road class parameters
+
+- [x] Export `IDM_PARAMS` keyed by road class (`'arterial'`, `'collector'`, `'local'`) with `v0`, `T`, `a`, `b`, `s0` per spec §4.3 table
+
+### 3.2 — `src/engine/idm.js` — IDM acceleration formula
+
+- [x] Implement `idmAccel(v, dv, s, params)` — pure function, returns m/s²
+  - `s_star = s0 + v*T + (v*dv) / (2 * sqrt(a*b))`
+  - `accel = a * (1 - (v/v0)^4 - (s_star/s)^2)`
+
+### 3.3 — `src/engine/idm.js` — vehicle step function
+
+- [x] Implement `stepVehicle(vehicle, leader, roadClass, dt)` — advances one vehicle by `dt` seconds
+  - Updates `vehicle.v` and `vehicle.pos` (0.0–1.0 progress along route)
+  - Clamps velocity to `[0, v0]`
+
+### 3.4 — `src/engine/idm.js` — sub-step loop
+
+- [x] Implement `stepAllVehicles(vehicles, dt)` — iterates all active vehicles
+  - `dtSub = Math.min(dt / 4, 0.25)` — max 0.25s per sub-step
+  - Sort vehicles front-to-back before each sub-step to avoid leader/follower order bugs
+
+### 3.5 — `src/engine/idm.js` — junction hold logic
+
+- [x] Traffic signal J8: fixed cycle hold (30s green / 30s red simulated)
+- [x] All-way stops (J4, J10, J28): FIFO queue — one vehicle proceeds per 4s simulated gap
+- [x] Priority stops and stop-controlled junctions: proceed if `timeToNextVehicle > 6s`
+
+**Phase 3 acceptance:** `stepAllVehicles` called in a tight loop produces no NaN or negative velocities; vehicles slow for leaders; vehicles pause at junctions and release correctly.
+
+---
+
+## Phase 4 — Engine: Vehicle Spawner
+
+Goal: `spawner.js` produces correct vehicle counts and route assignments per scenario and simulated time.
+
+### 4.1 — `src/engine/spawner.js` — scenario config
+
+- [x] Export `SCENARIO_CONFIG`:
+  ```js
+  {
+    L: { totalTrips: 500, peakWindowMin: 75, ratRunThreshold: 0.85 },
+    M: { totalTrips: 650, peakWindowMin: 60, ratRunThreshold: 0.80 },
+    H: { totalTrips: 840, peakWindowMin: 45, ratRunThreshold: 0.70 },
+  }
+  ```
+- [x] Drop-off dwell constant: `DWELL_S = 45`
+
+### 4.2 — `src/engine/spawner.js` — bell-curve inflow rate
+
+- [x] Implement `spawnRate(simTimeSec, scenario)` — returns vehicles/second
+  - Ramp-up 06:30→07:00
+  - Peak 07:00→07:45 (narrower for High, broader for Low)
+  - Taper 07:45→08:30
+  - Integral over full window ≈ `totalTrips` ±5%
+
+### 4.3 — `src/engine/spawner.js` — origin distribution
+
+- [x] Implement `corridorSplit(scenario)` — returns fraction of total trips per corridor based on TIA §13 percentages
+  - Dreyersdal Rd N (J1), Homestead Ave (J9), Children's Way (J8), Firgrove Way (J13)
+  - Document TIA §13 source values in code comments
+
+### 4.4 — `src/engine/spawner.js` — rat-run diversion
+
+- [x] Implement `assignRoute(corridorId, scenario, corridorDensity)` — returns route ID
+  - If `corridorDensity >= ratRunThreshold`, weighted random pick from corridor's rat-run routes
+  - Otherwise assign main route
+
+### 4.5 — `src/engine/spawner.js` — tick function
+
+- [x] Implement `spawnTick(simTimeSec, dt, scenario, corridorDensities)` — returns array of new vehicle objects
+  - Each vehicle: `{ id, routeId, pos: 0, v: 0, state: 'inbound', spawnTime: simTimeSec }`
+  - Per-corridor fractional accumulator to avoid missed vehicles from sub-1 spawn rates
+
+### 4.6 — `src/engine/spawner.js` — drop-off → outbound transition
+
+- [x] Vehicle reaches `pos >= 1.0` on inbound route → transition to `state: 'dwell'`, record `dwellStart`
+- [x] After `DWELL_S` simulated seconds → transition to `state: 'outbound'`, assign egress route (60% EG-A, 40% EG-B)
+
+**Phase 4 acceptance:** Headless test loop spawns vehicles over 7200 simulated seconds; total spawned ≈ scenario trip count ±5%; corridor splits roughly match TIA §13 percentages.
+
+---
+
+## Phase 5 — Canvas Animation Loop
+
+Goal: vehicles move on the map canvas, colours correct, canvas stays in sync with map viewport.
+
+### 5.1 — `src/components/SimMap.jsx` — canvas overlay setup
+
+- [x] `<canvas>` element positioned `absolute top:0 left:0` over Leaflet map container
+- [x] On mount: `canvas.width = container.offsetWidth; canvas.height = container.offsetHeight`
+- [x] Re-sync canvas dimensions on Leaflet `moveend`, `zoomend`, and window `resize`
+- [x] `ResizeObserver` on map container — handles orientation change and layout-driven resize
+- [x] Cache `vehicleRadius`: `window.innerWidth < 768 ? 3 : 4`; update in `ResizeObserver` callback; read cached value per frame (never re-read `innerWidth` per frame)
+
+### 5.2 — `src/components/SimMap.jsx` — animation loop
+
+- [x] `requestAnimationFrame` loop: started on play, cancelled on pause/reset
+- [x] Per frame:
+  1. `dt = 0.5 * speedMultiplier` (simulated seconds)
+  2. `simTimeSec += dt`
+  3. `spawnTick(...)` → add new vehicles
+  4. `stepAllVehicles(vehicles, dt)` → update positions
+  5. Transition dwell → outbound for completed dwells
+  6. Remove outbound vehicles with `pos >= 1.0`
+  7. Clear canvas, draw all active vehicles
+  8. Update React state (`simTime`, `activeVehicles`, `totalVehicles`) — throttled to max 4 updates/sec
+- [x] Auto-stop when `simTimeSec >= 7200` (08:30)
+
+### 5.3 — `src/components/SimMap.jsx` — vehicle rendering
+
+- [x] Route `pos` → `[lat, lng]` via linear interpolation along route polyline
+- [x] `[lat, lng]` → pixel via `map.latLngToContainerPoint()`
+- [x] Draw filled circle, radius = cached `vehicleRadius`
+- [x] Colour: `inbound=#3b82f6`, `outbound=#f97316`, `ratrun=#eab308`, `queued=#ef4444`
+- [x] Vehicle is `queued` when `v < 0.5 m/s`
+
+### 5.4 — `src/components/SimMap.jsx` — play / pause / reset
+
+- [x] Play: starts `requestAnimationFrame` loop
+- [x] Pause: cancels loop, preserves vehicle state
+- [x] Reset: cancels loop, clears vehicle array, resets `simTimeSec = 0`, re-seeds spawner accumulators
+
+**Phase 5 acceptance:** Vehicles spawn at entry junctions, move along polylines, slow near junctions, turn orange after drop-off, show red when stationary. Canvas does not drift from map on zoom/pan/mobile rotation.
+
+---
+
+## Phase 6 — Stats Panel: Live Data
+
+Goal: stats cards update in real time from simulation state.
+
+### 6.1 — Entry point counters
+
+- [x] `current` — vehicles currently on that corridor's routes (inbound only)
+- [x] `total` — cumulative vehicles spawned from that corridor since 06:30
+- [x] Colour: green < 50% of corridor `maxVehicles`, amber 50–80%, red > 80%
+
+### 6.2 — Bottleneck counters
+
+- [x] Christopher Rd (J4→J5): vehicle count on segment + % of segment `maxVehicles`
+- [x] Ruskin Rd ingress (J6→J7): count of vehicles in `queued` state on that segment
+- [x] Aristea Rd egress (J20→J29): count of outbound vehicles on egress routes
+
+### 6.3 — Active / Total vehicle counts
+
+- [x] `activeVehicles` (inbound + dwell + outbound in simulation now) + `totalVehicles` (cumulative since reset)
+- [x] Desktop: shown in Header right side
+- [x] Mobile: shown at top of StatsPanel
+
+**Phase 6 acceptance:** Cards update ~4×/sec during simulation; corridor colours change as roads load up; mobile stats block shows active/total counts.
+
+---
+
+## Phase 7 — Polish & Pre-deploy
+
+### 7.1 — Visual polish
+
+- [x] Consistent dark theme (header, ad strip, map controls, stats panel)
+- [x] Play/pause/reset icons: SVG or Unicode — no external icon library
+- [x] Active scenario button clearly highlighted
+- [x] Junction marker tooltips styled to match dark theme
+
+### 7.2 — Mobile QA *(browser verification needed)*
+
+- [ ] Test at 375px (iPhone SE) and 390px (iPhone 14)
+- [ ] All 7 header elements accessible (5 in header rows, 2 in stats panel below map)
+- [ ] Map tap opens junction tooltips
+- [ ] Canvas does not overflow on orientation change
+
+### 7.3 — Performance check *(browser verification needed)*
+
+- [ ] 10× speed + High scenario (~840 vehicles at peak): frame time < 16ms
+- [x] No memory leaks — completed vehicles removed; `rAF` ID always cancelled on cleanup
+
+### 7.4 — `vite.config.js`
+
+- [x] Confirm `base: '/'` (or absent — Vite default)
+- [x] Confirm `@vitejs/plugin-react` is configured
+
+### 7.5 — Build & deploy
+
+- [x] `npm run build` — no errors
+- [x] Leaflet CSS bundled in `dist/assets/` (imported in `SimMap.jsx` or `App.jsx`)
+- [x] `dist/bergvliet-roads.json` and `dist/junctions.geojson` present (Vite copies `public/`)
+- [ ] Upload `dist/` contents to `traffic.adamson.co.za` document root
+
+---
+
+## Dependency Order
 
 ```
-┌──────────────────────────────────────────────────────────────────────────┐
-│  🏫 Tokai HS Morning Traffic Simulator          ⚠ What if... ACTIVE      │
-├────────────────────────────────────────┬─────────────────────────────────┤
-│                                        │  ── LAYER 1: TIA BASELINE ──    │
-│                                        │  Scenario:  [H]  [M]  [L]       │
-│   ROAD MAP / ANIMATION                 │  AM Peak Trips:  840             │
-│   (SVG schematic — no map tiles)       │  Peak Window:    60 min          │
-│                                        │  Time:  [▶]  [⏸]  [↺]          │
-│   • Moving vehicle dots                │  Speed: [──●──] 1x – 5x         │
-│   • Blue = inbound                     │                                  │
-│   • Orange = outbound                  │  ── LAYER 2: WHAT IF... ──      │
-│   • Yellow = rat-run                   │                                  │
-│   • Grey = queued                      │  🚗 Road Capacity Realities      │
-│                                        │     [collapsed / expanded ▼]    │
-│   Road heat: 🟢🟡🟠🔴⬛ per v/c        │                                  │
-│                                        │  📋 Demand Management            │
-│   Queue bars visible at:               │     [collapsed / expanded ▼]    │
-│   • Ruskin Rd ingress                  │                                  │
-│   • Main/Dreyersdal junction           │  🚶 Modal Split                  │
-│   • Starke Rd merge                    │     [collapsed / expanded ▼]    │
-│   • Christopher Rd                     │                                  │
-│                                        │  ── LIVE COUNTERS ──             │
-│                                        │  Ruskin Rd queue:  ## veh        │
-│                                        │  Main/Dreyersdal:  ##s wait      │
-│                                        │  Starke Rd load:   ##%           │
-│                                        │  Christopher Rd:   ##%           │
-│                                        │  Total vehicles:   ## active     │
-└────────────────────────────────────────┴─────────────────────────────────┤
-│  ZONE TABLE:  Road | Queue | Wait | v/c | LOS | Δ vs TIA baseline        │
-└──────────────────────────────────────────────────────────────────────────┘
+Phase 1 (scaffold)
+  └─ Phase 2 (routes + Leaflet map)
+       ├─ Phase 3 (IDM physics)      ← can run parallel with Phase 2 after route shape agreed
+       └─ Phase 4 (spawner)          ← can run parallel with Phase 2 after route shape agreed
+            └─ Phase 5 (canvas animation)
+                 └─ Phase 6 (live stats)
+                      └─ Phase 7 (polish + deploy)
 ```
 
-The **Δ vs TIA baseline** column in the zone table is key — it shows the numerical difference that each active "What if..." group is making in real time (e.g. "−120 vehicles", "+2m 30s wait").
-
-### 5.3 Layer 1 — TIA Baseline Scenario Definitions
-
-These are locked to TIA figures. No missing variables applied.
-
-| Parameter | High (H) | Medium (M) | Low (L) |
-|---|---|---|---|
-| Total AM vehicle trips | **840** (TIA, no reduction) | **650** (notional 15% reduction) | **500** (notional 40% reduction) |
-| Peak arrival window | 45 min (sharp peak) | 60 min | 75 min |
-| Rat-run activation threshold | 70% capacity | 80% capacity | 85% capacity |
-| Drop-off dwell time | 45s (TIA assumption) | 45s | 45s |
-| Carriageway constraint | Not applied | Not applied | Not applied |
-| Modal split | 0% (TIA as-submitted) | 0% | 0% |
-| School Travel Plan | No | No | No |
-
-### 5.4 Layer 2 — "What if..." Toggle Groups
-
-Each group is an accordion panel in the sidebar. Groups can be toggled independently. Within each group, individual items can be switched on/off. When any item is active, the simulation recalculates live and the road heat map updates.
+Phases 3 and 4 can be developed in parallel once vehicle object shape is finalised in routes.js.
 
 ---
 
-#### Group A — 🚗 Road Capacity Realities
-*What the TIA ignored about the physical constraints of the roads*
+## Key Constants
 
-| Toggle | Effect on Simulation | TIA Gap |
+| Constant | Value | Spec ref |
 |---|---|---|
-| **On-street parking conflict** (22 bays on Ruskin Rd) | Reduces Ruskin Rd effective capacity by 35%; models loss of one moving lane during drop-off | TIA proposes 22 on-street bays on the ingress road — conflict never assessed |
-| **Narrow carriageway friction** (Ruskin Rd Class 5) | Applies 0.85 capacity multiplier to Ruskin Rd; vehicles slow when opposing traffic present | Class 5 road width never formally evaluated against 840 peak trips |
-| **Pedestrian-vehicle conflict** (no footpaths) | Applies 0.80 capacity multiplier; learners walking on carriageway create friction | No sidewalks on Ruskin or Aristea Rd; TIA recommends 2m paths but doesn't model the gap period |
-| **Aristea Rd egress delay** (cul-de-sac geometry) | Adds 30s per-vehicle delay at egress; models turning/reversing constraint | No swept-path or turning circle analysis presented for cul-de-sac conversion |
-
-When this group is active, Ruskin Rd and Aristea Rd visually "tighten" — queue bars extend, road heat intensifies, and the zone counter shows effective capacity vs TIA-assumed capacity.
-
----
-
-#### Group B — 📋 Demand Management
-*Interventions that reduce or redistribute traffic — none recommended in the TIA*
-
-| Toggle | Effect on Simulation | TIA Gap |
-|---|---|---|
-| **School Travel Plan (STP)** | Reduces total vehicle trips by 15% (conservative STP estimate) | No STP or TDM strategy recommended anywhere in the TIA |
-| **Staggered bell times** (15-min split) | Spreads arrival spike across two waves; softens the peak sharply | Single bell assumed throughout — worst-case peaking never stress-tested |
-| **Traffic marshal at Ruskin/Leyden** | Increases Ruskin/Leyden junction throughput by 25%; reduces ingress queue | No marshal or traffic management plan proposed for peak drop-off |
-
-When all three are active together, the simulation shows the realistic "managed" scenario — what the school *could* achieve with basic operational measures.
-
----
-
-#### Group C — 🚶 Modal Split
-*Trips that don't generate a car — ignored entirely in the TIA*
-
-| Toggle | Effect on Simulation | TIA Gap |
-|---|---|---|
-| **Walkers & cyclists** (15% of learners) | Removes ~126 vehicles from peak; shown as pedestrian icons on map | TIA states "no reduction factors applied" for middle-to-high income area — contested by review |
-| **Public transport** (MBT / GABS, 10%) | Removes ~84 vehicles; shown as bus icons on Ladies Mile / Main Rd routes | MBT and GABS routes on Main Rd and Ladies Mile Rd entirely unacknowledged |
-| **Lift clubs** (5% of families share) | Removes ~42 vehicles (assumes avg 2 learners per lift club car) | No lift club or carpooling factor modelled |
-
-When all three are active, total vehicle load drops by ~30% — the simulation shows what a realistic modal split assessment would have produced vs the TIA's zero-reduction assumption.
-
-### 5.5 Colour Coding
-
-#### Vehicles
-| Colour | Meaning |
-|---|---|
-| 🔵 Blue | Inbound vehicle (approaching school) |
-| 🟠 Orange | Outbound vehicle (leaving school / post drop-off) |
-| 🟡 Yellow | Rat-run / backroad diversion vehicle |
-| ⚫ Dark grey | Queued / stationary vehicle |
-| 🟣 Purple | "What if..." overlay vehicle (only appears when Layer 2 changes routing) |
-
-#### Road Segments (congestion heat)
-| Colour | LOS | v/c Ratio |
-|---|---|---|
-| 🟢 Green | A–B | < 0.60 |
-| 🟡 Yellow | C | 0.60–0.75 |
-| 🟠 Amber | D | 0.75–0.90 |
-| 🔴 Red | E | 0.90–1.00 |
-| ⬛ Dark Red | F — Failure | > 1.00 |
-
-Roads with active "What if..." overlays display a **dashed border pulse** to indicate they are modified from the TIA baseline. The zone table Δ column shows the before/after delta numerically.
-
----
-
-## 6. Zone Counter Displays
-
-Each key zone shows a live panel during simulation:
-
-```
-┌─────────────────────────────────────┐
-│ ZONE: Ruskin Road Ingress           │
-│ Vehicles queued:        ████ 42     │
-│ Avg wait time:          6m 20s      │
-│ Current v/c:            1.18  🔴    │
-│ Status:                 FAILURE     │
-└─────────────────────────────────────┘
-```
-
-Zones to instrument:
-1. **Ruskin Rd / Leyden Rd** — ingress queue + drop-off stack
-2. **Main Rd / Dreyersdal Rd** — the known LOS F failure point
-3. **Starke Road** — north and south approach loads
-4. **Christopher Road** — load and spillback
-5. **Aristea Road** — egress queue after school
-6. **Children's Way / Ladies Mile entry** — eastern approach pressure
-7. **Homestead Ave / Starke Rd junction** — eastern corridor merge point
-
----
-
-## 7. Variables Missing from the TIA Model
-
-All missing variables are exposed in Layer 2 ("What if..." groups). The table below maps each variable to its group and quantifies the simulation effect.
-
-| Missing Variable | Layer 2 Group | Simulation Effect | TIA Gap |
-|---|---|---|---|
-| On-street parking conflict (Ruskin Rd) | 🚗 Road Capacity | −35% Ruskin Rd capacity | 22 bays on ingress road, never assessed |
-| Narrow carriageway friction | 🚗 Road Capacity | ×0.85 capacity multiplier on Ruskin Rd | Class 5 width never evaluated |
-| Pedestrian-vehicle conflict | 🚗 Road Capacity | ×0.80 capacity multiplier; friction on carriageway | No footpaths; TIA doesn't model gap period |
-| Aristea Rd egress geometry | 🚗 Road Capacity | +30s per vehicle at egress | No swept-path or turning analysis |
-| School Travel Plan / TDM | 📋 Demand Mgmt | −15% total vehicle trips | No STP recommended in TIA |
-| Staggered bell times | 📋 Demand Mgmt | Splits peak into 2 waves; reduces spike | Single bell assumed throughout |
-| Traffic marshal at ingress | 📋 Demand Mgmt | +25% junction throughput at Ruskin/Leyden | No traffic management plan proposed |
-| Walker / cyclist modal split | 🚶 Modal Split | −15% vehicles (~126 fewer trips) | Zero reduction factor applied |
-| Public transport (MBT / GABS) | 🚶 Modal Split | −10% vehicles (~84 fewer trips) | Bus routes entirely unacknowledged |
-| Lift clubs / carpooling | 🚶 Modal Split | −5% vehicles (~42 fewer trips) | No carpooling factor modelled |
-
-**Variables intentionally excluded from Layer 2** (dropped from earlier draft per user decision):
-- Future school extension trips — relevant but de-scoped
-- Background traffic growth — de-scoped
-- Weather / rain effect — de-scoped
-- CoCT Main Rd upgrade timing — de-scoped
-
----
-
-## 8. Build Plan — Phased Delivery
-
-**Engine basis:** IDM/ACC re-implemented from traffic-simulation.de (movsim/traffic-simulation-de, GPL-3.0) blueprint. All vehicle movement physics are based on Treiber & Kesting (2013), *Traffic Flow Dynamics*, Springer.
-
-### Phase 1 — Static Schematic Map + Layer 1 Scenario Panel ✅ COMPLETE
-- Stylised SVG road network of Bergvliet area
-- H / M / L scenario toggle wired to trip counts and road heat colours (v/c-based)
-- Layer 2 "What if..." panel structure present with all three groups and individual toggles
-- Zone counter panels with v/c, queue estimate, wait time, and Δ vs baseline
-- Zone table at bottom with LOS colour coding
-
-**Deliverable:** `TokaiTrafficSim.jsx` (React artifact)  
-**Status:** ✅ Built
-
-### Phase 2 — IDM Vehicle Animation
-- Integrate IDM/ACC core engine (~150 lines) into the React artifact
-- Road segment objects modelled on traffic-simulation.de architecture, mapped to Bergvliet topology
-- Vehicle agents spawned at origin points per TIA trip distribution percentages
-- Animated vehicle dots on Canvas: blue (inbound), orange (outbound), yellow (rat-run), grey (queued)
-- Queue accumulation at Ruskin Rd ingress — vehicles stack, slow, and wait using IDM physics
-- Play / Pause / Reset controls + simulation speed multiplier slider (1×–5×)
-- Rat-run diversion: when a road segment v/c exceeds threshold, a proportion of vehicles reroute to backroad alternative
-
-**IDM parameters wired to scenario:**
-- `v0` set per road class (arterial 60 km/h, Class 5 30 km/h)
-- `inflow` set from scenario trip count × origin distribution %
-- All five IDM parameters adjustable via What if... toggles (§4.4)
-
-**Deliverable:** Updated `.jsx` artifact with live animation  
-**Effort:** 1–2 build sessions
-
-### Phase 3 — Layer 2 "What if..." Live on IDM Engine
-- Wire all three toggle groups to IDM parameter changes (not just v/c multipliers)
-- Road Capacity toggles modify `T`, `s0`, `v0` and effective lane capacity in the engine
-- Demand Management toggles modify inflow rate and peak distribution timing
-- Modal Split toggles remove vehicles from the spawn queue before they enter the network
-- Zone table Δ column updates in real time from actual IDM output (queue length, mean speed, delay)
-- "⚠ What if... ACTIVE" badge pulses; modified road segments shown with dashed canvas stroke
-
-**Deliverable:** Full two-layer interactive `.jsx` artifact  
-**Effort:** 1–2 build sessions
-
-### Phase 4 — Polish & Clarity
-- Summary stats bar: peak duration, worst LOS, max queue length, total vehicles removed by active What if... groups
-- "Reset to TIA baseline" single button
-- Active combination label: e.g. "High + Road Capacity Realities + Modal Split"
-- Colour-blind safe palette toggle
-- Attribution footer: "Vehicle physics based on IDM/ACC model — Treiber & Kesting (2013), via movsim/traffic-simulation-de (GPL-3.0)"
-
----
-
-## 9. Assumptions & Caveats
-
-1. **This is a communicative visualisation, not a certified traffic model.** Results should not be used for regulatory submissions without a qualified traffic engineer's sign-off.
-2. Vehicle movement physics are based on the **Intelligent Driver Model (IDM/ACC)** as implemented in movsim/traffic-simulation-de (GPL-3.0) by Treiber & Kesting. The IDM is academically validated but the parameter values used here are estimates calibrated to road class, not site-measured data.
-3. Trip distribution percentages are taken directly from TIA §13 and applied as inflow rates to IDM road segments proportionally to total vehicle counts per scenario.
-4. Road capacities and IDM parameters for Class 5 local streets are estimated from standard South African guidelines (HCM adapted for SA context) since the TIA did not formally assess them — these are the most uncertain inputs in the model.
-5. Rat-run routing logic is heuristic — vehicles divert when their primary route's mean speed drops below a threshold; real driver behaviour involves information lag and route familiarity effects not modelled here.
-6. The simulation time step is 0.5 seconds of simulated time per frame; the IDM is numerically stable at this resolution for the speed ranges involved.
-7. No turning movement analysis is modelled at intersections — merge/yield conflicts are approximated via IDM gap acceptance on connecting road segments.
-8. The A/B Street simulator (Rust/WASM, Apache 2.0) is noted as a future upgrade path if the project requires real OSM street geometry and a hosted standalone tool, at the cost of significantly higher deployment complexity.
-
----
-
-## 10. Success Criteria
-
-- [ ] All 20 OSM-validated roads represented in simulator (§3.1–3.4), with correct tier grouping
-- [ ] Dante Road, Airlie Road, and Vineyard Road modelled as active rat-run routes alongside the original four
-- [ ] Dante Close deadlock risk visible when Dante Rd egress overflow activates
-- [ ] Ladies Mile / Lantern Road naming discrepancy noted in UI tooltip
-- [ ] Vehicle movement driven by IDM/ACC physics — vehicles slow, queue, and brake realistically rather than teleporting or moving at fixed speeds
-- [ ] Queue build-up on Ruskin Road emerges organically from IDM physics in the High scenario (not hardcoded)
-- [ ] Rat-run activation shows on Starke Rd and Christopher Rd when primary routes saturate
-- [ ] All three Layer 2 "What if..." groups independently toggleable with live IDM parameter changes
-- [ ] Individual items within each group independently toggleable
-- [ ] Zone table Δ column shows real-time numerical delta vs TIA baseline when What if... active
-- [ ] "⚠ What if... ACTIVE" indicator clearly visible when any Layer 2 toggle is on
-- [ ] Modified roads visually distinguishable from TIA-baseline roads (dashed canvas stroke)
-- [ ] All 6 scenario combinations (3 × 2 layers) produce meaningfully different vehicle behaviour
-- [ ] Non-technical stakeholders can understand both layers within 2 minutes of viewing
-- [ ] Runs entirely in-browser with no backend, no external CDN dependencies for the engine, no CORS issues
-- [ ] Attribution to Treiber/Kesting and movsim/traffic-simulation-de present in UI footer
-
----
-
-## 11. References & Attribution
-
-- **TIA source data:** ITS Global, *Transport Impact Assessment — Tokai High School, Bergvliet*, ITS 4839, July 2025 (Draft)
-- **Independent review:** ITS Global Independent Review, March 2026
-- **Vehicle physics model:** Treiber, M. & Kesting, A. (2013). *Traffic Flow Dynamics: Data, Models and Simulation*. Springer. https://doi.org/10.1007/978-3-642-32460-4
-- **IDM reference implementation:** movsim/traffic-simulation-de (GPL-3.0). https://github.com/movsim/traffic-simulation-de
-- **IDM original paper:** Treiber, M., Hennecke, A., & Helbing, D. (2000). Congested traffic states in empirical observations and microscopic simulations. *Physical Review E*, 62, 1805–1824.
-- **MOBIL lane-change model:** Kesting, A., Treiber, M., & Helbing, D. (2007). General lane-changing model MOBIL for car-following models. *Transportation Research Record*, 86–94.
-- **Road classification:** South African Road Classification and Access Management Manual, TRH26 v1.0 (2012)
-- **Trip generation:** South African Trip Data Manual, TMH17 v1.1, COTO (2013)
-
----
-
-*Document prepared: March 2026 | v4 — OSM-validated road network via OpenStreetBrowser*  
-*Based on TIA ITS 4839 (July 2025), ITS Global Independent Review (March 2026), movsim/traffic-simulation-de engine research, and OSM validation at zoom 16 / -34.0476 / 18.4565*
+| Simulation start | 06:30 (simTimeSec = 0) | §4.3 |
+| Simulation end | 08:30 (simTimeSec = 7200) | §4.3 |
+| Frame dt at 1× | 0.5s | §4.3 |
+| Sub-step cap | 0.25s | §4.3 |
+| Drop-off dwell | 45s | §4.5 |
+| Egress split EG-A / EG-B | 60% / 40% | §4.4 |
+| Stats panel width (desktop) | 260px | §2.1 |
+| Mobile breakpoint | 768px | §2.2 |
+| Vehicle radius mobile / desktop | 3px / 4px | §4.2 |
+| Map bounds SW | -34.0568, 18.4465 | §4.1 |
+| Map bounds NE | -34.0400, 18.4625 | §4.1 |
+| AdSense pub ID | ca-pub-4744444280795001 | §6 |
+| AdSense slot | 2095203571 | §6 |
+| GTM container | GTM-60147474 | §7 |
+| GA4 property | 514042177 | §7 |

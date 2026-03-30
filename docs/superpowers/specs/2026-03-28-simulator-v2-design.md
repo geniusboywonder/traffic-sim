@@ -77,17 +77,37 @@ Scenario change resets simulation and re-seeds vehicle spawner. Drop-off dwell t
 - Leaflet initialised in a `useEffect` (empty dependency array) inside `SimMap.jsx`
 - Base tiles: OpenStreetMap
 - Road geometry: `bergvliet-roads.json` LineString features drawn as Leaflet polylines (neutral dark style, beneath vehicle canvas)
-- Junction markers: numbered circles from `junctions.geojson` using `CTRL_STYLE` (defined in `src/engine/routes.js` and imported into `SimMap.jsx` as `import { CTRL_STYLE } from '../engine/routes'`):
+- Junction markers: a subset of junctions from `junctions.geojson` are rendered as visible markers using `CTRL_STYLE`. All junctions remain in the data (for routing and simulation), but only the following **12 are shown on the map**:
+
+| J# | Name | Why shown |
+|---|---|---|
+| J1 | Main Rd / Dreyersdal Rd | Entry point + TIA LOS F |
+| J4 | Starke Rd / Christopher Rd | All-way stop — critical funnel |
+| J5 | Christopher Rd / Vineyard Rd | Stop-controlled bottleneck |
+| J6 | Vineyard Rd / Leyden Rd | Stop-controlled — last junction before ingress |
+| J7 | School Ingress — Leyden/Ruskin | Critical ingress bottleneck |
+| J8 | Ladies Mile / Children's Way | Traffic signal — entry point |
+| J9 | Ladies Mile / Homestead Ave | Priority stop — entry point |
+| J10 | Homestead Ave / Starke Rd | All-way stop |
+| J13 | Firgrove Way / Dreyersdal Rd | Entry point |
+| J18 | Dreyersdal Rd / Christopher Rd east | Stop-controlled convergence |
+| J20 | School Egress — Aristea Rd | School gate egress |
+| J28 | Homestead Ave / Dreyersdal Rd | All-way stop |
+
+Tooltip on click/tap shows: road names and control type only (no junction number label on the marker itself).
+
+`CTRL_STYLE` (defined in `src/engine/routes.js`, imported into `SimMap.jsx`):
 
 ```js
 const CTRL_STYLE = {
-  traffic_signal: { ring: '#f59e0b', symbol: '▶' },
-  priority_stop:  { ring: '#fb923c', symbol: '⊗' },
-  '4way_stop':    { ring: '#fb923c', symbol: '✕' },
-  stop:           { ring: '#64748b', symbol: '●' },
-  yield:          { ring: '#a3e635', symbol: '△' },
-  critical:       { ring: '#ef4444', symbol: '▼' },
-  egress:         { ring: '#3b82f6', symbol: '○' },
+  traffic_signal:     { ring: '#f59e0b', symbol: '▶' },
+  priority_stop:      { ring: '#fb923c', symbol: '⊗' },
+  '4way_stop':        { ring: '#fb923c', symbol: '✕' },
+  stop:               { ring: '#64748b', symbol: '●' },
+  yield:              { ring: '#a3e635', symbol: '△' },
+  critical:           { ring: '#ef4444', symbol: '▼' },
+  egress:             { ring: '#3b82f6', symbol: '○' },
+  roundabout_planned: { ring: '#c084fc', symbol: '◎' },
 };
 ```
 
@@ -114,7 +134,7 @@ map.fitBounds([
 | `#3b82f6` blue | Inbound — travelling to school |
 | `#f97316` orange | Outbound — leaving after drop-off |
 | `#eab308` yellow | Rat-run — diverted to secondary route |
-| `#475569` grey | Queued / stationary |
+| `#ef4444` red | Queued / stationary — highlights congestion and hold-ups |
 
 ### 4.3 IDM/ACC Physics Engine — `src/engine/idm.js`
 
@@ -148,7 +168,9 @@ Ported from the internal prototype `routes-on-map-v2.html` (in `.superpowers/bra
 - `snapSegment(from, to)` — finds closest road feature to both junction waypoints and extracts the sub-path
 - `roadRoute(waypoints)` — chains snapSegment calls for a full multi-junction route
 - `CTRL_STYLE` — junction control-type visual styles (see §4.1)
-- `ROUTE_CONFIG` — **17 route definitions** (4 main + 13 rat-runs):
+- `ROUTE_CONFIG` — **17 inbound + 2 outbound egress route definitions**:
+
+**Inbound (17 routes — 4 main + 13 rat-runs):**
 
 | Corridor | Main | Rat-runs | Total |
 |---|---|---|---|
@@ -157,6 +179,17 @@ Ported from the internal prototype `routes-on-map-v2.html` (in `.superpowers/bra
 | 2B — Children's Way | 2B | 2B-RR1, 2B-RR2, 2B-RR3 | 4 |
 | 3A — Firgrove Way | 3A | 3A-RR1, 3A-RR2 | 3 |
 | **Total** | **4** | **13** | **17** |
+
+**Outbound egress (2 routes):**
+
+After drop-off, vehicles exit via Aristea Rd (J20 → J29) and split across two modelled egress corridors:
+
+| Route | Path | Notes |
+|---|---|---|
+| EG-A — Children's Way / Ladies Mile | Aristea → Ruskin → Leyden → Vineyard → Children's Way → Ladies Mile (J8) | Primary egress; shortest route to M39 |
+| EG-B — Dreyersdal Rd / Main Rd | Aristea → Ruskin → Christopher → Dreyersdal → Main Rd (J1) | Secondary egress; northbound exit |
+
+Homestead Ave (J9) and Firgrove Way (J13) egress routes are **not individually modelled** — these corridors are compounded by Sweet Valley Primary School traffic during the same AM peak window, making reliable distribution assumptions impossible without that dataset. Outbound vehicles are split 60/40 between EG-A and EG-B as a reasonable proxy.
 
 ### 4.5 Vehicle Spawner — `src/engine/spawner.js`
 
@@ -211,7 +244,7 @@ Corridors: Dreyersdal Rd (N), Homestead Ave, Children's Way, Firgrove Way.
 |---|---|---|
 | Christopher Rd | J4 → J5 (Starke/Christopher → Christopher/Vineyard) | Current vehicles + % of capacity |
 | Ruskin Rd (ingress) | J6 → J7 (Vineyard/Leyden → Leyden/Ruskin) | Queue depth (vehicles waiting) |
-| Aristea Rd (egress) | J20 (Aristea Rd egress point) | Current vehicles outbound |
+| Aristea Rd (egress) | J20 → J29 (school gate → Ruskin/Aristea roundabout) | Current vehicles outbound |
 
 Christopher Rd (J4→J5) is the final Class 5 funnel all external and local traffic must pass through before reaching the Ruskin Rd ingress. It sits on every main route and most rat-run routes and is one of the roads the TIA never formally studied.
 
@@ -308,3 +341,5 @@ npm run build
 - User accounts or saved sessions
 - Background traffic (non-school vehicles)
 - Phase-specific egress simulation (post-school-day)
+
+claude --resume fd65b3bf-1c62-4b5e-9e83-f6c2cf103b0e

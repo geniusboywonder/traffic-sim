@@ -7,15 +7,16 @@ import './App.css';
 
 const INITIAL_STATS = {
   corridors: {
-    '1A': { label: 'Dreyersdal Rd N',  current: 0, total: 0, exited: 0, maxVehicles: 50, avgDelaySec: null },
-    '2A': { label: 'Homestead Ave',     current: 0, total: 0, exited: 0, maxVehicles: 60, avgDelaySec: null },
-    '2B': { label: "Children's Way",    current: 0, total: 0, exited: 0, maxVehicles: 70, avgDelaySec: null },
-    '3A': { label: 'Firgrove Way',      current: 0, total: 0, exited: 0, maxVehicles: 40, avgDelaySec: null },
+    '3A': { label: 'Firgrove Way',      current: 0, spawned: 0, exited: 0, avgInDelay: 0, avgOutDelay: 0, congestion: 0, slowing: 0, stopped: 0 },
+    '2A': { label: 'Homestead Ave',     current: 0, spawned: 0, exited: 0, avgInDelay: 0, avgOutDelay: 0, congestion: 0, slowing: 0, stopped: 0 },
+    '2B': { label: "Children's Way",    current: 0, spawned: 0, exited: 0, avgInDelay: 0, avgOutDelay: 0, congestion: 0, slowing: 0, stopped: 0 },
+    '1A': { label: 'Dreyersdal Rd N',  current: 0, spawned: 0, exited: 0, avgInDelay: 0, avgOutDelay: 0, congestion: 0, slowing: 0, stopped: 0 },
   },
   bottlenecks: {
-    christopher: { label: 'Christopher Rd',         current: 0, maxVehicles: 15 },
-    ruskin:      { label: 'Ruskin Rd (ingress)',     queued: 0,  maxVehicles: 20 },
-    aristea:     { label: 'Aristea Rd (egress)',     current: 0, maxVehicles: 10 },
+    christopher: { label: 'Christopher Rd', active: 0, slowing: 0, stopped: 0 },
+    leyden:      { label: 'Leyden Rd',      active: 0, slowing: 0, stopped: 0 },
+    ruskin:      { label: 'Ruskin Rd',      active: 0, slowing: 0, stopped: 0 },
+    aristea:     { label: 'Aristea Rd',     active: 0, slowing: 0, stopped: 0 },
   },
   parking: {
     onSite: 0,
@@ -32,12 +33,25 @@ export default function App() {
   const [totalVehicles, setTotalVehicles]   = useState(0);
   const [statsData, setStatsData]           = useState(INITIAL_STATS);
   const [activeRoutes, setActiveRoutes]     = useState(new Set([]));
+  const [selectedCorridors, setSelectedCorridors] = useState(new Set(['1A', '2A', '2B', '3A']));
 
   const handleToggleRoute = useCallback((id) => {
     setActiveRoutes(prev => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
       else next.add(id);
+      return next;
+    });
+  }, []);
+
+  const handleToggleCorridor = useCallback((id) => {
+    setSelectedCorridors(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        if (next.size > 1) next.delete(id);
+      } else {
+        next.add(id);
+      }
       return next;
     });
   }, []);
@@ -112,6 +126,7 @@ export default function App() {
             playing={playing}
             speed={speed}
             activeRoutes={activeRoutes}
+            selectedCorridors={selectedCorridors}
             onSimUpdate={handleSimUpdate}
             onStatsUpdate={handleStatsUpdate}
             onAutoStop={handleAutoStop}
@@ -122,7 +137,9 @@ export default function App() {
           activeVehicles={activeVehicles}
           totalVehicles={totalVehicles}
           activeRoutes={activeRoutes}
+          selectedCorridors={selectedCorridors}
           onToggleRoute={handleToggleRoute}
+          onToggleCorridor={handleToggleCorridor}
         />
       </div>
     </div>

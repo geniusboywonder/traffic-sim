@@ -211,8 +211,10 @@ const RAW_ROUTES = {
   'EG-B':   { name: 'Egress B — Dante→Vineyard→Airlie→Main Rd', corridor: 'egress', type: 'egress', junctions: [7,20,29,17,16,19,15,2,1], maxVehicles: 20 },
   // EG-C (15%): Dante south → Tussendal Ave → Dreyersdal Farm Rd → Main Rd
   'EG-C':   { name: 'Egress C — Dante→Tussendal→Main Rd',       corridor: 'egress', type: 'egress', junctions: [7,20,29,17,14,23,21,2,1], maxVehicles: 15 },
-  // EG-D (20%): Dante → Starke → Firgrove Service Rd
+  // EG-D (15%): Dante -> Starke -> Firgrove Service Rd (Exit J13)
   'EG-D':   { name: 'Egress D — Dante→Starke→Firgrove',         corridor: 'egress', type: 'egress', junctions: [7,20,29,17,16,5,4,24,10,12,13], maxVehicles: 20 },
+  // EG-E (15%): Dante -> Starke -> Homestead Ave (Exit J9)
+  'EG-E':   { name: 'Egress E — Dante→Starke→Homestead',        corridor: 'egress', type: 'egress', junctions: [7,20,29,17,16,5,4,24,10,9], maxVehicles: 20 },
 };
 
 // Build route config with lazy geometry computation
@@ -341,8 +343,9 @@ export function estimateRouteLength(geometry) {
 }
 
 export const EGRESS_ROUTES = [
-  { id: 'EG-A', weight: 0.40 },
-  { id: 'EG-B', weight: 0.25 },
-  { id: 'EG-C', weight: 0.15 },
-  { id: 'EG-D', weight: 0.20 },
+  { id: 'EG-A', weight: 0.30 }, // Children's Way (J8)
+  { id: 'EG-B', weight: 0.20 }, // Main Rd (J1)
+  { id: 'EG-C', weight: 0.15 }, // Main Rd (J1)
+  { id: 'EG-D', weight: 0.15 }, // Firgrove (J13)
+  { id: 'EG-E', weight: 0.20 }, // Homestead (J9)
 ];

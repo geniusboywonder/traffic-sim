@@ -53,7 +53,18 @@
       "Bash(export PYTHONPATH=\"$SUMO_HOME/tools:$PYTHONPATH\")",
       "Bash(SUMO_TOOLS=\"C:/Program Files \\(x86\\)/Eclipse/Sumo/tools\")",
       "Bash(pip show:*)",
-      "Read(//tmp/sumo-test/**)"
+      "Read(//tmp/sumo-test/**)",
+      "Bash(ls \"/c/Program Files \\(x86\\)/Eclipse/Sumo/bin/\")",
+      "Bash(unzip -l /c/Users/neill/Github/tokai-sim/osm/road.zip)",
+      "Read(//c/Users/neill/AppData/Roaming/Python/**)",
+      "Read(//c/Program Files \\(x86\\)/Eclipse/Sumo/**)",
+      "Bash(unzip -o osm/road.zip -d osm/road/)",
+      "Bash(nslookup files.pythonhosted.org)",
+      "Bash(nslookup:*)",
+      "Bash(\"C:/Program Files \\(x86\\)/Eclipse/Sumo/bin/netconvert.exe\" --version)",
+      "Bash(\"C:/Program Files \\(x86\\)/Eclipse/Sumo/bin/sumo.exe\" --help)",
+      "Bash(ls:*)",
+      "Bash(\"C:/Program Files \\(x86\\)/Eclipse/Sumo/bin/sumo.exe\" -c \"C:/Users/neill/Github/tokai-sim/sim/sumo/bergvliet-L.sumocfg\" --no-step-log false --no-warnings false)"
     ]
   }
 }

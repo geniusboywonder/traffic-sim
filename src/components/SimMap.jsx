@@ -26,6 +26,13 @@ const COLOUR = {
   'egress': { base: '#f97316', light: '#fdba74' }, // Orange (Visual Only)
 };
 
+const ENTRY_JUNCTIONS = {
+  '1A': 1,
+  '2A': 9,
+  '2B': 8,
+  '3A': 13
+};
+
 function posToLatLng(geometry, pos) {
   if (!geometry || geometry.length === 0) return null;
   const idx = Math.max(0, Math.min(1, pos)) * (geometry.length - 1);
@@ -36,7 +43,7 @@ function posToLatLng(geometry, pos) {
   ];
 }
 
-export default function SimMap({ scenario, playing, speed, activeRoutes, onSimUpdate, onStatsUpdate, onAutoStop }) {
+export default function SimMap({ scenario, playing, speed, activeRoutes, selectedCorridors, onSimUpdate, onStatsUpdate, onAutoStop }) {
   const containerRef = useRef(null), canvasRef = useRef(null), mapRef = useRef(null);
   const vehiclesRef = useRef([]), simTimeRef = useRef(0), spawnerStateRef = useRef(createSpawnerState());
   const rafRef = useRef(null), loopRef = useRef(null), lastUpdateRef = useRef(0);
@@ -72,22 +79,42 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, onSimUp
 
   const computeStats = useCallback((vehicles, totals, exits, inDelays, outDelays, congScores) => {
     const res = { corridors: {}, bottlenecks: {}, parking: {} };
-    ['1A','2A','2B','3A'].forEach(cid => {
-      const current = vehicles.filter(v => v.corridorId === cid && v.state === 'inbound').length;
+    
+    // Ordered corridors
+    ['3A', '2A', '2B', '1A'].forEach(cid => {
+      const corrVehicles = vehicles.filter(v => v.corridorId === cid && v.state === 'inbound');
+      const current = corrVehicles.length;
+      
+      const stopped = corrVehicles.filter(v => v.v < 0.5).length;
+      const slowing = corrVehicles.filter(v => v.v >= 0.5 && v.v < 2).length;
+      const active  = corrVehicles.filter(v => v.v >= 2).length;
+
       const inD = inDelays[cid], outD = outDelays[cid];
       res.corridors[cid] = {
-        label: cid === '1A' ? 'Dreyersdal N' : cid === '2A' ? 'Homestead' : cid === '2B' ? "Children's Way" : 'Firgrove Way',
-        current, total: totals[cid], exited: exits[cid], maxVehicles: 50,
-        avgInDelay: inD.count > 0 ? Math.round(inD.total / inD.count) : 0,
-        avgOutDelay: outD.count > 0 ? Math.round(outD.total / outD.count) : 0,
+        label: cid === '1A' ? 'Dreyersdal Rd N' : cid === '2A' ? 'Homestead Ave' : cid === '2B' ? "Children's Way" : 'Firgrove Way',
+        current, 
+        spawned: totals[cid], 
+        exited: exits[cid],
+        avgInDelay: inD.count > 0 ? (inD.total / inD.count / 60) : 0,
+        avgOutDelay: outD.count > 0 ? (outD.total / outD.count / 60) : 0,
         congestion: congScores?.[cid] ?? 0,
+        stopped, slowing, active
       };
     });
+
+    const getMetrics = (vList) => ({
+      active:  vList.filter(v => v.v >= 2).length,
+      slowing: vList.filter(v => v.v >= 0.5 && v.v < 2).length,
+      stopped: vList.filter(v => v.v < 0.5).length
+    });
+
     res.bottlenecks = {
-      christopher: { label: 'Christopher Rd', current: vehicles.filter(v => v.state === 'inbound' && v.pos > 0.6 && ['1A','2A','2B','3A'].some(r => v.routeId.includes(r))).length, maxVehicles: 15 },
-      ruskin: { label: 'Ruskin Rd (ingress)', queued: vehicles.filter(v => v.state === 'inbound' && v.pos > 0.85 && v.v < 0.5).length, maxVehicles: 20 },
-      aristea: { label: 'Aristea Rd (egress)', current: vehicles.filter(v => v.state === 'outbound').length, maxVehicles: 10 }
+      christopher: { label: 'Christopher Rd', ...getMetrics(vehicles.filter(v => v.state === 'inbound' && [4, 5].includes(v.holdingAt || (v.allJunctions && v.allJunctions[v.lastJunctionIdx+1]?.junctionId)))) },
+      leyden:      { label: 'Leyden Rd',      ...getMetrics(vehicles.filter(v => v.state === 'inbound' && [6, 25, 7].includes(v.holdingAt || (v.allJunctions && v.allJunctions[v.lastJunctionIdx+1]?.junctionId)))) },
+      ruskin:      { label: 'Ruskin Rd',      ...getMetrics(vehicles.filter(v => v.state === 'inbound' && v.routeId.includes('RR') && [17, 7].includes(v.holdingAt || (v.allJunctions && v.allJunctions[v.lastJunctionIdx+1]?.junctionId)))) },
+      aristea:     { label: 'Aristea Rd',     ...getMetrics(vehicles.filter(v => v.state === 'outbound' && !v.isParking)) }
     };
+
     const p = getParkingOccupancy(vehicles);
     res.parking = { onSite: p.onSite, onStreet: p.onStreet };
     return res;
@@ -273,6 +300,27 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, onSimUp
     const remaining = [];
     vehiclesRef.current.forEach(v => {
       if (v.state === 'outbound' && v.pos >= 1.0) {
+        v.v = 0; v.pos = 1.0;
+        
+        // Final exit hold check (J1, J8, J11, J13)
+        if (v.holdUntil === null) {
+          const finalJid = v.allJunctions[v.allJunctions.length - 1].junctionId;
+          const j = JUNCTIONS[finalJid];
+          if (j) {
+            const s = junctionStateRef.current.get(finalJid) ?? { lastRelease: 0 };
+            const h = junctionHoldDuration(finalJid, j.control, t, s.lastRelease, v.routeId, v.corridorId);
+            if (h > 0) {
+              v.holdUntil = t + h; v.holdingAt = finalJid;
+              logEvent('EGRESS_WAITING', v, { simTime: t, detail: `J${finalJid} hold=${h.toFixed(1)}s` });
+              remaining.push(v); return;
+            }
+            s.lastRelease = t; junctionStateRef.current.set(finalJid, s);
+          }
+        } else if (v.holdUntil > t) {
+          remaining.push(v); return;
+        }
+
+        // Exit reached
         if (corridorExitsRef.current[v.corridorId] !== undefined) {
           corridorExitsRef.current[v.corridorId]++;
           const d = outboundDelayRef.current[v.corridorId];
@@ -307,6 +355,30 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, onSimUp
   useEffect(() => { if (playing) rafRef.current = requestAnimationFrame(loopRef.current); else if (rafRef.current) cancelAnimationFrame(rafRef.current); return () => rafRef.current && cancelAnimationFrame(rafRef.current); }, [playing, loop]);
   useEffect(() => resetSim(), [scenario, resetSim]);
   useEffect(() => drawFrame(), [activeRoutes, drawFrame]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+
+    if (selectedCorridors.size === 0 || selectedCorridors.size === 4) {
+      // Default view
+      map.fitBounds([[-34.0568, 18.4465], [-34.0400, 18.4625]], { padding: [18, 18] });
+    } else {
+      // Focus selected corridors + school gate (J7)
+      const points = [ [JUNCTIONS[7].lat, JUNCTIONS[7].lng] ];
+      selectedCorridors.forEach(cid => {
+        const jid = ENTRY_JUNCTIONS[cid];
+        if (jid && JUNCTIONS[jid]) {
+          points.push([JUNCTIONS[jid].lat, JUNCTIONS[jid].lng]);
+        }
+      });
+      
+      if (points.length > 0) {
+        const bounds = L.latLngBounds(points);
+        map.fitBounds(bounds, { padding: [50, 50], animate: true, duration: 0.5 });
+      }
+    }
+  }, [selectedCorridors]);
 
   useEffect(() => {
     if (mapRef.current) return;

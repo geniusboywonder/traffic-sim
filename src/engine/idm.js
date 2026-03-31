@@ -77,6 +77,20 @@ export function junctionHoldDuration(jid, junctionControl, simTime, lastReleaseT
     if (corridorId === '1A' || corridorId === '2B') return gap >= 5.0 ? 0 : 5.0 - gap;
     return 0;
   }
+
+  // Final Egress Points: Busy main road wait times (7:30 - 8:30)
+  // J1: Main Rd, J9: Homestead (Sweet Valley), J13: Firgrove/Dreyersdal
+  if ([1, 9, 13].includes(parseInt(jid)) && routeId.startsWith('EG-')) {
+    if (simTime >= 3000 && simTime <= 8000) {
+      const sigma = 900; 
+      const peak = 15.0; 
+      const base = 2.0;
+      const multiplier = Math.exp(-Math.pow(simTime - 5400, 2) / (2 * Math.pow(sigma, 2)));
+      const dynamicHold = base + (peak - base) * multiplier;
+      if (gap < dynamicHold) return dynamicHold - gap;
+    }
+  }
+
   switch (junctionControl) {
     case 'none':          return 0;
     case 'traffic_signal': return (simTime % 60) < 30 ? 0 : 60 - (simTime % 60);

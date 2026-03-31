@@ -1,14 +1,11 @@
 TODO
 update the requirement/spec/plan with the changes we made.
-5) would it be possible and realistic to add in the delays due to traffic from Sweet Valley school without the data? what would those look like?
 6) in mobile view the map should start zoomed into the highlighted square and not show any of the darkened map
 
-got a wierd stall happendin
-corner of Dante & Airlie, the typical Vineyard "braking" corner and Airlie into the bottom of Vineyard
-Airlie into Vineyard long before Christopher and
-
-check the stall when turning right into Dreyersdal from Childrens Way
-
+model changes:
+1) when cars are slowing or stopped and can access a rat-run, then to change to the rat-runs
+2) let the models run until all cars have completed the run (currently H still has cars active at 9AM)
+3)
 
 DONE
 Lets update the plan and continue with the traffic simulator from @Tokai_HS_Traffic_Simulator_Plan.md and add to the existing pages.
@@ -90,3 +87,19 @@ then under that in small text the avg seconds delayed under the Delayed In, Dela
 
 8) convert time in seconds to minutes on the delay dashboard.
 9) add features to enable rat-runs once pressure builds.(WIP with Claude)
+
+i'd like to adjust the ui and functionality, the user should be able to select or deslect the various Entry / Exit Corridors. This selection can be the "entire" card and does not need additional UI elements.
+this should NOT remove any vehicles from the simulation, but is should "focus" the map window so as to onyl show the selected corridors
+e.g. selecting Main Rd and Childrens Way will "zoom" the window to only show those entry points.
+if all 4 are selected then obviously the whole view needs to be show, and likewise if the extreme points are selected, then those points will need to "fit" in the window, while still showing the school
+
+i would like to update the Dashboard cards.
+1) the headings are too dark and not easy to see.
+2) Add a total count next to the heading that shows X/Y where X is total "in" cars and Y is total "out" cards.
+3) Next line should show active cars, Avg time in (in minutes),  Avg time out (in minutes)
+4) Keep the congestion graph.
+5) Replace the test underneath to show % active, % slowing, % stopped (the stopped value must not include parked)
+6) list the corridors similarly to the map layout top to bottom as - Firgrove, Homestead, Childrens Way, Dreyersdal
+7) for the bottlenecks we need 4 cards: Christopher, Leyden, Ruskin, Aristea
+8) metrics for the bottlenecks card should be cars that are: active, slowing, stopped
+9) drop the tia assumptions (these will be on a seperate page)

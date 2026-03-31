@@ -31,11 +31,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **New Egress Route (EG-E):** Added Homestead Ave exit to simulate varied outbound flow.
 
 ### Changed — 2026-03-30
+- **Watch My Road Sidebar Integration:** Moved the "Watch My Road" analyzer from a map overlay to the primary position in the sidebar.
+- **Legacy Removal:** Retired the fixed "Network Bottlenecks" section in favor of the more accurate, segment-based dynamic road watcher.
 - **Vehicle Visualization:** Swapped shading strategy—inbound vehicles now use the dark shade (start) and outbound vehicles use the light shade (exit). Rat-runs are differentiated with the base corridor color and a white stroke.
 - **Route Toggling UI:** Moved individual route toggles into a single global "Show Routes" switch within the map legend.
 - **Dashboard UI & Metrics Overhaul:** Refactored corridor cards to match map flow, updated "Avg In/Out" labels to "Avg Time In/Out", right-aligned vehicle counts in card headers with "In: X / Out: X" formatting, added "Congestion Meter" headings to the status charts, and replaced stall counts with "% active/slowing/stopped" distribution.
 
 ### Fixed — 2026-03-30
+- **Initialization Order:** Resolved `ReferenceError: Cannot access 'drawFrame' before initialization` by reordering internal function definitions in `SimMap.jsx`.
+- **Road Stats Persistence:** Extracted road stats logic into a reusable helper; stats now persist and remain interactive (via cumulative tracking) even after the simulation finishes or is paused.
+- **Routing Restoration:** Reverted main inbound routes to Leyden Road (J6) to ensure primary traffic follows the intended approach while maintaining Ruskin Road (J17) as a valid rat-run.
+- **Yield Realism:** Tightened J5 (Christopher/Vineyard) yield logic (increased gap to 2.5s) to ensure vehicles slow down realistically before merging.
+- **Road Class Physics:** Implemented dynamic roadClass attribution; egress vehicles now correctly follow collector speed profiles, and rat-runs utilize local road parameters.
+- **Egress Peak Delays:** Widened the AM peak window and increased maximum hold times at exit points (J1, J9, J13) to better simulate external corridor back-pressure.
+- **Road Stats Logic:** Resolved a stale closure bug in the simulation loop by using `selectedRoadRef`, ensuring real-time stats update correctly upon selection.
+- **Tracking Accuracy:** Switched to distance-based segment positions and implemented continuous, per-frame global road visit tracking.
+- **Robust Matching:** Added case-insensitive, trimmed road name comparison to fix 0-stat errors across various OSM data formats.
 - **Routing & Snapping:** Fixed teleportation issue in `EG-A` and `2B` routes by adding missing junction waypoint (J27) at Children's Way / Starke Rd.
 - **Congestion Bar:** Fixed `computeStats` parameter mismatch and missing `congestionScoresRef`.
 - **Christopher Rd Hold:** Reverted J4 hold to 4s stop to restore school gate throughput.

@@ -223,7 +223,8 @@ export function roadRoute(waypoints) {
 
 const RAW_ROUTES = {
   // ── Corridor 1A — Main Rd / Dreyersdal N (entry J1) ──────────────────────
-  '1A':     { name: 'Route 1A — Main Rd (N1)',         corridor: '1A', type: 'main',   junctions: [1,2,3,27,22,4,5,6,7],          maxVehicles: 50 },
+  // Main path: Dreyersdal -> Airlie -> Starke -> Christopher -> Vineyard -> Leyden -> Ruskin
+  '1A':     { name: 'Route 1A — Main Rd (N1)',         corridor: '1A', type: 'main',   junctions: [1,2,15,18,4,5,6,7],            maxVehicles: 50 },
   '1A-RR1': { name: 'Rat-run 1A-1: Dreyersdal→Airlie', corridor: '1A', type: 'ratrun', junctions: [1,2,15,18,4,5,6,7],            maxVehicles: 25 },
   '1A-RR2': { name: 'Rat-run 1A-2: →Starke→Vineyard',  corridor: '1A', type: 'ratrun', junctions: [1,2,3,27,22,19,16,5,6,7],      maxVehicles: 25 },
   '1A-RR3': { name: 'Rat-run 1A-3: →Starke→Ruskin',    corridor: '1A', type: 'ratrun', junctions: [1,2,3,27,22,19,16,17,7],       maxVehicles: 20 },
@@ -237,7 +238,8 @@ const RAW_ROUTES = {
   '2A-RR2': { name: 'Rat-run 2A-2: →Homestead/Starke→Clement→Christopher', corridor: '2A', type: 'ratrun', junctions: [9,28,10,24,4,5,6,7], maxVehicles: 30 },
 
   // ── Corridor 2B — Children's Way (entry J8) ───────────────────────────────
-  '2B':     { name: "Route 2B — Children's Way",       corridor: '2B', type: 'main',   junctions: [8,26,27,22,15,18,4,5,6,7],     maxVehicles: 70 },
+  // Standard path: Children's Way -> Dreyersdal -> Christopher -> Vineyard -> Leyden -> Ruskin
+  '2B':     { name: "Route 2B — Children's Way",       corridor: '2B', type: 'main',   junctions: [8,26,15,18,4,5,6,7],           maxVehicles: 70 },
   '2B-RR1': { name: "Rat-run 2B-1: →Starke→Christopher", corridor: '2B', type: 'ratrun', junctions: [8,26,27,22,4,5,6,7],        maxVehicles: 35 },
   '2B-RR2': { name: "Rat-run 2B-2: →Starke→Vineyard→Christopher", corridor: '2B', type: 'ratrun', junctions: [8,26,27,22,19,16,5,6,7], maxVehicles: 30 },
   '2B-RR3': { name: "Rat-run 2B-3: →Starke→Vineyard→Ruskin", corridor: '2B', type: 'ratrun', junctions: [8,26,27,22,19,16,17,7], maxVehicles: 25 },

@@ -82,9 +82,9 @@ export function junctionHoldDuration(jid, junctionControl, simTime, lastReleaseT
   // J1: Main Rd, J9: Homestead (Sweet Valley), J13: Firgrove/Dreyersdal
   if ([1, 9, 13].includes(parseInt(jid)) && routeId.startsWith('EG-')) {
     if (simTime >= 3000 && simTime <= 8000) {
-      const sigma = 900; 
-      const peak = 15.0; 
-      const base = 2.0;
+      const sigma = 1200; // wider peak
+      const peak = 20.0; // more delay
+      const base = 3.0;
       const multiplier = Math.exp(-Math.pow(simTime - 5400, 2) / (2 * Math.pow(sigma, 2)));
       const dynamicHold = base + (peak - base) * multiplier;
       if (gap < dynamicHold) return dynamicHold - gap;
@@ -97,7 +97,7 @@ export function junctionHoldDuration(jid, junctionControl, simTime, lastReleaseT
     case '4way_stop':     return gap >= 4.0 ? 0 : 4.0 - gap;
     case 'priority_stop': return gap >= 8.0 ? 0 : 8.0 - gap;
     case 'stop':          return gap >= 4.0 ? 0 : 4.0 - gap;
-    case 'yield':         return gap >= 1.5 ? 0 : 1.5 - gap;
+    case 'yield':         return gap >= 2.5 ? 0 : 2.5 - gap;
     case 'critical':      return gap >= 4.5 ? 0 : 4.5 - gap; 
     case 'speed_hump':    return gap >= 1.2 ? 0 : 1.2 - gap;
     default: return 0;
@@ -169,9 +169,22 @@ export function stepAllVehicles(vehicles, dt, routeConfigs, simTime) {
         if (bLeader) { leader = bLeader; gap = bGap; }
       }
 
+      // ── Dynamic Road Class Attribution ───────────────────────────────────
       let roadClass = v.roadClass;
-      if (toJid === 20 || (v.state === 'outbound' && v.lastJunctionIdx === 0)) roadClass = 'internal';
-      else if (toJid === 7) roadClass = 'ruskin';
+      if (v.state === 'outbound') {
+        // Egress defaults to collector/local regardless of inbound corridor
+        roadClass = 'collector';
+      }
+      
+      if (toJid === 20 || (v.state === 'outbound' && v.lastJunctionIdx === 0)) {
+        roadClass = 'internal';
+      } else if (toJid === 7 || (v.state === 'outbound' && v.lastJunctionIdx === 1)) {
+        roadClass = 'ruskin';
+      } else if (v.state === 'inbound' && routeConfigs[v.routeId]?.type === 'ratrun') {
+        // Rat-runs are local roads
+        roadClass = 'local';
+      }
+
       const p = (v.schoolEndPos !== undefined && v.pos < v.schoolEndPos) ? IDM_PARAMS.schoolyard : (IDM_PARAMS[roadClass] ?? IDM_PARAMS.local);
       
       const holdActive = (v.holdUntil !== null && v.holdUntil > (simTime ?? v.simTime)) || 

@@ -41,6 +41,7 @@ export default function App() {
   const [resultsLoading, setResultsLoading] = useState(false);
   const [playbackFrames, setPlaybackFrames] = useState([]);
   const [selectedRoad, setSelectedRoad]     = useState(null);
+  const [roadStats, setRoadStats]           = useState(null);
   const playbackRef                         = useRef(new PlaybackSource());
 
   const handleToggleRoutes = useCallback(() => {
@@ -146,10 +147,14 @@ export default function App() {
   const handleRoadSelect = useCallback((road) => {
     if (!road) {
       setSelectedRoad(null);
+      setRoadStats(null);
       return;
     }
     setSelectedRoad(prev => {
-      if (prev && prev.name === road.name) return null;
+      if (prev && prev.name === road.name) {
+        setRoadStats(null);
+        return null;
+      }
       
       if (source === 'results') {
         const roads = playbackRef.current.getRoads();
@@ -159,6 +164,10 @@ export default function App() {
       return { name: road.name, id: road.name };
     });
   }, [source]);
+
+  const handleRoadStatsUpdate = useCallback((stats) => {
+    setRoadStats(stats);
+  }, []);
 
   return (
     <div className="app">
@@ -192,6 +201,7 @@ export default function App() {
             playbackSource={playbackRef.current}
             onSimUpdate={handleSimUpdate}
             onStatsUpdate={handleStatsUpdate}
+            onRoadStatsUpdate={handleRoadStatsUpdate}
             onAutoStop={handleAutoStop}
             onRoadSelect={handleRoadSelect}
             selectedRoad={selectedRoad}
@@ -204,6 +214,9 @@ export default function App() {
           totalVehicles={totalVehicles}
           selectedCorridors={selectedCorridors}
           onToggleCorridor={handleToggleCorridor}
+          selectedRoad={selectedRoad}
+          roadStats={roadStats}
+          onCloseRoad={() => handleRoadSelect(null)}
         />
       </div>
     </div>

@@ -192,7 +192,7 @@ const RAW_ROUTES = {
   '2A-RR2': { name: 'Rat-run 2A-2: →Homestead/Starke→Clement→Christopher', corridor: '2A', type: 'ratrun', junctions: [9,28,10,24,4,5,6,7], maxVehicles: 30 },
 
   // ── Corridor 2B — Children's Way (entry J8) ───────────────────────────────
-  '2B':     { name: "Route 2B — Children's Way",       corridor: '2B', type: 'main',   junctions: [8,26,15,18,4,5,6,7],           maxVehicles: 70 },
+  '2B':     { name: "Route 2B — Children's Way",       corridor: '2B', type: 'main',   junctions: [8,26,27,22,15,18,4,5,6,7],     maxVehicles: 70 },
   '2B-RR1': { name: "Rat-run 2B-1: →Starke→Christopher", corridor: '2B', type: 'ratrun', junctions: [8,26,27,22,4,5,6,7],        maxVehicles: 35 },
   '2B-RR2': { name: "Rat-run 2B-2: →Starke→Vineyard→Christopher", corridor: '2B', type: 'ratrun', junctions: [8,26,27,22,19,16,5,6,7], maxVehicles: 30 },
   '2B-RR3': { name: "Rat-run 2B-3: →Starke→Vineyard→Ruskin", corridor: '2B', type: 'ratrun', junctions: [8,26,27,22,19,16,17,7], maxVehicles: 25 },
@@ -205,7 +205,7 @@ const RAW_ROUTES = {
   // ── Egress routes (post drop-off) ─────────────────────────────────────────
   // All start at J7 (school gate) → J20 (Aristea exit) → J29 (roundabout) → right onto Dante
   // EG-A (40%): Dante → Vineyard → Airlie → Starke → Children's Way → Ladies Mile
-  'EG-A':   { name: "Egress A — Dante→Vineyard→Children's Way", corridor: 'egress', type: 'egress', junctions: [7,20,29,17,16,19,22,26,8], maxVehicles: 30 },
+  'EG-A':   { name: "Egress A — Dante→Vineyard→Children's Way", corridor: 'egress', type: 'egress', junctions: [7,20,29,17,16,19,22,27,26,8], maxVehicles: 30 },
   // EG-B (25%): Dante → Vineyard → Airlie → Dreyersdal Rd → Main Rd
   'EG-B':   { name: 'Egress B — Dante→Vineyard→Airlie→Main Rd', corridor: 'egress', type: 'egress', junctions: [7,20,29,17,16,19,15,2,1], maxVehicles: 20 },
   // EG-C (15%): Dante south → Tussendal Ave → Dreyersdal Farm Rd → Main Rd
@@ -240,6 +240,33 @@ export const CORRIDOR_ROUTES = {
   '2A': { main: '2A',  ratRuns: ['2A-RR1','2A-RR2'] },
   '2B': { main: '2B',  ratRuns: ['2B-RR1','2B-RR2','2B-RR3'] },
   '3A': { main: '3A',  ratRuns: ['3A-RR1','3A-RR2'] },
+};
+
+// ── Rat-run divergence points ────────────────────────────────────────────────
+// Defines where a vehicle on a main route can switch to a rat-run if congested.
+// Format: { [sourceRouteId]: [ { atJid, toRouteId } ] }
+export const RAT_RUN_SWITCHES = {
+  '1A': [
+    { atJid: 2,  toRouteId: '1A-RR1' },
+    { atJid: 3,  toRouteId: '1A-RR5' },
+    { atJid: 3,  toRouteId: '1A-RR6' },
+    { atJid: 22, toRouteId: '1A-RR2' },
+    { atJid: 22, toRouteId: '1A-RR3' },
+    { atJid: 22, toRouteId: '1A-RR4' }
+  ],
+  '2A': [
+    { atJid: 28, toRouteId: '2A-RR1' },
+    { atJid: 28, toRouteId: '2A-RR2' }
+  ],
+  '2B': [
+    { atJid: 26, toRouteId: '2B-RR1' },
+    { atJid: 26, toRouteId: '2B-RR2' },
+    { atJid: 26, toRouteId: '2B-RR3' }
+  ],
+  '3A': [
+    { atJid: 24, toRouteId: '3A-RR1' },
+    { atJid: 24, toRouteId: '3A-RR2' }
+  ]
 };
 
 // ── Route Junction Positions ────────────────────────────────────────────────

@@ -34,7 +34,7 @@ export default function App() {
   const [activeVehicles, setActiveVehicles] = useState(0);
   const [totalVehicles, setTotalVehicles]   = useState(0);
   const [statsData, setStatsData]           = useState(INITIAL_STATS);
-  const [activeRoutes, setActiveRoutes]     = useState(new Set([]));
+  const [showRoutes, setShowRoutes]         = useState(false);
   const [selectedCorridors, setSelectedCorridors] = useState(new Set(['1A', '2A', '2B', '3A']));
   
   const [source, setSource]                 = useState('live');
@@ -43,13 +43,8 @@ export default function App() {
   const [selectedRoad, setSelectedRoad]     = useState(null);
   const playbackRef                         = useRef(new PlaybackSource());
 
-  const handleToggleRoute = useCallback((id) => {
-    setActiveRoutes(prev => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
+  const handleToggleRoutes = useCallback(() => {
+    setShowRoutes(prev => !prev);
   }, []);
 
   const handleToggleCorridor = useCallback((id) => {
@@ -183,7 +178,8 @@ export default function App() {
             scenario={scenario}
             playing={playing}
             speed={speed}
-            activeRoutes={activeRoutes}
+            showRoutes={showRoutes}
+            onToggleRoutes={handleToggleRoutes}
             selectedCorridors={selectedCorridors}
             source={source}
             playbackSource={playbackRef.current}
@@ -197,9 +193,7 @@ export default function App() {
           statsData={statsData}
           activeVehicles={activeVehicles}
           totalVehicles={totalVehicles}
-          activeRoutes={activeRoutes}
           selectedCorridors={selectedCorridors}
-          onToggleRoute={handleToggleRoute}
           onToggleCorridor={handleToggleCorridor}
         />
         {selectedRoad && (

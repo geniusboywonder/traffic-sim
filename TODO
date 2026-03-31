@@ -3,11 +3,14 @@ TODO
 
 5) would it be possible and realistic to add in the delays due to traffic from Sweet Valley school without the data? what would those look like?
 6) in mobile view the map should start zoomed into the highlighted square and not show any of the darkened map
+7) snapping of cars to route Vineyard to Airlie to Starke to Childrens Way, teleports and doesnt follow the route
+9) change labels to say "Avg Time In", "Avg Time Out"
+10) is there ayway we can use the same entry/exit colour for the dots, but show a lighter and darker shade if the car is ingressing or egressing?
+
 
 model changes:
-1) when cars are slowing or stopped and can access a rat-run, then to change to the rat-runs
 2) let the models run until all cars have completed the run (currently H still has cars active at 9AM)
-3) 
+3)
 
 DONE
 Lets update the plan and continue with the traffic simulator from @Tokai_HS_Traffic_Simulator_Plan.md and add to the existing pages.
@@ -122,3 +125,7 @@ i would like to update the Dashboard cards.
 7) for the bottlenecks we need 4 cards: Christopher, Leyden, Ruskin, Aristea
 8) metrics for the bottlenecks card should be cars that are: active, slowing, stopped
 9) drop the tia assumptions (these will be on a seperate page)
+
+1) when cars are slowing or stopped and can access a rat-run, then to change to the rat-runs
+
+8) move the "show route" option into the key on the map and it must be a toggle switch that toggles all routes on or off

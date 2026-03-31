@@ -21,15 +21,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Speed Humps Extent:** Skipped humps outside OSM extent to prevent netconvert errors.
 
 ### Added — 2026-03-30
+- **Dynamic Rat-Run Switching:** Logic allowing vehicles to switch to alternative rat-runs if slowing or stopped near divergence points.
+- **Route Divergence Mapping:** Defined `RAT_RUN_SWITCHES` configuration for main corridor transitions at key junctions.
 - **Peak-Hour Egress Delays:** Dynamic wait times for final egress points (J1, J9, J13) scaling during 7:30–8:30 AM peak.
 - **Corridor Focus & Auto-Zoom:** Interactive StatsPanel cards with dynamic map focusing and bounding-box zoom.
 - **Dynamic Rat-Run Congestion:** Probability scaling (15%–85%) based on real-time corridor congestion scores.
 - **New Egress Route (EG-E):** Added Homestead Ave exit to simulate varied outbound flow.
 
 ### Changed — 2026-03-30
-- **Dashboard UI & Metrics Overhaul:** Refactored corridor cards to match map flow, added Total In/Out metrics, and replaced stall counts with "% active/slowing/stopped" distribution.
+- **Vehicle Visualization:** Swapped shading strategy—inbound vehicles now use the dark shade (start) and outbound vehicles use the light shade (exit). Rat-runs are differentiated with the base corridor color and a white stroke.
+- **Route Toggling UI:** Moved individual route toggles into a single global "Show Routes" switch within the map legend.
+- **Dashboard UI & Metrics Overhaul:** Refactored corridor cards to match map flow, updated "Avg In/Out" labels to "Avg Time In/Out", right-aligned vehicle counts in card headers with "In: X / Out: X" formatting, added "Congestion Meter" headings to the status charts, and replaced stall counts with "% active/slowing/stopped" distribution.
 
 ### Fixed — 2026-03-30
+- **Routing & Snapping:** Fixed teleportation issue in `EG-A` and `2B` routes by adding missing junction waypoint (J27) at Children's Way / Starke Rd.
 - **Congestion Bar:** Fixed `computeStats` parameter mismatch and missing `congestionScoresRef`.
 - **Christopher Rd Hold:** Reverted J4 hold to 4s stop to restore school gate throughput.
 

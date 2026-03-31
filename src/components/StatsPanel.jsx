@@ -8,9 +8,7 @@ function fmtMin(min) {
 
 export default function StatsPanel({
   statsData,
-  activeRoutes,
   selectedCorridors,
-  onToggleRoute,
   onToggleCorridor
 }) {
   const { corridors, bottlenecks, parking } = statsData;
@@ -35,15 +33,8 @@ export default function StatsPanel({
               style={{ cursor: 'pointer' }}
             >
               <div className="stat-card-header">
-                <div className="stat-card-label">
-                  {c.label} <span className="total-count">{c.spawned}/{c.exited}</span>
-                </div>
-                <button 
-                  className={`route-toggle-btn ${activeRoutes.has(id) ? 'active' : ''}`}
-                  onClick={(e) => { e.stopPropagation(); onToggleRoute(id); }}
-                >
-                  {activeRoutes.has(id) ? 'Hide' : 'Show'}
-                </button>
+                <div className="stat-card-label">{c.label}</div>
+                <span className="total-count">In: {c.spawned} / Out: {c.exited}</span>
               </div>
 
               <div className="metrics-row">
@@ -52,16 +43,17 @@ export default function StatsPanel({
                   <span className="m-value">{c.current}</span>
                 </div>
                 <div className="metric">
-                  <span className="m-label">Avg In</span>
+                  <span className="m-label">Avg Time In</span>
                   <span className="m-value">{fmtMin(c.avgInDelay)}</span>
                 </div>
                 <div className="metric">
-                  <span className="m-label">Avg Out</span>
+                  <span className="m-label">Avg Time Out</span>
                   <span className="m-value">{fmtMin(c.avgOutDelay)}</span>
                 </div>
               </div>
 
               <div className="congestion-container" style={{ marginTop: 8 }}>
+                <div className="m-label" style={{ marginBottom: 4, opacity: 0.8 }}>Congestion Meter</div>
                 <div className="congestion-bar" style={{ height: 4, background: '#1e3a5f', borderRadius: 2, overflow: 'hidden' }}>
                   <div 
                     className="congestion-fill" 

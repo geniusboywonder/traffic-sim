@@ -234,7 +234,6 @@
   font-family: 'Inter', sans-serif;
   font-size: 10px;
   color: #64748b;
-  margin-left: 6px;
   font-weight: 400;
 }
 
@@ -269,33 +268,6 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 6px;
-}
-
-.route-toggle-btn {
-  background: #1e293b;
-  color: #94a3b8;
-  border: 1px solid #334155;
-  border-radius: 4px;
-  padding: 3px 8px;
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.15s;
-  letter-spacing: 0.5px;
-}
-
-.route-toggle-btn:hover {
-  background: #334155;
-  color: #f1f5f9;
-  border-color: #475569;
-}
-
-.route-toggle-btn.active {
-  background: #2563eb;
-  color: #fff;
-  border-color: #3b82f6;
-  box-shadow: 0 0 8px rgba(37, 99, 235, 0.4);
 }
 
 .stat-card-row {

@@ -6,7 +6,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import {
   JUNCTIONS, VISIBLE_JUNCTIONS, CTRL_STYLE, ROAD_LINES, ROUTE_CONFIG,
-  getRouteJunctions,
+  getRouteJunctions, RAT_RUN_SWITCHES
 } from '../engine/routes';
 import { stepAllVehicles, junctionHoldDuration, getParkingOccupancy, PARKING_CAPACITY } from '../engine/idm';
 import {
@@ -19,11 +19,11 @@ import { logEvent, logSchoolEvent, loggerClear } from '../engine/logger';
 const COLOUR = {
   dwell:    '#6b7280', // grey
   delayed:  '#ef4444', // red
-  '1A':     { base: '#3b82f6', light: '#93c5fd' }, // Blue
-  '2A':     { base: '#06b6d4', light: '#67e8f9' }, // Cyan
-  '2B':     { base: '#6366f1', light: '#a5b4fc' }, // Indigo
-  '3A':     { base: '#10b981', light: '#6ee7b7' }, // Emerald
-  'egress': { base: '#f97316', light: '#fdba74' }, // Orange (Visual Only)
+  '1A':     { base: '#3b82f6', light: '#93c5fd', dark: '#1d4ed8' }, // Blue
+  '2A':     { base: '#06b6d4', light: '#a5b4fc', dark: '#0891b2' }, // Cyan
+  '2B':     { base: '#6366f1', light: '#c7d2fe', dark: '#4338ca' }, // Indigo
+  '3A':     { base: '#10b981', light: '#a7f3d0', dark: '#047857' }, // Emerald
+  'egress': { base: '#f97316', light: '#fdba74', dark: '#c2410c' }, // Orange (Visual Only)
 };
 
 const ENTRY_JUNCTIONS = {
@@ -43,7 +43,7 @@ function posToLatLng(geometry, pos) {
   ];
 }
 
-export default function SimMap({ scenario, playing, speed, activeRoutes, selectedCorridors, source, playbackSource, onSimUpdate, onStatsUpdate, onAutoStop, onRoadSelect }) {
+export default function SimMap({ scenario, playing, speed, showRoutes, onToggleRoutes, selectedCorridors, source, playbackSource, onSimUpdate, onStatsUpdate, onAutoStop, onRoadSelect }) {
   const containerRef = useRef(null), canvasRef = useRef(null), mapRef = useRef(null);
   const vehiclesRef = useRef([]), simTimeRef = useRef(0), spawnerStateRef = useRef(createSpawnerState());
   const rafRef = useRef(null), loopRef = useRef(null), lastUpdateRef = useRef(0);
@@ -57,10 +57,10 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, selecte
   const roadPolylinesRef = useRef([]);
   const onRoadSelectRef  = useRef(onRoadSelect);
 
-  const scenarioRef = useRef(scenario), speedRef = useRef(speed), activeRoutesRef = useRef(activeRoutes), sourceRef = useRef(source);
+  const scenarioRef = useRef(scenario), speedRef = useRef(speed), showRoutesRef = useRef(showRoutes), sourceRef = useRef(source);
   useEffect(() => { scenarioRef.current = scenario; }, [scenario]);
   useEffect(() => { speedRef.current = speed; }, [speed]);
-  useEffect(() => { activeRoutesRef.current = activeRoutes; }, [activeRoutes]);
+  useEffect(() => { showRoutesRef.current = showRoutes; }, [showRoutes]);
   useEffect(() => { sourceRef.current = source; }, [source]);
   useEffect(() => { onRoadSelectRef.current = onRoadSelect; }, [onRoadSelect]);
 
@@ -140,9 +140,9 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, selecte
     const ctx = canvas.getContext('2d'); ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Route Overlays
-    if (activeRoutesRef.current.size > 0) {
+    if (showRoutesRef.current) {
       Object.values(ROUTE_CONFIG).forEach(route => {
-        if (!route.geometry || !activeRoutesRef.current.has(route.corridor)) return;
+        if (!route.geometry) return;
         ctx.beginPath(); ctx.strokeStyle = COLOUR[route.corridor].base; ctx.lineWidth = route.type === 'ratrun' ? 2 : 3;
         ctx.globalAlpha = 0.3; if (route.type === 'ratrun') ctx.setLineDash([5,5]); else ctx.setLineDash([]);
         route.geometry.forEach((ll, i) => { const pt = map.latLngToContainerPoint(L.latLng(ll[0], ll[1])); if (i === 0) ctx.moveTo(pt.x, pt.y); else ctx.lineTo(pt.x, pt.y); });
@@ -157,17 +157,31 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, selecte
       const pt = map.latLngToContainerPoint(L.latLng(latlng[0], latlng[1]));
       
       let col;
+      const c = COLOUR[v.corridorId] || COLOUR['1A'];
+      let isRatRun = v.state === 'inbound' && route.type === 'ratrun';
+      
       if (v.state === 'dwell' || v.isParking) {
-        col = COLOUR.dwell; // grey: parked or driving to bay
+        col = COLOUR.dwell; 
       } else if (v.v < 2) {
-        col = COLOUR.delayed; // red: stopped/queued in street network
-      } else if (v.state === 'inbound' && route.type === 'ratrun') {
-        col = COLOUR[v.corridorId]?.light || COLOUR['1A'].light;
+        col = COLOUR.delayed; 
+      } else if (v.state === 'outbound') {
+        col = c.light; // light shade for exit
+      } else if (isRatRun) {
+        col = c.base; // base shade for rat-runs
       } else {
-        col = COLOUR[v.corridorId]?.base || COLOUR['1A'].base; // corridor colour throughout
+        col = c.dark; // dark shade for starting ingress
       }
       
-      ctx.beginPath(); ctx.arc(pt.x, pt.y, 4, 0, Math.PI*2); ctx.fillStyle = col; ctx.fill();
+      ctx.beginPath(); 
+      ctx.arc(pt.x, pt.y, 4, 0, Math.PI*2); 
+      ctx.fillStyle = col; 
+      ctx.fill();
+
+      if (isRatRun) {
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
     });
 
     // Internal Road Visuals (Grey Dotted Line)
@@ -269,6 +283,32 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, selecte
       }
 
       if (v.state === 'inbound' || v.state === 'outbound') {
+        // Dynamic Rat-run switch: if slowing or stopped near a divergence point, take a rat-run.
+        if (v.state === 'inbound' && v.v < 2 && !v.routeId.includes('RR')) {
+          const sws = RAT_RUN_SWITCHES[v.routeId];
+          if (sws) {
+            const nextWp = v.allJunctions[v.lastJunctionIdx + 1];
+            if (nextWp) {
+              const distToNext = (nextWp.pos - v.pos) * (v.routeLen || 1000);
+              if (distToNext < 15) { // within 15 meters of the next junction
+                const candidates = sws.filter(sw => sw.atJid === nextWp.junctionId);
+                if (candidates.length > 0 && Math.random() < (0.25 + (congestionScoresRef.current[v.corridorId] || 0) * 0.6)) {
+                  const s = candidates[Math.floor(Math.random() * candidates.length)];
+                  const newId = s.toRouteId;
+                  const newJuncs = getRouteJunctions(newId);
+                  const newJPos = newJuncs.find(nj => nj.junctionId === nextWp.junctionId);
+                  if (newJPos) {
+                    v.routeId = newId; v.allJunctions = newJuncs;
+                    v.routeLen = estimateRouteLength(ROUTE_CONFIG[newId].geometry);
+                    v.pos = newJPos.pos;
+                    logEvent('RAT_RUN_DIVERGE', v, { simTime: t, detail: `switched to ${newId} at J${nextWp.junctionId}` });
+                  }
+                }
+              }
+            }
+          }
+        }
+
         const juncs = v.allJunctions; if (v.lastJunctionIdx === undefined) v.lastJunctionIdx = 0;
         if (v.holdUntil !== null && v.holdUntil <= t && v.pos < 1.0) { v.holdUntil = null; v.holdingAt = null; }
         if (v.holdUntil === null) {
@@ -411,7 +451,7 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, selecte
 
   useEffect(() => { if (playing) rafRef.current = requestAnimationFrame(loopRef.current); else if (rafRef.current) cancelAnimationFrame(rafRef.current); return () => rafRef.current && cancelAnimationFrame(rafRef.current); }, [playing, loop]);
   useEffect(() => resetSim(), [scenario, resetSim]);
-  useEffect(() => drawFrame(), [activeRoutes, drawFrame]);
+  useEffect(() => drawFrame(), [showRoutes, drawFrame]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -493,6 +533,16 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, selecte
       <div ref={containerRef} style={{ width: '100%', height: '100%' }} />
       <canvas ref={canvasRef} style={{ position: 'absolute', top: 0, left: 0, pointerEvents: 'none', zIndex: 450 }} />
       <div style={{ position: 'absolute', bottom: 30, left: 8, zIndex: 500, background: 'rgba(13,21,38,0.85)', border: '1px solid #1e3a5f', borderRadius: 6, padding: '6px 10px', fontSize: 10, color: '#cbd5e1', display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, paddingBottom: 4, marginBottom: 4, borderBottom: '1px solid #1e3a5f' }}>
+          <input 
+            type="checkbox" 
+            id="route-toggle" 
+            checked={showRoutes} 
+            onChange={onToggleRoutes} 
+            style={{ cursor: 'pointer', width: 12, height: 12 }} 
+          />
+          <label htmlFor="route-toggle" style={{ cursor: 'pointer', fontWeight: 600 }}>Show Routes</label>
+        </div>
         {[[COLOUR['1A'].base, 'Dreyersdal N'], [COLOUR['2A'].base, 'Homestead'], [COLOUR['2B'].base, "Children's Way"], [COLOUR['3A'].base, 'Firgrove Way'], [COLOUR.delayed, 'Delayed'], [COLOUR.dwell, 'Parked']].map(([c, l]) => (
           <div key={l} style={{ display: 'flex', alignItems: 'center', gap: 6 }}><svg width="8" height="8"><circle cx="4" cy="4" r="3" fill={c} /></svg>{l}</div>
         ))}

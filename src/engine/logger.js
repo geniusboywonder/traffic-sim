@@ -1,13 +1,34 @@
 // ── logger.js ─────────────────────────────────────────────────────────────────
 // Vehicle event logger. Accumulates events in memory, downloadable as CSV.
 
-const MAX_EVENTS = 50000; // cap to avoid OOM on long runs
+const MAX_EVENTS = 100000; 
 
 const _events = [];
+const _roadSnapshots = [];
 let _enabled = true;
 
 export function loggerEnable(val) { _enabled = val; }
-export function loggerClear() { _events.length = 0; }
+export function loggerClear() { _events.length = 0; _roadSnapshots.length = 0; }
+
+export function logRoadSnapshot(simTime, roadStats) {
+  if (!_enabled) return;
+  Object.entries(roadStats).forEach(([road, dirs]) => {
+    ['inbound', 'outbound'].forEach(dir => {
+      const s = dirs[dir];
+      if (s.total > 0 || s.active > 0) {
+        _roadSnapshots.push({
+          t: simTime,
+          road,
+          dir,
+          total: s.total,
+          active: s.active,
+          slowing: s.slowing,
+          stopped: s.stopped
+        });
+      }
+    });
+  });
+}
 
 export function logEvent(type, vehicle, extra = {}) {
   if (!_enabled) return;
@@ -64,6 +85,23 @@ export function loggerDownload() {
   const a    = document.createElement('a');
   a.href     = url;
   a.download = `traffic-sim-log-${new Date().toISOString().slice(0,19).replace(/:/g,'-')}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+export function loggerDownloadRoadStats() {
+  if (_roadSnapshots.length === 0) { alert('No road snapshots recorded.'); return; }
+
+  const header = 'simTime,road,direction,total_cumulative,active,slowing,stopped';
+  const rows = _roadSnapshots.map(s =>
+    [s.t.toFixed(1), `"${s.road}"`, s.dir, s.total, s.active, s.slowing, s.stopped].join(',')
+  );
+  const csv = [header, ...rows].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `traffic-road-stats-${new Date().toISOString().slice(0,19).replace(/:/g,'-')}.csv`;
   a.click();
   URL.revokeObjectURL(url);
 }

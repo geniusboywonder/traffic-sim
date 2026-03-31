@@ -13,7 +13,7 @@ import {
   spawnTick, processDwell, createSpawnerState, resetVehicleIds,
   pickEgressRoute, estimateRouteLength,
 } from '../engine/spawner';
-import { logEvent, logSchoolEvent, loggerClear } from '../engine/logger';
+import { logEvent, logSchoolEvent, loggerClear, logRoadSnapshot } from '../engine/logger';
 import RoadWatcher from './RoadWatcher';
 
 // Vehicle colours and corridor palette
@@ -82,6 +82,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
   const roadVisitTrackerRef = useRef({ inbound: new Map(), outbound: new Map() });
   const roadPolylinesRef = useRef([]);
   const onRoadSelectRef  = useRef(onRoadSelect);
+  const lastRoadLogRef   = useRef(0);
 
   const scenarioRef = useRef(scenario), speedRef = useRef(speed), showRoutesRef = useRef(showRoutes), sourceRef = useRef(source), selectedRoadRef = useRef(selectedRoad);
   useEffect(() => { scenarioRef.current = scenario; }, [scenario]);
@@ -349,7 +350,49 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
       onSimUpdate(t, active, total);
       onStatsUpdate(computeStats(vehiclesRef.current, corridorTotalsRef.current, corridorExitsRef.current, inboundDelayRef.current, outboundDelayRef.current, congestionScoresRef.current));
       updateRoadStats();
+
+      // ── Periodic Global Road Logging (every 60 sim-seconds) ────────────────
+      if (t - lastRoadLogRef.current >= 60 && sourceRef.current === 'live') {
+        lastRoadLogRef.current = t;
+        const allRoads = {};
+        ROAD_LINES.forEach(f => {
+          const name = f.properties.name;
+          if (name) {
+            allRoads[name] = {
+              inbound: { total: 0, active: 0, slowing: 0, stopped: 0 },
+              outbound: { total: 0, active: 0, slowing: 0, stopped: 0 }
+            };
+          }
+        });
+
+        vehiclesRef.current.forEach(v => {
+          const route = ROUTE_CONFIG[v.routeId];
+          if (!route?.segments) return;
+          route.segments.forEach(s => {
+            if (v.pos >= s.startPos - 0.005 && v.pos <= s.endPos + 0.005) {
+              const road = allRoads[s.roadName];
+              if (road) {
+                const bucket = v.state === 'outbound' ? road.outbound : road.inbound;
+                if (v.v < 0.5) bucket.stopped++;
+                else if (v.v < 2) bucket.slowing++;
+                else bucket.active++;
+              }
+            }
+          });
+        });
+
+        // Add cumulative totals
+        Object.keys(allRoads).forEach(name => {
+          const key = name.toLowerCase().trim();
+          allRoads[name].inbound.total = roadVisitTrackerRef.current.inbound.get(key)?.size || 0;
+          allRoads[name].outbound.total = roadVisitTrackerRef.current.outbound.get(key)?.size || 0;
+        });
+
+        logRoadSnapshot(t, allRoads);
+      }
+
       pulsePhaseRef.current = (pulsePhaseRef.current + 1) % 4;
+
       VISIBLE_JUNCTIONS.forEach(jid => {
         const ent = junctionMarkersRef.current[jid]; if (!ent) return;
         const q = vehiclesRef.current.filter(v => v.holdingAt === jid).length, isB = q >= 2;

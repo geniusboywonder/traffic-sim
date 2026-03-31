@@ -3,7 +3,7 @@
 // Mobile: row-1 = logo + playback; row-2 = scenario + clock + speed.
 // Active/total vehicle counts are hidden on mobile (shown in StatsPanel instead).
 
-import { loggerDownload } from '../engine/logger';
+import { loggerDownload, loggerDownloadRoadStats } from '../engine/logger';
 
 function formatClock(simTime) {
   // simTime = seconds since 06:30
@@ -69,6 +69,7 @@ export default function Header({
       }
       <button className="ctrl-btn reset-btn" onClick={onReset} title="Reset">↺</button>
       <button className="ctrl-btn" onClick={loggerDownload} title="Download vehicle log (CSV)" style={{fontSize:'11px',padding:'2px 6px'}}>LOG</button>
+      <button className="ctrl-btn" onClick={loggerDownloadRoadStats} title="Download road stats log (CSV)" style={{fontSize:'11px',padding:'2px 6px',marginLeft:'2px'}}>ROAD LOG</button>
     </div>
   );
 

@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Speed Humps Extent:** Skipped humps outside OSM extent to prevent netconvert errors.
 
 ### Added — 2026-03-30
+- **Global Road Logging:** Implemented periodic snapshots (every 60 sim-seconds) of all road-level activity, capturing cumulative totals and instantaneous flow metrics (active/slowing/stopped) for the entire network.
+- **Road Log Export:** Added a "ROAD LOG" button to the header for downloading the full simulation's road-level data as a CSV.
 - **"Watch My Road" Overhaul:** Moved the road-stats overlay to the top-right of the map. Added a two-line "Traffic In/Out" format showing cumulative "Total" vehicles and real-time Active, Slowing, and Stopped metrics for individual streets.
 - **Interactive Road Highlighting:** Unselected roads are now transparent, appearing in grey only when selected. Implemented "click-to-toggle" logic for easier selection management.
 - **Dynamic Rat-Run Switching:** Logic allowing vehicles to switch to alternative rat-runs if slowing or stopped near divergence points.

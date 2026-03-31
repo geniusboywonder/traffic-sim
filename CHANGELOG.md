@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Speed Humps Extent:** Skipped humps outside OSM extent to prevent netconvert errors.
 
 ### Added — 2026-03-30
+- **"Watch My Road" Overhaul:** Moved the road-stats overlay to the top-right of the map. Added a two-line "Traffic In/Out" format showing cumulative "Total" vehicles and real-time Active, Slowing, and Stopped metrics for individual streets.
+- **Interactive Road Highlighting:** Unselected roads are now transparent, appearing in grey only when selected. Implemented "click-to-toggle" logic for easier selection management.
 - **Dynamic Rat-Run Switching:** Logic allowing vehicles to switch to alternative rat-runs if slowing or stopped near divergence points.
 - **Route Divergence Mapping:** Defined `RAT_RUN_SWITCHES` configuration for main corridor transitions at key junctions.
 - **Peak-Hour Egress Delays:** Dynamic wait times for final egress points (J1, J9, J13) scaling during 7:30–8:30 AM peak.

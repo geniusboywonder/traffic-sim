@@ -1,7 +1,7 @@
 // ── SimMap.jsx ────────────────────────────────────────────────────────────────
 // Leaflet map + canvas vehicle overlay + rAF animation loop.
 
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import {
@@ -14,6 +14,7 @@ import {
   pickEgressRoute, estimateRouteLength,
 } from '../engine/spawner';
 import { logEvent, logSchoolEvent, loggerClear } from '../engine/logger';
+import RoadWatcher from './RoadWatcher';
 
 // Vehicle colours and corridor palette
 const COLOUR = {
@@ -35,15 +36,39 @@ const ENTRY_JUNCTIONS = {
 
 function posToLatLng(geometry, pos) {
   if (!geometry || geometry.length === 0) return null;
-  const idx = Math.max(0, Math.min(1, pos)) * (geometry.length - 1);
-  const lo = Math.floor(idx), hi = Math.min(lo + 1, geometry.length - 1), t = idx - lo;
+  if (pos <= 0) return geometry[0];
+  if (pos >= 1) return geometry[geometry.length - 1];
+
+  const R = 6371000;
+  const cumDist = [0];
+  for (let i = 1; i < geometry.length; i++) {
+    const [lat1, lon1] = geometry[i - 1];
+    const [lat2, lon2] = geometry[i];
+    const dlat = (lat2 - lat1) * (Math.PI / 180);
+    const dlon = (lon2 - lon1) * (Math.PI / 180);
+    const a = Math.sin(dlat / 2) ** 2
+      + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dlon / 2) ** 2;
+    cumDist.push(cumDist[i - 1] + R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+  }
+  const totalLen = cumDist[cumDist.length - 1];
+  const targetDist = pos * totalLen;
+
+  let lo = 0, hi = geometry.length - 1;
+  while (hi - lo > 1) {
+    const mid = Math.floor((lo + hi) / 2);
+    if (cumDist[mid] < targetDist) lo = mid;
+    else hi = mid;
+  }
+
+  const d = cumDist[hi] - cumDist[lo];
+  const t = d > 0 ? (targetDist - cumDist[lo]) / d : 0;
   return [
     geometry[lo][0] + t * (geometry[hi][0] - geometry[lo][0]),
     geometry[lo][1] + t * (geometry[hi][1] - geometry[lo][1]),
   ];
 }
 
-export default function SimMap({ scenario, playing, speed, showRoutes, onToggleRoutes, selectedCorridors, source, playbackSource, onSimUpdate, onStatsUpdate, onAutoStop, onRoadSelect }) {
+export default function SimMap({ scenario, playing, speed, showRoutes, onToggleRoutes, selectedCorridors, source, playbackSource, onSimUpdate, onStatsUpdate, onAutoStop, onRoadSelect, selectedRoad, allPlaybackFrames }) {
   const containerRef = useRef(null), canvasRef = useRef(null), mapRef = useRef(null);
   const vehiclesRef = useRef([]), simTimeRef = useRef(0), spawnerStateRef = useRef(createSpawnerState());
   const rafRef = useRef(null), loopRef = useRef(null), lastUpdateRef = useRef(0);
@@ -54,15 +79,18 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
   const outboundDelayRef = useRef({ '1A': { total: 0, count: 0 }, '2A': { total: 0, count: 0 }, '2B': { total: 0, count: 0 }, '3A': { total: 0, count: 0 } });
   const pulsePhaseRef = useRef(0);
   const congestionScoresRef = useRef({ '1A': 0, '2A': 0, '2B': 0, '3A': 0 });
+  const roadVisitTrackerRef = useRef({ inbound: new Map(), outbound: new Map() });
   const roadPolylinesRef = useRef([]);
   const onRoadSelectRef  = useRef(onRoadSelect);
+  const [liveRoadStats, setLiveRoadStats] = useState(null);
 
-  const scenarioRef = useRef(scenario), speedRef = useRef(speed), showRoutesRef = useRef(showRoutes), sourceRef = useRef(source);
+  const scenarioRef = useRef(scenario), speedRef = useRef(speed), showRoutesRef = useRef(showRoutes), sourceRef = useRef(source), selectedRoadRef = useRef(selectedRoad);
   useEffect(() => { scenarioRef.current = scenario; }, [scenario]);
   useEffect(() => { speedRef.current = speed; }, [speed]);
   useEffect(() => { showRoutesRef.current = showRoutes; }, [showRoutes]);
   useEffect(() => { sourceRef.current = source; }, [source]);
   useEffect(() => { onRoadSelectRef.current = onRoadSelect; }, [onRoadSelect]);
+  useEffect(() => { selectedRoadRef.current = selectedRoad; }, [selectedRoad]);
 
   useEffect(() => {
     if (playbackSource && ROAD_LINES.length > 0) {
@@ -82,6 +110,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
     corridorExitsRef.current = { '1A': 0, '2A': 0, '2B': 0, '3A': 0 };
     inboundDelayRef.current = { '1A': { total: 0, count: 0 }, '2A': { total: 0, count: 0 }, '2B': { total: 0, count: 0 }, '3A': { total: 0, count: 0 } };
     outboundDelayRef.current = { '1A': { total: 0, count: 0 }, '2A': { total: 0, count: 0 }, '2B': { total: 0, count: 0 }, '3A': { total: 0, count: 0 } };
+    roadVisitTrackerRef.current = { inbound: new Map(), outbound: new Map() };
     const ctx = canvasRef.current?.getContext('2d'); ctx?.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
   }, []);
 
@@ -390,6 +419,20 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
     junctionStateRef.current.forEach(s => s.frameReleases = 0);
     stepAllVehicles(vehiclesRef.current, dt, ROUTE_CONFIG, t);
 
+    // ── Continuous Road Tracking ───────────────────────────────────────────
+    vehiclesRef.current.forEach(v => {
+      const route = ROUTE_CONFIG[v.routeId];
+      if (!route?.segments) return;
+      for (const s of route.segments) {
+        if (v.pos >= s.startPos - 0.005 && v.pos <= s.endPos + 0.005) {
+          const tracker = v.state === 'outbound' ? roadVisitTrackerRef.current.outbound : roadVisitTrackerRef.current.inbound;
+          const roadKey = s.roadName.toLowerCase().trim();
+          if (!tracker.has(roadKey)) tracker.set(roadKey, new Set());
+          tracker.get(roadKey).add(v.id);
+        }
+      }
+    });
+
     // 3. Cleanup & Rendering
     const remaining = [];
     vehiclesRef.current.forEach(v => {
@@ -429,11 +472,42 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
     const now = performance.now();
     if (now - lastUpdateRef.current >= 250) {
       lastUpdateRef.current = now;
+      
       const active = vehiclesRef.current.filter(v => v.state !== 'dwell').length;
       const total = Object.values(corridorTotalsRef.current).reduce((a,b) => a+b, 0);
       onSimUpdate(t, active, total);
       onStatsUpdate(computeStats(vehiclesRef.current, corridorTotalsRef.current, corridorExitsRef.current, inboundDelayRef.current, outboundDelayRef.current, congestionScoresRef.current));
       
+      // Calculate instantaneous stats for selected road
+      const currentSel = selectedRoadRef.current;
+      if (currentSel && sourceRef.current === 'live') {
+        const stats = {
+          inbound: { total: 0, active: 0, slowing: 0, stopped: 0 },
+          outbound: { total: 0, active: 0, slowing: 0, stopped: 0 }
+        };
+        const selName = currentSel.name.toLowerCase().trim();
+
+        vehiclesRef.current.forEach(v => {
+          const route = ROUTE_CONFIG[v.routeId];
+          if (!route?.segments) return;
+          const isOnRoad = route.segments.some(s => s.roadName.toLowerCase().trim() === selName && v.pos >= s.startPos - 0.005 && v.pos <= s.endPos + 0.005);
+          if (isOnRoad) {
+            const bucket = v.state === 'outbound' ? stats.outbound : stats.inbound;
+            if (v.v < 0.5) bucket.stopped++;
+            else if (v.v < 2) bucket.slowing++;
+            else bucket.active++;
+          }
+        });
+
+        // Cumulative totals from tracker
+        stats.inbound.total = roadVisitTrackerRef.current.inbound.get(selName)?.size || 0;
+        stats.outbound.total = roadVisitTrackerRef.current.outbound.get(selName)?.size || 0;
+
+        setLiveRoadStats(stats);
+      } else {
+        setLiveRoadStats(null);
+      }
+
       pulsePhaseRef.current = (pulsePhaseRef.current + 1) % 4;
       VISIBLE_JUNCTIONS.forEach(jid => {
         const ent = junctionMarkersRef.current[jid]; if (!ent) return;
@@ -488,7 +562,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
     // Draw ROAD_LINES as Leaflet polylines (beneath canvas, for click detection + road highlighting)
     const polylines = ROAD_LINES.map(feature => {
       const coords = feature.geometry.coordinates.map(([lon, lat]) => [lat, lon]);
-      const pl = L.polyline(coords, { color: '#334155', weight: 3, opacity: 0.7 }).addTo(map);
+      const pl = L.polyline(coords, { color: 'transparent', weight: 10, opacity: 0 }).addTo(map);
       pl._osmName = feature.properties?.name ?? '';
       return pl;
     });
@@ -496,13 +570,8 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
 
     // Road click handler — highlight full road by name
     polylines.forEach(pl => {
-      pl.on('click', () => {
-        polylines.forEach(p => p.setStyle({ color: '#334155', weight: 3, opacity: 0.7 }));
-        polylines.forEach(p => {
-          if (p._osmName && p._osmName === pl._osmName) {
-            p.setStyle({ color: '#f59e0b', weight: 5, opacity: 1.0 });
-          }
-        });
+      pl.on('click', (e) => {
+        L.DomEvent.stopPropagation(e);
         if (onRoadSelectRef.current) onRoadSelectRef.current({ name: pl._osmName });
       });
     });
@@ -528,10 +597,31 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
     };
   }, [drawFrame, syncCanvas]);
 
+  useEffect(() => {
+    const polylines = roadPolylinesRef.current;
+    if (!polylines.length) return;
+
+    polylines.forEach(p => {
+      if (selectedRoad && p._osmName === selectedRoad.name) {
+        p.setStyle({ color: '#64748b', weight: 6, opacity: 0.6 });
+      } else {
+        p.setStyle({ color: 'transparent', weight: 10, opacity: 0 });
+      }
+    });
+  }, [selectedRoad]);
+
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       <div ref={containerRef} style={{ width: '100%', height: '100%' }} />
       <canvas ref={canvasRef} style={{ position: 'absolute', top: 0, left: 0, pointerEvents: 'none', zIndex: 450 }} />
+      
+      <RoadWatcher 
+        road={selectedRoad} 
+        allFrames={allPlaybackFrames} 
+        liveStats={liveRoadStats}
+        onClose={() => onRoadSelect(null)}
+      />
+
       <div style={{ position: 'absolute', bottom: 30, left: 8, zIndex: 500, background: 'rgba(13,21,38,0.85)', border: '1px solid #1e3a5f', borderRadius: 6, padding: '6px 10px', fontSize: 10, color: '#cbd5e1', display: 'flex', flexDirection: 'column', gap: 2 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, paddingBottom: 4, marginBottom: 4, borderBottom: '1px solid #1e3a5f' }}>
           <input 

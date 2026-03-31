@@ -1,16 +1,21 @@
 TODO
 - update the requirement/spec/plan with the changes we made.
 
-5) would it be possible and realistic to add in the delays due to traffic from Sweet Valley school without the data? what would those look like?
-6) in mobile view the map should start zoomed into the highlighted square and not show any of the darkened map
-7) snapping of cars to route Vineyard to Airlie to Starke to Childrens Way, teleports and doesnt follow the route
-9) change labels to say "Avg Time In", "Avg Time Out"
-10) is there ayway we can use the same entry/exit colour for the dots, but show a lighter and darker shade if the car is ingressing or egressing?
+?) would it be possible and realistic to add in the delays due to traffic from Sweet Valley school without the data? what would those look like?
+?) in mobile view the map should start zoomed into the highlighted square and not show any of the darkened map
 
+11) watch my road needs to be in a seperate block on the map - maybe top right in the same style as the key.
+when no street is selected it needs to say: `click any street to see traffic activity`.
+and then when a street is cliked it need to show 2 lines for `Traffic In` and `Traffic Out`. Each line must show, Total:[9] Active:[9], Slowing:[9], Stopped:[9]
+also clicking the same road after it was selected should unselect it. clickig on a different rd moves to that road.
+i also dont like the grey colour of the roads - cant they be transparent until clicked on and then highlited in gray?
 
 model changes:
 2) let the models run until all cars have completed the run (currently H still has cars active at 9AM)
-3)
+3) the scenarios from the various models are not loading. no dots are shown moving on the map. it might be that the other models have rat-runs not defined on the map.
+troubleshoot why they are not showing and list any rat-runs that are not captured.
+4) cars are stillbrekaing for the corner in Vineyard after turning from CHristopher. I want any contraints removed from that corner.
+
 
 DONE
 Lets update the plan and continue with the traffic simulator from @Tokai_HS_Traffic_Simulator_Plan.md and add to the existing pages.
@@ -129,3 +134,8 @@ i would like to update the Dashboard cards.
 1) when cars are slowing or stopped and can access a rat-run, then to change to the rat-runs
 
 8) move the "show route" option into the key on the map and it must be a toggle switch that toggles all routes on or off
+9) change labels on the Entre/Exit Corridors to say "Avg Time In", "Avg Time Out"
+10) in the Entry/Exit cards - in the header, move the In/Out numbers to be right aligned. they may need a label to In: X / Out: X
+11) the congestion graph needs a heading to say Congestion Meter
+12) is there ayway we can use the same entry/exit colour for the dots, but show a lighter and darker shade if the car is ingressing or egressing?
+13) cars are not snapping to route from Vineyard to Airlie to Starke to Childrens Way, they teleports from Airlie across to CHildrens way.

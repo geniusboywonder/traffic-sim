@@ -144,13 +144,20 @@ export default function App() {
   }, []);
 
   const handleRoadSelect = useCallback((road) => {
-    if (source === 'results') {
-      const roads = playbackRef.current.getRoads();
-      const found = roads.find(r => r.name === road.name);
-      setSelectedRoad(found ? { name: road.name, id: found.id } : { name: road.name, id: road.name });
-    } else {
-      setSelectedRoad({ name: road.name, id: road.name });
+    if (!road) {
+      setSelectedRoad(null);
+      return;
     }
+    setSelectedRoad(prev => {
+      if (prev && prev.name === road.name) return null;
+      
+      if (source === 'results') {
+        const roads = playbackRef.current.getRoads();
+        const found = roads.find(r => r.name === road.name);
+        return found ? { name: road.name, id: found.id } : { name: road.name, id: road.name };
+      }
+      return { name: road.name, id: road.name };
+    });
   }, [source]);
 
   return (
@@ -187,6 +194,8 @@ export default function App() {
             onStatsUpdate={handleStatsUpdate}
             onAutoStop={handleAutoStop}
             onRoadSelect={handleRoadSelect}
+            selectedRoad={selectedRoad}
+            allPlaybackFrames={playbackFrames}
           />
         </div>
         <StatsPanel
@@ -196,15 +205,6 @@ export default function App() {
           selectedCorridors={selectedCorridors}
           onToggleCorridor={handleToggleCorridor}
         />
-        {selectedRoad && (
-          <div style={{ position: 'fixed', bottom: '20px', left: '20px', zIndex: 1000, width: '300px' }}>
-            <RoadWatcher 
-              road={selectedRoad} 
-              allFrames={source === 'results' ? playbackFrames : null} 
-              onClose={() => setSelectedRoad(null)} 
-            />
-          </div>
-        )}
       </div>
     </div>
   );

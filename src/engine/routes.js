@@ -88,10 +88,25 @@ export const ROAD_LINES = roadsData.features.filter(
   (f) => f.geometry?.type === 'LineString',
 );
 
+function computeCumulativeDistances(geom) {
+  const R = 6371000;
+  const cumDist = [0];
+  for (let i = 1; i < geom.length; i++) {
+    const [lat1, lon1] = geom[i - 1];
+    const [lat2, lon2] = geom[i];
+    const dlat = (lat2 - lat1) * (Math.PI / 180);
+    const dlon = (lon2 - lon1) * (Math.PI / 180);
+    const a = Math.sin(dlat / 2) ** 2
+      + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dlon / 2) ** 2;
+    cumDist.push(cumDist[i - 1] + R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+  }
+  return cumDist;
+}
+
 // ── Road-snap routing ─────────────────────────────────────────────────────────
-// from/to are [lat, lon]. Returns [[lat,lon], ...] following road geometry.
+// from/to are [lat, lon]. Returns [{roadName, coords: [[lat,lon], ...]}] following road geometry.
 export function snapSegment(from, to) {
-  let best = null, bestScore = Infinity;
+  let best = null, bestScore = Infinity, bestRoadName = '';
   for (const feat of ROAD_LINES) {
     const coords = feat.geometry.coordinates; // GeoJSON: [lon, lat]
     let fi = 0, fD = Infinity, ti = 0, tD = Infinity;
@@ -109,10 +124,14 @@ export function snapSegment(from, to) {
       let slice = coords.slice(s, e + 1).map(([lon, lat]) => [lat, lon]);
       if (fi > ti) slice.reverse();
       best = slice;
+      bestRoadName = feat.properties?.name || 'Unknown Road';
     }
   }
   // Use road geometry if both endpoints snap within combined ~300 m
-  return (best && best.length >= 2 && bestScore < 0.000010) ? best : [from, to];
+  if (best && best.length >= 2 && bestScore < 0.000010) {
+    return { roadName: bestRoadName, coords: best };
+  }
+  return { roadName: 'Direct Connection', coords: [from, to] };
 }
 
 // Lazily extract internal school road geometry from GeoJSON (J7→J20).
@@ -139,12 +158,19 @@ function getInternalRoadGeometry() {
 // Chain snapSegment calls for a full multi-junction route.
 // waypoints: array of junction IDs.
 // Special case: J7→J20 always uses the internal school road geometry.
+// Returns { fullGeometry: [[lat,lon],...], segments: [{roadName, startPos, endPos}] }
 export function roadRoute(waypoints) {
-  if (waypoints.length < 2) return waypoints.map((id) => {
-    const j = JUNCTIONS[id];
-    return [j.lat, j.lng];
-  });
-  const pts = [];
+  if (waypoints.length < 2) {
+    const pts = waypoints.map((id) => {
+      const j = JUNCTIONS[id];
+      return [j.lat, j.lng];
+    });
+    return { fullGeometry: pts, segments: [{ roadName: 'Junction Point', startPos: 0, endPos: 1.0 }] };
+  }
+
+  const fullPts = [];
+  const segments = [];
+
   for (let i = 0; i < waypoints.length - 1; i++) {
     const fromId = waypoints[i];
     const toId   = waypoints[i + 1];
@@ -154,7 +180,10 @@ export function roadRoute(waypoints) {
     if ((fromId === 7 && toId === 20) || (fromId === 20 && toId === 7)) {
       const internalGeom = getInternalRoadGeometry();
       if (internalGeom) {
-        seg = (fromId === 7) ? internalGeom : [...internalGeom].reverse();
+        seg = { 
+          roadName: 'Tokai High School Internal Road', 
+          coords: (fromId === 7) ? internalGeom : [...internalGeom].reverse() 
+        };
       }
     }
 
@@ -164,10 +193,26 @@ export function roadRoute(waypoints) {
       seg = snapSegment([a.lat, a.lng], [b.lat, b.lng]);
     }
 
-    if (i > 0 && pts.length) pts.pop(); // avoid duplicating join point
-    pts.push(...seg);
+    if (i > 0 && fullPts.length) fullPts.pop(); // avoid duplicating join point
+    
+    const startIdx = fullPts.length;
+    fullPts.push(...seg.coords);
+    const endIdx = fullPts.length - 1;
+    
+    segments.push({ roadName: seg.roadName, startIdx, endIdx });
   }
-  return pts;
+
+  // Calculate cumulative distances for accurate [0, 1] positions
+  const cumDists = computeCumulativeDistances(fullPts);
+  const totalLen = cumDists[cumDists.length - 1];
+
+  const finalSegments = segments.map(s => ({
+    roadName: s.roadName,
+    startPos: totalLen > 0 ? cumDists[s.startIdx] / totalLen : 0,
+    endPos: totalLen > 0 ? cumDists[s.endIdx] / totalLen : 1
+  }));
+
+  return { fullGeometry: fullPts, segments: finalSegments };
 }
 
 // ── ROUTE_CONFIG ──────────────────────────────────────────────────────────────
@@ -216,22 +261,18 @@ const RAW_ROUTES = {
   'EG-E':   { name: 'Egress E — Dante→Starke→Homestead',        corridor: 'egress', type: 'egress', junctions: [7,20,29,17,16,5,4,24,10,9], maxVehicles: 20 },
 };
 
-// Build route config with lazy geometry computation
-const _geometryCache = {};
-
 export const ROUTE_CONFIG = Object.fromEntries(
-  Object.entries(RAW_ROUTES).map(([id, r]) => [
-    id,
-    {
-      ...r,
-      get geometry() {
-        if (!_geometryCache[id]) {
-          _geometryCache[id] = roadRoute(r.junctions);
-        }
-        return _geometryCache[id];
+  Object.entries(RAW_ROUTES).map(([id, r]) => {
+    const data = roadRoute(r.junctions);
+    return [
+      id,
+      {
+        ...r,
+        geometry: data.fullGeometry,
+        segments: data.segments
       },
-    },
-  ]),
+    ];
+  }),
 );
 
 // Grouped by corridor for spawner use
@@ -275,9 +316,9 @@ const _routeJidCache = {};
 export function getRouteJunctions(routeId) {
   if (_routeJidCache[routeId]) return _routeJidCache[routeId];
   const route = ROUTE_CONFIG[routeId];
-  if (!route?.junctions || !route.geometry || route.geometry.length < 2) return [];
+  const geom = route?.geometry;
+  if (!route?.junctions || !geom || geom.length < 2) return [];
 
-  const geom = route.geometry;
   const R    = 6371000;
   const cumDist = [0];
   for (let i = 1; i < geom.length; i++) {
@@ -317,10 +358,10 @@ const _waypointPosCache  = {};
 export function getWaypointPositions(routeId) {
   if (_waypointPosCache[routeId]) return _waypointPosCache[routeId];
   const route = ROUTE_CONFIG[routeId];
-  if (!route?.junctions || !route.geometry || route.geometry.length < 2) {
+  const geom = route?.geometry;
+  if (!route?.junctions || !geom || geom.length < 2) {
     return (_waypointPosCache[routeId] = []);
   }
-  const geom = route.geometry;
   const R    = 6371000;
   // Cumulative arc-length at each geometry vertex
   const cumDist = [0];

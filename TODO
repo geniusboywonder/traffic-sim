@@ -1,11 +1,13 @@
 TODO
-update the requirement/spec/plan with the changes we made.
+- update the requirement/spec/plan with the changes we made.
+
+5) would it be possible and realistic to add in the delays due to traffic from Sweet Valley school without the data? what would those look like?
 6) in mobile view the map should start zoomed into the highlighted square and not show any of the darkened map
 
 model changes:
 1) when cars are slowing or stopped and can access a rat-run, then to change to the rat-runs
 2) let the models run until all cars have completed the run (currently H still has cars active at 9AM)
-3)
+3) 
 
 DONE
 Lets update the plan and continue with the traffic simulator from @Tokai_HS_Traffic_Simulator_Plan.md and add to the existing pages.
@@ -87,6 +89,23 @@ then under that in small text the avg seconds delayed under the Delayed In, Dela
 
 8) convert time in seconds to minutes on the delay dashboard.
 9) add features to enable rat-runs once pressure builds.(WIP with Claude)
+
+got a wierd stall happendin
+corner of Dante & Airlie, the typical Vineyard "braking" corner and Airlie into the bottom of Vineyard
+Airlie into Vineyard long before Christopher and
+
+check the stall when turning right into Dreyersdal from Childrens Way
+
+- the bottlenecks need to have a graph to show the backlog/backpressure that builds for those.
+another bottleneck to add would be Leyden
+
+- the dashboard should allow users to select or deslect the main entry routes and only see traffic flowing from those.
+    Each of those dashboard cards should be able to be toggled/faded out.
+    Likewise the map view should change to zoom in on the bounds of the ingress/egress route selected, its routes and rat-runs and the school.
+    Selecting more of the cards should let the map zoom out to include and show those routes too.
+    as an example, deslecting Firgrove and Homstead would allow the map to zoom and only show the school and the routes from Main Rd and CHildrens Way.
+
+- can we add any traffic delays for the egress route at the points of egress given that Firgrove, Ladies Mile and Main Rd are major trafic routes with bumper to bumper trafic from 7:30 to  8:30
 
 i'd like to adjust the ui and functionality, the user should be able to select or deslect the various Entry / Exit Corridors. This selection can be the "entire" card and does not need additional UI elements.
 this should NOT remove any vehicles from the simulation, but is should "focus" the map window so as to onyl show the selected corridors

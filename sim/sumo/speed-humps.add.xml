@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<additional>
+  <variableSpeedSign id="vss_J101" lanes="687674678#7_0" startPos="0.00" endPos="20.00">
+    <step time="0" speed="4.1667"/>
+  </variableSpeedSign>
+  <variableSpeedSign id="vss_J102" lanes="687674678#8_0" startPos="0.00" endPos="20.00">
+    <step time="0" speed="4.1667"/>
+  </variableSpeedSign>
+  <variableSpeedSign id="vss_J103" lanes="856730052#2_0" startPos="0.00" endPos="20.00">
+    <step time="0" speed="4.1667"/>
+  </variableSpeedSign>
+  <variableSpeedSign id="vss_J104" lanes="27669867#0_0" startPos="0.00" endPos="20.00">
+    <step time="0" speed="4.1667"/>
+  </variableSpeedSign>
+  <variableSpeedSign id="vss_J105" lanes="27669867#6_0" startPos="0.00" endPos="20.00">
+    <step time="0" speed="4.1667"/>
+  </variableSpeedSign>
+  <variableSpeedSign id="vss_J106" lanes="-27669867#7_0" startPos="0.00" endPos="20.00">
+    <step time="0" speed="4.1667"/>
+  </variableSpeedSign>
+  <variableSpeedSign id="vss_J108" lanes="-27669867#8_0" startPos="0.00" endPos="20.00">
+    <step time="0" speed="4.1667"/>
+  </variableSpeedSign>
+  <variableSpeedSign id="vss_J110" lanes="27669867#4_0" startPos="0.00" endPos="20.00">
+    <step time="0" speed="4.1667"/>
+  </variableSpeedSign>
+  <variableSpeedSign id="vss_J118" lanes="-687674678#10_0" startPos="0.00" endPos="12.40">
+    <step time="0" speed="4.1667"/>
+  </variableSpeedSign>
+  <variableSpeedSign id="vss_J119" lanes="687674678#25_0" startPos="0.00" endPos="20.00">
+    <step time="0" speed="4.1667"/>
+  </variableSpeedSign>
+  <variableSpeedSign id="vss_J120" lanes="-27669867#11_0" startPos="0.00" endPos="20.00">
+    <step time="0" speed="4.1667"/>
+  </variableSpeedSign>
+  <variableSpeedSign id="vss_J121" lanes="27669867#2_0" startPos="0.00" endPos="20.00">
+    <step time="0" speed="4.1667"/>
+  </variableSpeedSign>
+  <variableSpeedSign id="vss_J122" lanes="-687674678#1_0" startPos="0.00" endPos="20.00">
+    <step time="0" speed="4.1667"/>
+  </variableSpeedSign>
+</additional>

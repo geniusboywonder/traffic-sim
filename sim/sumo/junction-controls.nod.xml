@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<nodes>
+  <node id="-745" x="18.4580" y="-34.0512" type="traffic_light"/>
+  <node id="303887664" x="18.4488" y="-34.0450" type="allway_stop"/>
+  <node id="303887616" x="18.4562" y="-34.0526" type="allway_stop"/>
+  <node id="cluster_-91_303887562" x="18.4498" y="-34.0447" type="allway_stop"/>
+  <node id="cluster_-795_-833" x="18.4609" y="-34.0558" type="priority_stop"/>
+  <node id="cluster_-11_-775" x="18.4517" y="-34.0441" type="priority_stop"/>
+  <node id="cluster_-81_289421405" x="18.4487" y="-34.0414" type="priority_stop"/>
+  <node id="-376" x="18.4550" y="-34.0515" type="priority_stop"/>
+  <node id="-292" x="18.4522" y="-34.0516" type="priority_stop"/>
+  <node id="-124" x="18.4516" y="-34.0499" type="priority_stop"/>
+  <node id="-122" x="18.4510" y="-34.0490" type="priority_stop"/>
+</nodes>

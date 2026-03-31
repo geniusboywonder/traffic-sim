@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<configuration>
+  <input>
+    <net-file value="C:\Users\neill\Github\tokai-sim\sim\sumo\bergvliet.net.xml"/>
+    <route-files value="C:\Users\neill\Github\tokai-sim\sim\sumo\demand-L.rou.xml"/>
+    <additional-files value="C:\Users\neill\Github\tokai-sim\sim\sumo\speed-humps.add.xml"/>
+  </input>
+  <output>
+    <fcd-output value="C:\Users\neill\Github\tokai-sim\sim\sumo\fcd-L.xml"/>
+    <device.fcd.period value="60"/>
+    <tripinfo-output value="C:\Users\neill\Github\tokai-sim\sim\sumo\tripinfo-L.xml"/>
+  </output>
+  <time>
+    <begin value="23400"/>
+    <end value="30600"/>
+    <step-length value="1"/>
+  </time>
+  <processing>
+    <ignore-route-errors value="true"/>
+    <routing-algorithm value="astar"/>
+    <device.rerouting.probability value="1.0"/>
+    <device.rerouting.period value="60"/>
+    <device.rerouting.pre-period value="0"/>
+  </processing>
+  <report>
+    <no-warnings value="true"/>
+    <no-step-log value="true"/>
+  </report>
+</configuration>

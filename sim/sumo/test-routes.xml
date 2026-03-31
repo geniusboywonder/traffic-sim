@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2026-03-31T10:36:05.986403+02:00 by Eclipse SUMO duarouter 1.26.0
+<duarouterConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/duarouterConfiguration.xsd">
+
+    <input>
+        <net-file value="sim/sumo/bergvliet.net.xml"/>
+        <route-files value="sim/sumo/test-trips.xml"/>
+    </input>
+
+    <output>
+        <output-file value="sim/sumo/test-routes.xml"/>
+    </output>
+
+    <report>
+        <no-warnings value="true"/>
+        <ignore-errors value="true"/>
+    </report>
+
+</duarouterConfiguration>
+-->
+
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+    <vehicle id="test_N1" depart="0.00">
+        <route edges="e1015_rev e1014_rev e621_fwd e918_rev e749_rev e746_rev e807_rev e806_rev e805_rev e804_rev e803_rev e802_rev e801_rev e810_rev e809_rev e698_rev e700_rev e741_rev e26_rev e25_rev e687_rev e686_rev e685_rev e684_rev e683_rev e682_rev e681_rev e680_rev e272_rev e271_rev e305_rev e304_rev e1154_fwd school_internal_in"/>
+    </vehicle>
+    <vehicle id="test_N2" depart="0.00">
+        <route edges="e305_rev e304_rev e1154_fwd school_internal_in"/>
+    </vehicle>
+    <vehicle id="test_N3" depart="0.00">
+        <route edges="e192_fwd e807_rev e806_rev e805_rev e804_rev e803_rev e802_rev e801_rev e810_rev e809_rev e698_rev e700_rev e741_rev e26_rev e25_rev e687_rev e686_rev e685_rev e684_rev e683_rev e682_rev e681_rev e680_rev e272_rev e271_rev e305_rev e304_rev e1154_fwd school_internal_in"/>
+    </vehicle>
+    <vehicle id="test_N4" depart="0.00">
+        <route edges="e617_fwd e617_rev e287_fwd e674_fwd e675_fwd e676_fwd e677_fwd e678_fwd e679_fwd e272_rev e271_rev e305_rev e304_rev e1154_fwd school_internal_in"/>
+    </vehicle>
+</routes>

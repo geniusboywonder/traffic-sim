@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<trips>
+  <!-- Test route: N1 (1A) → school gate -->
+  <trip id="test_N1" depart="0" from="e1015_rev" to="school_internal_in"/>
+  <!-- Test route: N2 (2A) → school gate -->
+  <trip id="test_N2" depart="0" from="e305_rev"  to="school_internal_in"/>
+  <!-- Test route: N3 (2B) → school gate -->
+  <trip id="test_N3" depart="0" from="e192_fwd"  to="school_internal_in"/>
+  <!-- Test route: N4 (3A) → school gate -->
+  <trip id="test_N4" depart="0" from="e617_fwd"  to="school_internal_in"/>
+</trips>

@@ -1,0 +1,4 @@
+<?xml version="1.0" ?>
+<additional>
+  <parkingArea id="school_parking" lane="school_internal_in_0" startPos="10" endPos="320" roadsideCapacity="98" angle="45"/>
+</additional>

@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "scenario": "M",
+    "source": "uxsim",
+    "version": 1,
+    "start_time": 23400,
+    "end_time": 23520,
+    "timestep": 60
+  },
+  "roads": [
+    {
+      "id": "christopher_rd",
+      "name": "Christopher Road",
+      "osm_ids": ["way/111"],
+      "direction_pairs": ["inbound", "outbound"]
+    },
+    {
+      "id": "ruskin_rd",
+      "name": "Ruskin Road",
+      "osm_ids": ["way/222"],
+      "direction_pairs": ["inbound", "outbound"]
+    }
+  ],
+  "frames": [
+    {
+      "t": 23400,
+      "vehicles": [
+        { "id": "v1", "road_id": "christopher_rd", "progress": 0.1, "speed": 8.0, "state": "inbound" },
+        { "id": "v2", "road_id": "christopher_rd", "progress": 0.5, "speed": 0.0, "state": "queued" }
+      ],
+      "road_stats": [
+        { "road_id": "christopher_rd", "inbound": 2, "outbound": 0, "avg_delay_in": 30, "avg_delay_out": null },
+        { "road_id": "ruskin_rd", "inbound": 1, "outbound": 0, "avg_delay_in": 10, "avg_delay_out": null }
+      ]
+    },
+    {
+      "t": 23460,
+      "vehicles": [
+        { "id": "v1", "road_id": "christopher_rd", "progress": 0.4, "speed": 7.5, "state": "inbound" },
+        { "id": "v3", "road_id": "ruskin_rd", "progress": 0.2, "speed": 5.0, "state": "inbound" }
+      ],
+      "road_stats": [
+        { "road_id": "christopher_rd", "inbound": 1, "outbound": 0, "avg_delay_in": 25, "avg_delay_out": null },
+        { "road_id": "ruskin_rd", "inbound": 1, "outbound": 0, "avg_delay_in": 12, "avg_delay_out": null }
+      ]
+    }
+  ]
+}

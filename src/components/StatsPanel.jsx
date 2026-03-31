@@ -6,7 +6,13 @@ function fmtMin(min) {
   return `${min.toFixed(1)}m`;
 }
 
-export default function StatsPanel({ statsData, activeVehicles, totalVehicles, activeRoutes, selectedCorridors, onToggleRoute, onToggleCorridor }) {
+export default function StatsPanel({
+  statsData,
+  activeRoutes,
+  selectedCorridors,
+  onToggleRoute,
+  onToggleCorridor
+}) {
   const { corridors, bottlenecks, parking } = statsData;
 
   return (

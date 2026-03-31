@@ -127,7 +127,6 @@ function getInternalRoadGeometry() {
   // Ensure direction: J7 is the ingress end, J20 is the egress end.
   // Check which end is closer to J7.
   const j7 = JUNCTIONS[7];
-  const j20 = JUNCTIONS[20];
   const first = coords[0];
   const last  = coords[coords.length - 1];
   const d7first  = (first[0] - j7.lat) ** 2 + (first[1] - j7.lng) ** 2;

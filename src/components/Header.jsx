@@ -20,7 +20,8 @@ function formatClock(simTime) {
 export default function Header({
   scenario, playing, speed, simTime,
   activeVehicles, totalVehicles,
-  onScenarioChange, onPlay, onPause, onReset, onSpeedChange,
+  source, resultsLoading,
+  onScenarioChange, onPlay, onPause, onReset, onSpeedChange, onSourceChange,
 }) {
   const clock = formatClock(simTime);
 
@@ -45,6 +46,21 @@ export default function Header({
     </button>
   ));
 
+  const sourceBtns = (
+    <div className="source-btns">
+      {['live', 'results'].map(s => (
+        <button
+          key={s}
+          className={`source-btn ${source === s ? 'active' : ''}`}
+          onClick={() => onSourceChange(s)}
+          title={s === 'live' ? 'Live IDM simulation' : 'Pre-computed UXsim results'}
+        >
+          {s === 'live' ? 'Live' : resultsLoading ? '⟳' : 'Results'}
+        </button>
+      ))}
+    </div>
+  );
+
   const playbackBtns = (
     <div className="playback-btns">
       {playing
@@ -60,7 +76,7 @@ export default function Header({
     <header className="header">
       {/* ── Row 1 ─────────────────────────────────────────────────────────── */}
       <div className="header-row1">
-        <span className="header-logo">🏫 Tokai HS — Morning Traffic</span>
+        <span className="header-logo desktop-only">🏫 Tokai HS — Morning Traffic</span>
 
         {/* Desktop-only: scenario + clock + speed + counts */}
         <div className="scenario-btns desktop-only">{scenarioBtns}</div>
@@ -69,6 +85,7 @@ export default function Header({
 
         {/* Playback always visible */}
         {playbackBtns}
+        {sourceBtns}
 
         {/* Desktop-only: vehicle counts */}
         <div className="header-counts desktop-only">
@@ -88,6 +105,7 @@ export default function Header({
         <div className="scenario-btns">{scenarioBtns}</div>
         <span className="sim-clock">{clock}</span>
         <div className="speed-btns">{speedBtns}</div>
+        {sourceBtns}
       </div>
     </header>
   );

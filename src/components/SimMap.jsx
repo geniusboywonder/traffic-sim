@@ -6,7 +6,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import {
   JUNCTIONS, VISIBLE_JUNCTIONS, CTRL_STYLE, ROAD_LINES, ROUTE_CONFIG,
-  getWaypointPositions, getRouteJunctions,
+  getRouteJunctions,
 } from '../engine/routes';
 import { stepAllVehicles, junctionHoldDuration, getParkingOccupancy, PARKING_CAPACITY } from '../engine/idm';
 import {
@@ -43,7 +43,7 @@ function posToLatLng(geometry, pos) {
   ];
 }
 
-export default function SimMap({ scenario, playing, speed, activeRoutes, selectedCorridors, onSimUpdate, onStatsUpdate, onAutoStop }) {
+export default function SimMap({ scenario, playing, speed, activeRoutes, selectedCorridors, source, playbackSource, onSimUpdate, onStatsUpdate, onAutoStop, onRoadSelect }) {
   const containerRef = useRef(null), canvasRef = useRef(null), mapRef = useRef(null);
   const vehiclesRef = useRef([]), simTimeRef = useRef(0), spawnerStateRef = useRef(createSpawnerState());
   const rafRef = useRef(null), loopRef = useRef(null), lastUpdateRef = useRef(0);
@@ -54,11 +54,25 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, selecte
   const outboundDelayRef = useRef({ '1A': { total: 0, count: 0 }, '2A': { total: 0, count: 0 }, '2B': { total: 0, count: 0 }, '3A': { total: 0, count: 0 } });
   const pulsePhaseRef = useRef(0);
   const congestionScoresRef = useRef({ '1A': 0, '2A': 0, '2B': 0, '3A': 0 });
+  const roadPolylinesRef = useRef([]);
+  const onRoadSelectRef  = useRef(onRoadSelect);
 
-  const scenarioRef = useRef(scenario), speedRef = useRef(speed), activeRoutesRef = useRef(activeRoutes);
+  const scenarioRef = useRef(scenario), speedRef = useRef(speed), activeRoutesRef = useRef(activeRoutes), sourceRef = useRef(source);
   useEffect(() => { scenarioRef.current = scenario; }, [scenario]);
   useEffect(() => { speedRef.current = speed; }, [speed]);
   useEffect(() => { activeRoutesRef.current = activeRoutes; }, [activeRoutes]);
+  useEffect(() => { sourceRef.current = source; }, [source]);
+  useEffect(() => { onRoadSelectRef.current = onRoadSelect; }, [onRoadSelect]);
+
+  useEffect(() => {
+    if (playbackSource && ROAD_LINES.length > 0) {
+      const coords = {};
+      ROAD_LINES.forEach(f => {
+        if (f.properties.id) coords[f.properties.id] = f.geometry.coordinates;
+      });
+      playbackSource.setRoadCoords(coords);
+    }
+  }, [playbackSource]);
 
   const resetSim = useCallback(() => {
     loggerClear();
@@ -168,6 +182,46 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, selecte
   const loop = useCallback(() => {
     const dt = 0.5 * speedRef.current; simTimeRef.current += dt;
     const t = simTimeRef.current;
+    
+    if (sourceRef.current === 'results') {
+      // Playback mode — skip IDM/spawner entirely
+      const pb = playbackSource;
+      if (!pb?.isLoaded()) {
+        rafRef.current = requestAnimationFrame(loopRef.current);
+        return;
+      }
+      
+      const vehicles = pb.getVehicles(t);
+      // Draw playback vehicles on canvas
+      const ctx = canvasRef.current?.getContext('2d');
+      if (ctx && mapRef.current) {
+        ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+        const vr = window.innerWidth < 768 ? 3 : 4;
+        for (const v of vehicles) {
+          const pt = mapRef.current.latLngToContainerPoint([v.lat, v.lng]);
+          const colour = v.state === 'queued' ? '#ef4444'
+                       : v.state === 'rat_run' ? '#eab308'
+                       : v.state === 'outbound' ? '#f97316'
+                       : '#3b82f6';
+          ctx.beginPath();
+          ctx.arc(pt.x, pt.y, vr, 0, Math.PI * 2);
+          ctx.fillStyle = colour;
+          ctx.fill();
+        }
+      }
+
+      // Propagate stats upward
+      const active = vehicles.length;
+      onSimUpdate(t, active, active);
+
+      if (pb.isFinished(t)) {
+        onAutoStop();
+        return;
+      }
+      rafRef.current = requestAnimationFrame(loopRef.current);
+      return;
+    }
+
     if (t >= 9000) { drawFrame(); onAutoStop(); return; }
 
     const { newVehicles, congestionScores } = spawnTick(spawnerStateRef.current, t, dt, scenarioRef.current, vehiclesRef.current);
@@ -349,8 +403,11 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, selecte
       });
     }
     rafRef.current = requestAnimationFrame(loopRef.current);
-  }, [drawFrame, computeStats, onSimUpdate, onStatsUpdate, onAutoStop]);
-  loopRef.current = loop;
+  }, [drawFrame, computeStats, onSimUpdate, onStatsUpdate, onAutoStop, playbackSource]);
+  
+  useEffect(() => {
+    loopRef.current = loop;
+  }, [loop]);
 
   useEffect(() => { if (playing) rafRef.current = requestAnimationFrame(loopRef.current); else if (rafRef.current) cancelAnimationFrame(rafRef.current); return () => rafRef.current && cancelAnimationFrame(rafRef.current); }, [playing, loop]);
   useEffect(() => resetSim(), [scenario, resetSim]);
@@ -387,6 +444,29 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, selecte
     map.fitBounds([[-34.0568, 18.4465], [-34.0400, 18.4625]], { padding: [18, 18] });
     const outer = [[-40, 14], [-40, 23], [-30, 23], [-30, 14]], study = [[-34.0585, 18.4435], [-34.0395, 18.4435], [-34.0395, 18.4635], [-34.0585, 18.4635]];
     L.polygon([outer, study], { fillColor: '#050d1a', fillOpacity: 0.6, fillRule: 'evenodd', stroke: false }).addTo(map);
+    
+    // Draw ROAD_LINES as Leaflet polylines (beneath canvas, for click detection + road highlighting)
+    const polylines = ROAD_LINES.map(feature => {
+      const coords = feature.geometry.coordinates.map(([lon, lat]) => [lat, lon]);
+      const pl = L.polyline(coords, { color: '#334155', weight: 3, opacity: 0.7 }).addTo(map);
+      pl._osmName = feature.properties?.name ?? '';
+      return pl;
+    });
+    roadPolylinesRef.current = polylines;
+
+    // Road click handler — highlight full road by name
+    polylines.forEach(pl => {
+      pl.on('click', () => {
+        polylines.forEach(p => p.setStyle({ color: '#334155', weight: 3, opacity: 0.7 }));
+        polylines.forEach(p => {
+          if (p._osmName && p._osmName === pl._osmName) {
+            p.setStyle({ color: '#f59e0b', weight: 5, opacity: 1.0 });
+          }
+        });
+        if (onRoadSelectRef.current) onRoadSelectRef.current({ name: pl._osmName });
+      });
+    });
+
     VISIBLE_JUNCTIONS.forEach(jid => {
       const j = JUNCTIONS[jid], style = CTRL_STYLE[j.control] || CTRL_STYLE.stop;
       let col = style.color, isE = [1,8,9,13,20].includes(jid);
@@ -398,8 +478,15 @@ export default function SimMap({ scenario, playing, speed, activeRoutes, selecte
     map.whenReady(() => requestAnimationFrame(() => { syncCanvas(); drawFrame(); }));
     const ro = new ResizeObserver(sync); ro.observe(containerRef.current);
     window.addEventListener('resize', syncCanvas);
-    return () => { map.remove(); mapRef.current = null; ro.disconnect(); window.removeEventListener('resize', syncCanvas); };
-  }, []);
+    return () => { 
+      map.remove(); 
+      mapRef.current = null; 
+      ro.disconnect(); 
+      window.removeEventListener('resize', syncCanvas); 
+      roadPolylinesRef.current.forEach(p => p.remove());
+      roadPolylinesRef.current = [];
+    };
+  }, [drawFrame, syncCanvas]);
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>

@@ -1,8 +1,10 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import Header from './components/Header';
 import SimMap from './components/SimMap';
 import StatsPanel from './components/StatsPanel';
+import RoadWatcher from './components/RoadWatcher';
 import AdSlot from './components/AdSlot';
+import { PlaybackSource } from './engine/playback';
 import './App.css';
 
 const INITIAL_STATS = {
@@ -34,6 +36,12 @@ export default function App() {
   const [statsData, setStatsData]           = useState(INITIAL_STATS);
   const [activeRoutes, setActiveRoutes]     = useState(new Set([]));
   const [selectedCorridors, setSelectedCorridors] = useState(new Set(['1A', '2A', '2B', '3A']));
+  
+  const [source, setSource]                 = useState('live');
+  const [resultsLoading, setResultsLoading] = useState(false);
+  const [playbackFrames, setPlaybackFrames] = useState([]);
+  const [selectedRoad, setSelectedRoad]     = useState(null);
+  const playbackRef                         = useRef(new PlaybackSource());
 
   const handleToggleRoute = useCallback((id) => {
     setActiveRoutes(prev => {
@@ -56,16 +64,53 @@ export default function App() {
     });
   }, []);
 
-  const handleScenarioChange = useCallback((s) => {
+  const handleSourceChange = useCallback(async (s) => {
+    setSource(s);
+    setPlaying(false);
+    setSimTime(0);
+    setActiveVehicles(0);
+    setTotalVehicles(0);
+    setStatsData(INITIAL_STATS);
+    setSelectedRoad(null);
+    if (s === 'results') {
+      setResultsLoading(true);
+      try {
+        const pb = playbackRef.current;
+        pb.reset();
+        await pb.loadScenario(scenario);
+        setPlaybackFrames(pb.getAllFrames());
+      } catch (err) {
+        console.error('Failed to load scenario results:', err);
+      } finally {
+        setResultsLoading(false);
+      }
+    }
+  }, [scenario]);
+
+  const handleScenarioChange = useCallback(async (s) => {
     setScenario(s);
     setPlaying(false);
     setSimTime(0);
     setActiveVehicles(0);
     setTotalVehicles(0);
     setStatsData(INITIAL_STATS);
+    setSelectedRoad(null);
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({ event: 'scenario_change', scenario: s });
-  }, []);
+    if (source === 'results') {
+      setResultsLoading(true);
+      try {
+        const pb = playbackRef.current;
+        pb.reset();
+        await pb.loadScenario(s);
+        setPlaybackFrames(pb.getAllFrames());
+      } catch (err) {
+        console.error('Failed to load scenario results:', err);
+      } finally {
+        setResultsLoading(false);
+      }
+    }
+  }, [source]);
 
   const handlePlay = useCallback(() => {
     setPlaying(true);
@@ -103,6 +148,16 @@ export default function App() {
     setPlaying(false);
   }, []);
 
+  const handleRoadSelect = useCallback((road) => {
+    if (source === 'results') {
+      const roads = playbackRef.current.getRoads();
+      const found = roads.find(r => r.name === road.name);
+      setSelectedRoad(found ? { name: road.name, id: found.id } : { name: road.name, id: road.name });
+    } else {
+      setSelectedRoad({ name: road.name, id: road.name });
+    }
+  }, [source]);
+
   return (
     <div className="app">
       <Header
@@ -112,11 +167,14 @@ export default function App() {
         simTime={simTime}
         activeVehicles={activeVehicles}
         totalVehicles={totalVehicles}
+        source={source}
+        resultsLoading={resultsLoading}
         onScenarioChange={handleScenarioChange}
         onPlay={handlePlay}
         onPause={handlePause}
         onReset={handleReset}
         onSpeedChange={handleSpeedChange}
+        onSourceChange={handleSourceChange}
       />
       <AdSlot />
       <div className="content">
@@ -127,9 +185,12 @@ export default function App() {
             speed={speed}
             activeRoutes={activeRoutes}
             selectedCorridors={selectedCorridors}
+            source={source}
+            playbackSource={playbackRef.current}
             onSimUpdate={handleSimUpdate}
             onStatsUpdate={handleStatsUpdate}
             onAutoStop={handleAutoStop}
+            onRoadSelect={handleRoadSelect}
           />
         </div>
         <StatsPanel
@@ -141,6 +202,15 @@ export default function App() {
           onToggleRoute={handleToggleRoute}
           onToggleCorridor={handleToggleCorridor}
         />
+        {selectedRoad && (
+          <div style={{ position: 'fixed', bottom: '20px', left: '20px', zIndex: 1000, width: '300px' }}>
+            <RoadWatcher 
+              road={selectedRoad} 
+              allFrames={source === 'results' ? playbackFrames : null} 
+              onClose={() => setSelectedRoad(null)} 
+            />
+          </div>
+        )}
       </div>
     </div>
   );

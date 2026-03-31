@@ -99,6 +99,7 @@ export function junctionHoldDuration(jid, junctionControl, simTime, lastReleaseT
     case 'stop':          return gap >= 4.0 ? 0 : 4.0 - gap;
     case 'yield':         return gap >= 2.5 ? 0 : 2.5 - gap;
     case 'critical':      return gap >= 4.5 ? 0 : 4.5 - gap; 
+
     case 'speed_hump':    return gap >= 1.2 ? 0 : 1.2 - gap;
     default: return 0;
   }
@@ -172,8 +173,8 @@ export function stepAllVehicles(vehicles, dt, routeConfigs, simTime) {
       // ── Dynamic Road Class Attribution ───────────────────────────────────
       let roadClass = v.roadClass;
       if (v.state === 'outbound') {
-        // Egress defaults to collector/local regardless of inbound corridor
-        roadClass = 'collector';
+        // Egress always cautious on residential side-streets
+        roadClass = 'local';
       }
       
       if (toJid === 20 || (v.state === 'outbound' && v.lastJunctionIdx === 0)) {

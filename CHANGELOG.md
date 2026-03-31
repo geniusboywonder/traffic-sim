@@ -40,10 +40,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Dashboard UI & Metrics Overhaul:** Refactored corridor cards to match map flow, updated "Avg In/Out" labels to "Avg Time In/Out", right-aligned vehicle counts in card headers with "In: X / Out: X" formatting, added "Congestion Meter" headings to the status charts, and replaced stall counts with "% active/slowing/stopped" distribution.
 
 ### Fixed — 2026-03-30
-- **Initialization Order:** Resolved `ReferenceError: Cannot access 'drawFrame' before initialization` by reordering internal function definitions in `SimMap.jsx`.
-- **Road Stats Persistence:** Extracted road stats logic into a reusable helper; stats now persist and remain interactive (via cumulative tracking) even after the simulation finishes or is paused.
-- **Routing Restoration:** Reverted main inbound routes to Leyden Road (J6) to ensure primary traffic follows the intended approach while maintaining Ruskin Road (J17) as a valid rat-run.
 - **Yield Realism:** Tightened J5 (Christopher/Vineyard) yield logic (increased gap to 2.5s) to ensure vehicles slow down realistically before merging.
+- **Dynamic Speed Profiling:** Outbound (egress) vehicles and rat-run traffic now utilize `local` road parameters (30 km/h) instead of `collector` speeds, providing more realistic residential flow.
+- **Routing Restoration:** Fixed "grabled" 2B path; vehicles now correctly proceed from Children's Way to Dreyersdal/Christopher without inefficient looping.
+- **Ruskin Rd Rat-Run:** Maintained J17 (Ruskin Rd) as a valid rat-run option while keeping primary inbound routes on the Christopher/Leyden approach.
+- **Road Stats Persistence:** Extracted road stats logic into a reusable helper; stats now persist and remain interactive (via cumulative tracking) even after the simulation finishes or is paused.
 - **Road Class Physics:** Implemented dynamic roadClass attribution; egress vehicles now correctly follow collector speed profiles, and rat-runs utilize local road parameters.
 - **Egress Peak Delays:** Widened the AM peak window and increased maximum hold times at exit points (J1, J9, J13) to better simulate external corridor back-pressure.
 - **Road Stats Logic:** Resolved a stale closure bug in the simulation loop by using `selectedRoadRef`, ensuring real-time stats update correctly upon selection.

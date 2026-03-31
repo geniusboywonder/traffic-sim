@@ -239,7 +239,7 @@ const RAW_ROUTES = {
 
   // ── Corridor 2B — Children's Way (entry J8) ───────────────────────────────
   // Standard path: Children's Way -> Dreyersdal -> Christopher -> Vineyard -> Leyden -> Ruskin
-  '2B':     { name: "Route 2B — Children's Way",       corridor: '2B', type: 'main',   junctions: [8,26,15,18,4,5,6,7],           maxVehicles: 70 },
+  '2B':     { name: "Route 2B — Children's Way",       corridor: '2B', type: 'main',   junctions: [8, 26, 15, 18, 4, 5, 6, 7],    maxVehicles: 70 },
   '2B-RR1': { name: "Rat-run 2B-1: →Starke→Christopher", corridor: '2B', type: 'ratrun', junctions: [8,26,27,22,4,5,6,7],        maxVehicles: 35 },
   '2B-RR2': { name: "Rat-run 2B-2: →Starke→Vineyard→Christopher", corridor: '2B', type: 'ratrun', junctions: [8,26,27,22,19,16,5,6,7], maxVehicles: 30 },
   '2B-RR3': { name: "Rat-run 2B-3: →Starke→Vineyard→Ruskin", corridor: '2B', type: 'ratrun', junctions: [8,26,27,22,19,16,17,7], maxVehicles: 25 },

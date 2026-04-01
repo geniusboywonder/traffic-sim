@@ -883,7 +883,8 @@
 }
 
 .barrier-narrative p { font-size: 1.125rem; margin-bottom: 2rem; }
-.barrier-lekker { font-weight: 700; font-size: 1.25rem; color: #415D43; }
+.barrier-lekker { font-weight: 700; font-size: 1.25rem; color: #415D43; line-height: 1.8; }
+.barrier-sig { font-size: 0.95rem; font-weight: 500; opacity: 0.65; font-style: italic; }
 
 .barrier-disclaimer {
   grid-column: span 5;

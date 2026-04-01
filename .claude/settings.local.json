@@ -64,7 +64,17 @@
       "Bash(\"C:/Program Files \\(x86\\)/Eclipse/Sumo/bin/netconvert.exe\" --version)",
       "Bash(\"C:/Program Files \\(x86\\)/Eclipse/Sumo/bin/sumo.exe\" --help)",
       "Bash(ls:*)",
-      "Bash(\"C:/Program Files \\(x86\\)/Eclipse/Sumo/bin/sumo.exe\" -c \"C:/Users/neill/Github/tokai-sim/sim/sumo/bergvliet-L.sumocfg\" --no-step-log false --no-warnings false)"
+      "Bash(\"C:/Program Files \\(x86\\)/Eclipse/Sumo/bin/sumo.exe\" -c \"C:/Users/neill/Github/tokai-sim/sim/sumo/bergvliet-L.sumocfg\" --no-step-log false --no-warnings false)",
+      "Bash(ping:*)",
+      "Bash(tracert -d -h 20 api.anthropic.com)",
+      "Bash(tracert -d -h 20 generativelanguage.googleapis.com)",
+      "Bash(git fetch:*)",
+      "Bash(git merge:*)",
+      "Bash(grep -E \"\\\\.\\(py|xml|cfg|sumocfg\\)$\")",
+      "Bash(sumo --version)",
+      "Bash(netconvert --version)",
+      "Read(//c/Users/neill/Github/models/**)",
+      "Read(//c/Users/neill/**)"
     ]
   }
 }

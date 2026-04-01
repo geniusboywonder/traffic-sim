@@ -19,7 +19,7 @@ function formatClock(simTime) {
 
 export default function Header({
   scenario, playing, speed, simTime,
-  activeVehicles, totalVehicles,
+  activeVehicles, totalVehicles, totalIn, totalOut,
   source, resultsLoading,
   onScenarioChange, onPlay, onPause, onReset, onSpeedChange, onSourceChange,
 }) {
@@ -95,8 +95,12 @@ export default function Header({
             <span className="count-value">{activeVehicles}</span>
           </div>
           <div className="count-chip">
-            <span className="count-label">Total</span>
-            <span className="count-value">{totalVehicles}</span>
+            <span className="count-label">Total In</span>
+            <span className="count-value">{totalIn}</span>
+          </div>
+          <div className="count-chip">
+            <span className="count-label">Total Out</span>
+            <span className="count-value">{totalOut}</span>
           </div>
         </div>
       </div>

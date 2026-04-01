@@ -69,7 +69,36 @@ export class PlaybackSource {
     const dt = this._data.meta.timestep;
     const seenCorridor = { '1A': new Set(), '2A': new Set(), '2B': new Set(), '3A': new Set() };
     const slowAcc      = { '1A': 0, '2A': 0, '2B': 0, '3A': 0 };
-    const seenRoad     = {};   // road_id → Set of vehicle IDs
+    const seenRoadIn   = {};   // road_id → Set of inbound vehicle IDs
+    const seenRoadOut  = {};   // road_id → Set of outbound vehicle IDs
+
+    // Pre-pass: compute per-corridor avg outbound journey time.
+    // firstOutbound[vid] = abs time when vehicle first appears as outbound.
+    // lastSeen[vid]      = abs time when vehicle last appears in any frame.
+    const firstOutbound = {};
+    const lastSeen = {};
+    for (const frame of this._data.frames) {
+      for (const v of frame.vehicles) {
+        lastSeen[v.id] = frame.t;
+        if (v.state === 'outbound' && firstOutbound[v.id] === undefined) {
+          firstOutbound[v.id] = frame.t;
+        }
+      }
+    }
+    const outTimes = { '1A': [], '2A': [], '2B': [], '3A': [] };
+    for (const [vid, ft] of Object.entries(firstOutbound)) {
+      const ls = lastSeen[vid];
+      if (ls !== undefined && ls > ft) {
+        const cid = this._flowToCorridor(vid);
+        if (cid) outTimes[cid].push(ls - ft);
+      }
+    }
+    this._avgOutDelaySec = Object.fromEntries(
+      ['1A', '2A', '2B', '3A'].map(cid => {
+        const arr = outTimes[cid];
+        return [cid, arr.length > 0 ? arr.reduce((a, b) => a + b, 0) / arr.length : 0];
+      })
+    );
 
     this._frameStats = this._data.frames.map(frame => {
       for (const v of frame.vehicles) {
@@ -78,13 +107,20 @@ export class PlaybackSource {
           seenCorridor[cid].add(v.id);
           if (v.speed < 2) slowAcc[cid] += dt;
         }
-        if (!seenRoad[v.road_id]) seenRoad[v.road_id] = new Set();
-        seenRoad[v.road_id].add(v.id);
+        // Track inbound and outbound visits separately per road
+        if (v.state === 'outbound') {
+          if (!seenRoadOut[v.road_id]) seenRoadOut[v.road_id] = new Set();
+          seenRoadOut[v.road_id].add(v.id);
+        } else {
+          if (!seenRoadIn[v.road_id]) seenRoadIn[v.road_id] = new Set();
+          seenRoadIn[v.road_id].add(v.id);
+        }
       }
       return {
         spawned:  { '1A': seenCorridor['1A'].size, '2A': seenCorridor['2A'].size, '2B': seenCorridor['2B'].size, '3A': seenCorridor['3A'].size },
         slowTime: { ...slowAcc },
-        roadVisits: Object.fromEntries(Object.entries(seenRoad).map(([k, s]) => [k, s.size])),
+        roadVisitsIn:  Object.fromEntries(Object.entries(seenRoadIn).map(([k, s])  => [k, s.size])),
+        roadVisitsOut: Object.fromEntries(Object.entries(seenRoadOut).map(([k, s]) => [k, s.size])),
       };
     });
   }
@@ -223,7 +259,7 @@ export class PlaybackSource {
         label: PlaybackSource._CORRIDOR_LABELS[cid],
         current, spawned, exited, active, slowing, stopped, congestion,
         avgInDelay,
-        avgOutDelay: 0,
+        avgOutDelay: (this._avgOutDelaySec?.[cid] ?? 0) / 60,
       };
     }
 
@@ -241,8 +277,9 @@ export class PlaybackSource {
     const slug = roadId.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
 
     const frameIdx = this._data.frames.indexOf(frame);
-    const fs = this._frameStats[frameIdx] ?? { roadVisits: {} };
-    const cumulativeTotal = fs.roadVisits[slug] ?? 0;
+    const fs = this._frameStats[frameIdx] ?? { roadVisitsIn: {}, roadVisitsOut: {} };
+    const cumulativeIn  = fs.roadVisitsIn?.[slug]  ?? 0;
+    const cumulativeOut = fs.roadVisitsOut?.[slug] ?? 0;
 
     // Instantaneous speed breakdown from current frame (split by direction)
     const live = {
@@ -258,8 +295,8 @@ export class PlaybackSource {
     }
 
     return {
-      inbound:  { total: cumulativeTotal, ...live.inbound },
-      outbound: { total: cumulativeTotal, ...live.outbound },
+      inbound:  { total: cumulativeIn,  ...live.inbound },
+      outbound: { total: cumulativeOut, ...live.outbound },
     };
   }
 

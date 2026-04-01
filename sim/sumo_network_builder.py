@@ -81,7 +81,7 @@ SCHOOL_CORNER_ID  = "school-corner"
 SCHOOL_CORNER_LON = 18.4490
 SCHOOL_CORNER_LAT = -34.0528
 SCHOOL_EXIT_LON   = 18.4500
-SCHOOL_EXIT_LAT   = -34.0525
+SCHOOL_EXIT_LAT   = -34.0525  # south junction of Aristea Road (Aristea/Ruskin/Dante/Vineyard)
 
 # Junction control overrides from routes.js (only junctions that differ from OSM defaults).
 # sumo_type: traffic_light | allway_stop | priority_stop | priority
@@ -733,5 +733,5 @@ def build_sumo_network():
 
 
 if __name__ == "__main__":
-    net_path, overlay_snap = build_sumo_network()
+    net_path, overlay_snap, humps_path = build_sumo_network()
     print(f"\nSUMO network ready: {net_path}")

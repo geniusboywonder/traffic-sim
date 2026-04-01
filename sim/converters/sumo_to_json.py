@@ -128,10 +128,10 @@ def _load_tripinfo(tripinfo_path: Path) -> dict:
     return info
 
 
-def _vehicle_state(vehicle_id: str, speed: float) -> str:
+def _vehicle_state(speed: float, is_outbound: bool = False) -> str:
     if speed < 0.5:
         return "queued"
-    if "_out." in vehicle_id:
+    if is_outbound:
         return "outbound"
     return "inbound"
 
@@ -160,13 +160,19 @@ def convert(
     tripinfo = _load_tripinfo(tripinfo_xml_path)
 
     # Collect per-vehicle timeLoss keyed by road slug + direction for delay stats
-    # vehicle_id pattern: "flow_{N}_in.{M}" or "flow_{N}_out.{M}"
+    # vehicle_id pattern: "flow_{N}_in.{M}" — all flows are inbound; outbound is
+    # detected by tracking vehicles that have been on the school internal road.
     road_delay: dict[tuple, list] = {}  # (slug, state) → [timeLoss, ...]
 
     # Build frames by streaming FCD XML
     frame_times = range(start_time, end_time + 1, timestep)
     frames_by_t: dict[int, Frame] = {t: Frame(t=t) for t in frame_times}
     road_set: dict[str, RoadMeta] = {}
+
+    # Track which vehicles have completed their school drop-off (been on school
+    # internal road).  Subsequent appearances on other roads → state "outbound".
+    visited_school: set[str] = set()
+    SCHOOL_SLUG = "school_internal_road"
 
     current_t: int | None = None
 
@@ -190,6 +196,11 @@ def convert(
             em   = edge_meta[edge_id]
             slug = em["slug"]
 
+            # Mark vehicle as having visited school; detect outbound state.
+            if slug == SCHOOL_SLUG:
+                visited_school.add(vid)
+            is_outbound = (vid in visited_school) and (slug != SCHOOL_SLUG)
+
             # Use cumulative offset map for accurate road-level progress.
             # Falls back to pos/edge_length for edges not in the map.
             if edge_id in edge_offsets:
@@ -201,7 +212,7 @@ def convert(
                 length   = em["length"]
                 progress = min(1.0, pos / length) if length > 0 else 0.0
 
-            state = _vehicle_state(vid, speed)
+            state = _vehicle_state(speed, is_outbound)
 
             frames_by_t[current_t].vehicles.append(
                 VehicleState(id=vid, road_id=slug, progress=progress, speed=speed, state=state)

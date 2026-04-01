@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- generated on 2026-03-31T16:12:41.683777+02:00 by Eclipse SUMO netconvert 1.26.0
+<!-- generated on 2026-04-01T17:02:38.633916+02:00 by Eclipse SUMO netconvert 1.26.0
 <netconvertConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/netconvertConfiguration.xsd">
 
     <input>
@@ -18153,6 +18153,7 @@
     <connection from=":cluster_-849_-850_14" to="805241557" fromLane="0" toLane="0" dir="l" state="M"/>
     <connection from=":cluster_-849_-850_15" to="691091785#3" fromLane="0" toLane="0" dir="t" state="M"/>
 
-    <roundabout nodes="-43 -59 -79 -9" edges="687674694 687674695 687676148 687676149"/>
+    <roundabout nodes="-59 -9" edges="687674694 687676148"/>
+    <roundabout nodes="-43 -79" edges="687674695 687676149"/>
 
 </net>

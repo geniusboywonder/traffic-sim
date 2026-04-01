@@ -12,7 +12,7 @@ const INITIAL_STATS = {
     '3A': { label: 'Firgrove Way',      current: 0, spawned: 0, exited: 0, avgInDelay: 0, avgOutDelay: 0, congestion: 0, slowing: 0, stopped: 0 },
     '2A': { label: 'Homestead Ave',     current: 0, spawned: 0, exited: 0, avgInDelay: 0, avgOutDelay: 0, congestion: 0, slowing: 0, stopped: 0 },
     '2B': { label: "Children's Way",    current: 0, spawned: 0, exited: 0, avgInDelay: 0, avgOutDelay: 0, congestion: 0, slowing: 0, stopped: 0 },
-    '1A': { label: 'Dreyersdal Rd N',  current: 0, spawned: 0, exited: 0, avgInDelay: 0, avgOutDelay: 0, congestion: 0, slowing: 0, stopped: 0 },
+    '1A': { label: 'Main Rd',           current: 0, spawned: 0, exited: 0, avgInDelay: 0, avgOutDelay: 0, congestion: 0, slowing: 0, stopped: 0 },
   },
   bottlenecks: {
     christopher: { label: 'Christopher Rd', active: 0, slowing: 0, stopped: 0 },
@@ -35,7 +35,7 @@ export default function App() {
   const [totalVehicles, setTotalVehicles]   = useState(0);
   const [statsData, setStatsData]           = useState(INITIAL_STATS);
   const [showRoutes, setShowRoutes]         = useState(false);
-  const [selectedCorridors, setSelectedCorridors] = useState(new Set(['1A', '2A', '2B', '3A']));
+  const [selectedCorridors, setSelectedCorridors] = useState(new Set(['3A', '2A', '2B', '1A']));
   
   const [source, setSource]                 = useState('live');
   const [resultsLoading, setResultsLoading] = useState(false);
@@ -136,6 +136,9 @@ export default function App() {
     setTotalVehicles(total);
   }, []);
 
+  const totalIn  = Object.values(statsData.corridors).reduce((s, c) => s + (c.spawned ?? 0), 0);
+  const totalOut = Object.values(statsData.corridors).reduce((s, c) => s + (c.exited  ?? 0), 0);
+
   const handleStatsUpdate = useCallback((data) => {
     setStatsData(data);
   }, []);
@@ -178,6 +181,8 @@ export default function App() {
         simTime={simTime}
         activeVehicles={activeVehicles}
         totalVehicles={totalVehicles}
+        totalIn={totalIn}
+        totalOut={totalOut}
         source={source}
         resultsLoading={resultsLoading}
         onScenarioChange={handleScenarioChange}

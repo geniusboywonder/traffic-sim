@@ -95,7 +95,7 @@ export function junctionHoldDuration(jid, junctionControl, simTime, lastReleaseT
     case 'none':          return 0;
     case 'traffic_signal': return (simTime % 60) < 30 ? 0 : 60 - (simTime % 60);
     case '4way_stop':     return gap >= 4.0 ? 0 : 4.0 - gap;
-    case 'priority_stop': return gap >= 8.0 ? 0 : 8.0 - gap;
+    case 'priority_stop': return gap >= 5.0 ? 0 : 5.0 - gap;
     case 'stop':          return gap >= 4.0 ? 0 : 4.0 - gap;
     case 'yield':         return gap >= 2.5 ? 0 : 2.5 - gap;
     case 'critical':      return gap >= 4.5 ? 0 : 4.5 - gap; 
@@ -179,7 +179,8 @@ export function stepAllVehicles(vehicles, dt, routeConfigs, simTime) {
       
       if (toJid === 20 || (v.state === 'outbound' && v.lastJunctionIdx === 0)) {
         roadClass = 'internal';
-      } else if (toJid === 7 || (v.state === 'outbound' && v.lastJunctionIdx === 1)) {
+      } else if (v.state === 'outbound' && v.lastJunctionIdx === 1) {
+        // Outbound vehicles leaving the school gate stay cautious for the first segment
         roadClass = 'ruskin';
       } else if (v.state === 'inbound' && routeConfigs[v.routeId]?.type === 'ratrun') {
         // Rat-runs are local roads

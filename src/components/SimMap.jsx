@@ -102,7 +102,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
       const active  = corrVehicles.filter(v => v.v >= 2).length;
       const inD = inDelays[cid], outD = outDelays[cid];
       res.corridors[cid] = {
-        label: cid === '1A' ? 'Dreyersdal Rd N' : cid === '2A' ? 'Homestead Ave' : cid === '2B' ? "Children's Way" : 'Firgrove Way',
+        label: cid === '1A' ? 'Main Rd' : cid === '2A' ? 'Homestead Ave' : cid === '2B' ? "Children's Way" : 'Firgrove Way',
         current: corrVehicles.length, spawned: totals[cid], exited: exits[cid],
         avgInDelay: inD.count > 0 ? (inD.total / inD.count / 60) : 0,
         avgOutDelay: outD.count > 0 ? (outD.total / outD.count / 60) : 0,
@@ -160,7 +160,9 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
 
   const updateRoadStats = useCallback(() => {
     const currentSel = selectedRoadRef.current;
-    if (currentSel && sourceRef.current === 'live') {
+    if (!currentSel) { onRoadStatsUpdate(null); return; }
+
+    if (sourceRef.current === 'live') {
       const stats = { inbound: { total: 0, active: 0, slowing: 0, stopped: 0 }, outbound: { total: 0, active: 0, slowing: 0, stopped: 0 } };
       const selName = currentSel.name.toLowerCase().trim();
       vehiclesRef.current.forEach(v => {
@@ -174,8 +176,16 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
       stats.inbound.total = roadVisitTrackerRef.current.inbound.get(selName)?.size || 0;
       stats.outbound.total = roadVisitTrackerRef.current.outbound.get(selName)?.size || 0;
       onRoadStatsUpdate(stats);
-    } else { onRoadStatsUpdate(null); }
-  }, [onRoadStatsUpdate]);
+    } else if (sourceRef.current === 'results') {
+      // Playback mode: query playback source at current sim time so stats survive pause/stop.
+      const pb = playbackSource;
+      if (pb?.isLoaded()) {
+        const rs = pb.getRoadStatsDetailed(pb.getStartTime() + simTimeRef.current, currentSel.name);
+        onRoadStatsUpdate(rs);
+      }
+      // If pb not loaded yet, leave existing stats in place rather than clearing.
+    }
+  }, [onRoadStatsUpdate, playbackSource]);
 
   const resetSim = useCallback(() => {
     loggerClear();
@@ -493,7 +503,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
       else p.setStyle({ color: 'transparent', weight: 10, opacity: 0 });
     });
     updateRoadStats();
-  }, [selectedRoad, updateRoadStats, playing]);
+  }, [selectedRoad, updateRoadStats]);
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
@@ -504,7 +514,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
           <input type="checkbox" id="route-toggle" checked={showRoutes} onChange={onToggleRoutes} style={{ cursor: 'pointer', width: 12, height: 12 }} />
           <label htmlFor="route-toggle" style={{ cursor: 'pointer', fontWeight: 600 }}>Show Routes</label>
         </div>
-        {[[COLOUR['1A'].base, 'Dreyersdal N'], [COLOUR['2A'].base, 'Homestead'], [COLOUR['2B'].base, "Children's Way"], [COLOUR['3A'].base, 'Firgrove Way'], [COLOUR.delayed, 'Delayed'], [COLOUR.dwell, 'Parked']].map(([c, l]) => (
+        {[[COLOUR['3A'].base, 'Firgrove Way'], [COLOUR['2A'].base, 'Homestead Ave'], [COLOUR['2B'].base, "Children's Way"], [COLOUR['1A'].base, 'Main Rd'], [COLOUR.delayed, 'Delayed'], [COLOUR.dwell, 'Parked']].map(([c, l]) => (
           <div key={l} style={{ display: 'flex', alignItems: 'center', gap: 6 }}><svg width="8" height="8"><circle cx="4" cy="4" r="3" fill={c} /></svg>{l}</div>
         ))}
       </div>

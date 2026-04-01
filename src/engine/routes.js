@@ -8,7 +8,7 @@ import roadsData from '../data/bergvliet-roads.json';
 // ── Junction coordinates ──────────────────────────────────────────────────────
 // Sourced from junctions.geojson (GeoJSON coords are [lon, lat] — we store [lat, lon])
 export const JUNCTIONS = {
-  1:  { lat: -34.055818, lng: 18.460897, name: 'Main Rd / Dreyersdal Rd',              control: 'priority_stop' },
+  1:  { lat: -34.055818, lng: 18.460897, name: 'Main Rd',                              control: 'priority_stop' },
   2:  { lat: -34.055213, lng: 18.459043, name: 'Dreyersdal Rd / Dreyersdal Farm Rd',   control: 'yield', direction_only: 'from_farm_rd' },
   3:  { lat: -34.055697, lng: 18.456319, name: 'Dreyersdal Farm Rd / Starke Rd south', control: 'yield', direction_only: 'from_starke_south' },
   4:  { lat: -34.049908, lng: 18.451617, name: 'Starke Rd / Christopher Rd',           control: 'stop', direction_only: 'from_christopher' },

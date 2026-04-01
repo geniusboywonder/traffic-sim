@@ -197,19 +197,25 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
     if (sourceRef.current === 'results') {
       const pb = playbackSource;
       if (!pb?.isLoaded()) { rafRef.current = requestAnimationFrame(loopRef.current); return; }
-      const vehicles = pb.getVehicles(t);
+      const absT = pb.getStartTime() + t;
+      const vehicles = pb.getVehicles(absT);
       const ctx = canvasRef.current?.getContext('2d');
       if (ctx && mapRef.current) {
         ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
         const vr = window.innerWidth < 768 ? 3 : 4;
+        let drawn = 0;
         for (const v of vehicles) {
           const pt = mapRef.current.latLngToContainerPoint([v.lat, v.lng]);
           const colour = v.state === 'queued' ? '#ef4444' : v.state === 'rat_run' ? '#eab308' : v.state === 'outbound' ? '#f97316' : '#3b82f6';
           ctx.beginPath(); ctx.arc(pt.x, pt.y, vr, 0, Math.PI * 2); ctx.fillStyle = colour; ctx.fill();
+          drawn++;
         }
+        if (t % 60 < 1) console.log(`[SimMap] t=${Math.round(t)} canvas=${canvasRef.current.width}x${canvasRef.current.height} vehicles=${vehicles.length} drawn=${drawn} ctx=${!!ctx} map=${!!mapRef.current}`);
+      } else {
+        if (t % 60 < 1) console.warn(`[SimMap] t=${Math.round(t)} SKIP DRAW — ctx=${!!ctx} map=${!!mapRef.current} canvas=${!!canvasRef.current}`);
       }
-      onSimUpdate(t, vehicles.length, vehicles.length);
-      if (pb.isFinished(t)) { onAutoStop(); return; }
+      onSimUpdate(absT, vehicles.length, vehicles.length);
+      if (pb.isFinished(absT)) { onAutoStop(); return; }
       rafRef.current = requestAnimationFrame(loopRef.current);
       return;
     }
@@ -407,6 +413,27 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
   useEffect(() => { if (playing) rafRef.current = requestAnimationFrame(loopRef.current); else if (rafRef.current) cancelAnimationFrame(rafRef.current); return () => rafRef.current && cancelAnimationFrame(rafRef.current); }, [playing, loop]);
   useEffect(() => resetSim(), [scenario, resetSim]);
   useEffect(() => drawFrame(), [showRoutes, drawFrame]);
+
+  // Supply road geometry to the playback engine so it can interpolate vehicle positions.
+  // The scenario JSON uses snake_case road_ids; the GeoJSON uses display names — we normalise
+  // and add aliases for the four roads whose names differ between the two datasets.
+  useEffect(() => {
+    const aliases = {
+      'tokai_high_school_internal_road': 'school_internal_road',
+      'clement_road':                    'clement_way',
+      'lakeview_road':                   'lake_view_road',
+      'firgrove_way_service_road':       'firgrove_service_road',
+    };
+    const coordMap = {};
+    ROAD_LINES.forEach(feat => {
+      const name = feat.properties?.name;
+      if (!name) return;
+      const id = name.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+      coordMap[id] = feat.geometry.coordinates; // [lon, lat][]
+      if (aliases[id]) coordMap[aliases[id]] = feat.geometry.coordinates;
+    });
+    playbackSource.setRoadCoords(coordMap);
+  }, [playbackSource]);
 
   useEffect(() => {
     const map = mapRef.current; if (!map) return;

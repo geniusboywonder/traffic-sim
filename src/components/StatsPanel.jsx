@@ -27,7 +27,7 @@ export default function StatsPanel({
       <div className="stats-section-title">Watch My Road</div>
       {!selectedRoad ? (
         <div className="stat-card" style={{ textAlign: 'center', opacity: 0.6, fontStyle: 'italic', fontSize: 11 }}>
-          click any street to see traffic activity
+          select any street on the map to see traffic activity
         </div>
       ) : (
         <div className="stat-card" style={{ borderLeftColor: '#8aebff' }}>
@@ -38,7 +38,7 @@ export default function StatsPanel({
           
           <div className="rw-line" style={{ marginTop: 8 }}>
             <div className="rw-line-title" style={{ fontSize: 9, textTransform: 'uppercase', color: '#94a3b8', marginBottom: 4 }}>Traffic In</div>
-            <div className="rw-stats-row" style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+            <div className="rw-stats-row" style={{ display: 'flex', gap: 3, flexWrap: 'nowrap' }}>
               <span className="rw-stat-pill">Total:<b>{inbound.total}</b></span>
               <span className="rw-stat-pill">Active:<b>{inbound.active}</b></span>
               <span className="rw-stat-pill">Slowing:<b>{inbound.slowing}</b></span>
@@ -48,7 +48,7 @@ export default function StatsPanel({
 
           <div className="rw-line" style={{ marginTop: 8 }}>
             <div className="rw-line-title" style={{ fontSize: 9, textTransform: 'uppercase', color: '#94a3b8', marginBottom: 4 }}>Traffic Out</div>
-            <div className="rw-stats-row" style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+            <div className="rw-stats-row" style={{ display: 'flex', gap: 3, flexWrap: 'nowrap' }}>
               <span className="rw-stat-pill">Total:<b>{outbound.total}</b></span>
               <span className="rw-stat-pill">Active:<b>{outbound.active}</b></span>
               <span className="rw-stat-pill">Slowing:<b>{outbound.slowing}</b></span>

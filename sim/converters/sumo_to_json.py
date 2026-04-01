@@ -39,6 +39,60 @@ def _edge_from_lane(lane_id: str) -> str | None:
     return re.sub(r"_\d+$", "", lane_id)
 
 
+def _build_edge_offset_map(edge_meta: dict) -> dict:
+    """
+    For each SUMO edge, compute its cumulative offset within its road direction group
+    so that progress can be calculated as (offset + pos) / total_road_length.
+
+    Groups edges by (road_slug, base_osm_id, is_reversed).  Within each group,
+    edges are sorted by their #N sequence number, giving the correct road order.
+
+    For reversed edges (negative OSM ID) progress is inverted so it always runs
+    0→1 in the same direction as the GeoJSON geometry.
+
+    Returns {edge_id: {'offset': float, 'total': float, 'reversed': bool}}
+    Falls back gracefully — if an edge_id is not in the result the caller should
+    use pos/edge_length as before.
+    """
+    from collections import defaultdict
+
+    # group key → [(seq, edge_id, length)]
+    groups: dict[tuple, list] = defaultdict(list)
+
+    for eid, meta in edge_meta.items():
+        slug = meta["slug"]
+        is_neg = eid.startswith("-")
+        clean = eid.lstrip("-")
+
+        # Match base ID and optional #N sequence suffix
+        m = re.match(r"^(.+?)(?:#(\d+))?$", clean)
+        if not m:
+            continue
+        base = m.group(1)
+        seq  = int(m.group(2)) if m.group(2) is not None else 0
+
+        groups[(slug, base, is_neg)].append((seq, eid, meta["length"]))
+
+    offset_map: dict[str, dict] = {}
+
+    for (slug, base, is_neg), edges in groups.items():
+        edges.sort(key=lambda x: x[0])          # order by #0, #1, #2 …
+        total = sum(length for _, _, length in edges)
+        if total <= 0:
+            continue
+
+        cumulative = 0.0
+        for _, eid, length in edges:
+            offset_map[eid] = {
+                "offset":   cumulative,
+                "total":    total,
+                "reversed": is_neg,   # reversed relative to the GeoJSON direction
+            }
+            cumulative += length
+
+    return offset_map
+
+
 def _load_edge_meta(net_path: Path) -> dict:
     """
     Returns {edge_id: {'slug': str, 'name': str, 'length': float}}.
@@ -99,6 +153,8 @@ def convert(
 
     print(f"[sumo_to_json] Loading edge metadata from {net_path.name}...")
     edge_meta = _load_edge_meta(net_path)
+    edge_offsets = _build_edge_offset_map(edge_meta)
+    print(f"[sumo_to_json] Edge offset map: {len(edge_offsets)} edges mapped")
 
     print(f"[sumo_to_json] Loading tripinfo...")
     tripinfo = _load_tripinfo(tripinfo_xml_path)
@@ -131,11 +187,21 @@ def convert(
                 elem.clear()
                 continue
 
-            em       = edge_meta[edge_id]
-            slug     = em["slug"]
-            length   = em["length"]
-            progress = min(1.0, pos / length) if length > 0 else 0.0
-            state    = _vehicle_state(vid, speed)
+            em   = edge_meta[edge_id]
+            slug = em["slug"]
+
+            # Use cumulative offset map for accurate road-level progress.
+            # Falls back to pos/edge_length for edges not in the map.
+            if edge_id in edge_offsets:
+                om       = edge_offsets[edge_id]
+                raw      = (om["offset"] + pos) / om["total"]
+                progress = float(1.0 - raw if om["reversed"] else raw)
+                progress = max(0.0, min(1.0, progress))
+            else:
+                length   = em["length"]
+                progress = min(1.0, pos / length) if length > 0 else 0.0
+
+            state = _vehicle_state(vid, speed)
 
             frames_by_t[current_t].vehicles.append(
                 VehicleState(id=vid, road_id=slug, progress=progress, speed=speed, state=state)

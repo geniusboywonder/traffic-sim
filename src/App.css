@@ -451,12 +451,12 @@
 
 .rw-stats-row {
   display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
+  gap: 3px;
+  flex-wrap: nowrap;
 }
 
 .rw-stat-pill {
-  font-size: 9px;
+  font-size: 8px;
   background: #1e293b;
   padding: 2px 5px;
   border-radius: 4px;

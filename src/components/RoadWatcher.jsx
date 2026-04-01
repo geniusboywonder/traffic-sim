@@ -25,7 +25,7 @@ export default function RoadWatcher({ road, allFrames, liveStats, onClose }) {
     return (
       <div className="road-watcher">
         <div className="rw-empty">
-          click any street to see traffic activity
+          select any street on the map to see traffic activity
         </div>
       </div>
     );

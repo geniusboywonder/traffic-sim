@@ -41,6 +41,7 @@ export class PlaybackSource {
    */
   setRoadCoords(coordMap) {
     this._roadCoords = coordMap;
+    console.log('[Playback] setRoadCoords — roads mapped:', Object.keys(coordMap).length, Object.keys(coordMap).slice(0, 5));
   }
 
   /**
@@ -57,6 +58,10 @@ export class PlaybackSource {
 
   isLoaded() {
     return this._data !== null;
+  }
+
+  getStartTime() {
+    return this._data?.meta?.start_time ?? 0;
   }
 
   /** @returns {object[]} Full road registry from the loaded JSON */
@@ -95,11 +100,17 @@ export class PlaybackSource {
   getVehicles(simTime) {
     const frame = this._nearestFrame(simTime);
     if (!frame) return [];
-    return frame.vehicles.map(v => {
+    const results = frame.vehicles.map(v => {
       const coords = this._roadCoords[v.road_id] ?? [];
       const { lat, lng } = progressToLatLng(coords, v.progress);
       return { lat, lng, state: v.state, roadId: v.road_id, speed: v.speed };
     });
+    if (results.length > 0 && simTime % 60 < 1) {
+      const noCoords = results.filter(v => v.lat === 0 && v.lng === 0);
+      console.log(`[Playback] t=${simTime} vehicles=${results.length} at-zero=${noCoords.length} roadCoords-keys=${Object.keys(this._roadCoords).length}`);
+      if (results[0]) console.log('[Playback] sample vehicle:', results[0]);
+    }
+    return results;
   }
 
   /**
@@ -132,6 +143,6 @@ export class PlaybackSource {
 
   reset() {
     this._data = null;
-    this._roadCoords = {};
+    // _roadCoords is static map geometry — intentionally preserved across resets
   }
 }

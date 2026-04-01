@@ -134,10 +134,10 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
       const latlng = posToLatLng(route.geometry, v.pos); if (!latlng) return;
       const pt = map.latLngToContainerPoint(L.latLng(latlng[0], latlng[1]));
       let col; const c = COLOUR[v.corridorId] || COLOUR['1A']; let isRatRun = v.state === 'inbound' && route.type === 'ratrun';
-      if (v.state === 'dwell' || v.isParking) col = COLOUR.dwell; 
-      else if (v.v < 2) col = COLOUR.delayed; 
-      else if (v.state === 'outbound') col = c.light; 
-      else if (isRatRun) col = c.base; 
+      if (v.state === 'dwell' || v.isParking) col = COLOUR.dwell;
+      else if (v.state === 'outbound') col = v.v < 2 ? COLOUR.delayed : c.light;
+      else if (v.v < 2) col = COLOUR.delayed;
+      else if (isRatRun) col = c.base;
       else col = c.dark;
       ctx.beginPath(); ctx.arc(pt.x, pt.y, 4, 0, Math.PI*2); ctx.fillStyle = col; ctx.fill();
       if (isRatRun) { ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1; ctx.stroke(); }
@@ -203,18 +203,29 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
       if (ctx && mapRef.current) {
         ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
         const vr = window.innerWidth < 768 ? 3 : 4;
-        let drawn = 0;
         for (const v of vehicles) {
           const pt = mapRef.current.latLngToContainerPoint([v.lat, v.lng]);
-          const colour = v.state === 'queued' ? '#ef4444' : v.state === 'rat_run' ? '#eab308' : v.state === 'outbound' ? '#f97316' : '#3b82f6';
+          const c = COLOUR[v.corridorId] ?? COLOUR.egress;
+          let colour;
+          if (v.state === 'queued')                      colour = COLOUR.delayed;
+          else if (v.state === 'outbound') colour = v.speed < 2 ? COLOUR.delayed : c.light;
+          else if (v.speed < 2)                          colour = COLOUR.delayed;
+          else                                           colour = c.dark;
           ctx.beginPath(); ctx.arc(pt.x, pt.y, vr, 0, Math.PI * 2); ctx.fillStyle = colour; ctx.fill();
-          drawn++;
         }
-        if (t % 60 < 1) console.log(`[SimMap] t=${Math.round(t)} canvas=${canvasRef.current.width}x${canvasRef.current.height} vehicles=${vehicles.length} drawn=${drawn} ctx=${!!ctx} map=${!!mapRef.current}`);
-      } else {
-        if (t % 60 < 1) console.warn(`[SimMap] t=${Math.round(t)} SKIP DRAW — ctx=${!!ctx} map=${!!mapRef.current} canvas=${!!canvasRef.current}`);
       }
-      onSimUpdate(absT, vehicles.length, vehicles.length);
+      // Pass relative time so the clock (which adds 6:30 base) shows correctly
+      onSimUpdate(t, vehicles.length, vehicles.length);
+      // Update dashboard stats and Watch My Road from playback data
+      const stats = pb.getStats(absT);
+      if (stats) onStatsUpdate(stats);
+      const sel = selectedRoadRef.current;
+      if (sel) {
+        const rs = pb.getRoadStatsDetailed(absT, sel.name);
+        onRoadStatsUpdate(rs);
+      } else {
+        onRoadStatsUpdate(null);
+      }
       if (pb.isFinished(absT)) { onAutoStop(); return; }
       rafRef.current = requestAnimationFrame(loopRef.current);
       return;

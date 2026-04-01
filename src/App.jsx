@@ -1,128 +1,233 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import Header from './components/Header';
 import SimMap from './components/SimMap';
 import StatsPanel from './components/StatsPanel';
-import RoadWatcher from './components/RoadWatcher';
-import AdSlot from './components/AdSlot';
 import { PlaybackSource } from './engine/playback';
 import './App.css';
 
+function formatSimTime(simTime) {
+  const totalSec = Math.floor(simTime);
+  const baseMin  = 6 * 60 + 30; // 06:30 AM
+  const totalMin = baseMin + Math.floor(totalSec / 60);
+  const hours24  = Math.floor(totalMin / 60) % 24;
+  const mins     = totalMin % 60;
+  const h12      = hours24 % 12 || 12;
+  const ampm     = hours24 < 12 ? 'AM' : 'PM';
+  return `${h12}:${String(mins).padStart(2, '0')} ${ampm}`;
+}
+
 const INITIAL_STATS = {
   corridors: {
-    '3A': { label: 'Firgrove Way',      current: 0, spawned: 0, exited: 0, avgInDelay: 0, avgOutDelay: 0, congestion: 0, slowing: 0, stopped: 0 },
-    '2A': { label: 'Homestead Ave',     current: 0, spawned: 0, exited: 0, avgInDelay: 0, avgOutDelay: 0, congestion: 0, slowing: 0, stopped: 0 },
-    '2B': { label: "Children's Way",    current: 0, spawned: 0, exited: 0, avgInDelay: 0, avgOutDelay: 0, congestion: 0, slowing: 0, stopped: 0 },
-    '1A': { label: 'Main Rd',           current: 0, spawned: 0, exited: 0, avgInDelay: 0, avgOutDelay: 0, congestion: 0, slowing: 0, stopped: 0 },
+    '3A': { label: 'Firgrove Way',     current: 0, spawned: 0, exited: 0, avgInDelay: 0, avgOutDelay: 0, congestion: 0, active: 0, slowing: 0, stopped: 0 },
+    '2A': { label: 'Homestead Ave',    current: 0, spawned: 0, exited: 0, avgInDelay: 0, avgOutDelay: 0, congestion: 0, active: 0, slowing: 0, stopped: 0 },
+    '2B': { label: "Children's Way",   current: 0, spawned: 0, exited: 0, avgInDelay: 0, avgOutDelay: 0, congestion: 0, active: 0, slowing: 0, stopped: 0 },
+    '1A': { label: 'Main Rd',  current: 0, spawned: 0, exited: 0, avgInDelay: 0, avgOutDelay: 0, congestion: 0, active: 0, slowing: 0, stopped: 0 },
   },
-  bottlenecks: {
-    christopher: { label: 'Christopher Rd', active: 0, slowing: 0, stopped: 0 },
-    leyden:      { label: 'Leyden Rd',      active: 0, slowing: 0, stopped: 0 },
-    ruskin:      { label: 'Ruskin Rd',      active: 0, slowing: 0, stopped: 0 },
-    aristea:     { label: 'Aristea Rd',     active: 0, slowing: 0, stopped: 0 },
-  },
-  parking: {
-    onSite: 0,
-    onStreet: 0
-  }
+  parking: { onSite: 0, onStreet: 0 }
 };
 
-export default function App() {
-  const [scenario, setScenario]             = useState('M');
-  const [playing, setPlaying]               = useState(false);
-  const [speed, setSpeed]                   = useState(1);
-  const [simTime, setSimTime]               = useState(0);
-  const [activeVehicles, setActiveVehicles] = useState(0);
-  const [totalVehicles, setTotalVehicles]   = useState(0);
-  const [statsData, setStatsData]           = useState(INITIAL_STATS);
-  const [showRoutes, setShowRoutes]         = useState(false);
-  const [selectedCorridors, setSelectedCorridors] = useState(new Set(['3A', '2A', '2B', '1A']));
-  
-  const [source, setSource]                 = useState('live');
-  const [resultsLoading, setResultsLoading] = useState(false);
-  const [playbackFrames, setPlaybackFrames] = useState([]);
-  const [selectedRoad, setSelectedRoad]     = useState(null);
-  const [roadStats, setRoadStats]           = useState(null);
-  const playbackRef                         = useRef(new PlaybackSource());
+const AccessBarrier = ({ onInitialize }) => (
+  <div className="access-barrier" id="access-barrier">
+    <div className="bezel-outer barrier-card">
+      <div className="bezel-inner barrier-content">
+        <header style={{ textAlign: 'center' }}>
+          <div className="barrier-title-box">
+            <h2>Tokai High School Traffic Simulator</h2>
+          </div>
+        </header>
 
-  const handleToggleRoutes = useCallback(() => {
-    setShowRoutes(prev => !prev);
-  }, []);
+        <div className="barrier-grid">
+          <div className="barrier-narrative">
+            <p>Hi there! As a Bergvliet resident, I wanted to visually understand what an additional 800 cars would do to the suburban streets of Bergvliet. And given that the WCED-commissioned Traffic Impact Assessment is woefully limited in its scope, I built a thing.</p>
+            <p>This site is also not formally associated with the <a href="https://www.facebook.com/CommunityResponseBergvlietSchool" target="_blank" className="editorial-link">Bergvliet Volunteers Association (BVA)</a>, although I am a member of the <a href="https://chat.whatsapp.com/J7ooHVb9tdr4n9PLf76wYy?mode=ems_wa_t" target="_blank" className="editorial-link">Community Response: Tokai School WhatsApp group</a>.</p>
+            <p className="barrier-lekker">Just be lekker!</p>
+          </div>
+          <div className="barrier-disclaimer">
+            <span className="disclaimer-label">DISCLAIMER</span>
+            <p className="disclaimer-text">I am just a guy, with AI. I am not a traffic-assessor, and I don't have any deep knowledge on traffic flow, stalling physics or back-pressure. My AI agents helped with that. They could be wrong. And this is just <strong>one possible scenario</strong>. It's fun and informative, but not definitive in its modelling. Don't use this site to make any life-changing decisions.</p>
+          </div>
+        </div>
+
+        <div className="barrier-action">
+          <button className="init-sim-btn" onClick={onInitialize}>Initialize Simulator →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+const BentoBriefing = () => (
+  <section className="bento-briefing" id="briefing">
+    <div className="bento-content">
+      <div className="narrative-block">
+        <div className="narrative-item">
+          <h3 className="narrative-subtitle">Microscopic Logic</h3>
+          <p className="narrative-text-large">
+            Tokai-Sim is like a super-realistic video game that lets you watch exactly what happens during the morning school drop-off at Tokai High.
+          </p>
+        </div>
+        <div className="narrative-item">
+          <p className="narrative-text-medium">
+            It models every car, every slow-down at a speed hump, and every frustrated parent trying to squeeze in a quick drop-off. The heart of the simulation is the Intelligent Driver Model — that decides how close cars follow each other, how fast they accelerate, and when they brake gently instead of slamming on the anchors.
+          </p>
+        </div>
+      </div>
+
+      <div className="tech-hub-block">
+        <div className="meta-hovers-box">
+          <div className="hover-trigger">
+            TIA Assumptions
+            <div className="hover-target">
+              <div className="popover-card">
+                <h4>TIA assumptions</h4>
+                <ul className="popover-list">
+                  <li>• <strong>Cars per hour:</strong> L: 500, M: 650, H: 840</li>
+                  <li>• <strong>Cars per entryway:</strong> Children’s Way: 36% | Homestead Ave: 30% | Firgrove Way: 18% | Dreyersdal North: 16%</li>
+                  <li>• <strong>School Drop-offs:</strong> 120 bays (98 on-site + 22 on-street)</li>
+                  <li>• <strong>Avg stop time:</strong> 45 seconds | One-way system | Aristea Traffic Circle</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div className="hover-trigger">
+            Model Parameters
+            <div className="hover-target">
+              <div className="popover-card">
+                <h4>Model parameters</h4>
+                <ul className="popover-list">
+                  <li>• <strong>Speeds:</strong> Arterial: 60 | Collector: 40 | Local: 30</li>
+                  <li>• <strong>Safety:</strong> 1.5 – 2.5s safe gap | 2.5s yield gap</li>
+                  <li>• <strong>Scale:</strong> 11 junctions & 28 road signs</li>
+                  <li>• <strong>Logic:</strong> Rat-runs trigger at 6–10% congestion | 85% chance</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="limitations-card">
+          <span className="limitations-title">IMPORTANT MODELLING LIMITATION</span>
+          <ul className="limitations-list">
+            <li>• NO SWEET VALLEY SCHOOL TRAFFIC CONDITIONS ARE AVAILABLE</li>
+            <li>• NO TRAFFIC CONDITIONS FOR EXITING TO FIRGROVE, LADIES MILE OR MAIN RD ARE AVAILABLE</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+const ModelsSection = () => (
+  <section className="models-section" id="models">
+    <div className="models-grid">
+      <div className="models-header">
+        <span className="models-subtitle">Archive: Chapter 01</span>
+        <h2 className="models-title">Models & Validation</h2>
+      </div>
+      
+      <div className="models-content">
+        <div className="model-entry">
+          <h3>The Western Cape Mobility Department TIA Approach</h3>
+          <p>The official Traffic Impact Assessment (TIA) for Tokai High School follows South Africa’s TMH 16 guidelines. It uses a straightforward, analytical method based on standard traffic engineering formulas. The TIA calculates expected trip numbers, splits them by direction, and checks road and intersection capacity using averaged flows — basically a “worst-case 15-minute peak” snapshot. It gives planners and authorities a reliable, deterministic baseline.</p>
+        </div>
+
+        <div className="model-entry">
+          <h3>SUMO & UXsim: Professional Pedigree & Model Validation</h3>
+          <div className="pedigree-grid">
+            <div className="pedigree-item">
+              <h4>SUMO (Simulation of Urban MObility)</h4>
+              <p style={{fontSize: '14px'}}>Developed by the German Aerospace Center (DLR), SUMO is a world-leading microscopic simulator. It tracks every individual car, using proven car-following mathematics such as the Intelligent Driver Model (IDM). It covers acceleration, braking, reactions to others, the 28 speed humps, the 11 special junctions, and realistic rat-running behaviour.</p>
+            </div>
+            <div className="pedigree-item">
+              <h4>UXsim</h4>
+              <p style={{fontSize: '14px'}}>Created by Dr. Toru Seo at the Institute of Science Tokyo, UXsim is a fast, modern macroscopic/mesoscopic simulator. It focuses on overall network flow using fundamental traffic theory and runs large-scale checks quickly. It gives us a “big picture” check against the official TIA curves.</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="calibration-box">
+          <h3>TOKAI-SIM CALIBRATION</h3>
+          <p>We calibrated Tokai-Sim’s live engine directly to the TIA’s peak-hour volumes, origin splits, and 840-vehicle baseline. SUMO then runs the same network at microscopic level (with all 28 speed humps, 11 junction overrides, and realistic rat-run logic), while UXsim independently validates total network throughput against the TIA’s flow-density curves. The three layers are deliberately cross-checked so any “what-if” scenario sits on the same mathematical foundation.</p>
+        </div>
+
+        <div className="model-entry">
+          <h3>Why small differences appear — and why the trend matters</h3>
+          <p>Microscopic tools like SUMO are stochastic (they include realistic random driver behaviour), while the TIA and UXsim use averaged, deterministic flows. This means queue lengths or exact travel times can vary slightly between runs. We validated by running multiple SUMO simulations and comparing the average results to both UXsim and the TIA baselines. The overall trends match extremely closely. The small differences you may notice are exactly why we built the “Live vs Results” toggle.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+const Footer = () => (
+  <footer className="site-footer" id="contact">
+    <div className="footer-content">
+      <div className="footer-brand">
+        <h2>Tokai-Sim</h2>
+        <p className="footer-slogan">"putting you in the driving seat"</p>
+      </div>
+      <div className="footer-credits">
+        <p>Built by <a href="https://x.com/geniusboywonder" target="_blank" className="editorial-link">Neill Adamson @geniusboywonder</a></p>
+        <p className="sub">Help building with AI? <a href="mailto:nadamson@gmail.com" className="editorial-link">nadamson@gmail.com</a></p>
+      </div>
+    </div>
+  </footer>
+);
+
+export default function App() {
+  const [initialized, setInitialized]           = useState(false);
+  const [scenario, setScenario]                 = useState('M');
+  const [playing, setPlaying]                   = useState(false);
+  const [speed, setSpeed]                       = useState(1);
+  const [simTime, setSimTime]                   = useState(0);
+  const [activeVehicles, setActiveVehicles]     = useState(0);
+  const [statsData, setStatsData]               = useState(INITIAL_STATS);
+  const [selectedCorridors, setSelectedCorridors] = useState(new Set(['3A', '2A', '2B', '1A']));
+  const [showRoutes, setShowRoutes]             = useState(false);
+  const [source, setSource]                     = useState('live');
+  const [selectedRoad, setSelectedRoad]         = useState(null);
+  const [roadStats, setRoadStats]               = useState(null);
+  const playbackRef                             = useRef(new PlaybackSource());
+
+  useEffect(() => {
+    document.body.style.overflow = initialized ? 'auto' : 'hidden';
+  }, [initialized]);
 
   const handleToggleCorridor = useCallback((id) => {
     setSelectedCorridors(prev => {
       const next = new Set(prev);
-      if (next.has(id)) {
-        if (next.size > 1) next.delete(id);
-      } else {
-        next.add(id);
-      }
+      if (next.has(id)) { if (next.size > 1) next.delete(id); }
+      else next.add(id);
       return next;
     });
   }, []);
 
-  const handleSourceChange = useCallback(async (s) => {
-    setSource(s);
-    setPlaying(false);
-    setSimTime(0);
-    setActiveVehicles(0);
-    setTotalVehicles(0);
-    setStatsData(INITIAL_STATS);
-    setSelectedRoad(null);
-    if (s === 'results') {
-      setResultsLoading(true);
-      try {
-        const pb = playbackRef.current;
-        pb.reset();
-        await pb.loadScenario(scenario);
-        setPlaybackFrames(pb.getAllFrames());
-      } catch (err) {
-        console.error('Failed to load scenario results:', err);
-      } finally {
-        setResultsLoading(false);
-      }
-    }
-  }, [scenario]);
+  const handleToggleRoutes = useCallback(() => setShowRoutes(p => !p), []);
 
   const handleScenarioChange = useCallback(async (s) => {
     setScenario(s);
     setPlaying(false);
     setSimTime(0);
-    setActiveVehicles(0);
-    setTotalVehicles(0);
     setStatsData(INITIAL_STATS);
     setSelectedRoad(null);
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({ event: 'scenario_change', scenario: s });
     if (source === 'results') {
-      setResultsLoading(true);
-      try {
-        const pb = playbackRef.current;
-        pb.reset();
-        await pb.loadScenario(s);
-        setPlaybackFrames(pb.getAllFrames());
-      } catch (err) {
-        console.error('Failed to load scenario results:', err);
-      } finally {
-        setResultsLoading(false);
-      }
+      try { const pb = playbackRef.current; pb.reset(); await pb.loadScenario(s); }
+      catch (err) { console.error('Failed to load scenario:', err); }
     }
   }, [source]);
 
-  const handlePlay = useCallback(() => {
-    setPlaying(true);
+  const handlePlayPause = useCallback(() => {
+    setPlaying(prev => !prev);
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({ event: 'simulation_play' });
-  }, []);
-
-  const handlePause = useCallback(() => {
-    setPlaying(false);
   }, []);
 
   const handleReset = useCallback(() => {
     setPlaying(false);
     setSimTime(0);
-    setActiveVehicles(0);
-    setTotalVehicles(0);
     setStatsData(INITIAL_STATS);
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({ event: 'simulation_reset' });
@@ -130,35 +235,31 @@ export default function App() {
 
   const handleSpeedChange = useCallback((s) => setSpeed(s), []);
 
-  const handleSimUpdate = useCallback((time, active, total) => {
+  const handleSimUpdate = useCallback((time, active) => {
     setSimTime(time);
     setActiveVehicles(active);
-    setTotalVehicles(total);
   }, []);
 
-  const totalIn  = Object.values(statsData.corridors).reduce((s, c) => s + (c.spawned ?? 0), 0);
-  const totalOut = Object.values(statsData.corridors).reduce((s, c) => s + (c.exited  ?? 0), 0);
+  const handleStatsUpdate = useCallback((data) => setStatsData(data), []);
+  const handleAutoStop    = useCallback(() => setPlaying(false), []);
 
-  const handleStatsUpdate = useCallback((data) => {
-    setStatsData(data);
-  }, []);
-
-  const handleAutoStop = useCallback(() => {
+  const handleSourceChange = useCallback(async (src) => {
+    setSource(src);
     setPlaying(false);
-  }, []);
+    setSimTime(0);
+    setStatsData(INITIAL_STATS);
+    setSelectedRoad(null);
+    setRoadStats(null);
+    if (src === 'results') {
+      try { const pb = playbackRef.current; pb.reset(); await pb.loadScenario(scenario); }
+      catch (err) { console.error('Failed to load scenario results:', err); }
+    }
+  }, [scenario]);
 
   const handleRoadSelect = useCallback((road) => {
-    if (!road) {
-      setSelectedRoad(null);
-      setRoadStats(null);
-      return;
-    }
+    if (!road) { setSelectedRoad(null); setRoadStats(null); return; }
     setSelectedRoad(prev => {
-      if (prev && prev.name === road.name) {
-        setRoadStats(null);
-        return null;
-      }
-      
+      if (prev && prev.name === road.name) { setRoadStats(null); return null; }
       if (source === 'results') {
         const roads = playbackRef.current.getRoads();
         const found = roads.find(r => r.name === road.name);
@@ -168,62 +269,83 @@ export default function App() {
     });
   }, [source]);
 
-  const handleRoadStatsUpdate = useCallback((stats) => {
-    setRoadStats(stats);
-  }, []);
+  const handleRoadStatsUpdate = useCallback((stats) => setRoadStats(stats), []);
 
   return (
     <div className="app">
-      <Header
-        scenario={scenario}
-        playing={playing}
-        speed={speed}
-        simTime={simTime}
-        activeVehicles={activeVehicles}
-        totalVehicles={totalVehicles}
-        totalIn={totalIn}
-        totalOut={totalOut}
-        source={source}
-        resultsLoading={resultsLoading}
-        onScenarioChange={handleScenarioChange}
-        onPlay={handlePlay}
-        onPause={handlePause}
-        onReset={handleReset}
-        onSpeedChange={handleSpeedChange}
-        onSourceChange={handleSourceChange}
-      />
-      <AdSlot />
-      <div className="content">
-        <div className="map-container">
-          <SimMap
-            scenario={scenario}
-            playing={playing}
-            speed={speed}
-            showRoutes={showRoutes}
-            onToggleRoutes={handleToggleRoutes}
-            selectedCorridors={selectedCorridors}
-            source={source}
-            playbackSource={playbackRef.current}
-            onSimUpdate={handleSimUpdate}
-            onStatsUpdate={handleStatsUpdate}
-            onRoadStatsUpdate={handleRoadStatsUpdate}
-            onAutoStop={handleAutoStop}
-            onRoadSelect={handleRoadSelect}
-            selectedRoad={selectedRoad}
-            allPlaybackFrames={playbackFrames}
-          />
+      <div className="noise-overlay" />
+
+      {!initialized && <AccessBarrier onInitialize={() => setInitialized(true)} />}
+
+      <Header simTime={simTime} />
+
+      <main className="main-layout" id="simulator">
+        <header className="hero-header">
+          <h2>Pick a scenario and watch the traffic wiggle!</h2>
+          <div className="hero-totals-card">
+            <div className="htc-stat">
+              <span className="htc-label">Time</span>
+              <span className="htc-value htc-time">{formatSimTime(simTime)}</span>
+            </div>
+            <div className="htc-divider" />
+            <div className="htc-stat">
+              <span className="htc-label">Active</span>
+              <span className="htc-value">{activeVehicles}</span>
+            </div>
+            <div className="htc-stat">
+              <span className="htc-label">Total In</span>
+              <span className="htc-value">{Object.values(statsData.corridors).reduce((s, c) => s + (c.spawned || 0), 0)}</span>
+            </div>
+            <div className="htc-stat">
+              <span className="htc-label">Total Out</span>
+              <span className="htc-value">{Object.values(statsData.corridors).reduce((s, c) => s + (c.exited || 0), 0)}</span>
+            </div>
+          </div>
+        </header>
+
+        <div className="content">
+          <div className="map-viewport-container bezel-outer">
+            <div className="bezel-inner">
+              <SimMap
+                scenario={scenario}
+                playing={playing}
+                speed={speed}
+                showRoutes={showRoutes}
+                onToggleRoutes={handleToggleRoutes}
+                selectedCorridors={selectedCorridors}
+                source={source}
+                playbackSource={playbackRef.current}
+                onSimUpdate={handleSimUpdate}
+                onStatsUpdate={handleStatsUpdate}
+                onRoadStatsUpdate={handleRoadStatsUpdate}
+                onAutoStop={handleAutoStop}
+                onPlayPause={handlePlayPause}
+                onReset={handleReset}
+                onSpeedChange={handleSpeedChange}
+                onScenarioChange={handleScenarioChange}
+                onSourceChange={handleSourceChange}
+                onRoadSelect={handleRoadSelect}
+                selectedRoad={selectedRoad}
+              />
+            </div>
+          </div>
+          <div className="stats-panel-container">
+            <StatsPanel
+              statsData={statsData}
+              activeVehicles={activeVehicles}
+              selectedCorridors={selectedCorridors}
+              onToggleCorridor={handleToggleCorridor}
+              selectedRoad={selectedRoad}
+              roadStats={roadStats}
+              onCloseRoad={() => handleRoadSelect(null)}
+            />
+          </div>
         </div>
-        <StatsPanel
-          statsData={statsData}
-          activeVehicles={activeVehicles}
-          totalVehicles={totalVehicles}
-          selectedCorridors={selectedCorridors}
-          onToggleCorridor={handleToggleCorridor}
-          selectedRoad={selectedRoad}
-          roadStats={roadStats}
-          onCloseRoad={() => handleRoadSelect(null)}
-        />
-      </div>
+      </main>
+
+      <BentoBriefing />
+      <ModelsSection />
+      <Footer />
     </div>
   );
 }

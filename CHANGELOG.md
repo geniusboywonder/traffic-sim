@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### Changed — 2026-04-01
+- **Hero Totals Card — Simulation Time:** Added a live `Time: HH:MM AM` display to the top summary card alongside Active / Total In / Total Out, separated by a divider. Time is derived from the same `formatClock` logic used by the navigation clock, starting at 06:30 AM.
+- **UI Spacing & Card Density:** Increased `main-layout` top padding to create breathing room below the fixed navigation bar. Reduced stat-card padding and stats-panel gap so all five sidebar cards fit within the map height without clipping content at the bottom. Tightened internal element margins on card headers and congestion containers.
+- **Watch My Road Card Layout:** Added a `.rw-line` flex wrapper with a gap between the Traffic In and Traffic Out rows so both sections are evenly spaced when a road is selected.
+
+### Added — 2026-04-01
+- **Model Comparison Script:** `models/compare_models.py` compares IDM live simulation against SUMO microscopic output per scenario (L/M/H). Reports inbound journey times, junction delay, peak congestion timing, top congested roads, school arrival rate per 15-min window, and a summary verdict. Auto-discovers IDM log files from `models/{l,m,h}/` folders.
+- **SUMO Pipeline Restored:** Fixed broken network build caused by `--geometry.remove` pruning the mid-block Aristea exit node. Reverted school exit to the real OSM junction at south Aristea (node -294), confirmed as the only exit from the school gate with Aristea Road as the sole outgoing edge.
+- **Scenario JSON Regenerated:** Re-ran all three SUMO scenarios (L/M/H) producing correct 41-road networks with expected vehicle-frame counts (L: 8 313, M: 16 165, H: 22 641).
+- **Header Counts Split:** "Total" vehicle chip replaced with separate "Total In" and "Total Out" chips derived from corridor spawn/exit tallies.
+
+### Fixed — 2026-04-01
+- **SUMO Network Build:** `sumo_network_builder.py` `__main__` block corrected to unpack three return values (`net_path, overlay_snap, humps_path`) after `build_sumo_network()` signature was updated.
+- **Outbound State Detection:** `sumo_to_json.py` `_vehicle_state()` now tracks vehicles that have visited `school_internal_road` and marks subsequent frames as `outbound` via a `visited_school` set (replaces the broken `"_out." in vehicle_id` check).
+- **Watch My Road — Results Mode:** `updateRoadStats` in `SimMap.jsx` now queries `PlaybackSource.getRoadStatsDetailed()` in results mode; road stats no longer clear on pause or simulation end.
+- **avgOutDelay in Playback:** `PlaybackSource._precomputeStats()` pre-pass now computes per-corridor average outbound delay; was previously hardcoded to 0.
+- **Road Visit Directional Split:** `PlaybackSource` splits `seenRoad` into `seenRoadIn` / `seenRoadOut` so inbound and outbound cumulative totals are tracked independently.
+- **IDM Braking Fix:** Removed erroneous `toJid === 7` condition that applied conservative `ruskin` road class to all vehicles approaching the school gate, not just outbound ones leaving it.
+- **Priority Stop Delay:** Reduced `priority_stop` junction hold from 8.0 s to 5.0 s to restore realistic throughput at controlled intersections.
+
 ### Added — 2026-03-31
 - **Playback Engine & Road Analytics:** Created `PlaybackSource` in `src/engine/playback.js` to load and interpolate pre-computed UXsim/SUMO results from JSON files.
 - **Source Toggle:** Added a "Live / Results" toggle in the `Header` component to switch between the real-time IDM engine and pre-computed models.

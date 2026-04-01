@@ -152,7 +152,7 @@
   pointer-events: auto;
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 0.5rem;
   padding: 0.5rem;
   background: var(--surface-low);
   border-radius: 100px;
@@ -182,7 +182,6 @@
 .speed-selector {
   display: flex;
   gap: 0.25rem;
-  padding-right: 1rem;
 }
 
 .speed-pill {
@@ -212,17 +211,28 @@
 }
 
 /* ── Stats Panel — Section Titles ── */
-.stats-section-title { display: none; }
+.stats-section-title {
+  font-size: 8px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--muted-text);
+  opacity: 0.6;
+  padding: 0 0.25rem;
+  flex-shrink: 0;
+}
 
-/* ── Stat Cards ── */
-.stat-cards-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+/* ── Corridor 2-column grid ── */
+.corridor-grid {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 0.35rem;
 }
 
 .stat-card {
-  flex: 1;
   min-height: 0;
   background-color: var(--surface-low);
   border-radius: 0.75rem;
@@ -238,8 +248,10 @@
 .stat-card.deselected { opacity: 0.4; }
 .stat-card.selected   { opacity: 1; }
 
+/* Watch My Road sits above the grid as a compact fixed strip */
 .stat-card--watch {
   border-left-color: #5B8FA8;
+  flex-shrink: 0;
 }
 
 .wmy-empty {

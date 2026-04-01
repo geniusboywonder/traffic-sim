@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### Fixed — 2026-04-01
+- **LOG / ROAD LOG Buttons Visible:** `.sim-controls` gap reduced from `1.5rem` to `0.5rem` and `speed-selector` padding-right removed so the controls bar no longer overflows and gets clipped by `bezel-inner`'s `overflow: hidden`. Both download buttons are now visible.
+- **Corridor Cards — 2×2 Grid:** Replaced single-column flex list with a `corridor-grid` (2 columns × 2 rows, `1fr 1fr`) so all four cards share width and height without excessive whitespace.
+- **"Entry / Exit Corridors" Label Restored:** Section title re-added above the corridor grid; was incorrectly hidden during earlier refactor.
+- **Metric Labels — Avg Time In / Avg Time Out:** Corrected "Avg In" → "Avg Time In" and "Avg Out" → "Avg Time Out" in corridor cards.
+
 ### Changed — 2026-04-01
 - **Hero Totals Card — Simulation Time:** Added a live `Time: HH:MM AM` display to the top summary card alongside Active / Total In / Total Out, separated by a divider. Time is derived from the same `formatClock` logic used by the navigation clock, starting at 06:30 AM.
 - **UI Spacing & Card Density:** Increased `main-layout` top padding to create breathing room below the fixed navigation bar. Reduced stat-card padding and stats-panel gap so all five sidebar cards fit within the map height without clipping content at the bottom. Tightened internal element margins on card headers and congestion containers.

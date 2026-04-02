@@ -105,16 +105,19 @@ def _build_vehicle_id_map(W, corridor_nodes):
     if not corridor_nodes:
         return {}
 
-    # Build node-id → corridor_index lookup using Python object identity
-    corridor_by_node_id = {id(node): cidx for cidx, node in corridor_nodes.items()}
+    # Map node name (string) → corridor index — more robust than id() comparison
+    corridor_by_node_name = {node.name: cidx for cidx, node in corridor_nodes.items()}
 
     seq_counter = {cidx: 0 for cidx in corridor_nodes}
     veh_id_map = {}   # vehicle_name → stable flow ID string
 
-    for veh in W.VEHICLES:
-        cidx = corridor_by_node_id.get(id(veh.orig))
+    # W.VEHICLES is an OrderedDict[str, Vehicle] — iterate values()
+    for veh in W.VEHICLES.values():
+        orig_name = veh.orig.name if veh.orig else None
+        dest_name = veh.dest.name if veh.dest else None
+        cidx = corridor_by_node_name.get(orig_name)
         if cidx is None:
-            cidx = corridor_by_node_id.get(id(veh.dest))
+            cidx = corridor_by_node_name.get(dest_name)
         if cidx is not None:
             flow_num = cidx * 5
             seq = seq_counter[cidx]
@@ -230,7 +233,8 @@ def convert(W, scenario: str, corridor_nodes=None,
                 direction = link_direction.get(link_name, "inbound")
 
                 # Resolve stable corridor-tagged ID (falls back to opaque ID)
-                veh_name = getattr(row, "vehicle", None)
+                # DataFrame column is 'name' (not 'vehicle') per UXSim API
+                veh_name = getattr(row, "name", None)
                 veh_id   = veh_id_map.get(veh_name, f"v{frame_t}_{i}") if veh_name else f"v{frame_t}_{i}"
 
                 vehicles.append(VehicleState(

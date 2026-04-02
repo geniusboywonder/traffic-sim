@@ -285,28 +285,75 @@ a {
   padding: 1rem;
 }
 
-/* Card 4-Row Architecture */
-.card-row-1 { display: flex; justify-content: space-between; align-items: baseline; }
-.card-row-2 { display: flex; justify-content: space-between; align-items: center; margin: 0.25rem 0; }
-.card-row-3 { margin-top: 0.5rem; }
-.card-row-4 { display: flex; justify-content: space-between; font-size: 8px; font-weight: 800; color: var(--muted-text); text-transform: uppercase; }
-
-.v2-big-num { 
-  font-family: 'Manrope', sans-serif; 
-  font-size: 1.5rem; 
-  font-weight: 300; 
-  color: var(--on-surface); 
-  letter-spacing: -0.02em;
+/* ── Card 4-Row Architecture ── */
+/* All rows use flex so left label + right value never collide */
+.card-row-1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
 }
-
-.v2-avg-time { 
-  font-family: 'Work Sans', sans-serif;
-  font-size: 10px; 
-  font-weight: 700; 
-  color: var(--muted-text); 
+.card-row-2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-top: 0.3rem;
+}
+.card-row-3 { margin-top: 0.4rem; }
+.card-row-4 {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.3rem;
+  font-size: 8px;
+  font-weight: 800;
+  color: var(--muted-text);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  margin-left: 4px; 
+}
+.card-row-4 span { white-space: nowrap; }
+
+/* Road name — left side of row 1 */
+.sc-label {
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--on-surface);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+/* Traffic counts — right side of row 1 */
+.sc-counts {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--muted-text);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+/* "Avg Travel Time" label — left side of row 2 */
+.sc-meta {
+  font-size: 8px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted-text);
+  white-space: nowrap;
+}
+
+/* Time values — right side of row 2 */
+.sc-times {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--on-surface);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
 }
 
 .v2-h {

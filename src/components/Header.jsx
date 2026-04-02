@@ -21,12 +21,6 @@ export default function Header({ simTime, statsData }) {
   const totalOut = Object.values(statsData.corridors).reduce((s, c) => s + (c.exited || 0), 0);
   const active = Object.values(statsData.corridors).reduce((s, c) => s + (c.current || 0), 0);
 
-  // Calculate Global Congestion (weighted avg of all corridors)
-  const totalActive = Object.values(statsData.corridors).reduce((s, c) => s + (c.current || 0), 0);
-  const globalCongestion = totalActive > 0 
-    ? Object.values(statsData.corridors).reduce((s, c) => s + (c.congestion * c.current), 0) / totalActive
-    : 0;
-
   return (
     <div className="header-wrapper">
       <nav className="nav-deck">
@@ -44,18 +38,14 @@ export default function Header({ simTime, statsData }) {
           </ul>
         </div>
 
-        <div className="nav-right-group" style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-          <div className="global-summary-pill">
-            <div className="htc-stat">
+        <div className="nav-right-group" style={{ display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'flex-end' }}>
+          <div className="global-summary-pill" style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+            <div className="htc-stat" style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
               <span className="htc-label">Time</span>
               <span className="htc-value" style={{ width: '70px' }}>{clock}</span>
             </div>
-            <div className="htc-divider" />
-            <div className="htc-stat">
-              <span className="htc-label">Active</span>
-              <span className="htc-value">{active}</span>
-            </div>
-            <div className="htc-stat">
+            <div className="htc-divider" style={{ width: '1px', height: '1.25rem', background: 'var(--surface-high)' }} />
+            <div className="htc-stat" style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
               <span className="htc-label">Total In/Out</span>
               <span className="htc-value">{totalIn} / {totalOut}</span>
             </div>

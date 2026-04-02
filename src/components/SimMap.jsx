@@ -205,7 +205,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
       internal.geometry.coordinates.forEach((cl, i) => { const pt = map.latLngToContainerPoint(L.latLng(cl[1], cl[0])); if (i === 0) ctx.moveTo(pt.x, pt.y); else ctx.lineTo(pt.x, pt.y); });
       ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha = 1;
     }
-  }, []);
+  }, [selectedCorridors]);
 
   const syncCanvas = useCallback(() => {
     if (!containerRef.current || !canvasRef.current) return;
@@ -484,7 +484,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
       });
     }
     rafRef.current = requestAnimationFrame(loopRef.current);
-  }, [drawFrame, computeStats, updateRoadStats, onSimUpdate, onStatsUpdate, onAutoStop, playbackSource]);
+  }, [drawFrame, computeStats, updateRoadStats, onSimUpdate, onStatsUpdate, onAutoStop, playbackSource, onRoadStatsUpdate]);
   
   useEffect(() => { loopRef.current = loop; }, [loop]);
   useEffect(() => { if (playing) rafRef.current = requestAnimationFrame(loopRef.current); else if (rafRef.current) cancelAnimationFrame(rafRef.current); return () => rafRef.current && cancelAnimationFrame(rafRef.current); }, [playing, loop]);
@@ -509,7 +509,8 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
       coordMap[id] = feat.geometry.coordinates; // [lon, lat][]
       if (aliases[id]) coordMap[aliases[id]] = feat.geometry.coordinates;
     });
-    playbackSource.setRoadCoords(coordMap);
+    const pb = playbackSource?.current || playbackSource;
+    if (pb?.setRoadCoords) pb.setRoadCoords(coordMap);
   }, [playbackSource]);
 
   useEffect(() => {
@@ -543,12 +544,15 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
       const m = L.circleMarker([j.lat, j.lng], { radius: 7, color: col, weight: isE ? 2 : 1.5, opacity: isE ? 1 : 0.6, fill: true, fillColor: isE ? col : 'transparent', fillOpacity: isE ? 0.8 : 0 }).addTo(map).bindPopup(`<b>${j.name}</b><br>${j.control}`);
       junctionMarkersRef.current[jid] = { marker: m, baseColor: col };
     });
-    const sync = () => { syncCanvas(); drawFrame(); }; map.on('moveend zoomend', sync);
-    map.whenReady(() => requestAnimationFrame(() => { syncCanvas(); drawFrame(); }));
-    const ro = new ResizeObserver(sync); ro.observe(containerRef.current);
-    window.addEventListener('resize', syncCanvas);
+    const sync = () => { syncCanvas(); drawFrame(); };
+    // invalidateSize tells Leaflet the container has resized; sync then redraws the canvas.
+    const syncAll = () => { map.invalidateSize({ animate: false }); syncCanvas(); drawFrame(); };
+    map.on('moveend zoomend', sync);
+    map.whenReady(() => requestAnimationFrame(() => { syncAll(); }));
+    const ro = new ResizeObserver(syncAll); ro.observe(containerRef.current);
+    window.addEventListener('resize', syncAll);
     return () => { 
-      map.remove(); mapRef.current = null; ro.disconnect(); window.removeEventListener('resize', syncCanvas); 
+      map.remove(); mapRef.current = null; ro.disconnect(); window.removeEventListener('resize', syncAll);
       roadPolylinesRef.current.forEach(p => p.remove()); roadPolylinesRef.current = [];
     };
   }, [drawFrame, syncCanvas]);

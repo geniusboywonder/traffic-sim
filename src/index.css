@@ -1,16 +1,14 @@
 *, *::before, *::after { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; height: 100%; }
+html, body { margin: 0; padding: 0; }
 body {
-  background: #0f172a;
-  color: #e2e8f0;
-  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  background: var(--canvas, #F1F5F1);
+  color: var(--on-surface, #111D13);
+  font-family: 'Work Sans', system-ui, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
 }
 #root {
   width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+  min-height: 100vh;
 }

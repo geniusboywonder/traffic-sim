@@ -13,27 +13,53 @@ function formatClock(simTime) {
   return `${h12}:${String(mins).padStart(2, '0')} ${ampm}`;
 }
 
-export default function Header({ simTime }) {
+export default function Header({ simTime, statsData }) {
   const clock = formatClock(simTime);
+
+  // Consolidate global stats
+  const totalIn = Object.values(statsData.corridors).reduce((s, c) => s + (c.spawned || 0), 0);
+  const totalOut = Object.values(statsData.corridors).reduce((s, c) => s + (c.exited || 0), 0);
+  const active = Object.values(statsData.corridors).reduce((s, c) => s + (c.current || 0), 0);
+
+  // Calculate Global Congestion (weighted avg of all corridors)
+  const totalActive = Object.values(statsData.corridors).reduce((s, c) => s + (c.current || 0), 0);
+  const globalCongestion = totalActive > 0 
+    ? Object.values(statsData.corridors).reduce((s, c) => s + (c.congestion * c.current), 0) / totalActive
+    : 0;
 
   return (
     <div className="header-wrapper">
       <nav className="nav-deck">
-        <div className="header-logo">
-          <div className="logo-dot" />
-          <span className="header-logo-text">TokaiSim</span>
+        <div className="nav-left-group" style={{ display: 'flex', alignItems: 'center', gap: '2.5rem' }}>
+          <div className="header-logo">
+            <div className="logo-dot" />
+            <span className="header-logo-text">Tokai-Sim</span>
+          </div>
+
+          <ul className="nav-links" style={{ display: 'flex', listStyle: 'none', margin: 0, padding: 0, gap: '1.5rem' }}>
+            <li><a href="#simulator">Simulator</a></li>
+            <li><a href="#briefing">Models</a></li>
+            <li><a href="#findings">Findings</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
         </div>
 
-        <ul className="nav-links">
-          <li><a href="#simulator">Simulator</a></li>
-          <li><a href="#models">Models</a></li>
-          <li><a href="#findings">Findings</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <div style={{ width: 1, height: '1.25rem', background: 'var(--surface-high)', flexShrink: 0 }} />
-          <time className="header-time">{clock}</time>
+        <div className="nav-right-group" style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+          <div className="global-summary-pill">
+            <div className="htc-stat">
+              <span className="htc-label">Time</span>
+              <span className="htc-value" style={{ width: '70px' }}>{clock}</span>
+            </div>
+            <div className="htc-divider" />
+            <div className="htc-stat">
+              <span className="htc-label">Active</span>
+              <span className="htc-value">{active}</span>
+            </div>
+            <div className="htc-stat">
+              <span className="htc-label">Total In/Out</span>
+              <span className="htc-value">{totalIn} / {totalOut}</span>
+            </div>
+          </div>
         </div>
       </nav>
     </div>

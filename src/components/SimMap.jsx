@@ -155,14 +155,48 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
       const route = ROUTE_CONFIG[v.routeId]; if (!route?.geometry) return;
       const latlng = posToLatLng(route.geometry, v.pos); if (!latlng) return;
       const pt = map.latLngToContainerPoint(L.latLng(latlng[0], latlng[1]));
-      let col; const c = COLOUR[v.corridorId] || COLOUR['1A']; let isRatRun = v.state === 'inbound' && route.type === 'ratrun';
+      
+      const c = COLOUR[v.corridorId] || COLOUR['1A'];
+      const isSelected = selectedCorridors.has(v.corridorId);
+      const alpha = isSelected ? 1.0 : 0.2;
+      
+      let col;
       if (v.state === 'dwell' || v.isParking) col = COLOUR.dwell;
-      else if (v.state === 'outbound') col = v.v < 2 ? COLOUR.delayed : c.light;
       else if (v.v < 2) col = COLOUR.delayed;
-      else if (isRatRun) col = c.base;
+      else if (v.state === 'outbound') col = c.light;
       else col = c.dark;
-      ctx.beginPath(); ctx.arc(pt.x, pt.y, 4, 0, Math.PI*2); ctx.fillStyle = col; ctx.fill();
-      if (isRatRun) { ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1; ctx.stroke(); }
+
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = col;
+      ctx.strokeStyle = col;
+      ctx.lineWidth = 1.5;
+
+      const size = 4;
+      if (route.type === 'ratrun') {
+        // Rat-Run: Diamonds ◆ / ◇
+        ctx.beginPath();
+        ctx.moveTo(pt.x, pt.y - size * 1.4);
+        ctx.lineTo(pt.x + size * 1.4, pt.y);
+        ctx.lineTo(pt.x, pt.y + size * 1.4);
+        ctx.lineTo(pt.x - size * 1.4, pt.y);
+        ctx.closePath();
+        if (v.state === 'outbound' || v.state === 'dwell') {
+          ctx.stroke(); // Hollow Diamond ◇
+        } else {
+          ctx.fill(); // Solid Diamond ◆
+        }
+      } else if (v.state === 'outbound' || v.state === 'dwell') {
+        // Egress/Parked Main: Hollow Circle ○
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, size, 0, Math.PI * 2);
+        ctx.stroke();
+      } else {
+        // Inbound Main: Solid Circle ●
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1.0;
     });
 
     const internal = ROAD_LINES.find(f => f.properties.name?.toLowerCase().includes('internal road'));
@@ -547,7 +581,10 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
       </div>
 
       {/* Sim Controls Island — draggable */}
-      <div className="sim-controls-wrapper" style={{ transform: `translate(${controlsOffset.x}px, ${controlsOffset.y}px)` }}>
+      <div className="sim-controls-wrapper" style={{ transform: `translate(${controlsOffset.x}px, ${controlsOffset.y}px)`, flexDirection: 'column', alignItems: 'center' }}>
+        <div className="player-control-micro-label">
+          Play a scenario and watch the traffic wiggle!
+        </div>
         <div className="sim-controls">
           {/* Drag handle */}
           <span onMouseDown={(e) => startDrag(controlsDragRef, controlsOffset, setControlsOffset, e)}

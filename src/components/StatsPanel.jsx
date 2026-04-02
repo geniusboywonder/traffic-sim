@@ -16,7 +16,7 @@ const StatsPanel = memo(({ statsData, activeVehicles, selectedCorridors, onToggl
     <aside className="stats-panel">
 
       {/* ── Watch My Road ── */}
-      <div className="stat-card stat-card--watch" style={{ borderLeftColor: '#5B8FA8' }}>
+      <div className="stat-card stat-card--watch">
         {!selectedRoad ? (
           <div className="wmy-empty">
             <span className="wmy-empty-label">Watch My Road</span>
@@ -24,34 +24,36 @@ const StatsPanel = memo(({ statsData, activeVehicles, selectedCorridors, onToggl
           </div>
         ) : (
           <>
-            <div className="stat-card-header">
-              <div className="stat-card-label" style={{ color: '#5B8FA8' }}>{selectedRoad.name}</div>
+            <div className="card-row-1">
+              <div className="v2-roadname" style={{ color: 'var(--c-3a)' }}>{selectedRoad.name}</div>
+              <div className="v2-h">Traffic In: {inbound.total} / Traffic Out: {outbound.total}</div>
               <button className="rw-close" onClick={onCloseRoad}>×</button>
             </div>
-            <div className="rw-line">
-              <div className="rw-line-title">Traffic In</div>
-              <div className="rw-stats-row">
-                <span className="rw-stat-pill">Total <b>{inbound.total}</b></span>
-                <span className="rw-stat-pill">Active <b>{inbound.active}</b></span>
-                <span className="rw-stat-pill">Slow <b>{inbound.slowing}</b></span>
-                <span className="rw-stat-pill">Stop <b>{inbound.stopped}</b></span>
+            <div className="card-row-2">
+              <div className="v2-h">Avg Travel Time</div>
+              <div className="v2-big-num" style={{ fontSize: '1.25rem' }}>
+                <span className="v2-h">In</span> {fmtMin(roadStats?.avgInDelay)} 
+                <span className="v2-h" style={{ marginLeft: '10px' }}>Out</span> {fmtMin(roadStats?.avgOutDelay)}
               </div>
             </div>
-            <div className="rw-line">
-              <div className="rw-line-title">Traffic Out</div>
-              <div className="rw-stats-row">
-                <span className="rw-stat-pill">Total <b>{outbound.total}</b></span>
-                <span className="rw-stat-pill">Active <b>{outbound.active}</b></span>
-                <span className="rw-stat-pill">Slow <b>{outbound.slowing}</b></span>
-                <span className="rw-stat-pill">Stop <b>{outbound.stopped}</b></span>
+            <div className="card-row-3">
+              <div className="v2-h">Road Congestion</div>
+              <div className="congestion-bar" style={{ height: '6px', marginTop: '4px' }}>
+                <div className="congestion-fill" style={{ 
+                  width: `${Math.round(((inbound.stopped + outbound.stopped) / (inbound.total + outbound.total || 1)) * 100)}%`,
+                  background: 'var(--delay)'
+                }} />
               </div>
+            </div>
+            <div className="card-row-4">
+              <span>{Math.round((inbound.active / (inbound.total || 1)) * 100)}% active</span>
+              <span>{Math.round((inbound.slowing / (inbound.total || 1)) * 100)}% slowing</span>
+              <span>{Math.round((inbound.stopped / (inbound.total || 1)) * 100)}% stopped</span>
             </div>
           </>
         )}
       </div>
 
-      {/* ── Entry / Exit Corridors ── */}
-      <div className="stats-section-title">Entry / Exit Corridors</div>
       <div className="corridor-grid">
         {Object.entries(corridors).map(([id, c]) => {
           const total    = (c.active || 0) + (c.slowing || 0) + (c.stopped || 0);
@@ -67,45 +69,39 @@ const StatsPanel = memo(({ statsData, activeVehicles, selectedCorridors, onToggl
               style={{ borderLeftColor: `var(--c-${id.toLowerCase()})`, cursor: 'pointer' }}
               onClick={() => onToggleCorridor(id)}
             >
-              <div className="stat-card-header">
-                <div className="stat-card-label">{c.label}</div>
-                <span className="total-count">In: {c.spawned} / Out: {c.exited}</span>
+              <div className="card-row-1">
+                <div className="v2-roadname" style={{ fontSize: '11px' }}>{c.label}</div>
+                <div className="v2-h">In: {c.spawned} / Out: {c.exited}</div>
               </div>
 
-              <div className="metrics-row">
-                <div className="metric">
-                  <span className="m-label">Active</span>
-                  <span className="m-value">{c.current}</span>
-                </div>
-                <div className="metric">
-                  <span className="m-label">Avg Time In</span>
-                  <span className="m-value">{fmtMin(c.avgInDelay)}</span>
-                </div>
-                <div className="metric">
-                  <span className="m-label">Avg Time Out</span>
-                  <span className="m-value">{fmtMin(c.avgOutDelay)}</span>
-                </div>
-              </div>
-
-              <div className="congestion-container">
-                <div className="m-label" style={{ marginBottom: '0.2rem' }}>Congestion Meter</div>
-                <div className="congestion-bar">
-                  <div className="congestion-fill" style={{
-                    width: `${Math.min(100, Math.round((c.congestion ?? 0) * 100))}%`,
-                    background: (c.congestion ?? 0) > 0.7 ? '#A64D4D' : (c.congestion ?? 0) > 0.4 ? '#C27D60' : `var(--c-${id.toLowerCase()})`,
-                  }} />
-                </div>
-                <div className="congestion-stats">
-                  <span>{pActive}% active</span>
-                  <span>{pSlowing}% slowing</span>
-                  <span>{pStopped}% stopped</span>
-                </div>
-              </div>
+              {!isSelected ? (
+                <div className="v2-h" style={{ marginTop: '4px', opacity: 0.6 }}>Deselected — Click to focus</div>
+              ) : (
+                <>
+                  <div className="card-row-2">
+                    <div className="v2-big-num">{c.spawned + c.exited}<span className="v2-avg-time">{fmtMin(c.avgInDelay)}</span></div>
+                    <div className="v2-big-num" style={{ textAlign: 'right' }}>{c.exited}<span className="v2-avg-time">{fmtMin(c.avgOutDelay)}</span></div>
+                  </div>
+                  <div className="card-row-3">
+                    <div className="v2-h">Congestion</div>
+                    <div className="congestion-bar">
+                      <div className="congestion-fill" style={{
+                        width: `${Math.min(100, Math.round((c.congestion ?? 0) * 100))}%`,
+                        background: (c.congestion ?? 0) > 0.7 ? 'var(--delay)' : `var(--c-${id.toLowerCase()})`,
+                      }} />
+                    </div>
+                  </div>
+                  <div className="card-row-4">
+                    <span>{pActive}% act</span>
+                    <span>{pSlowing}% slw</span>
+                    <span>{pStopped}% stp</span>
+                  </div>
+                </>
+              )}
             </div>
           );
         })}
       </div>
-
     </aside>
   );
 });

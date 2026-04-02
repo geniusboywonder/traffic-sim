@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<!-- saved from url=(0062)file:///C:/Users/neill/Github/tokai-sim/EDITORIAL_PREVIEW.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TokaiSim — Editorial Preview</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link href="./TokaiSim — Editorial Preview1_files/css2" rel="stylesheet">
+    <style>
+        :root {
+            /* Tonal Architecture */
+            --canvas: #FFF9EA;
+            --surface-low: #FAF3DD;
+            --surface-high: #F4E3CB;
+            --surface-highest: #E9E2CD;
+            --primary: #365652;
+            --primary-container: #4E6E6A;
+            --secondary: #D0A679;
+            --on-surface: #1E1C0F;
+            --muted-text: #717977;
+            --ash-gray: #ACC2AF;
+            
+            /* Spacing Scale */
+            --space-4: 1.5rem;
+            --space-10: 3.5rem;
+            --space-16: 5.5rem;
+            
+            /* Elevation */
+            --sunlight-shadow: 0 24px 48px -12px rgba(30, 28, 15, 0.06);
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--canvas);
+            color: var(--on-surface);
+            font-family: 'Work Sans', sans-serif;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, .display-font {
+            font-family: 'Manrope', sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin: 0;
+        }
+
+        /* ── Header: Glassmorphism ────────────────────────────────────────── */
+        header {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            height: 72px;
+            background: rgba(250, 243, 221, 0.8);
+            backdrop-filter: blur(24px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            padding: 0 var(--space-4);
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-mark {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-container));
+            border-radius: 4px;
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 16px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-container));
+            color: var(--canvas);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-family: 'Manrope', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: transform 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+        }
+
+        /* ── Main Layout ─────────────────────────────────────────────────── */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            height: calc(100vh - 72px);
+            overflow: hidden;
+        }
+
+        /* ── Map Area ────────────────────────────────────────────────────── */
+        .map-viewport {
+            background-color: var(--surface-low);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Mock Map Geometry */
+        .mock-map {
+            width: 80%;
+            height: 80%;
+            border-radius: 8px;
+            background: #e0dac5; /* surface_dim */
+            position: relative;
+            filter: grayscale(0.2) contrast(0.9);
+        }
+
+        .road-line {
+            position: absolute;
+            background: var(--ash-gray);
+            height: 2px;
+            opacity: 0.4;
+        }
+
+        .vehicle-dot {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        /* ── Stats Sidebar ───────────────────────────────────────────────── */
+        .sidebar {
+            background-color: var(--surface-low);
+            padding: var(--space-4);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .section-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--muted-text);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .stat-card {
+            background-color: var(--surface-high);
+            padding: 20px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .stat-card:hover {
+            background-color: var(--surface-highest);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .metric-group {
+            display: flex;
+            gap: 24px;
+        }
+
+        .metric {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .m-val {
+            font-family: 'Manrope', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 300;
+            line-height: 1;
+        }
+
+        .m-lbl {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            color: var(--muted-text);
+            margin-top: 4px;
+        }
+
+        /* ── Editorial Section ───────────────────────────────────────────── */
+        .editorial-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-16) var(--space-4);
+        }
+
+        .hero-moment {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: var(--space-10);
+            align-items: center;
+            margin-bottom: var(--space-16);
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            line-height: 1.1;
+            color: var(--primary);
+        }
+
+        .hero-copy {
+            font-size: 1.1rem;
+            color: var(--on-surface);
+            opacity: 0.8;
+        }
+
+        .swatches {
+            display: flex;
+            gap: 8px;
+            margin-top: 24px;
+        }
+
+        .swatch {
+            width: 40px;
+            height: 40px;
+            border-radius: 2px;
+        }
+
+        /* ── Specific Component Styles ───────────────────────────────────── */
+        .congestion-bar {
+            height: 2px;
+            background: var(--ash-gray);
+            width: 100%;
+            margin-top: 12px;
+            position: relative;
+        }
+        .congestion-fill {
+            position: absolute;
+            height: 100%;
+            background: var(--secondary);
+            width: 65%;
+        }
+
+        .corridor-indicator {
+            width: 4px;
+            height: 12px;
+            border-radius: 2px;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <div class="logo-mark"></div>
+            <span class="display-font">TokaiSim</span>
+        </div>
+        <div class="nav-controls">
+            <button class="btn-primary">Execute Scenario</button>
+        </div>
+    </header>
+
+    <div class="dashboard">
+        <div class="map-viewport">
+            <!-- Mock Simulation Visualization -->
+            <div class="mock-map">
+                <div class="road-line" style="width: 100%; top: 40%; transform: rotate(5deg);"></div>
+                <div class="road-line" style="width: 100%; top: 60%; transform: rotate(-3deg);"></div>
+                <div class="road-line" style="height: 100%; left: 50%; width: 2px;"></div>
+                
+                <div class="vehicle-dot" style="top: 42%; left: 20%; background: var(--primary);"></div>
+                <div class="vehicle-dot" style="top: 41%; left: 25%; background: var(--primary);"></div>
+                <div class="vehicle-dot" style="top: 40%; left: 30%; background: var(--primary-container);"></div>
+                <div class="vehicle-dot" style="top: 58%; left: 70%; background: var(--secondary);"></div>
+                <div class="vehicle-dot" style="top: 62%; left: 75%; background: #e27d60;"></div> <!-- Terracotta delay -->
+            </div>
+        </div>
+
+        <aside class="sidebar">
+            <div class="section-label">Active Intelligence</div>
+            
+            <div class="stat-card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span class="corridor-indicator" style="background: var(--primary);"></span>
+                        Main Rd
+                    </div>
+                    <span class="m-lbl">1A Corridor</span>
+                </div>
+                <div class="metric-group">
+                    <div class="metric">
+                        <span class="m-val">142</span>
+                        <span class="m-lbl">Inflow</span>
+                    </div>
+                    <div class="metric">
+                        <span class="m-val">4.2<small style="font-size: 0.5em;">m</small></span>
+                        <span class="m-lbl">Avg Delay</span>
+                    </div>
+                </div>
+                <div class="congestion-bar">
+                    <div class="congestion-fill" style="width: 78%; background: var(--primary);"></div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span class="corridor-indicator" style="background: var(--secondary);"></span>
+                        Homestead Ave
+                    </div>
+                    <span class="m-lbl">2A Corridor</span>
+                </div>
+                <div class="metric-group">
+                    <div class="metric">
+                        <span class="m-val">89</span>
+                        <span class="m-lbl">Inflow</span>
+                    </div>
+                    <div class="metric">
+                        <span class="m-val">1.8<small style="font-size: 0.5em;">m</small></span>
+                        <span class="m-lbl">Avg Delay</span>
+                    </div>
+                </div>
+                <div class="congestion-bar">
+                    <div class="congestion-fill" style="width: 32%; background: var(--secondary);"></div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span class="corridor-indicator" style="background: var(--ash-gray);"></span>
+                        Children's Way
+                    </div>
+                    <span class="m-lbl">2B Corridor</span>
+                </div>
+                <div class="metric-group">
+                    <div class="metric">
+                        <span class="m-val">214</span>
+                        <span class="m-lbl">Inflow</span>
+                    </div>
+                    <div class="metric">
+                        <span class="m-val">6.5<small style="font-size: 0.5em;">m</small></span>
+                        <span class="m-lbl">Avg Delay</span>
+                    </div>
+                </div>
+                <div class="congestion-bar">
+                    <div class="congestion-fill" style="width: 92%; background: #e27d60;"></div>
+                </div>
+            </div>
+
+        </aside>
+    </div>
+
+    <section class="editorial-container">
+        <div class="hero-moment">
+            <div>
+                <h1 class="hero-title">The Curated<br>Earth.</h1>
+                <div class="swatches">
+                    <div class="swatch" style="background: #FFF9EA;"></div>
+                    <div class="swatch" style="background: #FAF3DD;"></div>
+                    <div class="swatch" style="background: #F4E3CB;"></div>
+                    <div class="swatch" style="background: #365652;"></div>
+                    <div class="swatch" style="background: #D0A679;"></div>
+                    <div class="swatch" style="background: #1E1C0F;"></div>
+                </div>
+            </div>
+            <div class="hero-copy">
+                <p>This design system rejects the "templated" nature of modern SaaS interfaces in favor of a high-end, editorial experience. It is designed to feel like a premium monograph—part architectural blueprint, part sustainable lifestyle journal.</p>
+                <p style="font-weight: 700; color: var(--primary);">Intentional asymmetry and tonal depth replace the digital rigidity of the past.</p>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: var(--space-10);">
+            <div style="background: var(--surface-high); height: 400px; border-radius: 8px; position: relative; overflow: hidden;">
+                <div style="padding: 40px;">
+                    <h3 style="margin-bottom: 16px;">Tonal Layering</h3>
+                    <p style="font-size: 0.9rem; color: var(--muted-text);">Depth is achieved by stacking tiers. No harsh lines, just the natural shift of mineral tones.</p>
+                </div>
+                <div style="position: absolute; bottom: -20px; right: -20px; width: 200px; height: 200px; background: var(--surface-highest); border-radius: 4px; transform: rotate(15deg);"></div>
+            </div>
+            <div>
+                <h2 style="margin-bottom: var(--space-4); font-size: 2rem;">Structural Minimalism</h2>
+                <p>TokaiSim v3 moves beyond the standard grid. By embracing white space as a structural material, we allow complex traffic data to breathe. The result is an analytical tool that feels less like a spreadsheet and more like a curated intelligence dossier.</p>
+                <ul style="list-style: none; padding: 0; margin-top: 32px; display: flex; flex-direction: column; gap: 16px;">
+                    <li style="border-bottom: 1px solid rgba(113, 121, 119, 0.1); padding-bottom: 8px;">
+                        <span style="font-weight: 700; color: var(--primary);">01.</span> Hookers Green Authoritative Elements
+                    </li>
+                    <li style="border-bottom: 1px solid rgba(113, 121, 119, 0.1); padding-bottom: 8px;">
+                        <span style="font-weight: 700; color: var(--primary);">02.</span> Manrope Geometric Typography
+                    </li>
+                    <li style="border-bottom: 1px solid rgba(113, 121, 119, 0.1); padding-bottom: 8px;">
+                        <span style="font-weight: 700; color: var(--primary);">03.</span> Sunlit Ambient Shadows
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+
+
+</body></html>

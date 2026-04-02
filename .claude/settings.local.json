@@ -77,7 +77,14 @@
       "Read(//c/Users/neill/**)",
       "Bash(find /Users/neill/Documents/AICode/Projects/traffic-sim -name fcd* -o -name tripinfo* -o -name *output* -o -name *.out)",
       "Bash(git pull:*)",
-      "Bash(git stash:*)"
+      "Bash(git stash:*)",
+      "Bash(grep -r \"TODO\\\\|FIXME\\\\|XXX\\\\|HACK\\\\|BUG\" /Users/neill/Documents/AICode/Projects/traffic-sim/sim/*.py /Users/neill/Documents/AICode/Projects/traffic-sim/sim/converters/*.py)",
+      "Bash(grep:*)",
+      "Bash(pip3 install:*)",
+      "Bash(git rm:*)",
+      "mcp__plugin_context7_context7__resolve-library-id",
+      "mcp__read-website-fast__read_website",
+      "Bash(pdftotext --version)"
     ]
   }
 }

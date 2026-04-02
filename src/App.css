@@ -247,51 +247,86 @@ a {
 .stats-panel {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 1rem;
   height: 100%;
 }
 
-/* ── Stats Panel — Section Titles ── */
-.stats-section-title {
-  font-size: 8px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  color: var(--muted-text);
-  opacity: 0.6;
-  padding: 0 0.25rem;
-  flex-shrink: 0;
-}
-
-/* ── Corridor 2-column grid ── */
 .corridor-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  overflow-y: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }
 
 .stat-card {
   background-color: var(--surface-high);
-  border-radius: 0.75rem;
-  border-left: 3px solid var(--muted-text);
-  padding: 0.55rem 0.9rem;
+  border-radius: 4px;
+  border-left: 4px solid var(--muted-text);
+  padding: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
-  transition: opacity 0.2s;
+  gap: 0.5rem;
+  transition: all 0.3s var(--bezier);
 }
 
-.stat-card.deselected { opacity: 0.4; }
-.stat-card.selected   { opacity: 1; }
+.stat-card.deselected {
+  height: 48px;
+  overflow: hidden;
+  opacity: 0.4;
+}
 
-/* Watch My Road — dark sage card */
+.stat-card.selected { opacity: 1; }
+
+/* Watch My Road — spans 2 columns */
 .stat-card--watch {
+  grid-column: span 2;
   background-color: #1E3520;
   border-left-color: var(--c-3a);
   flex-shrink: 0;
-  padding: 0.875rem 1.1rem;
-  min-height: 72px;
+  padding: 1rem;
+}
+
+/* Card 4-Row Architecture */
+.card-row-1 { display: flex; justify-content: space-between; align-items: baseline; }
+.card-row-2 { display: flex; justify-content: space-between; align-items: center; margin: 0.25rem 0; }
+.card-row-3 { margin-top: 0.5rem; }
+.card-row-4 { display: flex; justify-content: space-between; font-size: 8px; font-weight: 800; color: var(--muted-text); text-transform: uppercase; }
+
+.v2-big-num { 
+  font-family: 'Manrope', sans-serif; 
+  font-size: 1.5rem; 
+  font-weight: 300; 
+  color: var(--on-surface); 
+  letter-spacing: -0.02em;
+}
+
+.v2-avg-time { 
+  font-family: 'Work Sans', sans-serif;
+  font-size: 10px; 
+  font-weight: 700; 
+  color: var(--muted-text); 
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-left: 4px; 
+}
+
+.v2-h {
+  font-family: 'Work Sans', sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted-text);
+}
+
+.player-control-micro-label {
+  font-family: 'Work Sans', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted-text);
+  margin-bottom: 8px;
+  opacity: 0.7;
 }
 .stat-card--watch .wmy-empty { gap: 0.3rem; }
 .stat-card--watch .wmy-empty-label { color: var(--c-3a); }

@@ -1,3 +1,102 @@
+
+Lets combine the overall summary and the "watch my road" feature. When no road is selected, then show the overall summary.
+when a road is selected then show that road. The metrics and congestion meter should update depending the on selection.
+We just need a "click any road to zoom in
+
+when "deselecting" an Exit/Entry corridors, on deselect, collapse the card so only the title is showing, and keep the same "faded" look.
+apply the same "fading" to all cars that use that entrance or exit on the maps - so they dont distract from where people want to focus.
+
+lets simplify the cards and go back to 2x2, with the "watch my road" card spanning both.
+Drop the "Active" title and number. Structure the cards as follows:
+Row 1: Dreyersdal Rd:      Traffic In: XX / Traffic Out: XX
+Row 2: Avg Travel time:    In: MM:SS / Out: MM:SS
+Row 3: Road Congestion:    Congestion meter ---+++=====+++ (fills rows)
+Row 4:                      |  0% active | 0% slowing | 0% stopped
+
+if it will help you can check out https://github.com/yousifamanuel/terraink.git
+
+Design Audit & Transformation Report
+
+  1. Typography: The "Architectural vs. Data" Conflict
+   * Problem: The site uses Manrope (Geometric/Architectural) for headings and Work Sans (Humanist/Clean) for the body. However, the StatsPanel mixes these
+     inconsistently—using Manrope for data values but inconsistent weights for labels. This makes the interface feel "uncalibrated."
+   * Fix: Establish a strict typographic rule.
+       * Work Sans for all small utility labels, captions, and narrative text.
+       * Manrope exclusively for architectural headings and "Critical System Stats" (big numbers) to give them a technical, precision-engineered feel.
+       * Tighten tracking: Small caps labels should have slightly increased letter-spacing (0.1em) for readability.
+
+  2. Layout: The "Above the Fold" Mandate
+   * Problem: On a standard 13-15" laptop (e.g., 900px vertical), the current vertical stack of 5 cards (Watch My Road + 4 Corridors) is mathematically
+     guaranteed to scroll. The hero-header and main-layout top padding consume ~200px, leaving only ~700px for the cards.
+   * Fix:
+       * Corridor Grid: Pivot the 4 corridor cards back to a 2x2 grid but with a more refined "Editorial Card" design to save vertical space while improving
+         readability.
+       * Watch My Road: Keep it as a full-width "Primary Focus" card but reduce its internal padding.
+       * Map Height: Constrain the map and sidebar height to a fixed calculation (calc(100vh - header_height - hero_height)) to ensure the "No-Scroll"
+         requirement is met across all desktop resolutions.
+
+  3. Desktop "Vastness" (White Space)
+   * Problem: On ultra-wide monitors, the 1700px max-width leaves huge empty gutters on the left and right, and the 1fr grid stretches elements horizontally in
+     a way that feels "loose."
+   * Fix:
+       * Asymmetric Balance: Instead of centering everything, we will use a slightly offset layout or introduce a "Technical Overlay" effect on the background.
+       * Depth with Layers: Use the "Glassmorphism" principle from your DESIGN.md more effectively. The sidebar shouldn't just be a column; it should feel like
+         a floating "Control Desk" with subtle depth.
+
+  4. The "Uniform Site" Feel
+   * Problem: Component boundaries are currently defined by background color shifts (surface-low vs surface-high), which can look "muddy."
+   * Fix: Introduce Refined Borders. Not 1px solid black, but 1px solid rgba(17, 29, 19, 0.05) (Sage-tinted borders). This provides the "Tactical Intelligence"
+     feel requested in the design specs.
+
+  ---
+
+  Proposed UI Transformation Plan
+
+
+  ┌────────────┬──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │ Component  │ Change Description                                                                                                                       │
+  ├────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ Header     │ Tighten the "Nav Deck" pill. Add a subtle "System Status" pulse to the clock.                                                            │
+  │ StatsPanel │ 2x2 Grid for Corridors. Cards will use a "Split Data" layout: In/Out stats on the left, Congestion Meter on the right.                   │
+  │ Typography │ Global update to weights (300/500/800) to create dramatic contrast between data and labels.                                              │
+  │ Map Bezel  │ Add a "Surgical" aesthetic: micro-borders and corner accents to make it look like a high-end control viewport.                           │
+  │ Color      │ Deepen the contrast in the Sage palette. Ensure the "Watch My Road" card feels like a privileged focus area (The "Black Box" treatment). │
+  └────────────┴──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+  Would you like me to proceed with these implementation changes to fix the layout, typography, and "Above the Fold" requirement?
+ > proceed. but explain how you are addressing the feeling of too much white space and disconnected sections between headings/navigations
+✦ To address the feeling of disconnected sections and excessive white space, I am shifting from a "stacked document" layout to an "Integrated Console"
+  architecture.
+
+  The "Uniform Site" Strategy
+   1. The "Structural Anchor" (White Space Fix): Instead of centered content floating in a vast void, I am introducing a Background Utility Layer. This uses a
+      subtle 1px grid motif and "Depth Strips" that span the full width of the screen, visually "tethering" the centered content to the edges of the browser.
+      This eliminates the "island" effect.
+   2. The "Nav-to-Hero" Bridge: I will reduce the dead space between the Navigation Pill and the Hero Header by using Shared Vertical Rhythm. The Navigation's
+      sage-tinted blur will "bleed" into a subtle top-gradient on the main section, creating a continuous vertical flow rather than two separate elements.
+   3. Typographic "Calibration": I'm moving away from loose, default spacing. By using Tight Tracking (-0.05em) on headings and Monospaced Data Weights for
+      stats, the site will feel like a high-precision instrument. Manrope will act as the "Technical Frame" and Work Sans as the "Human Narrative."
+   4. The "No-Scroll" Corridor Grid: I will pivot the 4 corridor cards into a 2x2 Compressed Grid. Each card will use a "Dashboard Split" (Stats Left / Meter
+      Right) to reduce its vertical height by ~40%, ensuring all 4 fit comfortably alongside the map without a single pixel of scrolling.
+
+      UI Improvements Summary:
+   1. Uniform Site Feel: Introduced a Structural Background Grid and a Navigation Bridge that connects the nav pill to the content using consistent spacing and
+      subtle depth gradients.
+   2. White Space Optimization:
+       * Replaced the loosely centered container with a Balanced Gutter System (1600px max-width).
+       * The 2x2 Corridor Grid fills the sidebar space more densely, providing a "Command Center" feel.
+   3. Above the Fold:
+       * The Hero Header is now more compact (align-items: flex-end).
+       * The 4 Corridor Cards are now in a 2x2 grid, reducing their vertical height by ~40%.
+       * The map and stats panel are tied to height: 100vh to ensure no scrolling is required on standard desktop screens.
+   4. Typography & Readability:
+       * Strict Type Hierarchy: Manrope (ExtraBold) is now exclusively for critical stats and labels, while Work Sans handles narrative flow.
+       * Tightened Tracking: Heading tracking reduced to -0.05em for a more premium, modern look.
+       * Data Density: Combined Average In/Out stats into a single line (In / Out) to save space and improve comparison speed.
+
+
+
 TODO
 - update the requirement/spec/plan with the changes we made.
 
@@ -6,9 +105,7 @@ TODO
 
 model changes:
 2) let the models run until all cars have completed the run (currently H still has cars active at 9AM)
-
 4) cars are stillbrekaing for the corner in Vineyard after turning from CHristopher. I want any contraints removed from that corner.
-
 
 DONE
 Lets update the plan and continue with the traffic simulator from @Tokai_HS_Traffic_Simulator_Plan.md and add to the existing pages.
@@ -150,3 +247,46 @@ things I am noticing and not able to confirm:
 - how can we validate this with the car logs shared from the sim logs.
 - the scenarios from the various models are not loading. no dots are shown moving on the map. it might be that the other models have rat-runs not defined on the map.
 troubleshoot why they are not showing and list any rat-runs that are not captured.
+
+1) fix the disclaimer so that it doesnt need to scroll to click the Initialise Simulator - maybe make it responsive and wider?
+2) add to the copy text under the Simulator text to include, "The model use a "main route" for each entry / exit corridor from Firgrove Way, Homestead Rd, Childrens Way and Main Rd. This is the route most cars will follow - until traffic starts to build up. Then cars will find and follow multiple rat-runs to the school. The model attempts to avoid the normal Sweet Valley routes at the top of Dreyserdal Rd and exiting via Homestead."
+3) i dont like the card layout 2x2 for the dashboard - is too big and square and disproportionate. And the Watch my Rd badges are all too smal and bunched up. This doesnt feel very consistent or well laid out.
+4) the site has lost the styling and colouring defined in the STYLE_GUIDE
+5)critically evaluate the site agaisnt design best practice. Identify and fix the flow and typography - it feels dijointed and not a uniform site. there also feels like too much white space on desktop full screens.
+
+1) the text starting "The model uses . . " should be a new paragraph under after " . . . slamming on the anchors."
+2) fix the alignment on the dashboard cards - text is cut off
+3) the player controls feel overwelmingly large for the map and the size of the dashboard cards and the unlikely
+4) hyperlinks are showing as blue rather then the correct green
+5) the map coloured dots have lost their enteire stylign and theme
+6) why is Watch my Road card black? it need to be differentaited, but black is too severe
+7) the player controls and key need to be movable within the map area since they will get in the way as people move about the map.-include a little "moveable" visual cue/icon
+8) headings/ navigation should be Simulator, Models, Findings (add in this heading too), Contact.
+
+Menu:
+Simulator is fine.
+Model should navigate to the section starting "The Western Cape Mobility Department TIA Approach",
+Findings is a NEW HEADING to be added as a NEW SECTION with no content yet.
+Contacts is fine
+
+use the front-end designer skill and critically evaluate the site agaisnt design best practice. Identify and fix the flow and typography - it feels
+   dijointed and not a uniform site. there also feels like too much white space on desktop full screens. also all the 4 corridor cards must show completely
+   above the fold - NO SCROLLING. Suggest layout fixes to improve the readabiity of the cards, but also the layout and design
+
+implement all elements of the Style-guide in the map. items like the diamonds are not being used on the rat run, and im not seeing empty circles on the outbound journeys
+
+finally check for consistency on the typography of the cards
+
+lets compress a few things:
+- move the menu to be left aligned next to the "Tokai-Sim" heading. not jutified or centred.
+
+- move the overall summary card (6:30 AM Active: X, Total In: X, Total Out: X) into the same nav bar - right aligned.
+- add an overall Congestion meter to this card which consolidates all routes and shows the overal congestion
+
+- add "Play a scenario and watch the traffic wiggle!" as a very small text line above the player controls and drop the "Pick a scenario and watch the traffic wiggle!" titles
+
+make the paragraph "The model uses a "main route . . ." in the same style and flow as the paragraph above. - it currently is not justifed and the padding/wrap is "off".
+
+the url link to the "The Western Cape Mobility Department" has been lost
+
+remove "Archive: Chapter 01"

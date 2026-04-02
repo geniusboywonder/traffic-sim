@@ -26,7 +26,7 @@ export default function Header({ simTime }) {
 
         <ul className="nav-links">
           <li><a href="#simulator">Simulator</a></li>
-          <li><a href="#briefing">Models</a></li>
+          <li><a href="#models">Models</a></li>
           <li><a href="#findings">Findings</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>

@@ -68,7 +68,7 @@ function posToLatLng(geometry, pos) {
   ];
 }
 
-export default function SimMap({ scenario, playing, speed, showRoutes, onToggleRoutes, selectedCorridors, source, playbackSource, onSimUpdate, onStatsUpdate, onRoadStatsUpdate, onAutoStop, onRoadSelect, selectedRoad, allPlaybackFrames, onPlayPause, onReset, onSpeedChange, onScenarioChange, onSourceChange }) {
+export default function SimMap({ scenario, playing, speed, showRoutes, onToggleRoutes, selectedCorridors, source, playbackSource, onSimUpdate, onStatsUpdate, onRoadStatsUpdate, onAutoStop, onRoadSelect, selectedRoad, onPlayPause, onReset, onSpeedChange, onScenarioChange, onSourceChange }) {
   const containerRef = useRef(null), canvasRef = useRef(null), mapRef = useRef(null);
   const vehiclesRef = useRef([]), simTimeRef = useRef(0), spawnerStateRef = useRef(createSpawnerState());
   const rafRef = useRef(null), loopRef = useRef(null), lastUpdateRef = useRef(0);
@@ -584,9 +584,8 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
           {/* Source */}
           <div className="speed-selector">
             {[
-              { id: 'live',  label: 'Live',  title: 'Live IDM simulation (runs in browser)' },
-              { id: 'sumo',  label: 'SUMO',  title: 'Pre-computed SUMO microscopic model' },
-              { id: 'uxsim', label: 'UXSim', title: 'Pre-computed UXSim mesoscopic model' },
+              { id: 'live', label: 'Live', title: 'Live IDM simulation (runs in browser)' },
+              { id: 'sumo', label: 'SUMO', title: 'Pre-computed SUMO microscopic model' },
             ].map(({ id, label, title }) => (
               <button key={id} className={`speed-pill${source === id ? ' active' : ''}`}
                 onClick={() => onSourceChange?.(id)} title={title}>

@@ -40,7 +40,7 @@ from sumo_network_builder import build_sumo_network, node_id
 from converters.sumo_to_json import convert
 
 SIM_START = 23400   # 06:30 seconds since midnight
-SIM_END   = 30600   # 08:30
+SIM_END   = 32400   # 09:00 — extended to allow traffic to clear post-peak
 TIMESTEP  = 30      # output frame interval
 
 SCENARIO_DEMAND = {"L": 420, "M": 650, "H": 840}

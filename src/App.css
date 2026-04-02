@@ -861,6 +861,98 @@ a {
 
 .calibration-box h3 { text-transform: uppercase; }
 
+/* ── Findings Section ── */
+.findings-section {
+  background: var(--on-surface);
+  padding: 8rem 1.5rem;
+  position: relative;
+  z-index: 10;
+}
+
+.findings-grid {
+  max-width: 1700px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 3rem;
+  align-items: start;
+}
+
+.findings-header {
+  grid-column: span 4;
+  position: sticky;
+  top: 7rem;
+}
+
+.findings-header .models-subtitle { color: rgba(241,245,241,0.4); }
+.findings-header .models-title    { color: #F1F5F1; font-size: 3rem; }
+
+.findings-intro {
+  color: rgba(241,245,241,0.55);
+  font-size: 1rem;
+  line-height: 1.65;
+  margin-top: 1.5rem;
+  max-width: 28ch;
+}
+
+.findings-content {
+  grid-column: span 8;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.finding-card {
+  background: rgba(241,245,241,0.05);
+  border: 1px solid rgba(241,245,241,0.1);
+  border-radius: 1.5rem;
+  padding: 2rem 2.5rem;
+  display: grid;
+  grid-template-columns: 2.5rem 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.finding-card--alert {
+  background: rgba(166,77,77,0.12);
+  border-color: rgba(166,77,77,0.3);
+}
+
+.finding-card--muted {
+  background: rgba(241,245,241,0.03);
+  border-color: rgba(241,245,241,0.06);
+}
+
+.finding-icon {
+  font-size: 1.25rem;
+  line-height: 1.6;
+  opacity: 0.7;
+}
+
+.finding-body h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #F1F5F1;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+}
+
+.finding-body p {
+  font-size: 0.925rem;
+  color: rgba(241,245,241,0.6);
+  line-height: 1.7;
+}
+
+.finding-body p strong {
+  color: rgba(241,245,241,0.9);
+  font-weight: 700;
+}
+
+.finding-body p em {
+  color: var(--c-3a);
+  font-style: normal;
+}
+
 /* ── Footer ── */
 .site-footer {
   background: var(--on-surface);
@@ -1022,7 +1114,7 @@ a {
     height: auto;
     overflow-y: visible;
   }
-  .bento-content { grid-template-columns: 1fr; }
+  .bento-briefing { grid-template-columns: 1fr; }
   .narrative-block, .tech-hub-block { grid-column: span 12; }
   .models-grid { grid-template-columns: 1fr; }
   .models-header, .models-content { grid-column: span 12; }

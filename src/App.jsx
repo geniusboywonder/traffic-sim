@@ -122,42 +122,103 @@ const BentoBriefing = () => (
 );
 
 const ModelsSection = () => (
-  <section className="models-section" id="findings">
-    <div className="models-grid">
-      <div className="models-header">
-        <span className="models-subtitle">Archive: Chapter 01</span>
-        <h2 className="models-title">Models & Validation</h2>
+  <section className=”models-section” id=”models”>
+    <div className=”models-grid”>
+      <div className=”models-header”>
+        <span className=”models-subtitle”>Chapter 01</span>
+        <h2 className=”models-title”>Models & Validation</h2>
       </div>
-      
-      <div className="models-content">
-        <div className="model-entry">
+
+      <div className=”models-content”>
+        <div className=”model-entry”>
           <h3>The Western Cape Mobility Department TIA Approach</h3>
           <p>The official Traffic Impact Assessment (TIA) for Tokai High School follows South Africa’s TMH 16 guidelines. It uses a straightforward, analytical method based on standard traffic engineering formulas. The TIA calculates expected trip numbers, splits them by direction, and checks road and intersection capacity using averaged flows — basically a “worst-case 15-minute peak” snapshot. It gives planners and authorities a reliable, deterministic baseline.</p>
         </div>
 
-        <div className="model-entry">
+        <div className=”model-entry”>
           <h3>SUMO & UXsim: Professional Pedigree & Model Validation</h3>
-          <div className="pedigree-grid">
-            <div className="pedigree-item">
+          <div className=”pedigree-grid”>
+            <div className=”pedigree-item”>
               <h4>SUMO (Simulation of Urban MObility)</h4>
-              <p style={{fontSize: '14px'}}>Developed by the German Aerospace Center (DLR), SUMO is a world-leading microscopic simulator. It tracks every individual car, using proven car-following mathematics such as the Intelligent Driver Model (IDM). It covers acceleration, braking, reactions to others, the 28 speed humps, the 11 special junctions, and realistic rat-running behaviour.</p>
+              <p style={{fontSize: ‘14px’}}>Developed by the German Aerospace Center (DLR), SUMO is a world-leading microscopic simulator. It tracks every individual car, using proven car-following mathematics such as the Intelligent Driver Model (IDM). It covers acceleration, braking, reactions to others, the 28 speed humps, the 11 special junctions, and realistic rat-running behaviour.</p>
             </div>
-            <div className="pedigree-item">
+            <div className=”pedigree-item”>
               <h4>UXsim</h4>
-              <p style={{fontSize: '14px'}}>Created by Dr. Toru Seo at the Institute of Science Tokyo, UXsim is a fast, modern macroscopic/mesoscopic simulator. It focuses on overall network flow using fundamental traffic theory and runs large-scale checks quickly. It gives us a “big picture” check against the official TIA curves.</p>
+              <p style={{fontSize: ‘14px’}}>Created by Dr. Toru Seo at the Institute of Science Tokyo, UXsim is a fast, modern mesoscopic simulator. It models traffic as flow rather than individual vehicles — using the same kinematic wave mathematics that underpin the TIA’s own capacity calculations. This makes it the ideal cross-check: it speaks the same mathematical language as the TIA, but runs the full network rather than a snapshot.</p>
             </div>
           </div>
         </div>
 
-        <div className="calibration-box">
+        <div className=”calibration-box”>
           <h3>TOKAI-SIM CALIBRATION</h3>
           <p>We calibrated Tokai-Sim’s live engine directly to the TIA’s peak-hour volumes, origin splits, and 840-vehicle baseline. SUMO then runs the same network at microscopic level (with all 28 speed humps, 11 junction overrides, and realistic rat-run logic), while UXsim independently validates total network throughput against the TIA’s flow-density curves. The three layers are deliberately cross-checked so any “what-if” scenario sits on the same mathematical foundation.</p>
         </div>
 
-        <div className="model-entry">
+        <div className=”model-entry”>
           <h3>Why small differences appear — and why the trend matters</h3>
-          <p>Microscopic tools like SUMO are stochastic (they include realistic random driver behaviour), while the TIA and UXsim use averaged, deterministic flows. This means queue lengths or exact travel times can vary slightly between runs. We validated by running multiple SUMO simulations and comparing the average results to both UXsim and the TIA baselines. The overall trends match extremely closely. The small differences you may notice are exactly why we built the “Live vs Results” toggle.</p>
+          <p>Microscopic tools like SUMO are stochastic (they include realistic random driver behaviour), while the TIA and UXsim use averaged, deterministic flows. This means queue lengths or exact travel times can vary slightly between runs. We validated by running multiple SUMO simulations and comparing the average results to both UXsim and the TIA baselines. The overall trends match extremely closely. The small differences you may notice are exactly why we built the Live vs SUMO toggle.</p>
         </div>
+      </div>
+    </div>
+  </section>
+);
+
+const FindingsSection = () => (
+  <section className=”findings-section” id=”findings”>
+    <div className=”findings-grid”>
+      <div className=”findings-header”>
+        <span className=”models-subtitle”>Chapter 02</span>
+        <h2 className=”models-title”>What the Models Say</h2>
+        <p className=”findings-intro”>UXsim analysed all three scenarios using kinematic wave theory — the same mathematics as the TIA. Here is what it found, compared against SUMO’s microscopic simulation.</p>
+      </div>
+
+      <div className=”findings-content”>
+
+        {/* Key finding 1 — clearance */}
+        <div className=”finding-card finding-card--alert”>
+          <div className=”finding-icon”>⚠</div>
+          <div className=”finding-body”>
+            <h3>Traffic does not clear by 08:30</h3>
+            <p>The TIA assumes all 840 vehicles complete their trips by 08:30 AM. Both SUMO and UXsim show significant residual congestion at 08:30 across all three scenarios. In the High scenario, SUMO records ~480 vehicles still active at 08:29. UXsim confirms continued network loading well past 08:30. <strong>The TIA’s clearance assumption is not supported by dynamic modelling.</strong></p>
+          </div>
+        </div>
+
+        {/* Key finding 2 — peak timing */}
+        <div className=”finding-card”>
+          <div className=”finding-icon”>⏱</div>
+          <div className=”finding-body”>
+            <h3>Peak congestion hits at 07:45 — not 08:00</h3>
+            <p>The TIA’s own trapezoidal demand profile places 35% of all trips in the 07:30–08:00 window, with the effective peak around 07:45. Both SUMO and the Live engine confirm peak network density at approximately 07:45 AM. The critical window for rat-run activation and junction back-pressure is therefore earlier than the TIA’s “peak 15-minute” analysis suggests.</p>
+          </div>
+        </div>
+
+        {/* Key finding 3 — UXsim vs SUMO agreement */}
+        <div className=”finding-card”>
+          <div className=”finding-icon”>✓</div>
+          <div className=”finding-body”>
+            <h3>UXsim and SUMO agree on congestion patterns</h3>
+            <p>Despite operating at different abstraction levels, UXsim and SUMO identify the same roads as highest-stress: the Children’s Way / Dreyersdal approach, the Homestead Ave corridor, and the Aristea Road school frontage. This cross-model agreement strengthens confidence that the congestion picture is real, not an artefact of any single model’s assumptions.</p>
+          </div>
+        </div>
+
+        {/* Key finding 4 — rat runs */}
+        <div className=”finding-card”>
+          <div className=”finding-icon”>🔀</div>
+          <div className=”finding-body”>
+            <h3>Rat-runs activate in Medium and High scenarios</h3>
+            <p>SUMO’s dynamic rerouting shows rat-run activity emerging at ~6–10% corridor congestion — consistent with the Live engine’s threshold. In the High scenario, over 30% of inbound vehicles divert via secondary residential streets. UXsim’s network flow confirms the same secondary corridors reach capacity limits, validating that rat-run pressure is a structural feature of the network, not a modelling quirk.</p>
+          </div>
+        </div>
+
+        {/* Limitation callout */}
+        <div className=”finding-card finding-card--muted”>
+          <div className=”finding-icon”>ℹ</div>
+          <div className=”finding-body”>
+            <h3>What UXsim cannot tell us</h3>
+            <p>UXsim models traffic as flow, not individual cars. It cannot reproduce speed-hump braking events, junction hold behaviour, or individual rat-run decisions. Its role here is <em>network-level validation</em> — confirming that the overall demand exceeds the network’s capacity envelope under TIA assumptions. The Live and SUMO engines carry the detailed behavioural story.</p>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -350,6 +411,7 @@ export default function App() {
 
       <BentoBriefing />
       <ModelsSection />
+      <FindingsSection />
       <Footer />
     </div>
   );

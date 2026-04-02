@@ -1,19 +1,17 @@
 """
 compare_models.py
 =================
-Compares IDM (live simulation) output against SUMO microscopic simulation
-for the same scenario (default: L = 420 trips).
+Compares IDM (live simulation), SUMO microscopic, and UXSim mesoscopic
+simulations for the same scenario (default: L = 420 trips).
 
 Outputs a plain-text summary report to stdout and saves a CSV comparison
-table to models/comparison_report.csv.
+table to models/comparison_{scenario}.csv.
 
 Usage:
     python models/compare_models.py
     python models/compare_models.py --scenario M
-    python models/compare_models.py --idm-log models/l/traffic-sim-log-2026-04-01T11-26-56.csv \
-                                    --idm-roads models/l/traffic-road-stats-2026-04-01T11-30-46.csv \
-                                    --sumo-tripinfo sim/sumo/tripinfo-L.xml \
-                                    --sumo-json public/sim-results/scenario-L.json
+    python models/compare_models.py --scenario H --idm-log models/h/log.csv \
+                                    --idm-roads models/h/roads.csv
 """
 
 import argparse
@@ -232,6 +230,90 @@ def parse_sumo(tripinfo_path: Path, json_path: Path):
 
 
 # ---------------------------------------------------------------------------
+# UXSim parsing  (from pre-computed scenario-{S}-uxsim.json)
+# ---------------------------------------------------------------------------
+
+def parse_uxsim(json_path: Path):
+    """
+    Extract comparable metrics from a UXSim scenario JSON.
+
+    UXSim uses deltan=5 (platoon size), so vehicle row counts are ÷5 of real
+    vehicles. We multiply by deltan where counting individuals, and note this
+    in the output.
+
+    Metrics extracted:
+      - Peak vehicle count on network (proxy for capacity utilisation)
+      - Frame where vehicles still active at sim end (clearance check)
+      - Per-road max vehicle counts (congestion ranking)
+      - Peak congestion timing (frame with most vehicles)
+      - Avg delay per road (from avg_delay_in fields)
+    """
+    DELTAN = 5   # UXSim platoon size
+
+    with open(json_path) as f:
+        jdata = json.load(f)
+
+    meta   = jdata.get("meta", {})
+    frames = jdata.get("frames", [])
+
+    SIM_END_T = meta.get("end_time", 32400)
+
+    # Peak vehicle count and timing
+    frame_counts = [(fr["t"], len(fr["vehicles"]) * DELTAN) for fr in frames]
+    if frame_counts:
+        peak_t, peak_count = max(frame_counts, key=lambda x: x[1])
+        peak_sim_t = peak_t - SIM_START_S
+    else:
+        peak_t, peak_count, peak_sim_t = 0, 0, 0
+
+    # Clearance check: vehicles still present in final frame
+    last_frame = frames[-1] if frames else {"t": SIM_END_T, "vehicles": []}
+    vehicles_at_end = len(last_frame["vehicles"]) * DELTAN
+    clears_by_end = vehicles_at_end == 0
+
+    # Road-level stats: max inbound count per road across all frames
+    road_max_inbound  = defaultdict(int)
+    road_max_outbound = defaultdict(int)
+    road_avg_delay    = defaultdict(list)
+
+    for fr in frames:
+        for rs in fr.get("road_stats", []):
+            rid = rs["road_id"]
+            ib  = rs.get("inbound", 0) * DELTAN
+            ob  = rs.get("outbound", 0) * DELTAN
+            road_max_inbound[rid]  = max(road_max_inbound[rid], ib)
+            road_max_outbound[rid] = max(road_max_outbound[rid], ob)
+            d = rs.get("avg_delay_in")
+            if d is not None:
+                road_avg_delay[rid].append(d)
+
+    road_congestion_rank = pd.Series(road_max_inbound).sort_values(ascending=False)
+    road_delay_rank      = pd.Series({
+        rid: sum(v) / len(v) for rid, v in road_avg_delay.items() if v
+    }).sort_values(ascending=False)
+
+    # Journey time estimate: UXSim doesn't track per-vehicle trip times,
+    # but we can estimate from the delay data on key entry roads
+    all_delays = [d for delays in road_avg_delay.values() for d in delays]
+    avg_delay_s = sum(all_delays) / len(all_delays) if all_delays else 0
+    est_trip_s  = FREE_FLOW_TRIP_S + avg_delay_s
+
+    return {
+        "total_spawned":          meta.get("total_trips", "N/A"),
+        "peak_vehicles_on_net":   peak_count,
+        "peak_congestion_sim_t":  peak_sim_t,
+        "peak_congestion_clock":  sim_to_clock(peak_sim_t),
+        "vehicles_at_end":        vehicles_at_end,
+        "clears_by_end":          clears_by_end,
+        "avg_delay_s":            avg_delay_s,
+        "est_trip_s":             est_trip_s,
+        "road_congestion_rank":   road_congestion_rank.head(8).to_dict(),
+        "road_delay_rank":        road_delay_rank.head(8).to_dict(),
+        "note":                   f"Platoon-based (deltan={DELTAN}); counts are ×{DELTAN} scaled",
+    }
+
+
+# ---------------------------------------------------------------------------
 # Report
 # ---------------------------------------------------------------------------
 
@@ -245,113 +327,155 @@ def fmt(val, unit="s", decimals=1):
     return f"{val:.{decimals}f}"
 
 
-def print_report(idm, sumo, scenario):
-    sep = "=" * 70
+def print_report(idm, sumo, uxsim, scenario):
+    sep = "=" * 80
     print(f"\n{sep}")
-    print(f"  MODEL COMPARISON — Scenario {scenario}  (IDM live vs SUMO microscopic)")
+    print(f"  MODEL COMPARISON — Scenario {scenario}  (IDM live | SUMO microscopic | UXSim mesoscopic)")
     print(sep)
 
-    print("\n── 1. TRIP COMPLETION ─────────────────────────────────────────────────")
+    print("\n── 1. TRIP COMPLETION ─────────────────────────────────────────────────────────")
     rows = [
-        ("Trips spawned",    f"{idm['total_spawned']}",          f"{sumo['total_spawned']}"),
-        ("Trips completed",  f"{idm['completed_n']}",            f"{sumo['completed_n']}"),
-        ("Completion rate",  fmt(idm['completion_rate'], '%'),   fmt(sumo['completion_rate'], '%')),
+        ("Trips spawned",    f"{idm['total_spawned']}",          f"{sumo['total_spawned']}",     "N/A (flow-based)"),
+        ("Trips completed",  f"{idm['completed_n']}",            f"{sumo['completed_n']}",       "N/A"),
+        ("Completion rate",  fmt(idm['completion_rate'], '%'),   fmt(sumo['completion_rate'], '%'), "N/A"),
     ]
-    _print_table(rows)
+    _print_table3(rows)
 
-    print("\n── 2. TRIP DURATION ───────────────────────────────────────────────────")
+    print("\n── 2. TRIP DURATION ───────────────────────────────────────────────────────────")
+    ux_trip = fmt(uxsim['est_trip_s']) if uxsim else "—"
+    ux_delay = fmt(uxsim['avg_delay_s']) if uxsim else "—"
     rows = [
-        ("Mean trip time",   fmt(idm['trip_mean_s']),   fmt(sumo['trip_mean_s'])),
-        ("Median trip time", fmt(idm['trip_median_s']), fmt(sumo['trip_median_s'])),
-        ("P85 trip time",    fmt(idm['trip_p85_s']),    fmt(sumo['trip_p85_s'])),
-        ("P95 trip time",    fmt(idm['trip_p95_s']),    fmt(sumo['trip_p95_s'])),
+        ("Mean trip time",        fmt(idm['trip_mean_s']),   fmt(sumo['trip_mean_s']),   ux_trip + " (est)"),
+        ("Median trip time",      fmt(idm['trip_median_s']), fmt(sumo['trip_median_s']), "—"),
+        ("P85 trip time",         fmt(idm['trip_p85_s']),    fmt(sumo['trip_p85_s']),    "—"),
+        ("P95 trip time",         fmt(idm['trip_p95_s']),    fmt(sumo['trip_p95_s']),    "—"),
+        ("Mean delay",            fmt(idm['delay_mean_s']),  fmt(sumo['delay_mean_s']),  ux_delay),
     ]
-    _print_table(rows)
+    _print_table3(rows)
 
-    print("\n── 3. DELAY & CONGESTION ──────────────────────────────────────────────")
+    print("\n── 3. CONGESTION & PEAK TIMING ────────────────────────────────────────────────")
+    ux_peak = uxsim['peak_congestion_clock'] if uxsim else "—"
+    ux_peak_veh = f"{uxsim['peak_vehicles_on_net']}" if uxsim else "—"
     rows = [
-        ("Mean delay",             fmt(idm['delay_mean_s']),          fmt(sumo['delay_mean_s'])),
-        ("Delay ratio (delay/FF)", fmt(idm['delay_ratio_mean'], '%'), fmt(sumo['delay_ratio_mean'], '%')),
-        ("Avg stopped/waiting",    fmt(idm['stopped_time_mean_s']),   fmt(sumo['stopped_time_mean_s'])),
-        ("Peak congestion at",     idm['peak_congestion_clock'],      sumo['peak_congestion_clock']),
+        ("Peak congestion at",       idm['peak_congestion_clock'],           sumo['peak_congestion_clock'],         ux_peak),
+        ("Peak vehicles on network", "—",                                    "—",                                   ux_peak_veh),
+        ("Delay ratio (delay/FF)",   fmt(idm['delay_ratio_mean'], '%'),      fmt(sumo['delay_ratio_mean'], '%'),    "—"),
+        ("Avg stopped/waiting",      fmt(idm['stopped_time_mean_s']),        fmt(sumo['stopped_time_mean_s']),      "—"),
     ]
-    _print_table(rows)
+    _print_table3(rows)
 
-    print("\n── 4. TOP CONGESTED ROADS (max simultaneous stopped/queued) ───────────")
-    print(f"  {'Road':<32} {'IDM (max stopped)':>20}  {'SUMO (max queued)':>20}")
-    print(f"  {'-'*32} {'-'*20}  {'-'*20}")
+    print("\n── 4. TRAFFIC CLEARANCE ───────────────────────────────────────────────────────")
+    print("  ⚠  TIA assumes all traffic clears by 08:30. Models show:")
+    ux_clears = ("✓ CLEARS" if uxsim and uxsim['clears_by_end'] else f"✗ {uxsim['vehicles_at_end']} veh still active") if uxsim else "—"
+    sumo_end_veh = sumo.get('vehicles_at_end', 'unknown')
+    sumo_clears = f"✗ ~{sumo_end_veh} veh still active" if sumo_end_veh and sumo_end_veh != 0 else "✓ CLEARS"
+    rows = [
+        ("Clears by sim end?",  "— (live, user-controlled)", sumo_clears, ux_clears),
+    ]
+    _print_table3(rows)
+
+    print("\n── 5. TOP CONGESTED ROADS ─────────────────────────────────────────────────────")
+    print(f"  {'Road':<35} {'IDM':>15}  {'SUMO':>15}  {'UXSim':>15}")
+    print(f"  {'-'*35} {'-'*15}  {'-'*15}  {'-'*15}")
     idm_roads  = idm['road_stopped_rank']
     sumo_roads = sumo['road_stopped_rank']
-    all_roads  = list(dict.fromkeys(list(idm_roads.keys()) + list(sumo_roads.keys())))[:10]
+    ux_roads   = (uxsim['road_congestion_rank'] if uxsim else {})
+    all_roads  = list(dict.fromkeys(list(idm_roads.keys()) + list(sumo_roads.keys()) + list(ux_roads.keys())))[:10]
     for r in all_roads:
-        iv = f"{idm_roads.get(r, 0):.0f}" if r in idm_roads else "—"
-        sv = f"{sumo_roads.get(r, 0):.0f}" if r in sumo_roads else "—"
-        # normalise road name for matching
-        print(f"  {r:<32} {iv:>20}  {sv:>20}")
+        iv = f"{idm_roads.get(r, 0):.0f}"   if r in idm_roads  else "—"
+        sv = f"{sumo_roads.get(r, 0):.0f}"  if r in sumo_roads else "—"
+        uv = f"{ux_roads.get(r, 0):.0f}"    if r in ux_roads   else "—"
+        print(f"  {r:<35} {iv:>15}  {sv:>15}  {uv:>15}")
 
-    print("\n── 5. ROAD RANK AGREEMENT ─────────────────────────────────────────────")
+    print("\n── 6. ROAD RANK AGREEMENT ─────────────────────────────────────────────────────")
     idm_top  = [r.lower().replace(" ", "_").replace("'", "") for r in list(idm['road_congestion_rank'].keys())[:5]]
-    sumo_top = [r for r in list(sumo['road_congestion_rank'].keys())[:5]]
-    idm_top_s  = ", ".join(idm_top[:5])
-    sumo_top_s = ", ".join(sumo_top[:5])
-    # Count overlap (fuzzy)
-    overlap = sum(1 for ir in idm_top for sr in sumo_top if ir[:6] in sr or sr[:6] in ir)
-    print(f"  IDM  top-5: {idm_top_s}")
-    print(f"  SUMO top-5: {sumo_top_s}")
-    print(f"  Overlap:    {overlap}/5 roads appear in both top-5 lists")
+    sumo_top = list(sumo['road_congestion_rank'].keys())[:5]
+    ux_top   = list(ux_roads.keys())[:5] if ux_roads else []
+    overlap_idm_sumo = sum(1 for ir in idm_top for sr in sumo_top if ir[:6] in sr or sr[:6] in ir)
+    overlap_sumo_ux  = sum(1 for sr in sumo_top for ur in ux_top   if sr[:6] in ur or ur[:6] in sr)
+    print(f"  IDM   top-5: {', '.join(idm_top)}")
+    print(f"  SUMO  top-5: {', '.join(sumo_top)}")
+    print(f"  UXSim top-5: {', '.join(ux_top) or '—'}")
+    print(f"  IDM↔SUMO overlap: {overlap_idm_sumo}/5  |  SUMO↔UXSim overlap: {overlap_sumo_ux}/5")
 
-    print("\n── 6. SCHOOL THROUGHPUT (vehicles/15-min arriving at school) ──────────")
-    print(f"  {'15-min window':<20} {'IDM arrivals':>14}  {'SUMO arrivals':>14}")
-    print(f"  {'-'*20} {'-'*14}  {'-'*14}")
+    print("\n── 7. SCHOOL THROUGHPUT (vehicles/15-min arriving at school) ──────────────────")
+    print(f"  {'15-min window':<20} {'IDM':>12}  {'SUMO':>12}")
+    print(f"  {'-'*20} {'-'*12}  {'-'*12}")
     idm_s  = idm.get('school_arrivals_15min', {})
     sumo_s = sumo.get('school_arrivals_15min', {})
-    all_bins = sorted(set(list(idm_s.keys()) + list(sumo_s.keys())))
-    for b in all_bins:
+    for b in sorted(set(list(idm_s.keys()) + list(sumo_s.keys()))):
         label = f"{sim_to_clock(b*900)}–{sim_to_clock((b+1)*900)}"
         iv = f"{idm_s.get(b, 0):.0f}" if b in idm_s else "—"
         sv = f"{sumo_s.get(b, 0):.0f}" if b in sumo_s else "—"
-        print(f"  {label:<20} {iv:>14}  {sv:>14}")
+        print(f"  {label:<20} {iv:>12}  {sv:>12}")
 
-    print(f"\n{'─'*70}")
+    # ── Verdict ──────────────────────────────────────────────────────────────
+    print(f"\n{'─'*80}")
     print("  VERDICT")
-    print('─'*70)
+    print('─'*80)
     idm_mean  = idm['trip_mean_s']
     sumo_mean = sumo['trip_mean_s']
-    ratio = abs(idm_mean - sumo_mean) / max(sumo_mean, 1)
-    if ratio < 0.15:
-        verdict = "GOOD — mean trip times within 15%."
-    elif ratio < 0.30:
-        verdict = "ACCEPTABLE — mean trip times within 30%; check bottleneck agreement."
+    ratio_is  = abs(idm_mean - sumo_mean) / max(sumo_mean, 1)
+
+    if ratio_is < 0.15:
+        verdict_is = "GOOD — IDM/SUMO mean trip times within 15%"
+    elif ratio_is < 0.30:
+        verdict_is = "ACCEPTABLE — IDM/SUMO within 30%; check bottleneck agreement"
     else:
-        verdict = "DIVERGENT — mean trip times differ >30%; investigate demand or routing."
-    print(f"  Trip time difference: {abs(idm_mean-sumo_mean):.0f}s ({ratio*100:.1f}%) → {verdict}")
-    print(f"  Peak congestion: IDM={idm['peak_congestion_clock']}, SUMO={sumo['peak_congestion_clock']}")
-    print(f"  Road rank overlap (top-5): {overlap}/5\n")
+        verdict_is = "DIVERGENT — IDM/SUMO differ >30%; investigate demand or routing"
+
+    if uxsim:
+        ux_est = uxsim['est_trip_s']
+        ratio_su = abs(sumo_mean - ux_est) / max(sumo_mean, 1)
+        if ratio_su < 0.20:
+            verdict_su = f"GOOD — SUMO/UXSim trip estimates within 20% ({ratio_su*100:.0f}%)"
+        elif ratio_su < 0.40:
+            verdict_su = f"REASONABLE — SUMO/UXSim within 40% ({ratio_su*100:.0f}%); mesoscopic abstraction expected"
+        else:
+            verdict_su = f"DIVERGENT — SUMO/UXSim differ {ratio_su*100:.0f}%; review network demand"
+    else:
+        verdict_su = "UXSim data not available"
+
+    print(f"  IDM vs SUMO:   {abs(idm_mean-sumo_mean):.0f}s ({ratio_is*100:.1f}%) → {verdict_is}")
+    print(f"  SUMO vs UXSim: → {verdict_su}")
+    print(f"  Peak congestion: IDM={idm['peak_congestion_clock']}, SUMO={sumo['peak_congestion_clock']}", end="")
+    if uxsim: print(f", UXSim={uxsim['peak_congestion_clock']}")
+    else: print()
+
+    # Clearance warning
+    if uxsim and not uxsim['clears_by_end']:
+        print(f"\n  ⚠  CLEARANCE FLAG: UXSim shows {uxsim['vehicles_at_end']} vehicles still active at sim end.")
+        print(f"     TIA assumption that traffic clears by 08:30 is NOT supported by modelling.")
+    print()
 
 
-def _print_table(rows):
-    print(f"  {'Metric':<32} {'IDM':>18}  {'SUMO':>18}")
-    print(f"  {'-'*32} {'-'*18}  {'-'*18}")
-    for label, idm_val, sumo_val in rows:
-        print(f"  {label:<32} {idm_val:>18}  {sumo_val:>18}")
+def _print_table3(rows):
+    print(f"  {'Metric':<32} {'IDM':>18}  {'SUMO':>18}  {'UXSim':>18}")
+    print(f"  {'-'*32} {'-'*18}  {'-'*18}  {'-'*18}")
+    for label, idm_val, sumo_val, ux_val in rows:
+        print(f"  {label:<32} {idm_val:>18}  {sumo_val:>18}  {ux_val:>18}")
 
 
-def save_csv(idm, sumo, scenario, out_path: Path):
+def save_csv(idm, sumo, uxsim, scenario, out_path: Path):
+    ux = uxsim or {}
     records = [
-        ("scenario",              scenario,    scenario),
-        ("trips_spawned",         idm["total_spawned"],    sumo["total_spawned"]),
-        ("trips_completed",       idm["completed_n"],      sumo["completed_n"]),
-        ("completion_rate_pct",   round(idm["completion_rate"]*100, 1), round(sumo["completion_rate"]*100, 1)),
-        ("trip_mean_s",           round(idm["trip_mean_s"], 1),    round(sumo["trip_mean_s"], 1)),
-        ("trip_median_s",         round(idm["trip_median_s"], 1),  round(sumo["trip_median_s"], 1)),
-        ("trip_p85_s",            round(idm["trip_p85_s"], 1),     round(sumo["trip_p85_s"], 1)),
-        ("trip_p95_s",            round(idm["trip_p95_s"], 1),     round(sumo["trip_p95_s"], 1)),
-        ("delay_mean_s",          round(idm["delay_mean_s"], 1),   round(sumo["delay_mean_s"], 1)),
-        ("delay_ratio_pct",       round(idm["delay_ratio_mean"]*100, 1), round(sumo["delay_ratio_mean"]*100, 1)),
-        ("stopped_time_mean_s",   round(idm["stopped_time_mean_s"], 1), round(sumo["stopped_time_mean_s"], 1)),
-        ("peak_congestion_clock", idm["peak_congestion_clock"], sumo["peak_congestion_clock"]),
+        ("scenario",               scenario,                          scenario,                           scenario),
+        ("trips_spawned",          idm["total_spawned"],              sumo["total_spawned"],              "N/A"),
+        ("trips_completed",        idm["completed_n"],                sumo["completed_n"],                "N/A"),
+        ("completion_rate_pct",    round(idm["completion_rate"]*100, 1), round(sumo["completion_rate"]*100, 1), "N/A"),
+        ("trip_mean_s",            round(idm["trip_mean_s"], 1),     round(sumo["trip_mean_s"], 1),     round(ux.get("est_trip_s", 0), 1)),
+        ("trip_median_s",          round(idm["trip_median_s"], 1),   round(sumo["trip_median_s"], 1),   "N/A"),
+        ("trip_p85_s",             round(idm["trip_p85_s"], 1),      round(sumo["trip_p85_s"], 1),      "N/A"),
+        ("trip_p95_s",             round(idm["trip_p95_s"], 1),      round(sumo["trip_p95_s"], 1),      "N/A"),
+        ("delay_mean_s",           round(idm["delay_mean_s"], 1),    round(sumo["delay_mean_s"], 1),    round(ux.get("avg_delay_s", 0), 1)),
+        ("delay_ratio_pct",        round(idm["delay_ratio_mean"]*100, 1), round(sumo["delay_ratio_mean"]*100, 1), "N/A"),
+        ("stopped_time_mean_s",    round(idm["stopped_time_mean_s"], 1), round(sumo["stopped_time_mean_s"], 1), "N/A"),
+        ("peak_congestion_clock",  idm["peak_congestion_clock"],     sumo["peak_congestion_clock"],     ux.get("peak_congestion_clock", "N/A")),
+        ("peak_vehicles_on_net",   "N/A",                             "N/A",                             ux.get("peak_vehicles_on_net", "N/A")),
+        ("vehicles_at_end",        "N/A",                             ux.get("vehicles_at_end", "N/A"),  ux.get("vehicles_at_end", "N/A")),
+        ("clears_by_end",          "N/A",                             "N/A",                             str(ux.get("clears_by_end", "N/A"))),
     ]
-    df = pd.DataFrame(records, columns=["metric", "idm", "sumo"])
+    df = pd.DataFrame(records, columns=["metric", "idm", "sumo", "uxsim"])
     df.to_csv(out_path, index=False)
     print(f"  CSV saved → {out_path}")
 
@@ -365,8 +489,23 @@ SCENARIO_DEFAULTS = {
         "idm_log":       "models/l/traffic-sim-log-2026-04-01T11-26-56.csv",
         "idm_roads":     "models/l/traffic-road-stats-2026-04-01T11-30-46.csv",
         "sumo_tripinfo": "sim/sumo/tripinfo-L.xml",
-        "sumo_json":     "public/sim-results/scenario-L.json",
-    }
+        "sumo_json":     "public/sim-results/scenario-L-sumo.json",
+        "uxsim_json":    "public/sim-results/scenario-L-uxsim.json",
+    },
+    "M": {
+        "idm_log":       None,
+        "idm_roads":     None,
+        "sumo_tripinfo": "sim/sumo/tripinfo-M.xml",
+        "sumo_json":     "public/sim-results/scenario-M-sumo.json",
+        "uxsim_json":    "public/sim-results/scenario-M-uxsim.json",
+    },
+    "H": {
+        "idm_log":       None,
+        "idm_roads":     None,
+        "sumo_tripinfo": "sim/sumo/tripinfo-H.xml",
+        "sumo_json":     "public/sim-results/scenario-H-sumo.json",
+        "uxsim_json":    "public/sim-results/scenario-H-uxsim.json",
+    },
 }
 
 def main():
@@ -376,27 +515,65 @@ def main():
     parser.add_argument("--idm-roads")
     parser.add_argument("--sumo-tripinfo")
     parser.add_argument("--sumo-json")
+    parser.add_argument("--uxsim-json")
     args = parser.parse_args()
 
     defaults = SCENARIO_DEFAULTS.get(args.scenario, SCENARIO_DEFAULTS["L"])
 
-    idm_log       = Path(args.idm_log       or REPO_ROOT / defaults["idm_log"])
-    idm_roads     = Path(args.idm_roads     or REPO_ROOT / defaults["idm_roads"])
     sumo_tripinfo = Path(args.sumo_tripinfo or REPO_ROOT / defaults["sumo_tripinfo"])
     sumo_json     = Path(args.sumo_json     or REPO_ROOT / defaults["sumo_json"])
+    uxsim_json    = Path(args.uxsim_json    or REPO_ROOT / defaults["uxsim_json"])
 
-    print(f"Loading IDM log:       {idm_log.name}")
-    print(f"Loading IDM roads:     {idm_roads.name}")
+    # IDM logs are optional — only available for scenario L currently
+    idm_log_default   = defaults.get("idm_log")
+    idm_roads_default = defaults.get("idm_roads")
+    idm_log   = Path(args.idm_log   or REPO_ROOT / idm_log_default)   if (args.idm_log   or idm_log_default)   else None
+    idm_roads = Path(args.idm_roads or REPO_ROOT / idm_roads_default) if (args.idm_roads or idm_roads_default) else None
+
+    # Parse models
+    idm  = None
+    if idm_log and idm_roads and idm_log.exists() and idm_roads.exists():
+        print(f"Loading IDM log:       {idm_log.name}")
+        print(f"Loading IDM roads:     {idm_roads.name}")
+        idm = parse_idm(idm_log, idm_roads)
+    else:
+        print(f"[SKIP] IDM logs not available for scenario {args.scenario}")
+
     print(f"Loading SUMO tripinfo: {sumo_tripinfo.name}")
     print(f"Loading SUMO JSON:     {sumo_json.name}")
-
-    idm  = parse_idm(idm_log, idm_roads)
     sumo = parse_sumo(sumo_tripinfo, sumo_json)
 
-    print_report(idm, sumo, args.scenario)
+    uxsim = None
+    if uxsim_json.exists():
+        print(f"Loading UXSim JSON:    {uxsim_json.name}")
+        uxsim = parse_uxsim(uxsim_json)
+    else:
+        print(f"[SKIP] UXSim JSON not found: {uxsim_json.name}")
 
-    out_path = REPO_ROOT / "models" / f"comparison_{args.scenario}.csv"
-    save_csv(idm, sumo, args.scenario, out_path)
+    if idm:
+        print_report(idm, sumo, uxsim, args.scenario)
+        out_path = REPO_ROOT / "models" / f"comparison_{args.scenario}.csv"
+        save_csv(idm, sumo, uxsim, args.scenario, out_path)
+    else:
+        # SUMO vs UXSim only report
+        sep = "=" * 80
+        print(f"\n{sep}")
+        print(f"  SUMO vs UXSim — Scenario {args.scenario}  (no IDM log available)")
+        print(sep)
+        if uxsim:
+            print(f"\n  SUMO peak congestion:  {sumo['peak_congestion_clock']}")
+            print(f"  UXSim peak congestion: {uxsim['peak_congestion_clock']}")
+            print(f"  SUMO mean trip time:   {fmt(sumo['trip_mean_s'])}")
+            print(f"  UXSim est trip time:   {fmt(uxsim['est_trip_s'])} (estimated from delay data)")
+            print(f"  UXSim avg delay:       {fmt(uxsim['avg_delay_s'])}")
+            if not uxsim['clears_by_end']:
+                print(f"\n  ⚠  CLEARANCE FLAG: UXSim shows {uxsim['vehicles_at_end']} vehicles still active at sim end.")
+                print(f"     TIA assumption that traffic clears by 08:30 is NOT supported.")
+        out_path = REPO_ROOT / "models" / f"comparison_{args.scenario}.csv"
+        save_csv({"total_spawned":"N/A","completed_n":"N/A","completion_rate":0,"trip_mean_s":0,"trip_median_s":0,
+                  "trip_p85_s":0,"trip_p95_s":0,"delay_mean_s":0,"delay_ratio_mean":0,"stopped_time_mean_s":0,
+                  "peak_congestion_clock":"N/A","road_stopped_rank":{},"road_congestion_rank":{},"school_arrivals_15min":{}},
+                 sumo, uxsim, args.scenario, out_path)
 
 
 if __name__ == "__main__":

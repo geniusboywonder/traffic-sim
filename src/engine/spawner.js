@@ -18,7 +18,9 @@ export const CORRIDOR_SPLITS = Object.fromEntries(Object.entries(RAW).map(([k, v
 
 export const CORRIDOR_ROAD_CLASS = { '1A': 'arterial', '2A': 'collector', '2B': 'collector', '3A': 'collector' };
 
-const PEAK_PARAMS = { H: { centre: 3600, sigma: 1200 }, M: { centre: 3600, sigma: 1500 }, L: { centre: 3600, sigma: 1737 } };
+// TIA trapezoidal profile: 35% of demand falls 07:30–08:00 → peak centred at 07:45 (simTime=4500).
+// Sigma controls spread: H is tightest (fast ramp), L is widest (spread across full 2 hrs).
+const PEAK_PARAMS = { H: { centre: 4500, sigma: 1200 }, M: { centre: 4500, sigma: 1500 }, L: { centre: 4500, sigma: 1737 } };
 
 function gaussianRate(t, centre, sigma) { return Math.exp(-0.5 * ((t - centre) / sigma) ** 2); }
 function computeNorm(scenario) {

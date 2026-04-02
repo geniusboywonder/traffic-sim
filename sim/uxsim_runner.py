@@ -47,7 +47,7 @@ from converters.uxsim_to_json import convert
 OUTPUT_DIR = Path(__file__).parent.parent / "public" / "sim-results"
 
 SIM_START = 23400   # 06:30
-SIM_END   = 30600   # 08:30
+SIM_END   = 32400   # 09:00 — extended to allow traffic to clear post-peak
 TIMESTEP  = 30      # seconds between output frames
 
 # Total vehicle trips per scenario (TIA §13)

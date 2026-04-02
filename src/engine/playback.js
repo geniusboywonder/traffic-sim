@@ -137,12 +137,14 @@ export class PlaybackSource {
   /**
    * Fetch and load a scenario JSON file.
    * @param {string} scenario - "L", "M", or "H"
+   * @param {string} model    - "sumo" or "uxsim"
    * @returns {Promise<void>}
    */
-  async loadScenario(scenario) {
+  async loadScenario(scenario, model = 'sumo') {
     this._data = null;
-    const res = await fetch(`/sim-results/scenario-${scenario}.json`);
-    if (!res.ok) throw new Error(`Failed to load scenario-${scenario}.json: ${res.status}`);
+    const file = `scenario-${scenario}-${model}.json`;
+    const res = await fetch(`/sim-results/${file}`);
+    if (!res.ok) throw new Error(`Failed to load ${file}: ${res.status}`);
     this._data = await res.json();
     this._precomputeStats();
   }

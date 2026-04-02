@@ -25,7 +25,7 @@ from .schema import SimOutput, SimMeta, RoadMeta, Frame, VehicleState, RoadStat
 
 START_TIME = 23400   # 06:30 in seconds since midnight
 END_TIME   = 30600   # 08:30
-TIMESTEP   = 60      # seconds between output frames
+TIMESTEP   = 30      # seconds between output frames
 
 
 def slugify(name: str) -> str:
@@ -90,11 +90,55 @@ def _build_link_index(W):
     return link_by_name, road_links
 
 
-def convert(W, scenario: str, start_time=START_TIME, end_time=END_TIME, timestep=TIMESTEP) -> SimOutput:
+def _build_vehicle_id_map(W, corridor_nodes):
+    """
+    Map every UXsim vehicle name to a frontend-compatible flow ID.
+
+    The frontend's _flowToCorridor() parses "flow_{N}_*" where corridor index
+    = floor(N / 5).  We assign each corridor a block of 5 flow numbers so the
+    mapping stays stable: corridor 0 → flow_0_*, corridor 1 → flow_5_*, etc.
+
+    Vehicles whose origin OR destination matches a corridor node are tagged;
+    any others fall back to an opaque "v_{name}" ID (school-internal traffic,
+    edge-case orphans).
+    """
+    if not corridor_nodes:
+        return {}
+
+    # Build node-id → corridor_index lookup using Python object identity
+    corridor_by_node_id = {id(node): cidx for cidx, node in corridor_nodes.items()}
+
+    seq_counter = {cidx: 0 for cidx in corridor_nodes}
+    veh_id_map = {}   # vehicle_name → stable flow ID string
+
+    for veh in W.VEHICLES:
+        cidx = corridor_by_node_id.get(id(veh.orig))
+        if cidx is None:
+            cidx = corridor_by_node_id.get(id(veh.dest))
+        if cidx is not None:
+            flow_num = cidx * 5
+            seq = seq_counter[cidx]
+            seq_counter[cidx] += 1
+            veh_id_map[veh.name] = f"flow_{flow_num}_{seq}"
+
+    tagged = sum(1 for v in veh_id_map.values() if v.startswith("flow_"))
+    print(f"[uxsim_to_json] Vehicle corridor mapping: {tagged}/{len(W.VEHICLES)} tagged")
+    return veh_id_map
+
+
+def convert(W, scenario: str, corridor_nodes=None,
+            start_time=START_TIME, end_time=END_TIME, timestep=TIMESTEP) -> SimOutput:
     """
     Convert a completed UXsim World to a SimOutput.
 
     Call this AFTER W.exec_simulation() has returned.
+
+    Parameters
+    ----------
+    corridor_nodes : dict  corridor_index (0-3) → UXsim Node, optional
+        When provided, vehicles are assigned frontend-compatible flow_N_*
+        IDs so the dashboard corridor stats (spawned, slowTime, congestion)
+        work correctly.
     """
     print(f"[uxsim_to_json] Computing Edie state for scenario {scenario}...")
     W.analyzer.compute_edie_state()
@@ -104,6 +148,9 @@ def convert(W, scenario: str, start_time=START_TIME, end_time=END_TIME, timestep
 
     print("[uxsim_to_json] Fetching link traffic state DataFrame...")
     link_df = W.analyzer.link_traffic_state_to_pandas()
+
+    # Build vehicle name → stable corridor-tagged ID
+    veh_id_map = _build_vehicle_id_map(W, corridor_nodes)
 
     _, road_links = _build_link_index(W)
 
@@ -182,8 +229,12 @@ def convert(W, scenario: str, start_time=START_TIME, end_time=END_TIME, timestep
                 speed    = float(getattr(row, "v", 0))
                 direction = link_direction.get(link_name, "inbound")
 
+                # Resolve stable corridor-tagged ID (falls back to opaque ID)
+                veh_name = getattr(row, "vehicle", None)
+                veh_id   = veh_id_map.get(veh_name, f"v{frame_t}_{i}") if veh_name else f"v{frame_t}_{i}"
+
                 vehicles.append(VehicleState(
-                    id       = f"v{frame_t}_{i}",
+                    id       = veh_id,
                     road_id  = road_id,
                     progress = progress,
                     speed    = speed,

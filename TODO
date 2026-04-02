@@ -4,16 +4,9 @@ TODO
 ?) would it be possible and realistic to add in the delays due to traffic from Sweet Valley school without the data? what would those look like?
 ?) in mobile view the map should start zoomed into the highlighted square and not show any of the darkened map
 
-11) watch my road needs to be in a seperate block on the map - maybe top right in the same style as the key.
-when no street is selected it needs to say: `click any street to see traffic activity`.
-and then when a street is cliked it need to show 2 lines for `Traffic In` and `Traffic Out`. Each line must show, Total:[9] Active:[9], Slowing:[9], Stopped:[9]
-also clicking the same road after it was selected should unselect it. clickig on a different rd moves to that road.
-i also dont like the grey colour of the roads - cant they be transparent until clicked on and then highlited in gray?
-
 model changes:
 2) let the models run until all cars have completed the run (currently H still has cars active at 9AM)
-3) the scenarios from the various models are not loading. no dots are shown moving on the map. it might be that the other models have rat-runs not defined on the map.
-troubleshoot why they are not showing and list any rat-runs that are not captured.
+
 4) cars are stillbrekaing for the corner in Vineyard after turning from CHristopher. I want any contraints removed from that corner.
 
 
@@ -139,3 +132,21 @@ i would like to update the Dashboard cards.
 11) the congestion graph needs a heading to say Congestion Meter
 12) is there ayway we can use the same entry/exit colour for the dots, but show a lighter and darker shade if the car is ingressing or egressing?
 13) cars are not snapping to route from Vineyard to Airlie to Starke to Childrens Way, they teleports from Airlie across to CHildrens way.
+
+11) watch my road needs to be in a seperate block on the map - maybe top right in the same style as the key.
+when no street is selected it needs to say: `click any street to see traffic activity`.
+and then when a street is cliked it need to show 2 lines for `Traffic In` and `Traffic Out`. Each line must show, Total:[9] Active:[9], Slowing:[9], Stopped:[9]
+also clicking the same road after it was selected should unselect it. clickig on a different rd moves to that road.
+i also dont like the grey colour of the roads - cant they be transparent until clicked on and then highlited in gray?
+ the whole model seems to have changed, and I am concerned that some of the road conditions are no longer being followed.
+things I am noticing and not able to confirm:
+- cars flow from Christopher to Vineyard without stopping.
+- the speed of cars egressing seems a lot faster than ingressing (not the flow, the actual speed of the carsO
+- no one seems to use Ruskin Rd to enter the school anymore - they all go via Leyden.
+- cars from Childrens Way no longer to right into Dreyersdal. They proceed to Starke, then right on Airlie, then left onto Dreyersdal and then left onto Christopher. This is not an effecient route, and somehow this real route has been grabled. there should be a mix of cars from Childrens Way truning right at Dreyersdal or at Starke. Cars the use Starke, should follow Starke to Christopher. Cars the use Dreyersdal, should follow Dreyerdal to Chirstopher. Except for rat-runs during slowing or stopping due to back-pressure.
+- Check that the rules for when a car alters their route to take a rat-run are when cars are slowing or stopping for backpressure
+- the numbers showing on the Watch my Road for Christopher are not the same as those showing for the Bottlenecks on Christopher as seen in the screenshot.
+- are all the speed and road signs being obeyed
+- how can we validate this with the car logs shared from the sim logs.
+- the scenarios from the various models are not loading. no dots are shown moving on the map. it might be that the other models have rat-runs not defined on the map.
+troubleshoot why they are not showing and list any rat-runs that are not captured.

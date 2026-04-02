@@ -185,7 +185,7 @@ export default function App() {
   const [statsData, setStatsData]               = useState(INITIAL_STATS);
   const [selectedCorridors, setSelectedCorridors] = useState(new Set(['3A', '2A', '2B', '1A']));
   const [showRoutes, setShowRoutes]             = useState(false);
-  const [source, setSource]                     = useState('live');
+  const [source, setSource]                     = useState('live');   // 'live' | 'sumo' | 'uxsim'
   const [selectedRoad, setSelectedRoad]         = useState(null);
   const [roadStats, setRoadStats]               = useState(null);
   const playbackRef                             = useRef(new PlaybackSource());
@@ -213,8 +213,8 @@ export default function App() {
     setSelectedRoad(null);
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({ event: 'scenario_change', scenario: s });
-    if (source === 'results') {
-      try { const pb = playbackRef.current; pb.reset(); await pb.loadScenario(s); }
+    if (source === 'sumo' || source === 'uxsim') {
+      try { const pb = playbackRef.current; pb.reset(); await pb.loadScenario(s, source); }
       catch (err) { console.error('Failed to load scenario:', err); }
     }
   }, [source]);
@@ -250,8 +250,8 @@ export default function App() {
     setStatsData(INITIAL_STATS);
     setSelectedRoad(null);
     setRoadStats(null);
-    if (src === 'results') {
-      try { const pb = playbackRef.current; pb.reset(); await pb.loadScenario(scenario); }
+    if (src === 'sumo' || src === 'uxsim') {
+      try { const pb = playbackRef.current; pb.reset(); await pb.loadScenario(scenario, src); }
       catch (err) { console.error('Failed to load scenario results:', err); }
     }
   }, [scenario]);
@@ -260,7 +260,7 @@ export default function App() {
     if (!road) { setSelectedRoad(null); setRoadStats(null); return; }
     setSelectedRoad(prev => {
       if (prev && prev.name === road.name) { setRoadStats(null); return null; }
-      if (source === 'results') {
+      if (source === 'sumo' || source === 'uxsim') {
         const roads = playbackRef.current.getRoads();
         const found = roads.find(r => r.name === road.name);
         return found ? { name: road.name, id: found.id } : { name: road.name, id: road.name };
@@ -281,7 +281,10 @@ export default function App() {
 
       <main className="main-layout" id="simulator">
         <header className="hero-header">
-          <h2>Pick a scenario and watch the traffic wiggle!</h2>
+          <div className="hero-copy">
+            <h2>Pick a scenario and watch the traffic wiggle!</h2>
+            <p className="hero-description">The model uses a "main route" for each entry / exit corridor from Firgrove Way, Homestead Rd, Children's Way and Main Rd. This is the route most cars will follow — until traffic starts to build up. Then cars will find and follow multiple rat-runs to the school. The model attempts to avoid the normal Sweet Valley routes at the top of Dreyersdal Rd and exiting via Homestead.</p>
+          </div>
           <div className="hero-totals-card">
             <div className="htc-stat">
               <span className="htc-label">Time</span>

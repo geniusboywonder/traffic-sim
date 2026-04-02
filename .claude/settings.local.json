@@ -74,7 +74,10 @@
       "Bash(sumo --version)",
       "Bash(netconvert --version)",
       "Read(//c/Users/neill/Github/models/**)",
-      "Read(//c/Users/neill/**)"
+      "Read(//c/Users/neill/**)",
+      "Bash(find /Users/neill/Documents/AICode/Projects/traffic-sim -name fcd* -o -name tripinfo* -o -name *output* -o -name *.out)",
+      "Bash(git pull:*)",
+      "Bash(git stash:*)"
     ]
   }
 }

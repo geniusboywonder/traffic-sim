@@ -13,7 +13,7 @@ import {
   spawnTick, processDwell, createSpawnerState, resetVehicleIds,
   pickEgressRoute, estimateRouteLength,
 } from '../engine/spawner';
-import { logEvent, logSchoolEvent, loggerClear, logRoadSnapshot } from '../engine/logger';
+import { logEvent, logSchoolEvent, loggerClear, logRoadSnapshot, loggerDownload, loggerDownloadRoadStats } from '../engine/logger';
 import RoadWatcher from './RoadWatcher';
 
 // Vehicle colours and corridor palette
@@ -68,7 +68,7 @@ function posToLatLng(geometry, pos) {
   ];
 }
 
-export default function SimMap({ scenario, playing, speed, showRoutes, onToggleRoutes, selectedCorridors, source, playbackSource, onSimUpdate, onStatsUpdate, onRoadStatsUpdate, onAutoStop, onRoadSelect, selectedRoad, allPlaybackFrames }) {
+export default function SimMap({ scenario, playing, speed, showRoutes, onToggleRoutes, selectedCorridors, source, playbackSource, onSimUpdate, onStatsUpdate, onRoadStatsUpdate, onAutoStop, onRoadSelect, selectedRoad, allPlaybackFrames, onPlayPause, onReset, onSpeedChange, onScenarioChange, onSourceChange }) {
   const containerRef = useRef(null), canvasRef = useRef(null), mapRef = useRef(null);
   const vehiclesRef = useRef([]), simTimeRef = useRef(0), spawnerStateRef = useRef(createSpawnerState());
   const rafRef = useRef(null), loopRef = useRef(null), lastUpdateRef = useRef(0);
@@ -176,7 +176,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
       stats.inbound.total = roadVisitTrackerRef.current.inbound.get(selName)?.size || 0;
       stats.outbound.total = roadVisitTrackerRef.current.outbound.get(selName)?.size || 0;
       onRoadStatsUpdate(stats);
-    } else if (sourceRef.current === 'results') {
+    } else if (sourceRef.current === 'sumo' || sourceRef.current === 'uxsim') {
       // Playback mode: query playback source at current sim time so stats survive pause/stop.
       const pb = playbackSource;
       if (pb?.isLoaded()) {
@@ -204,7 +204,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
     const dt = 0.5 * speedRef.current; simTimeRef.current += dt;
     const t = simTimeRef.current;
     
-    if (sourceRef.current === 'results') {
+    if (sourceRef.current === 'sumo' || sourceRef.current === 'uxsim') {
       const pb = playbackSource;
       if (!pb?.isLoaded()) { rafRef.current = requestAnimationFrame(loopRef.current); return; }
       const absT = pb.getStartTime() + t;
@@ -509,14 +509,68 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       <div ref={containerRef} style={{ width: '100%', height: '100%' }} />
       <canvas ref={canvasRef} style={{ position: 'absolute', top: 0, left: 0, pointerEvents: 'none', zIndex: 450 }} />
-      <div style={{ position: 'absolute', bottom: 30, left: 8, zIndex: 500, background: 'rgba(13,21,38,0.85)', border: '1px solid #1e3a5f', borderRadius: 6, padding: '6px 10px', fontSize: 10, color: '#cbd5e1', display: 'flex', flexDirection: 'column', gap: 2 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, paddingBottom: 4, marginBottom: 4, borderBottom: '1px solid #1e3a5f' }}>
+
+      {/* Legend */}
+      <div style={{ position: 'absolute', bottom: 110, left: 8, zIndex: 500, background: 'var(--surface-low)', borderRadius: 8, padding: '6px 10px', fontSize: 10, color: 'var(--on-surface)', display: 'flex', flexDirection: 'column', gap: 2, opacity: 0.9 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, paddingBottom: 4, marginBottom: 4, borderBottom: '1px solid var(--surface-high)' }}>
           <input type="checkbox" id="route-toggle" checked={showRoutes} onChange={onToggleRoutes} style={{ cursor: 'pointer', width: 12, height: 12 }} />
           <label htmlFor="route-toggle" style={{ cursor: 'pointer', fontWeight: 600 }}>Show Routes</label>
         </div>
         {[[COLOUR['3A'].base, 'Firgrove Way'], [COLOUR['2A'].base, 'Homestead Ave'], [COLOUR['2B'].base, "Children's Way"], [COLOUR['1A'].base, 'Main Rd'], [COLOUR.delayed, 'Delayed'], [COLOUR.dwell, 'Parked']].map(([c, l]) => (
           <div key={l} style={{ display: 'flex', alignItems: 'center', gap: 6 }}><svg width="8" height="8"><circle cx="4" cy="4" r="3" fill={c} /></svg>{l}</div>
         ))}
+      </div>
+
+      {/* Sim Controls Island */}
+      <div className="sim-controls-wrapper">
+        <div className="sim-controls">
+          {/* Scenario */}
+          <div className="speed-selector">
+            {['L', 'M', 'H'].map(s => (
+              <button key={s} className={`speed-pill${scenario === s ? ' active' : ''}`} onClick={() => onScenarioChange?.(s)}
+                title={{ L: 'Low — 500 trips', M: 'Medium — 650 trips', H: 'High (TIA) — 840 trips' }[s]}>
+                {s}
+              </button>
+            ))}
+          </div>
+
+          <div style={{ width: 1, height: '1.5rem', background: 'var(--surface-high)', flexShrink: 0 }} />
+
+          {/* Play / Pause */}
+          <button className="play-pause-btn" onClick={onPlayPause} title={playing ? 'Pause' : 'Play'}>
+            {playing ? '⏸' : '▶'}
+          </button>
+
+          {/* Speed */}
+          <div className="speed-selector">
+            {[1, 2, 5, 10].map(s => (
+              <button key={s} className={`speed-pill${speed === s ? ' active' : ''}`} onClick={() => onSpeedChange?.(s)}>{s}×</button>
+            ))}
+          </div>
+
+          <div style={{ width: 1, height: '1.5rem', background: 'var(--surface-high)', flexShrink: 0 }} />
+
+          {/* Source */}
+          <div className="speed-selector">
+            {[
+              { id: 'live',  label: 'Live',  title: 'Live IDM simulation (runs in browser)' },
+              { id: 'sumo',  label: 'SUMO',  title: 'Pre-computed SUMO microscopic model' },
+              { id: 'uxsim', label: 'UXSim', title: 'Pre-computed UXSim mesoscopic model' },
+            ].map(({ id, label, title }) => (
+              <button key={id} className={`speed-pill${source === id ? ' active' : ''}`}
+                onClick={() => onSourceChange?.(id)} title={title}>
+                {label}
+              </button>
+            ))}
+          </div>
+
+          <div style={{ width: 1, height: '1.5rem', background: 'var(--surface-high)', flexShrink: 0 }} />
+
+          {/* Reset + Logs */}
+          <button className="speed-pill" onClick={onReset} title="Reset">↺</button>
+          <button className="speed-pill" onClick={loggerDownload} title="Download vehicle log (CSV)">LOG</button>
+          <button className="speed-pill" onClick={loggerDownloadRoadStats} title="Download road stats log (CSV)">ROAD LOG</button>
+        </div>
       </div>
     </div>
   );

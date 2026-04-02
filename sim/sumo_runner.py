@@ -280,7 +280,7 @@ def run_scenario(scenario, net_path, overlay_snap, humps_path=None):
     run_sumo(cfg_path)
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    out_path = OUTPUT_DIR / f"scenario-{scenario}.json"
+    out_path = OUTPUT_DIR / f"scenario-{scenario}-sumo.json"
     sim_output = convert(fcd_path, tripinfo_path, scenario=scenario,
                          start_time=SIM_START, end_time=SIM_END, timestep=TIMESTEP)
     sim_output.write_json(out_path)

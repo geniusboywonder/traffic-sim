@@ -48,7 +48,7 @@ OUTPUT_DIR = Path(__file__).parent.parent / "public" / "sim-results"
 
 SIM_START = 23400   # 06:30
 SIM_END   = 30600   # 08:30
-TIMESTEP  = 60      # seconds between output frames
+TIMESTEP  = 30      # seconds between output frames
 
 # Total vehicle trips per scenario (TIA §13)
 SCENARIO_DEMAND = {
@@ -83,12 +83,20 @@ def inject_demand(W, overlay_nodes, total_trips):
 
     Inbound:  each corridor node → School-Gate
     Outbound: School-Gate → each corridor node (offset by DWELL_OFFSET_S)
+
+    Returns
+    -------
+    corridor_nodes : dict  corridor_index (0-3) → UXsim Node
+        Used by the converter to map vehicles back to their corridor for
+        frontend-compatible flow_N_* vehicle ID generation.
     """
     school_gate = overlay_nodes.get("School-Gate")
     if school_gate is None:
         raise RuntimeError("School-Gate node not found — check network_builder output")
 
-    for corridor in CORRIDORS:
+    corridor_nodes = {}   # corridor_idx → Node
+
+    for idx, corridor in enumerate(CORRIDORS):
         nid   = corridor["node_id"]
         share = corridor["share"]
         origin = overlay_nodes.get(nid)
@@ -96,6 +104,7 @@ def inject_demand(W, overlay_nodes, total_trips):
             print(f"[runner] WARNING: {nid} ({corridor['label']}) not found — skipping")
             continue
 
+        corridor_nodes[idx] = origin
         corridor_trips = total_trips * share
 
         for t_start, t_end, time_share in ARRIVAL_PROFILE:
@@ -132,6 +141,7 @@ def inject_demand(W, overlay_nodes, total_trips):
             )
 
     print(f"[runner] Demand injected: {total_trips} trips across {len(CORRIDORS)} corridors")
+    return corridor_nodes
 
 
 def run_scenario(scenario: str):
@@ -148,8 +158,8 @@ def run_scenario(scenario: str):
         reaction_time = 1.5,
     )
 
-    # Inject demand
-    inject_demand(W, overlay_nodes, total_trips)
+    # Inject demand — returns corridor_idx→Node map for vehicle ID generation
+    corridor_nodes = inject_demand(W, overlay_nodes, total_trips)
 
     # Run
     print(f"[runner] Starting simulation...")
@@ -157,11 +167,18 @@ def run_scenario(scenario: str):
     print(f"[runner] Simulation complete.")
 
     # Convert to canonical JSON
-    sim_output = convert(W, scenario=scenario, start_time=SIM_START, end_time=SIM_END, timestep=TIMESTEP)
+    sim_output = convert(
+        W,
+        scenario       = scenario,
+        corridor_nodes = corridor_nodes,
+        start_time     = SIM_START,
+        end_time       = SIM_END,
+        timestep       = TIMESTEP,
+    )
 
     # Write output
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    out_path = OUTPUT_DIR / f"scenario-{scenario}.json"
+    out_path = OUTPUT_DIR / f"scenario-{scenario}-uxsim.json"
     sim_output.write_json(out_path)
 
     return out_path

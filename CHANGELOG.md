@@ -4,6 +4,43 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### Added — 2026-04-02
+- **UXSim Model Source:** UXSim pre-computed scenario outputs (L/M/H) are now generated and served. The source toggle now offers three options — Live / SUMO / UXSim — letting users compare the browser IDM engine, SUMO microscopic model, and UXSim mesoscopic model side by side.
+- **UXSim Python Pipeline:** `uxsim_runner.py`, `network_builder.py`, and `uxsim_to_json.py` now produce frontend-compatible JSON at 30-second snapshot intervals. Corridor-tagged vehicle IDs (`flow_N_seq`) enable full dashboard stats (spawned counts, congestion bars, avg delays) for UXSim output.
+
+### Changed — 2026-04-02
+- **Snapshot Interval — 30 Seconds:** Both SUMO and UXSim output snapshots reduced from 60 s to 30 s, capturing short dwell/yield events (45 s drop-off, speed-hump slowing) that were previously invisible between frames. SUMO scenario files regenerated accordingly.
+- **Scenario File Naming:** Scenario JSON files renamed from `scenario-{L/M/H}.json` to `scenario-{L/M/H}-sumo.json` and `scenario-{L/M/H}-uxsim.json` so both models can coexist without overwriting each other.
+- **Navigation Labels:** Header nav updated to Simulator / Models / Findings / Contact. "Findings" links to the model validation section (formerly "Engines"). Section IDs updated to match.
+- **"The Model Uses…" Paragraph:** Route description text moved from below the hero heading into the Briefing section, as a body paragraph after "slamming on the anchors."
+- **Vehicle Dot Colours:** Map vehicle colours updated to match the design token palette — dark forest (Main Rd), celadon (Homestead), warm amber (Children's Way), sage (Firgrove), amber egress — replacing the generic blue/cyan/indigo/emerald set.
+- **Watch My Road Card:** Background lightened from `#111D13` (near-black) to `#1E3520` (dark sage green) — differentiated from other cards without the harsh black treatment.
+
+### Fixed — 2026-04-02
+- **Dashboard Cards — Text Cut-Off:** Removed `overflow: hidden` and `justify-content: space-between` from corridor cards; replaced with gap-based layout so the Congestion Meter label and bar are no longer clipped.
+- **Player Controls Size:** Play button reduced from 3 rem to 2.25 rem; speed pill padding halved. Controls bar no longer dominates the map area.
+- **Hyperlinks — Blue Default:** Global `a { color: inherit }` rule added to prevent browser default blue on all links. `.editorial-link` now correctly renders in the celadon green (`--c-3a`).
+- **UXSim Corridor Tagging:** `W.VEHICLES` is an `OrderedDict` — was iterating keys (strings) instead of `.values()`. Vehicle DataFrame column is `name` not `vehicle`. Both bugs fixed; corridor tagging now achieves 100% across all scenarios.
+
+### Added — 2026-04-02 (UI)
+- **Draggable Controls & Legend:** Both the simulation controls bar and the map legend now have a `⠿` drag handle. Users can reposition them freely within the map area so they don't obscure roads of interest.
+
+### Fixed — 2026-04-02
+- **Site Rendering — Broken Layout:** CSS design tokens (`--canvas`, `--surface-low`, `--surface-high`, `--on-surface`, etc.) were never defined in a `:root` block, causing all backgrounds to render transparent and sections to overlap. Added full token set to `App.css`.
+- **Body Background & Root Scroll:** `index.css` still had the old dark HUD styles (`background: #0f172a`) and `#root { overflow: hidden }` which clipped the editorial sections. Updated to use the sage palette and allow page scrolling.
+- **Fonts Not Loaded:** Manrope and Work Sans were referenced in CSS but never imported. Added Google Fonts link to `index.html`.
+- **Header Double-Rendering:** `Header.jsx` used old class names (`header`, `header-row1`, `header-row2`, `desktop-only`) that no longer existed in the redesigned CSS, causing controls to render twice as unstyled text. Rewrote `Header.jsx` to match the `header-wrapper → nav-deck` pill structure.
+- **Sim Controls Missing:** Play/pause, scenario, speed, source, reset, and log buttons were passed to `SimMap` but never rendered. Added a floating `sim-controls` island inside the map bezel using the existing CSS classes.
+- **Corridor Border Colours:** CSS variables `--c-1a`, `--c-2a`, `--c-2b` were missing from `:root`, so corridor card left-borders had no colour. Added all three tokens.
+
+### Changed — 2026-04-02
+- **Access Barrier — No-Scroll Layout:** Tightened all padding and margins on the intro modal (padding `4rem` → `2rem`, gaps `3rem` → `1.5rem`, button `1.5rem 4rem` → `1rem 3rem`) so the "Initialize Simulator" button is always visible without scrolling.
+- **Simulator Copy — Route Explanation:** Added a description paragraph below the hero heading explaining the main-route and rat-run model logic, including Sweet Valley avoidance behaviour.
+- **Dashboard — Vertical Card Stack:** Replaced the cramped 2×2 corridor grid with a single-column vertical stack. Each card now has full sidebar width, giving the metrics row and congestion bar proper breathing room.
+- **Watch My Road — Black Box Style:** Applied the Style Guide "Black Box" treatment: dark `#111D13` background, celadon `#709775` road-name title, white-tinted stat pills, and increased internal padding. Consistent with the editorial design spec.
+- **Style Guide — Typography Baseline:** Added `h1/h2/h3 { font-family: 'Manrope' }` rule so all headings use the correct architectural typeface.
+- **Corridor Cards — Surface Hierarchy:** Card background updated from `surface-low` to `surface-high` to match the Style Guide nesting hierarchy (Canvas → Surface-Low region → Surface-High card).
+
 ### Fixed — 2026-04-01
 - **LOG / ROAD LOG Buttons Visible:** `.sim-controls` gap reduced from `1.5rem` to `0.5rem` and `speed-selector` padding-right removed so the controls bar no longer overflows and gets clipped by `bezel-inner`'s `overflow: hidden`. Both download buttons are now visible.
 - **Corridor Cards — 2×2 Grid:** Replaced single-column flex list with a `corridor-grid` (2 columns × 2 rows, `1fr 1fr`) so all four cards share width and height without excessive whitespace.

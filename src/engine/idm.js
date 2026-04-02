@@ -97,10 +97,11 @@ export function junctionHoldDuration(jid, junctionControl, simTime, lastReleaseT
     case '4way_stop':     return gap >= 4.0 ? 0 : 4.0 - gap;
     case 'priority_stop': return gap >= 5.0 ? 0 : 5.0 - gap;
     case 'stop':          return gap >= 4.0 ? 0 : 4.0 - gap;
-    case 'yield':         return gap >= 2.5 ? 0 : 2.5 - gap;
-    case 'critical':      return gap >= 4.5 ? 0 : 4.5 - gap; 
-
-    case 'speed_hump':    return gap >= 1.2 ? 0 : 1.2 - gap;
+    case 'yield':              return gap >= 2.5 ? 0 : 2.5 - gap;
+    case 'critical':           return gap >= 4.5 ? 0 : 4.5 - gap;
+    case 'roundabout_planned': return gap >= 2.5 ? 0 : 2.5 - gap; // TIA §14: mini-roundabout at Ruskin/Aristea
+    case 'egress':             return gap >= 1.2 ? 0 : 1.2 - gap; // TIA §11: raised intersection at Aristea exit
+    case 'speed_hump':         return gap >= 1.2 ? 0 : 1.2 - gap;
     default: return 0;
   }
 }

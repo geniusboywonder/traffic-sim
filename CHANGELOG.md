@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Player Control Micro-Label:** Added technical instructional text above simulation controls.
 - **Editorial Restoration:** Restored functional WCMD link and fixed route explanation paragraph justification and layout.
 
+### Fixed — 2026-04-02 (Junction Controls)
+- **J29 Ruskin/Aristea Roundabout — Now Modelled:** `roundabout_planned` control type previously fell through to `default: return 0` — every egress vehicle passed through with zero delay. Added yield-equivalent hold (2.5 s), matching TIA §14 which mandates this roundabout as the primary school-traffic mitigation measure.
+- **J20 Aristea Egress — Raised Intersection:** `egress` control type also fell to `default: return 0`. Added speed-hump-equivalent hold (1.2 s) per TIA §11 proposal for a raised intersection at the Aristea Road exit point.
+
 ### Fixed — 2026-04-02 (Speed Limits)
 - **Corridor Road Classes Corrected:** All four inbound corridors (1A, 2A, 2B, 3A) were assigned `arterial` or `collector` road class, giving vehicles 40–60 km/h desired speeds. Every modelled segment from the entry junction to the school gate is a TIA Class 5 Local Street (30 km/h). The arterial/collector approach roads (Main Rd, Ladies Mile, Firgrove Way) are off-map. All corridors corrected to `local` (30 km/h). This brings the live model into agreement with SUMO, which uses OSM speed limits. Congestion on Dreyersdal (1A) and Homestead (2A) will now appear more realistically — consistent with TIA's LOS F warning at Main Rd/Dreyersdal.
 - **Removed Redundant Rat-Run Speed Override:** The `idm.js` override forcing rat-run vehicles to `local` road class is now redundant (main routes are also `local`) and has been removed.

@@ -16,15 +16,15 @@ import {
 import { logEvent, logSchoolEvent, loggerClear, logRoadSnapshot, loggerDownload, loggerDownloadRoadStats } from '../engine/logger';
 import RoadWatcher from './RoadWatcher';
 
-// Vehicle colours and corridor palette
+// Vehicle colours — aligned with design token palette
 const COLOUR = {
-  dwell:    '#6b7280', // grey
-  delayed:  '#ef4444', // red
-  '1A':     { base: '#3b82f6', light: '#93c5fd', dark: '#1d4ed8' }, // Blue
-  '2A':     { base: '#06b6d4', light: '#a5b4fc', dark: '#0891b2' }, // Cyan
-  '2B':     { base: '#6366f1', light: '#c7d2fe', dark: '#4338ca' }, // Indigo
-  '3A':     { base: '#10b981', light: '#a7f3d0', dark: '#047857' }, // Emerald
-  'egress': { base: '#f97316', light: '#fdba74', dark: '#c2410c' }, // Orange (Visual Only)
+  dwell:    '#717977',
+  delayed:  '#A64D4D',
+  '1A':     { base: '#2D5438', light: '#4A7A56', dark: '#111D13' }, // dark forest  — Main Rd
+  '2A':     { base: '#709775', light: '#A1CCA5', dark: '#415D43' }, // celadon      — Homestead
+  '2B':     { base: '#C4864A', light: '#E0B88A', dark: '#8B5A28' }, // warm amber   — Children's Way
+  '3A':     { base: '#A1CCA5', light: '#C8E0C8', dark: '#709775' }, // sage         — Firgrove
+  'egress': { base: '#D4732E', light: '#F0A870', dark: '#A04E18' }, // amber        — egress
 };
 
 const ENTRY_JUNCTIONS = {
@@ -72,6 +72,28 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
   const containerRef = useRef(null), canvasRef = useRef(null), mapRef = useRef(null);
   const vehiclesRef = useRef([]), simTimeRef = useRef(0), spawnerStateRef = useRef(createSpawnerState());
   const rafRef = useRef(null), loopRef = useRef(null), lastUpdateRef = useRef(0);
+
+  // Draggable controls and legend
+  const [controlsOffset, setControlsOffset] = useState({ x: 0, y: 0 });
+  const [legendOffset, setLegendOffset]     = useState({ x: 0, y: 0 });
+  const controlsDragRef = useRef(null);
+  const legendDragRef   = useRef(null);
+
+  const startDrag = useCallback((dragRef, currentOffset, setOffset, e) => {
+    if (e.button !== 0) return;
+    dragRef.current = { startX: e.clientX, startY: e.clientY, origX: currentOffset.x, origY: currentOffset.y };
+    const onMove = (e) => {
+      if (!dragRef.current) return;
+      setOffset({
+        x: dragRef.current.origX + (e.clientX - dragRef.current.startX),
+        y: dragRef.current.origY + (e.clientY - dragRef.current.startY),
+      });
+    };
+    const onUp = () => { dragRef.current = null; window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+    e.preventDefault();
+  }, []);
   const junctionStateRef = useRef(new Map()), junctionMarkersRef = useRef({});
   const corridorTotalsRef = useRef({ '1A': 0, '2A': 0, '2B': 0, '3A': 0 });
   const corridorExitsRef = useRef({ '1A': 0, '2A': 0, '2B': 0, '3A': 0 });
@@ -510,20 +532,29 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
       <div ref={containerRef} style={{ width: '100%', height: '100%' }} />
       <canvas ref={canvasRef} style={{ position: 'absolute', top: 0, left: 0, pointerEvents: 'none', zIndex: 450 }} />
 
-      {/* Legend */}
-      <div style={{ position: 'absolute', bottom: 110, left: 8, zIndex: 500, background: 'var(--surface-low)', borderRadius: 8, padding: '6px 10px', fontSize: 10, color: 'var(--on-surface)', display: 'flex', flexDirection: 'column', gap: 2, opacity: 0.9 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, paddingBottom: 4, marginBottom: 4, borderBottom: '1px solid var(--surface-high)' }}>
-          <input type="checkbox" id="route-toggle" checked={showRoutes} onChange={onToggleRoutes} style={{ cursor: 'pointer', width: 12, height: 12 }} />
-          <label htmlFor="route-toggle" style={{ cursor: 'pointer', fontWeight: 600 }}>Show Routes</label>
+      {/* Legend — draggable */}
+      <div style={{ position: 'absolute', bottom: 90, left: 8, zIndex: 500, background: 'var(--surface-low)', borderRadius: 10, padding: '6px 10px', fontSize: 10, color: 'var(--on-surface)', display: 'flex', flexDirection: 'column', gap: 3, opacity: 0.95, boxShadow: '0 4px 12px rgba(0,0,0,0.1)', transform: `translate(${legendOffset.x}px,${legendOffset.y}px)`, userSelect: 'none' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, paddingBottom: 4, marginBottom: 2, borderBottom: '1px solid var(--surface-high)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <input type="checkbox" id="route-toggle" checked={showRoutes} onChange={onToggleRoutes} style={{ cursor: 'pointer', width: 12, height: 12 }} />
+            <label htmlFor="route-toggle" style={{ cursor: 'pointer', fontWeight: 700 }}>Show Routes</label>
+          </div>
+          <span onMouseDown={(e) => startDrag(legendDragRef, legendOffset, setLegendOffset, e)} style={{ cursor: 'grab', fontSize: 12, color: 'var(--muted-text)', lineHeight: 1, padding: '0 2px' }} title="Drag to move">⠿</span>
         </div>
         {[[COLOUR['3A'].base, 'Firgrove Way'], [COLOUR['2A'].base, 'Homestead Ave'], [COLOUR['2B'].base, "Children's Way"], [COLOUR['1A'].base, 'Main Rd'], [COLOUR.delayed, 'Delayed'], [COLOUR.dwell, 'Parked']].map(([c, l]) => (
           <div key={l} style={{ display: 'flex', alignItems: 'center', gap: 6 }}><svg width="8" height="8"><circle cx="4" cy="4" r="3" fill={c} /></svg>{l}</div>
         ))}
       </div>
 
-      {/* Sim Controls Island */}
-      <div className="sim-controls-wrapper">
+      {/* Sim Controls Island — draggable */}
+      <div className="sim-controls-wrapper" style={{ transform: `translate(${controlsOffset.x}px, ${controlsOffset.y}px)` }}>
         <div className="sim-controls">
+          {/* Drag handle */}
+          <span onMouseDown={(e) => startDrag(controlsDragRef, controlsOffset, setControlsOffset, e)}
+            style={{ cursor: 'grab', fontSize: 14, color: 'var(--muted-text)', padding: '0 4px', lineHeight: 1, flexShrink: 0 }} title="Drag to reposition">⠿</span>
+
+          <div style={{ width: 1, height: '1.25rem', background: 'var(--surface-high)', flexShrink: 0 }} />
+
           {/* Scenario */}
           <div className="speed-selector">
             {['L', 'M', 'H'].map(s => (
@@ -534,7 +565,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
             ))}
           </div>
 
-          <div style={{ width: 1, height: '1.5rem', background: 'var(--surface-high)', flexShrink: 0 }} />
+          <div style={{ width: 1, height: '1.25rem', background: 'var(--surface-high)', flexShrink: 0 }} />
 
           {/* Play / Pause */}
           <button className="play-pause-btn" onClick={onPlayPause} title={playing ? 'Pause' : 'Play'}>
@@ -548,7 +579,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
             ))}
           </div>
 
-          <div style={{ width: 1, height: '1.5rem', background: 'var(--surface-high)', flexShrink: 0 }} />
+          <div style={{ width: 1, height: '1.25rem', background: 'var(--surface-high)', flexShrink: 0 }} />
 
           {/* Source */}
           <div className="speed-selector">
@@ -564,7 +595,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
             ))}
           </div>
 
-          <div style={{ width: 1, height: '1.5rem', background: 'var(--surface-high)', flexShrink: 0 }} />
+          <div style={{ width: 1, height: '1.25rem', background: 'var(--surface-high)', flexShrink: 0 }} />
 
           {/* Reset + Logs */}
           <button className="speed-pill" onClick={onReset} title="Reset">↺</button>

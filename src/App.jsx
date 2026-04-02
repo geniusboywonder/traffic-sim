@@ -70,6 +70,9 @@ const BentoBriefing = () => (
           <p className="narrative-text-medium">
             It models every car, every slow-down at a speed hump, and every frustrated parent trying to squeeze in a quick drop-off. The heart of the simulation is the Intelligent Driver Model — that decides how close cars follow each other, how fast they accelerate, and when they brake gently instead of slamming on the anchors.
           </p>
+          <p className="narrative-text-body">
+            The model uses a "main route" for each entry / exit corridor from Firgrove Way, Homestead Rd, Children's Way and Main Rd. This is the route most cars will follow — until traffic starts to build up. Then cars will find and follow multiple rat-runs to the school. The model attempts to avoid the normal Sweet Valley routes at the top of Dreyersdal Rd and exiting via Homestead.
+          </p>
         </div>
       </div>
 
@@ -119,7 +122,7 @@ const BentoBriefing = () => (
 );
 
 const ModelsSection = () => (
-  <section className="models-section" id="models">
+  <section className="models-section" id="findings">
     <div className="models-grid">
       <div className="models-header">
         <span className="models-subtitle">Archive: Chapter 01</span>
@@ -283,7 +286,6 @@ export default function App() {
         <header className="hero-header">
           <div className="hero-copy">
             <h2>Pick a scenario and watch the traffic wiggle!</h2>
-            <p className="hero-description">The model uses a "main route" for each entry / exit corridor from Firgrove Way, Homestead Rd, Children's Way and Main Rd. This is the route most cars will follow — until traffic starts to build up. Then cars will find and follow multiple rat-runs to the school. The model attempts to avoid the normal Sweet Valley routes at the top of Dreyersdal Rd and exiting via Homestead.</p>
           </div>
           <div className="hero-totals-card">
             <div className="htc-stat">

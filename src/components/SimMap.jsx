@@ -107,12 +107,14 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
   const lastRoadLogRef   = useRef(0);
 
   const scenarioRef = useRef(scenario), speedRef = useRef(speed), showRoutesRef = useRef(showRoutes), sourceRef = useRef(source), selectedRoadRef = useRef(selectedRoad);
+  const selectedCorridorsRef = useRef(selectedCorridors);
   useEffect(() => { scenarioRef.current = scenario; }, [scenario]);
   useEffect(() => { speedRef.current = speed; }, [speed]);
   useEffect(() => { showRoutesRef.current = showRoutes; }, [showRoutes]);
   useEffect(() => { sourceRef.current = source; }, [source]);
   useEffect(() => { onRoadSelectRef.current = onRoadSelect; }, [onRoadSelect]);
   useEffect(() => { selectedRoadRef.current = selectedRoad; }, [selectedRoad]);
+  useEffect(() => { selectedCorridorsRef.current = selectedCorridors; }, [selectedCorridors]);
 
   // Define logic functions at the TOP to avoid initialization ReferenceErrors
   const computeStats = useCallback((vehicles, totals, exits, inDelays, outDelays, congScores) => {
@@ -277,7 +279,10 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
           else if (v.state === 'outbound') colour = v.speed < 2 ? COLOUR.delayed : c.light;
           else if (v.speed < 2)                          colour = COLOUR.delayed;
           else                                           colour = c.dark;
+          const isSelected = selectedCorridorsRef.current.has(v.corridorId);
+          ctx.globalAlpha = isSelected ? 1.0 : 0.2;
           ctx.beginPath(); ctx.arc(pt.x, pt.y, vr, 0, Math.PI * 2); ctx.fillStyle = colour; ctx.fill();
+          ctx.globalAlpha = 1.0;
         }
       }
       // Pass relative time so the clock (which adds 6:30 base) shows correctly

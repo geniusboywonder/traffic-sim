@@ -182,9 +182,6 @@ export function stepAllVehicles(vehicles, dt, routeConfigs, simTime) {
       } else if (v.state === 'outbound' && v.lastJunctionIdx === 1) {
         // Outbound vehicles leaving the school gate stay cautious for the first segment
         roadClass = 'ruskin';
-      } else if (v.state === 'inbound' && routeConfigs[v.routeId]?.type === 'ratrun') {
-        // Rat-runs are local roads
-        roadClass = 'local';
       }
 
       const p = (v.schoolEndPos !== undefined && v.pos < v.schoolEndPos) ? IDM_PARAMS.schoolyard : (IDM_PARAMS[roadClass] ?? IDM_PARAMS.local);

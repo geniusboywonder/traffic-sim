@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### Fixed — 2026-04-02 (Speed Limits)
+- **Corridor Road Classes Corrected:** All four inbound corridors (1A, 2A, 2B, 3A) were assigned `arterial` or `collector` road class, giving vehicles 40–60 km/h desired speeds. Every modelled segment from the entry junction to the school gate is a TIA Class 5 Local Street (30 km/h). The arterial/collector approach roads (Main Rd, Ladies Mile, Firgrove Way) are off-map. All corridors corrected to `local` (30 km/h). This brings the live model into agreement with SUMO, which uses OSM speed limits. Congestion on Dreyersdal (1A) and Homestead (2A) will now appear more realistically — consistent with TIA's LOS F warning at Main Rd/Dreyersdal.
+- **Removed Redundant Rat-Run Speed Override:** The `idm.js` override forcing rat-run vehicles to `local` road class is now redundant (main routes are also `local`) and has been removed.
+
 ### Fixed — 2026-04-02 (TIA Compliance)
 - **SUMO Corridor Shares Corrected:** SUMO `CORRIDORS` shares were significantly wrong vs TIA Section 13. Dreyersdal North (1A) was over-allocated by 53% (24% → 15.7%); Homestead Avenue (2A) was under-allocated by 33% (20% → 30%). Children's Way (2B) and Dreyersdal South (3A) also adjusted to exact TIA-normalized values. Full audit recorded in `docs/TIA_Parameter_Audit.md`.
 - **SUMO L Scenario Trip Count:** Aligned SUMO L scenario from 420 → 500 trips to match the live model.

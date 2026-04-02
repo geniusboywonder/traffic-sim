@@ -16,7 +16,10 @@ const RAW = { '1A': 11, '2A': 21, '2B': 25, '3A': 13 }; // TIA Section 13: Dreye
 const SUM  = Object.values(RAW).reduce((a, b) => a + b, 0);
 export const CORRIDOR_SPLITS = Object.fromEntries(Object.entries(RAW).map(([k, v]) => [k, v / SUM]));
 
-export const CORRIDOR_ROAD_CLASS = { '1A': 'arterial', '2A': 'collector', '2B': 'collector', '3A': 'collector' };
+// All modelled segments are TIA Class 5 Local Streets (30 km/h). The arterial/collector
+// approach roads (Main Rd, Ladies Mile, Firgrove) are off-map — the route starts after
+// the turn-off at the entry junction.
+export const CORRIDOR_ROAD_CLASS = { '1A': 'local', '2A': 'local', '2B': 'local', '3A': 'local' };
 
 // TIA trapezoidal profile: 35% of demand falls 07:30–08:00 → peak centred at 07:45 (simTime=4500).
 // Sigma controls spread: H is tightest (fast ramp), L is widest (spread across full 2 hrs).

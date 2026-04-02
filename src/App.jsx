@@ -5,17 +5,6 @@ import StatsPanel from './components/StatsPanel';
 import { PlaybackSource } from './engine/playback';
 import './App.css';
 
-function formatSimTime(simTime) {
-  const totalSec = Math.floor(simTime);
-  const baseMin  = 6 * 60 + 30; // 06:30 AM
-  const totalMin = baseMin + Math.floor(totalSec / 60);
-  const hours24  = Math.floor(totalMin / 60) % 24;
-  const mins     = totalMin % 60;
-  const h12      = hours24 % 12 || 12;
-  const ampm     = hours24 < 12 ? 'AM' : 'PM';
-  return `${h12}:${String(mins).padStart(2, '0')} ${ampm}`;
-}
-
 const INITIAL_STATS = {
   corridors: {
     '3A': { label: 'Firgrove Way',     current: 0, spawned: 0, exited: 0, avgInDelay: 0, avgOutDelay: 0, congestion: 0, active: 0, slowing: 0, stopped: 0 },
@@ -357,7 +346,7 @@ export default function App() {
                 onToggleRoutes={handleToggleRoutes}
                 selectedCorridors={selectedCorridors}
                 source={source}
-                playbackSource={playbackRef.current}
+                playbackSource={playbackRef}
                 onSimUpdate={handleSimUpdate}
                 onStatsUpdate={handleStatsUpdate}
                 onRoadStatsUpdate={handleRoadStatsUpdate}

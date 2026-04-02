@@ -1,17 +1,12 @@
+SPEED HUMPS IN DANTE, VINEYARD & LEYDEN WILL SLOW THIGS EVEN MORE.
 
-Lets combine the overall summary and the "watch my road" feature. When no road is selected, then show the overall summary.
-when a road is selected then show that road. The metrics and congestion meter should update depending the on selection.
-We just need a "click any road to zoom in
+
+Lets combine the overall summary and the "watch my road" feature. When no road is selected, then show the overall summary in the "watch my road" card.
+when a road is selected then show that road. The metrics and congestion meter should update depending the on selection made.
+When no road is slected, bold text explaining "click any road to focus on it" is needed.
 
 when "deselecting" an Exit/Entry corridors, on deselect, collapse the card so only the title is showing, and keep the same "faded" look.
 apply the same "fading" to all cars that use that entrance or exit on the maps - so they dont distract from where people want to focus.
-
-lets simplify the cards and go back to 2x2, with the "watch my road" card spanning both.
-Drop the "Active" title and number. Structure the cards as follows:
-Row 1: Dreyersdal Rd:      Traffic In: XX / Traffic Out: XX
-Row 2: Avg Travel time:    In: MM:SS / Out: MM:SS
-Row 3: Road Congestion:    Congestion meter ---+++=====+++ (fills rows)
-Row 4:                      |  0% active | 0% slowing | 0% stopped
 
 if it will help you can check out https://github.com/yousifamanuel/terraink.git
 
@@ -290,3 +285,11 @@ make the paragraph "The model uses a "main route . . ." in the same style and fl
 the url link to the "The Western Cape Mobility Department" has been lost
 
 remove "Archive: Chapter 01"
+
+lets simplify and standardise all the cards, with the "watch my road" card spanning both the 2x2 grid.
+Drop the "Active" title and number. Structure the cards as follows:
+Row 1: Dreyersdal Rd:      Traffic In: XX / Traffic Out: XX
+Row 2: Avg Travel time:    In: MM:SS / Out: MM:SS
+Row 3: Road Congestion:    Congestion meter ---+++=====+++ (fills rows)
+Row 4:                      |  0% active | 0% slowing | 0% stopped
+Be sure that the growing numbers don't cause the text to wrap to the next line.

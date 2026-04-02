@@ -5,7 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added — 2026-04-02 (UI Overhaul & Style Guide v3.0)
-- **Header & Navigation Refactor:** Navigation links are now left-aligned next to the logo. Simulation summary (Time, Active, Total In/Out) integrated into a right-aligned pill within the navigation bar.
+- **Integrated System Intelligence:** Combined the overall simulation summary into the "Watch My Road" card when no specific road is selected, providing network-wide context (Total In/Out, Avg Travel Times, Global Stress) in the primary analyzer card.
+- **UX Guidance:** Added bold "Click any road to focus on it" instruction to the summary view to improve discoverability.
+- **Header & Navigation Refactor:** Navigation links are now left-aligned next to the logo. Simulation summary pill (Time, Active, Total In/Out) is now horizontally aligned and pinned to the far right of the navigation bar.
 - **Style Guide Map Markers:** Implemented symbolic vehicle shapes: Diamonds (◆/◇) for rat-runs, Hollow Circles (○) for egress/parked main routes, and Solid Circles (●) for inbound main routes.
 - **Vehicle Fading Logic:** Vehicles belonging to deselected corridors now fade to 20% opacity, improving visual focus on active routes.
 - **Sidebar 2x2 Grid:** Corridor cards reverted to a compact 2x2 layout to maximize vertical space.

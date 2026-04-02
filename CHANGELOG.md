@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### Fixed — 2026-04-02 (TIA Compliance)
+- **SUMO Corridor Shares Corrected:** SUMO `CORRIDORS` shares were significantly wrong vs TIA Section 13. Dreyersdal North (1A) was over-allocated by 53% (24% → 15.7%); Homestead Avenue (2A) was under-allocated by 33% (20% → 30%). Children's Way (2B) and Dreyersdal South (3A) also adjusted to exact TIA-normalized values. Full audit recorded in `docs/TIA_Parameter_Audit.md`.
+- **SUMO L Scenario Trip Count:** Aligned SUMO L scenario from 420 → 500 trips to match the live model.
+- **Live Model 3A Corridor Share:** Corrected `RAW['3A']` in `spawner.js` from 12 → 13, matching TIA Section 13 (Dreyersdal South = 13% of total trips).
+- **Peak Timing Corrected:** IDM Gaussian peak centre corrected from simTime 3600 (07:30) → 4500 (07:45), matching TIA's trapezoidal demand profile (35% of trips arrive 07:30–08:00, centred at 07:45).
+- **Simulation End Time Extended:** Both SUMO and UXSim runners extended from 08:30 (SIM_END 30600) to 09:00 (32400) to allow post-peak traffic clearance, matching TIA analysis period.
+
+### Added — 2026-04-02 (Findings Section)
+- **Findings Section:** Added a dedicated `#findings` section to the website summarising model validation outcomes across IDM, SUMO, and UXSim — clearance warning, peak timing confirmation, cross-model agreement, rat-run emergence, and UXSim flow limitations.
+- **UXSim Validation in compare_models.py:** `parse_uxsim()` and updated `print_report()` / `save_csv()` added to include UXSim alongside IDM and SUMO in the 3-column comparison report.
+
 ### Added — 2026-04-02
 - **UXSim Model Source:** UXSim pre-computed scenario outputs (L/M/H) are now generated and served. The source toggle now offers three options — Live / SUMO / UXSim — letting users compare the browser IDM engine, SUMO microscopic model, and UXSim mesoscopic model side by side.
 - **UXSim Python Pipeline:** `uxsim_runner.py`, `network_builder.py`, and `uxsim_to_json.py` now produce frontend-compatible JSON at 30-second snapshot intervals. Corridor-tagged vehicle IDs (`flow_N_seq`) enable full dashboard stats (spawned counts, congestion bars, avg delays) for UXSim output.

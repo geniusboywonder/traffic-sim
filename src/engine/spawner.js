@@ -12,7 +12,7 @@ export const SCENARIO_CONFIG = {
 
 export const DWELL_S = 45; 
 
-const RAW = { '1A': 11, '2A': 21, '2B': 25, '3A': 12 };
+const RAW = { '1A': 11, '2A': 21, '2B': 25, '3A': 13 }; // TIA Section 13: Dreyersdal S = 13%
 const SUM  = Object.values(RAW).reduce((a, b) => a + b, 0);
 export const CORRIDOR_SPLITS = Object.fromEntries(Object.entries(RAW).map(([k, v]) => [k, v / SUM]));
 

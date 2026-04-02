@@ -43,13 +43,15 @@ SIM_START = 23400   # 06:30 seconds since midnight
 SIM_END   = 32400   # 09:00 — extended to allow traffic to clear post-peak
 TIMESTEP  = 30      # output frame interval
 
-SCENARIO_DEMAND = {"L": 420, "M": 650, "H": 840}
+SCENARIO_DEMAND = {"L": 500, "M": 650, "H": 840}
 
+# Corridor shares from TIA Section 13 (external 70% normalized to 100%):
+#   Dreyersdal N=11%, Homestead=21%, Children's Way=25%, Dreyersdal S=13% → sum=70
 CORRIDORS = [
-    {"node_id": "N1", "share": 0.24, "label": "1A"},
-    {"node_id": "N4", "share": 0.20, "label": "2A"},
-    {"node_id": "N3", "share": 0.35, "label": "2B"},
-    {"node_id": "N2", "share": 0.21, "label": "3A"},
+    {"node_id": "N1", "share": 0.157, "label": "1A"},  # Dreyersdal N  11/70
+    {"node_id": "N4", "share": 0.300, "label": "2A"},  # Homestead     21/70
+    {"node_id": "N3", "share": 0.357, "label": "2B"},  # Children's Way 25/70
+    {"node_id": "N2", "share": 0.186, "label": "3A"},  # Dreyersdal S  13/70
 ]
 
 ARRIVAL_PROFILE = [

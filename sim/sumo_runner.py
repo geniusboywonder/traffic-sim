@@ -41,7 +41,7 @@ from converters.sumo_to_json import convert
 
 SIM_START = 23400   # 06:30 seconds since midnight
 SIM_END   = 30600   # 08:30
-TIMESTEP  = 60      # output frame interval
+TIMESTEP  = 30      # output frame interval
 
 SCENARIO_DEMAND = {"L": 420, "M": 650, "H": 840}
 

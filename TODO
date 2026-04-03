@@ -1,14 +1,21 @@
+CONTENT CHANGE:
+Avg Time Out will be understated due to no modelling of traffic on Firgrove, Ladies Mile and Main Roads
 SPEED HUMPS IN DANTE, VINEYARD & LEYDEN WILL SLOW THIGS EVEN MORE.
 
+The expanded hover text is rendering off screen
 
-Lets combine the overall summary and the "watch my road" feature. When no road is selected, then show the overall summary in the "watch my road" card.
-when a road is selected then show that road. The metrics and congestion meter should update depending the on selection made.
-When no road is slected, bold text explaining "click any road to focus on it" is needed.
+the bottom of each corridor card has lots of white space. perhaps improve the padding between each line - and also shorten each card to make it more balanced
 
-when "deselecting" an Exit/Entry corridors, on deselect, collapse the card so only the title is showing, and keep the same "faded" look.
-apply the same "fading" to all cars that use that entrance or exit on the maps - so they dont distract from where people want to focus.
+add the Overall Avg Time In/ Out to the right aligned numbers in the nav bar
+the reset button or moving to a different scenario does not reset to 6:30 and let the model run.
+no avg time shows when selecting a road to watch on Live or SUMO models
 
-if it will help you can check out https://github.com/yousifamanuel/terraink.git
+check the colours of the routes and rat-runs are consistent for each route.
+on the SUMO model check the colours of the routes and rat-runs. I am seeing some cars from Main Rd up past Homestead. And Dreyersdal Rd corridor showing "main rd" coloured cars
+
+check the start time of the model - no cars seems to go through until 6:40 so the first few minutes are empty
+why arent more cars using the dereyersdal farm / tussendal rd for entry?
+check the route and rat-route for Homestead.
 
 Design Audit & Transformation Report
 
@@ -90,17 +97,7 @@ Design Audit & Transformation Report
        * Tightened Tracking: Heading tracking reduced to -0.05em for a more premium, modern look.
        * Data Density: Combined Average In/Out stats into a single line (In / Out) to save space and improve comparison speed.
 
-
-
-TODO
-- update the requirement/spec/plan with the changes we made.
-
-?) would it be possible and realistic to add in the delays due to traffic from Sweet Valley school without the data? what would those look like?
 ?) in mobile view the map should start zoomed into the highlighted square and not show any of the darkened map
-
-model changes:
-2) let the models run until all cars have completed the run (currently H still has cars active at 9AM)
-4) cars are stillbrekaing for the corner in Vineyard after turning from CHristopher. I want any contraints removed from that corner.
 
 DONE
 Lets update the plan and continue with the traffic simulator from @Tokai_HS_Traffic_Simulator_Plan.md and add to the existing pages.
@@ -286,6 +283,10 @@ the url link to the "The Western Cape Mobility Department" has been lost
 
 remove "Archive: Chapter 01"
 
+Lets combine the overall summary and the "watch my road" feature. When no road is selected, then show the overall summary in the "watch my road" card.
+when a road is selected then show that road. The metrics and congestion meter should update depending the on selection made.
+When no road is slected, bold text explaining "click any road to focus on it" is needed.
+
 lets simplify and standardise all the cards, with the "watch my road" card spanning both the 2x2 grid.
 Drop the "Active" title and number. Structure the cards as follows:
 Row 1: Dreyersdal Rd:      Traffic In: XX / Traffic Out: XX
@@ -293,3 +294,36 @@ Row 2: Avg Travel time:    In: MM:SS / Out: MM:SS
 Row 3: Road Congestion:    Congestion meter ---+++=====+++ (fills rows)
 Row 4:                      |  0% active | 0% slowing | 0% stopped
 Be sure that the growing numbers don't cause the text to wrap to the next line.
+
+when "deselecting" an Exit/Entry corridors, keep the same "faded" look and now apply the same "fading" to all cars that use that entrance or exit on the maps - so they dont distract from where people want to focus.
+
+the structure of the cards is now right.
+except the "Overal Summary" should show (expanded) from the start (and above the heading should be the "click to focus on any street" message.
+however the cards needs to fill the vertical space on the right - to the same boundaries as the map - so as to appear balanced.
+then, the relative sizing of the information in the each cards is incorrect and doenst have the right weighting.
+this screenshot was better for the weightings - the numbers were bigger and bolder, and the headings less so.
+keep the 4 line structure the same but the numbers need to pop more.
+
+1) implement the hologram cards and keep the xisting inforamtion structure
+2) ensure all cards fit within the height of the Map
+3) keep the 2x2 grid
+
+lets tweak the watch my road card.
+1) change the txt starting "Click any road . . " to "Select any road on the map to focus on it"
+2) when a road is selected, change the text to " Click here to see Overall Traffic Summary"
+3) change text "Avg In" to "Avg Time In" and "Avg Out" to "Avg Time Out"
+4) swap the pills so that the first row shows  "Total In" and "Avg Time In" and the second row shows "Total Out" and "Avg Time Out"
+5) the congestion graph should be the same as the ones for the corridor - only for the entire map.
+6) the congestion graph text must change from "X active vehicles % congestion" to "% active | % slowing | % stopped"
+7) on the Overall Summary be sure that that "Select any road on the map to focus on it" and "Click here to see Overall Traffic Summary" are on the same postion
+on the card (above the heading).
+8) This card is too dark. YOu need to find a shad that matches the muted rest of the pallete. Is there an existing colour defined  in the @design/STYLE_GUIDE.md that we could use? If not suggest one.
+9) change the "Hot" badge that shows to "Stopped"
+
+lets tweak the Corridor Cards:
+1) Each card should use the colour palette specific to its route/corridor - as implemented on the map elements. update the colours on each card to better represent this. be conscious of readability and enasure all text is clear.
+2) Change text "In" and "Out" to "Traffic In" and "Traffic Out"
+3) change text "Avg In" to "Avg Time In" and "Avg Out" to "Avg Time Out"
+4) swap the pills so that the first row shows  "Traffic In" and "Avg Time In" and the second row shows "Traffic Out" and "Avg Time Out"
+
+if it will help you can check out https://github.com/yousifamanuel/terraink.git

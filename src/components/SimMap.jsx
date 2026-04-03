@@ -159,7 +159,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
       const pt = map.latLngToContainerPoint(L.latLng(latlng[0], latlng[1]));
       
       const c = COLOUR[v.corridorId] || COLOUR['1A'];
-      const isSelected = selectedCorridors.has(v.corridorId);
+      const isSelected = selectedCorridorsRef.current.has(v.corridorId);
       const alpha = isSelected ? 1.0 : 0.2;
       
       let col;
@@ -207,7 +207,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
       internal.geometry.coordinates.forEach((cl, i) => { const pt = map.latLngToContainerPoint(L.latLng(cl[1], cl[0])); if (i === 0) ctx.moveTo(pt.x, pt.y); else ctx.lineTo(pt.x, pt.y); });
       ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha = 1;
     }
-  }, [selectedCorridors]);
+  }, []);
 
   const syncCanvas = useCallback(() => {
     if (!containerRef.current || !canvasRef.current) return;
@@ -494,7 +494,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
   useEffect(() => { loopRef.current = loop; }, [loop]);
   useEffect(() => { if (playing) rafRef.current = requestAnimationFrame(loopRef.current); else if (rafRef.current) cancelAnimationFrame(rafRef.current); return () => rafRef.current && cancelAnimationFrame(rafRef.current); }, [playing, loop]);
   useEffect(() => resetSim(), [scenario, resetSim]);
-  useEffect(() => drawFrame(), [showRoutes, drawFrame]);
+  useEffect(() => drawFrame(), [showRoutes, selectedCorridors, drawFrame]);
 
   // Supply road geometry to the playback engine so it can interpolate vehicle positions.
   // The scenario JSON uses snake_case road_ids; the GeoJSON uses display names — we normalise

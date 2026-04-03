@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed — 2026-04-03 (SUMO / UXSim Playback)
+- **Corridor Auto-Zoom:** Fixed a bug where selecting/deselecting corridor cards failed to zoom the map. The issue was caused by the map re-initializing on every corridor toggle due to `drawFrame` and `syncCanvas` being used as dependencies in the map initialization `useEffect` while they themselves depended on `selectedCorridors`. Fixed by making these functions stable via `selectedCorridorsRef` and stable `useCallback` definitions, ensuring the map stays active and `fitBounds` can execute on the existing instance.
 - **SUMO & UXSim Playback Loop:** `playbackSource` is passed as a React ref (`{ current: PlaybackSource }`) but the `loop` and `updateRoadStats` callbacks in `SimMap.jsx` used it as a direct instance, causing `TypeError: pb.isLoaded is not a function` on every animation frame — silently killing the playback loop. Fixed by resolving the ref with `playbackSource?.current ?? playbackSource`, consistent with the road-coords effect already using `playbackSource?.current || playbackSource`.
 
 ### Changed — 2026-04-03 (Style Guide v3.1 — Card Palette)

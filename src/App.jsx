@@ -230,7 +230,24 @@ const FindingsSection = () => (
           <Monitor size={40} color="var(--c-3a)" />
           The Damage Report
         </h2>
-        <p className="findings-intro">Here's what came out of the black box. UXSim analysed all three scenarios compared against the Lab simulation.</p>
+        <div className="findings-stats-row">
+          <div className="findings-stat">
+            <span className="findings-stat-num">~7 min</span>
+            <span className="findings-stat-label">free-flow trip — TIA baseline</span>
+          </div>
+          <div className="findings-stat findings-stat--alert">
+            <span className="findings-stat-num">~32 min</span>
+            <span className="findings-stat-label">Lab model mean trip — High scenario</span>
+          </div>
+          <div className="findings-stat findings-stat--alert">
+            <span className="findings-stat-num">108</span>
+            <span className="findings-stat-label">vehicles still active after 08:30 — every scenario</span>
+          </div>
+          <div className="findings-stat findings-stat--alert">
+            <span className="findings-stat-num">3</span>
+            <span className="findings-stat-label">independent models — same conclusion</span>
+          </div>
+        </div>
       </div>
 
       <div className="findings-columns">
@@ -243,8 +260,8 @@ const FindingsSection = () => (
           </div>
           <h3 className="findings-col-heading">Total System Failure</h3>
           <ul className="findings-bullets">
-            <li><strong>Traffic does not clear by 08:30:</strong> TIA assumes all 840 vehicles complete their trips by 08:30 AM. Dynamic modelling shows significant residual congestion well past this window.</li>
-            <li><strong>The TIA's assumption is unsupported:</strong> In the High scenario, the Lab model records ~480 vehicles still active at 08:29.</li>
+            <li><strong>Traffic does not clear by 08:30.</strong> The TIA assumes the school run is done by 08:30 AM. The Lab model records <span className="stat-pill" data-source="Lab model — all scenarios">~108 vehicles</span> still active at 08:29 in every scenario — including Low demand. Our Live engine shows <span className="stat-pill" data-source="Live engine, High scenario, 23% of 840 trips">192 vehicles</span> unfinished at sim end in the High scenario.</li>
+            <li><strong>Delays aren't measured in seconds.</strong> A school-run trip takes <span className="stat-pill" data-source="TIA free-flow baseline, ~3km route">~7 min</span> in free flow. Under High demand the Lab model records a mean trip of <span className="stat-pill" data-source="Lab model mean trip duration, High scenario">~32 min</span> with an average <span className="stat-pill" data-source="Lab model avg waiting time (fully stopped), High scenario">16 min spent completely stopped</span>. <span className="stat-pill" data-source="P95 trip time: Live 65 min, Lab 69 min — High scenario">1 in 20 drivers</span> takes over an hour.</li>
           </ul>
         </div>
 
@@ -256,8 +273,8 @@ const FindingsSection = () => (
           </div>
           <h3 className="findings-col-heading">Significant Damage</h3>
           <ul className="findings-bullets">
-            <li><strong>Peak hits at 07:45:</strong> Not the 08:00 start time assumed. Peak density hits around 07:45 AM, increasing back-pressure earlier.</li>
-            <li><strong>Rat-runs activate:</strong> Over 30% of inbound vehicles divert via secondary residential streets in the High scenario.</li>
+            <li><strong>The school gate is the single point of failure.</strong> Every model independently flags the school approach as the most congested point in the network. UXSim's average delay at the school entrance grows from <span className="stat-pill" data-source="UXSim avg_delay_in, school_internal_road, Low scenario">33s</span> to <span className="stat-pill" data-source="UXSim avg_delay_in, school_internal_road, High scenario">71s</span> between Low and High. 28 speed humps and a single-entry gate mean one stalled vehicle stalls the entire queue.</li>
+            <li><strong>Rat-run pressure is structural.</strong> Dreyersdal Road is the single most loaded road in Medium and High scenarios (Lab model). UXSim records average delays of <span className="stat-pill" data-source="UXSim avg delay, Ruskin Road across scenarios">74–106s on Ruskin Road</span> and up to <span className="stat-pill" data-source="UXSim avg delay, Vineyard Road, High scenario">86s on Vineyard Road</span>. When the main routes fill, the rat-runs fill too.</li>
           </ul>
         </div>
 
@@ -267,18 +284,13 @@ const FindingsSection = () => (
             <span className="findings-badge findings-badge--sideswipe">Side-swipe</span>
             <CheckCircle size={20} color="var(--c-3a)" />
           </div>
-          <h3 className="findings-col-heading">Minor Observations</h3>
+          <h3 className="findings-col-heading">Telling Details</h3>
           <ul className="findings-bullets">
-            <li><strong>Model Agreement:</strong> UXSim and the Lab model identify the same roads as highest-stress: Children's Way and Homestead Ave.</li>
-            <li><strong>Validated Congestion:</strong> Cross-model convergence rules out individual model quirks.</li>
+            <li><strong>The queue peaks at <span className="stat-pill" data-source="Lab model peak vehicles on network — all High/Med scenarios">08:15</span>, not 07:45.</strong> TIA analysis centres on 07:30–08:00. But Lab model peak network loading hits at 08:15–08:17. The school gate keeps queueing vehicles 30 minutes after peak demand has passed. Demand peaks at 07:45. Congestion peaks half an hour later.</li>
+            <li><strong>Three models, one conclusion.</strong> Live, Lab, and UXSim — built on entirely different mathematics — independently identify the same roads. School internal road appears in the top 3 congested roads in every model, every scenario. Starke Road and the Dreyersdal/Vineyard corridor appear in the top 5 across all models in Medium and High. That's not a modelling quirk. It's the road.</li>
           </ul>
         </div>
 
-      </div>
-
-      <div className="findings-caveat">
-        <Info size={20} />
-        <p><strong>What UXsim cannot tell us:</strong> UXsim models traffic as flow, not individual cars. It cannot reproduce speed-hump braking or individual junction holds. Its role is <em>network-level validation</em>.</p>
       </div>
 
       <div className="road-closed-block" style={{ background: 'var(--surface-high)', border: '1.5px dashed #C47070', color: 'var(--on-surface)', marginTop: '3rem' }}>

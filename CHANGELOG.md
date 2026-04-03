@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### Fixed — 2026-04-03 (CSS)
+- **App.css line 1338 — Stray `}` removed:** Orphaned closing brace from a parallel UI edit caused PostCSS parse failure. Removed stray brace and duplicate `.model-entry-body` rule block that followed it (parallel team's version retained).
+
+### Changed — 2026-04-03 (Findings Section Rewrite)
+- **Intro stats row:** Replaced single intro paragraph with a 4-stat highlight row — free-flow baseline (~7 min), Lab H mean trip (~32 min), vehicles at 08:30 (108), and model count (3). Alert numbers styled in `#C47070`.
+- **Write-off copy updated:** Two bullets with real model data. Key numbers — 108 vehicles, 192 vehicles, 7 min, 32 min, 16 min stopped, 1-in-20 takes an hour — wrapped in `.stat-pill` with `data-source` tooltips on hover.
+- **Fender-bender copy updated:** School gate bottleneck (33s → 71s UXSim delay L→H) and rat-run structural loading (Dreyersdal #1 in M/H, Ruskin 74–106s, Vineyard 86s). All key numbers hoverable.
+- **Side-swipe copy updated:** Queue peaks at 08:15 not 07:45 (Lab model), and cross-model convergence on school internal road + Dreyersdal/Vineyard corridor.
+- **UXSim limitation card removed:** "What UXSim cannot tell us" block removed per brief — this is covered in the Under the Hood section.
+- **Width expanded:** `.findings-section` padding-inline tightened to `clamp(1rem, 3vw, 2.5rem)` (was `1.5rem`); `.findings-grid` max-width raised from 1400px to 1600px.
+- **`.stat-pill` component:** Dashed underline on key numbers; CSS `::after` tooltip shows `data-source` on hover (model/scenario attribution).
+
 ### Changed — 2026-04-03 (Model Naming: Live / Lab)
 - **Player control toggle:** SUMO button label changed from "SUMO" to "Lab". Internal `id` value remains `'sumo'` — no logic changes. Tooltip updated to "Pre-run lab simulation (SUMO microscopic model)".
 - **Under the Hood copy:** Entry ③ heading updated to "Lab — Professional Cross-Check". All body copy references to "SUMO" as a user-facing term replaced with "the Lab model" or "Lab model". SUMO is still mentioned by full name once for credibility ("The Lab model runs on SUMO...").

@@ -5,9 +5,9 @@ import { ROUTE_CONFIG, CORRIDOR_ROUTES, EGRESS_ROUTES, estimateRouteLength } fro
 import { PARKING_CAPACITY, getParkingOccupancy } from './idm';
 
 export const SCENARIO_CONFIG = {
-  L: { totalTrips: 500, peakWindowMin: 75, ratRunThreshold: 0.10, habitualRatRunProb: 0.06 },
-  M: { totalTrips: 650, peakWindowMin: 60, ratRunThreshold: 0.08, habitualRatRunProb: 0.08 },
-  H: { totalTrips: 840, peakWindowMin: 45, ratRunThreshold: 0.06, habitualRatRunProb: 0.10 },
+  L: { totalTrips: 500, peakWindowMin: 75, ratRunThreshold: 0.10, habitualRatRunProb: 0.01 },
+  M: { totalTrips: 650, peakWindowMin: 60, ratRunThreshold: 0.08, habitualRatRunProb: 0.02 },
+  H: { totalTrips: 840, peakWindowMin: 45, ratRunThreshold: 0.06, habitualRatRunProb: 0.03 },
 };
 
 // Simulation timing: offset skips the near-empty Gaussian tail at 06:30.

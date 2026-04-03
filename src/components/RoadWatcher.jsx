@@ -3,6 +3,7 @@
 // Updated to show 2-line Traffic In/Out format with Total, Active, Slowing, Stopped counts.
 
 import React from 'react';
+import { X } from 'lucide-react';
 
 function computeTotals(roadId, allFrames) {
   if (!allFrames || allFrames.length === 0) return null;
@@ -52,7 +53,7 @@ export default function RoadWatcher({ road, allFrames, liveStats, onClose }) {
     <div className="road-watcher">
       <div className="rw-header">
         <span className="rw-title" title={road.name}>{road.name}</span>
-        <button className="rw-close" aria-label="close" onClick={onClose}>×</button>
+        <button className="rw-close" aria-label="close" onClick={onClose}><X size={14} /></button>
       </div>
 
       <div className="rw-line">

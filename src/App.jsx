@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { PersonStanding, Database, Activity, FileText, Search, Info, AlertTriangle, Clock, CheckCircle, Split, Car, Play, Monitor, Timer, Map, Bot } from 'lucide-react';
+import { PersonStanding, Database, Activity, FileText, Search, Info, AlertTriangle, Clock, CheckCircle, Split, Car, Play, Monitor, Timer, Map, Bot, OctagonX } from 'lucide-react';
 import Header from './components/Header';
 import SimMap from './components/SimMap';
 import StatsPanel from './components/StatsPanel';
@@ -69,84 +69,93 @@ const AccessBarrier = ({ onInitialize }) => (
   </div>
 );
 
-const BentoBriefing = () => (
-  <section className="bento-briefing" id="briefing">
-    <div className="bento-content">
-      <div className="narrative-block">
-        <div className="narrative-item">
-          <h3 className="narrative-subtitle" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <Map size={14} color="var(--c-3a)" />
-            Under the Hood
-          </h3>
-          <p className="narrative-text-large">
-            Traff<span>✱</span>k is the dashcam you never knew you needed for Tokai's morning rush.
-          </p>
-        </div>
-        <div className="narrative-item">
-          <p className="narrative-text-medium">
-            It models every car, every slow-down at a speed hump, and every frustrated parent trying to squeeze in a quick drop-off. The heart of the simulation is the Intelligent Driver Model — that decides how close cars follow each other, how fast they accelerate, and when they brake gently instead of slamming on the anchors.
-          </p>
-          <p className="narrative-text-body" style={{ textAlign: 'justify', maxWidth: 'none' }}>
-            The model uses a "main route" for each entry / exit corridor from Firgrove Way, Homestead Rd, Children's Way and Main Rd. This is the route most cars will follow — until traffic starts to build up. Then cars will find and follow multiple rat-runs to the school. The model attempts to avoid the normal Sweet Valley routes at the top of Dreyersdal Rd and exiting via Homestead.
-          </p>
-        </div>
-      </div>
+const BentoBriefing = () => {
+  const [tiaOpen, setTiaOpen] = useState(false);
+  const [specsOpen, setSpecsOpen] = useState(false);
 
-      <div className="tech-hub-block">
-        <div className="meta-hovers-box">
-          <div className="hover-trigger">
-            <FileText size={18} style={{ marginRight: '0.5rem' }} />
-            The TIA Highway Code
-            <div className="hover-target">
-              <div className="popover-card">
-                <h4 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <FileText size={14} />
-                  The TIA Highway Code
-                </h4>
-                <ul className="popover-list">
-                  <li>• <strong>Cars per hour:</strong> L: 500, M: 650, H: 840</li>
-                  <li>• <strong>Cars per entryway:</strong> Children’s Way: 36% | Homestead Ave: 30% | Firgrove Way: 18% | Dreyersdal North: 16%</li>
-                  <li>• <strong>School Drop-offs:</strong> 120 bays (98 on-site + 22 on-street)</li>
-                  <li>• <strong>Avg stop time:</strong> 45 seconds | One-way system | Aristea Traffic Circle</li>
-                </ul>
+  return (
+    <section className="bento-briefing" id="briefing">
+      <div className="bento-content">
+        <div className="narrative-block">
+          <div className="narrative-item">
+            <h3 className="narrative-subtitle" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <Map size={14} color="var(--c-3a)" />
+              Under the Hood
+            </h3>
+            <p className="narrative-text-large">
+              Traff<span>✱</span>k is the dashcam you never knew you needed for Tokai's morning rush.
+            </p>
+          </div>
+          <div className="narrative-item">
+            <p className="narrative-text-medium">
+              It models every car, every slow-down at a speed hump, and every frustrated parent trying to squeeze in a quick drop-off. The heart of the simulation is the Intelligent Driver Model — that decides how close cars follow each other, how fast they accelerate, and when they brake gently instead of slamming on the anchors.
+            </p>
+            <p className="narrative-text-body" style={{ textAlign: 'justify', maxWidth: 'none' }}>
+              The model uses a "main route" for each entry / exit corridor from Firgrove Way, Homestead Rd, Children's Way and Main Rd. This is the route most cars will follow — until traffic starts to build up. Then cars will find and follow multiple rat-runs to the school. The model attempts to avoid the normal Sweet Valley routes at the top of Dreyersdal Rd and exiting via Homestead.
+            </p>
+          </div>
+        </div>
+
+        <div className="tech-hub-block">
+          <div className="meta-hovers-box">
+            <div className={`hover-trigger interactive-card ${tiaOpen ? 'active' : ''}`} onClick={() => setTiaOpen(!tiaOpen)}>
+              <div className="card-front">
+                <FileText size={18} style={{ marginRight: '0.5rem' }} />
+                The TIA Highway Code
+              </div>
+              <div className="card-back">
+                <div className="popover-card">
+                  <h4 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <FileText size={14} />
+                    The TIA Highway Code
+                  </h4>
+                  <ul className="popover-list">
+                    <li>• <strong>Cars per hour:</strong> L: 500, M: 650, H: 840</li>
+                    <li>• <strong>Cars per entryway:</strong> Children's Way: 36% | Homestead Ave: 30% | Firgrove Way: 18% | Dreyersdal North: 16%</li>
+                    <li>• <strong>School Drop-offs:</strong> 120 bays (98 on-site + 22 on-street)</li>
+                    <li>• <strong>Avg stop time:</strong> 45 seconds | One-way system | Aristea Traffic Circle</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div className={`hover-trigger interactive-card ${specsOpen ? 'active' : ''}`} onClick={() => setSpecsOpen(!specsOpen)}>
+              <div className="card-front">
+                <Search size={18} style={{ marginRight: '0.5rem' }} />
+                Engine Specs
+              </div>
+              <div className="card-back">
+                <div className="popover-card">
+                  <h4 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <Search size={14} />
+                    Engine Specs
+                  </h4>
+                  <ul className="popover-list">
+                    <li>• <strong>Speeds:</strong> Arterial: 60 | Collector: 40 | Local: 30</li>
+                    <li>• <strong>Safety:</strong> 1.5 – 2.5s safe gap | 2.5s yield gap</li>
+                    <li>• <strong>Scale:</strong> 11 junctions & 28 road signs</li>
+                    <li>• <strong>Logic:</strong> Rat-runs trigger at 6–10% congestion | 85% chance</li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="hover-trigger">
-            <Search size={18} style={{ marginRight: '0.5rem' }} />
-            Engine Specs
-            <div className="hover-target">
-              <div className="popover-card">
-                <h4 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <Search size={14} />
-                  Engine Specs
-                </h4>
-                <ul className="popover-list">
-                  <li>• <strong>Speeds:</strong> Arterial: 60 | Collector: 40 | Local: 30</li>
-                  <li>• <strong>Safety:</strong> 1.5 – 2.5s safe gap | 2.5s yield gap</li>
-                  <li>• <strong>Scale:</strong> 11 junctions & 28 road signs</li>
-                  <li>• <strong>Logic:</strong> Rat-runs trigger at 6–10% congestion | 85% chance</li>
-                </ul>
-              </div>
-            </div>
+          <div className="limitations-card">
+            <span className="limitations-title" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '1rem', color: 'var(--delay)' }}>
+              <OctagonX size={24} strokeWidth={3} />
+              ROAD CLOSED: MODELLING LIMITATIONS
+            </span>
+            <ul className="limitations-list">
+              <li>• NO SWEET VALLEY SCHOOL TRAFFIC CONDITIONS ARE AVAILABLE</li>
+              <li>• NO TRAFFIC CONDITIONS FOR EXITING TO FIRGROVE, LADIES MILE OR MAIN RD ARE AVAILABLE</li>
+            </ul>
           </div>
         </div>
-
-        <div className="limitations-card">
-          <span className="limitations-title" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <Info size={12} />
-            ⛔ ROAD CLOSED
-          </span>
-          <ul className="limitations-list">
-            <li>• NO SWEET VALLEY SCHOOL TRAFFIC CONDITIONS ARE AVAILABLE</li>
-            <li>• NO TRAFFIC CONDITIONS FOR EXITING TO FIRGROVE, LADIES MILE OR MAIN RD ARE AVAILABLE</li>
-          </ul>
-        </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 const ModelsSection = () => (
   <section className="models-section" id="models">
@@ -164,7 +173,7 @@ const ModelsSection = () => (
             <FileText size={24} color="var(--c-3a)" />
             The Western Cape Mobility Department <a href="https://www.westerncape.gov.za/mobility" target="_blank" className="editorial-link">(WCMD)</a> TIA Approach
           </h3>
-          <p>The official TIA is a snapshot — one frame from the dashcam. It follows South Africa’s TMH 16 guidelines: a straightforward, analytical method based on standard traffic engineering formulas. The TIA calculates expected trip numbers, splits them by direction, and checks road and intersection capacity using averaged flows — basically a "worst-case 15-minute peak" snapshot. It gives planners and authorities a reliable, deterministic baseline.</p>
+          <p>The official TIA is a snapshot — one frame from the dashcam. It follows South Africa's TMH 16 guidelines: a straightforward, analytical method based on standard traffic engineering formulas. The TIA calculates expected trip numbers, splits them by direction, and checks road and intersection capacity using averaged flows — basically a "worst-case 15-minute peak" snapshot. It gives planners and authorities a reliable, deterministic baseline.</p>
         </div>
 
         <div className="model-entry">
@@ -185,7 +194,7 @@ const ModelsSection = () => (
                 <Activity size={16} />
                 UXsim
               </h4>
-              <p style={{fontSize: '14px'}}>Created by Dr. Toru Seo at the Institute of Science Tokyo, UXsim is a fast, modern mesoscopic simulator. It models traffic as flow rather than individual vehicles — using the same kinematic wave mathematics that underpin the TIA’s own capacity calculations. This makes it the ideal cross-check: it speaks the same mathematical language as the TIA, but runs the full network rather than a snapshot.</p>
+              <p style={{fontSize: '14px'}}>Created by Dr. Toru Seo at the Institute of Science Tokyo, UXsim is a fast, modern mesoscopic simulator. It models traffic as flow rather than individual vehicles — using the same kinematic wave mathematics that underpin the TIA's own capacity calculations. This makes it the ideal cross-check: it speaks the same mathematical language as the TIA, but runs the full network rather than a snapshot.</p>
             </div>
           </div>
         </div>
@@ -195,7 +204,7 @@ const ModelsSection = () => (
             <CheckCircle size={28} color="var(--c-3a)" />
             TUNING THE ENGINE
           </h3>
-          <p>We calibrated Tokai-Sim’s live engine directly to the TIA’s peak-hour volumes, origin splits, and 840-vehicle baseline. SUMO then runs the same network at microscopic level (with all 28 speed humps, 11 junction overrides, and realistic rat-run logic), while UXsim independently validates total network throughput against the TIA’s flow-density curves. The three layers are deliberately cross-checked so any "what-if" scenario sits on the same mathematical foundation.</p>
+          <p>We calibrated Tokai-Sim's live engine directly to the TIA's peak-hour volumes, origin splits, and 840-vehicle baseline. SUMO then runs the same network at microscopic level (with all 28 speed humps, 11 junction overrides, and realistic rat-run logic), while UXsim independently validates total network throughput against the TIA's flow-density curves. The three layers are deliberately cross-checked so any "what-if" scenario sits on the same mathematical foundation.</p>
         </div>
 
         <div className="model-entry">
@@ -220,62 +229,56 @@ const FindingsSection = () => (
           <Monitor size={40} color="var(--c-3a)" />
           What the Models Say
         </h2>
-        <p className="findings-intro">Here’s what came out of the black box. UXsim analysed all three scenarios using kinematic wave theory — compared against SUMO’s microscopic simulation.</p>
+        <p className="findings-intro">Here's what came out of the black box. UXsim analysed all three scenarios using kinematic wave theory — compared against SUMO's microscopic simulation.</p>
       </div>
 
       <div className="findings-columns">
 
-        {/* Write-off column */}
-        <div className="findings-col findings-col--writeoff">
-          <div className="findings-col-top">
-            <span className="findings-badge findings-badge--writeoff">Write-off</span>
-            <AlertTriangle size={20} color="#A64D4D" />
+        {/* Key finding 1 — clearance */}
+        <div className="finding-card finding-card--alert">
+          <div className="finding-icon"><AlertTriangle size={24} color="var(--delay)" /></div>
+          <div className="finding-body">
+            <h3>Traffic does not clear by 08:30</h3>
+            <p>The TIA assumes all 840 vehicles complete their trips by 08:30 AM. Both SUMO and UXsim show significant residual congestion at 08:30 across all three scenarios. In the High scenario, SUMO records ~480 vehicles still active at 08:29. UXsim confirms continued network loading well past 08:30. <strong>The TIA's clearance assumption is not supported by dynamic modelling.</strong></p>
           </div>
-          <h3 className="findings-col-heading">The big one</h3>
-          <ul className="findings-bullets">
-            <li>Traffic does not clear by 08:30 in any scenario</li>
-            <li>High scenario: ~480 vehicles still active at 08:29</li>
-            <li>The TIA’s clearance assumption is not supported by either model</li>
-          </ul>
         </div>
 
-        {/* Fender-bender column */}
-        <div className="findings-col findings-col--fender">
-          <div className="findings-col-top">
-            <span className="findings-badge findings-badge--fender">Fender-benders</span>
-            <Clock size={20} color="#C27D60" />
+        {/* Key finding 2 — peak timing */}
+        <div className="finding-card">
+          <div className="finding-icon"><Clock size={24} color="var(--c-3a)" /></div>
+          <div className="finding-body">
+            <h3>Peak congestion hits at 07:45 — not 08:00</h3>
+            <p>The TIA's own trapezoidal demand profile places 35% of all trips in the 07:30–08:00 window, with the effective peak around 07:45. Both SUMO and the Live engine confirm peak network density at approximately 07:45 AM. The critical window for rat-run activation and junction back-pressure is therefore earlier than the TIA's "peak 15-minute" analysis suggests.</p>
           </div>
-          <h3 className="findings-col-heading">Worth noting</h3>
-          <ul className="findings-bullets">
-            <li>Peak congestion hits 07:45 — 15 minutes earlier than the TIA suggests</li>
-            <li>35% of all trips fall in the 07:30–08:00 window</li>
-            <li>Rat-runs activate at ~6–10% corridor congestion in Medium + High scenarios</li>
-            <li>Over 30% of inbound vehicles divert via residential streets in the High scenario</li>
-          </ul>
         </div>
 
-        {/* Side-swipe column */}
-        <div className="findings-col findings-col--sideswipe">
-          <div className="findings-col-top">
-            <span className="findings-badge findings-badge--sideswipe">Side-swipes</span>
-            <CheckCircle size={20} color="var(--c-3a)" />
+        {/* Key finding 3 — UXsim vs SUMO agreement */}
+        <div className="finding-card">
+          <div className="finding-icon"><CheckCircle size={24} color="var(--c-3a)" /></div>
+          <div className="finding-body">
+            <h3>UXsim and SUMO agree on congestion patterns</h3>
+            <p>Despite operating at different abstraction levels, UXsim and SUMO identify the same roads as highest-stress: the Children's Way / Dreyersdal approach, the Homestead Ave corridor, and the Aristea Road school frontage. This cross-model agreement strengthens confidence that the congestion picture is real, not an artefact of any single model's assumptions.</p>
           </div>
-          <h3 className="findings-col-heading">Minor but real</h3>
-          <ul className="findings-bullets">
-            <li>Both models flag the same highest-stress roads: Children’s Way / Dreyersdal, Homestead Ave, Aristea Rd</li>
-            <li>Cross-model agreement confirms the congestion picture is structural, not a modelling artefact</li>
-            <li>Secondary corridors reach capacity limits in both SUMO and UXsim</li>
-          </ul>
         </div>
 
+        {/* Key finding 4 — rat runs */}
+        <div className="finding-card">
+          <div className="finding-icon"><Split size={24} color="var(--c-3a)" /></div>
+          <div className="finding-body">
+            <h3>Rat-runs activate in Medium and High scenarios</h3>
+            <p>SUMO's dynamic rerouting shows rat-run activity emerging at ~6–10% corridor congestion — consistent with the Live engine's threshold. In the High scenario, over 30% of inbound vehicles divert via secondary residential streets. UXsim's network flow confirms the same secondary corridors reach capacity limits, validating that rat-run pressure is a structural feature of the network, not a modelling quirk.</p>
+          </div>
+        </div>
+
+        {/* Limitation callout */}
+        <div className="finding-card finding-card--muted">
+          <div className="finding-icon"><Info size={24} color="rgba(241,245,241,0.4)" /></div>
+          <div className="finding-body">
+            <h3>What UXsim cannot tell us</h3>
+            <p>UXsim models traffic as flow, not individual cars. It cannot reproduce speed-hump braking events, junction hold behaviour, or individual rat-run decisions. Its role here is <em>network-level validation</em> — confirming that the overall demand exceeds the network's capacity envelope under TIA assumptions. The Live and SUMO engines carry the detailed behavioural story.</p>
+          </div>
+        </div>
       </div>
-
-      {/* Methodology caveat */}
-      <div className="findings-caveat">
-        <Info size={15} color="rgba(241,245,241,0.35)" style={{ flexShrink: 0, marginTop: '0.1rem' }} />
-        <p><strong>What UXsim cannot tell us:</strong> UXsim models traffic as flow, not individual cars — it can’t reproduce braking events, junction hold behaviour, or individual rat-run decisions. Its role here is network-level validation: confirming overall demand exceeds the network’s capacity envelope under TIA assumptions. The Live and SUMO engines carry the detailed behavioural story.</p>
-      </div>
-
     </div>
   </section>
 );
@@ -311,11 +314,28 @@ export default function App() {
   const [source, setSource]                     = useState('live');   // 'live' | 'sumo' | 'uxsim'
   const [selectedRoad, setSelectedRoad]         = useState(null);
   const [roadStats, setRoadStats]               = useState(null);
+  const [activeSection, setActiveSection]     = useState('simulator');
   const playbackRef                             = useRef(new PlaybackSource());
 
   useEffect(() => {
     document.body.style.overflow = initialized ? 'auto' : 'hidden';
   }, [initialized]);
+
+  useEffect(() => {
+    const options = { threshold: 0.2, rootMargin: '-10% 0px -40% 0px' };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) setActiveSection(entry.target.id);
+      });
+    }, options);
+
+    ['simulator', 'briefing', 'findings', 'models', 'contact'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   const handleToggleCorridor = useCallback((id) => {
     setSelectedCorridors(prev => {
@@ -408,11 +428,11 @@ export default function App() {
 
       {!initialized && <AccessBarrier onInitialize={() => setInitialized(true)} />}
 
-      <main className="main-layout" id="simulator" style={{ paddingTop: '6rem' }}>
+      <main className="main-layout" id="simulator">
         <div className="scrolling-top-bar">
           <div className="scrolling-top-bar-inner">
             <div className="nav-container">
-              <Header />
+              <Header activeSection={activeSection} />
             </div>
             <div className="stats-pill-container">
               <div className="scrolling-stats-pill">
@@ -438,7 +458,9 @@ export default function App() {
                     <span className="htc-value">{fmtTime(avgInTime)} / {fmtTime(avgOutTime)}</span>
                   </div>
                 </div>
-              </div>            </div>
+              </div>
+            </div>
+            <div className="header-right-empty" />
           </div>
         </div>
 
@@ -483,8 +505,8 @@ export default function App() {
       </main>
 
       <BentoBriefing />
-      <ModelsSection />
       <FindingsSection />
+      <ModelsSection />
       <Footer />
     </div>
   );

@@ -608,14 +608,39 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, paddingBottom: 4, marginBottom: 2, borderBottom: '1px solid var(--surface-high)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <MapIcon size={12} strokeWidth={2.5} />
-            <input type="checkbox" id="route-toggle" checked={showRoutes} onChange={onToggleRoutes} style={{ cursor: 'pointer', width: 12, height: 12 }} />
-            <label htmlFor="route-toggle" style={{ cursor: 'pointer', fontWeight: 700 }}>Show Routes</label>
+            <button 
+              className={`speed-pill${showRoutes ? ' active' : ''}`} 
+              onClick={onToggleRoutes}
+              style={{ fontSize: '0.65rem', padding: '0.2rem 0.5rem', height: 'auto', border: 'none' }}
+            >
+              Show Routes
+            </button>
           </div>
           <span onMouseDown={(e) => startDrag(legendDragRef, legendOffset, setLegendOffset, e)} style={{ cursor: 'grab', display: 'flex', alignItems: 'center', color: 'var(--muted-text)', padding: '0 2px' }} title="Drag to move">
             <GripVertical size={14} />
           </span>
-        </div>        {[[COLOUR['3A'].base, 'Firgrove Way'], [COLOUR['2A'].base, 'Homestead Ave'], [COLOUR['2B'].base, "Children's Way"], [COLOUR['1A'].base, 'Main Rd'], [COLOUR.delayed, 'Delayed'], [COLOUR.dwell, 'Parked']].map(([c, l]) => (
-          <div key={l} style={{ display: 'flex', alignItems: 'center', gap: 6 }}><svg width="8" height="8"><circle cx="4" cy="4" r="3" fill={c} /></svg>{l}</div>
+        </div>        {[
+          { c: COLOUR['3A'].base, l: 'Firgrove Way', s: '●' },
+          { c: COLOUR['2A'].base, l: 'Homestead Ave', s: '●' },
+          { c: COLOUR['2B'].base, l: "Children's Way", s: '●' },
+          { c: COLOUR['1A'].base, l: 'Main Rd', s: '●' },
+          { c: '#fff', l: 'Rat-Run', s: '◆', stroke: '#000' },
+          { c: COLOUR.delayed, l: 'Delayed', s: '●' },
+          { c: COLOUR.dwell, l: 'Parked', s: '■' }
+        ].map(({c, l, s, stroke}) => (
+          <div key={l} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span style={{ 
+              color: c, 
+              fontSize: s === '■' ? 8 : 12, 
+              width: 12, 
+              textAlign: 'center',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              WebkitTextStroke: stroke ? `1px ${stroke}` : 'none'
+            }}>{s}</span>
+            {l}
+          </div>
         ))}
       </div>
 

@@ -1,6 +1,6 @@
 // ── StatsPanel.jsx ────────────────────────────────────────────────────────────
 import { memo, useRef, useCallback } from 'react';
-import { Eye, EyeOff, Car, Timer, ArrowUpFromLine, ArrowDownFromLine } from 'lucide-react';
+import { Eye, EyeOff, Car, Timer, ArrowUpFromLine, ArrowDownFromLine, X } from 'lucide-react';
 
 function fmtTime(minutes) {
   if (!minutes || minutes === 0) return '—';
@@ -15,13 +15,13 @@ const CORR_BG = {
   '1A': { from: '#8FB89A', to: '#6BA47A', accent: '#2D5438', light: '#2D5438', textDark: '#0E1C11', mutedDark: 'rgba(14,28,17,0.6)',  statBg: 'rgba(255,255,255,0.28)', trackColor: 'rgba(0,0,0,0.12)' },
   '2A': { from: '#A1CCA5', to: '#7AAF82', accent: '#415D43', light: '#415D43', textDark: '#132215', mutedDark: 'rgba(19,34,21,0.6)',  statBg: 'rgba(255,255,255,0.28)', trackColor: 'rgba(0,0,0,0.12)' },
   '2B': { from: '#E0B88A', to: '#C49660', accent: '#8B5A28', light: '#8B5A28', textDark: '#221808', mutedDark: 'rgba(34,24,8,0.6)',   statBg: 'rgba(255,255,255,0.28)', trackColor: 'rgba(0,0,0,0.12)' },
-  '3A': { from: '#C8E0C8', to: '#A4C4A8', accent: '#709775', light: '#384E3E', textDark: '#0F1E13', mutedDark: 'rgba(15,30,19,0.6)',  statBg: 'rgba(255,255,255,0.28)', trackColor: 'rgba(0,0,0,0.12)' },
+  '3A': { from: '#C8E0C8', to: '#A4C4A8', accent: 'var(--c-3a)', light: '#384E3E', textDark: '#0F1E13', mutedDark: 'rgba(15,30,19,0.6)',  statBg: 'rgba(255,255,255,0.28)', trackColor: 'rgba(0,0,0,0.12)' },
 };
 
 function StatBlock({ label, value, accent, dim, textColor, labelColor, bgColor, icon: Icon }) {
   const valueColor = textColor
     ? (dim ? `${textColor}99` : textColor)
-    : (dim ? 'rgba(241,245,241,0.5)' : (accent || '#F1F5F1'));
+    : (dim ? 'rgba(241,245,241,0.5)' : (accent || 'var(--canvas)'));
 
   return (
     <div style={{
@@ -37,7 +37,7 @@ function StatBlock({ label, value, accent, dim, textColor, labelColor, bgColor, 
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
         {Icon && <Icon size={10} strokeWidth={3} color={labelColor || 'rgba(241,245,241,0.38)'} />}
         <span style={{
-          fontSize: 7,
+          fontSize: '0.65rem',
           fontWeight: 900,
           letterSpacing: '0.12em',
           textTransform: 'uppercase',
@@ -65,7 +65,7 @@ function CongBar({ pct, accent, isHot, trackColor }) {
         height: '100%',
         width: `${pct}%`,
         borderRadius: 2,
-        background: isHot ? '#A64D4D' : accent,
+        background: isHot ? 'var(--delay)' : accent,
         transition: 'width 0.4s ease',
       }} />
     </div>
@@ -186,7 +186,7 @@ function CorridorCard({ id, c, isSelected, onToggle }) {
         <div className="holo-breakdown" style={{ color: cols.mutedDark, marginTop: '0.6rem' }}>
           <span>{pActive}% active</span>
           <span>{pSlowing}% slowing</span>
-          <span style={{ color: isHot ? '#8B1A1A' : undefined }}>{pStopped}% stopped</span>
+          <span style={{ color: isHot ? 'var(--delay)' : undefined }}>{pStopped}% stopped</span>
         </div>
       </div>
     </div>
@@ -267,7 +267,7 @@ const StatsPanel = memo(({ statsData, selectedCorridors, onToggleCorridor, selec
             </div>
             <div className="holo-header">
               <ArrowUpFromLine size={14} strokeWidth={3} color="rgba(15,30,19,0.6)" style={{ marginRight: '0.3rem' }} />
-              <span className="holo-label" style={{ color: 'rgba(15,30,19,0.6)', fontSize: 9 }}>Overall Summary</span>
+              <span className="holo-label" style={{ color: 'rgba(15,30,19,0.6)', fontSize: '0.65rem' }}>Overall Summary</span>
             </div>
             <div className="holo-grid" style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginTop: '1.25rem' }}>
               <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
@@ -282,12 +282,12 @@ const StatsPanel = memo(({ statsData, selectedCorridors, onToggleCorridor, selec
               </div>
             </div>
             <div style={{ marginTop: '1.25rem' }}>
-              <CongBar pct={globalCongPct} accent="#709775" isHot={isGlobalHot} trackColor="rgba(0,0,0,0.12)" />
+              <CongBar pct={globalCongPct} accent="var(--c-3a)" isHot={isGlobalHot} trackColor="rgba(0,0,0,0.12)" />
             </div>
             <div className="holo-breakdown" style={{ color: 'rgba(15,30,19,0.55)', marginTop: '0.6rem' }}>
               <span>{netPActive}% active</span>
               <span>{netPSlowing}% slowing</span>
-              <span style={{ color: isGlobalHot ? '#8B1A1A' : undefined }}>{netPStopped}% stopped</span>
+              <span style={{ color: isGlobalHot ? 'var(--delay)' : undefined }}>{netPStopped}% stopped</span>
             </div>
           </>
         ) : (
@@ -297,8 +297,8 @@ const StatsPanel = memo(({ statsData, selectedCorridors, onToggleCorridor, selec
             </button>
             <div className="holo-header">
               <ArrowDownFromLine size={14} strokeWidth={3} color="rgba(15,30,19,0.6)" style={{ marginRight: '0.3rem' }} />
-              <span className="holo-label" style={{ color: 'rgba(15,30,19,0.6)', fontSize: 9, flex: 1 }}>{selectedRoad.name}</span>
-              <button className="rw-close" onClick={onCloseRoad}>×</button>
+              <span className="holo-label" style={{ color: 'rgba(15,30,19,0.6)', fontSize: '0.65rem', flex: 1 }}>{selectedRoad.name}</span>
+              <button className="rw-close" onClick={onCloseRoad}><X size={14} /></button>
             </div>
             <div className="holo-grid" style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginTop: '1.25rem' }}>
               <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
@@ -313,12 +313,12 @@ const StatsPanel = memo(({ statsData, selectedCorridors, onToggleCorridor, selec
               </div>
             </div>
             <div style={{ marginTop: '1.25rem' }}>
-              <CongBar pct={wCongPct} accent="#709775" isHot={wIsHot} trackColor="rgba(0,0,0,0.12)" />
+              <CongBar pct={wCongPct} accent="var(--c-3a)" isHot={wIsHot} trackColor="rgba(0,0,0,0.12)" />
             </div>
             <div className="holo-breakdown" style={{ color: 'rgba(15,30,19,0.55)', marginTop: '0.6rem' }}>
               <span>{wActive}% active</span>
               <span>{wSlowing}% slowing</span>
-              <span style={{ color: wIsHot ? '#8B1A1A' : undefined }}>{wStopped}% stopped</span>
+              <span style={{ color: wIsHot ? 'var(--delay)' : undefined }}>{wStopped}% stopped</span>
             </div>
           </>
         )}

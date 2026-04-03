@@ -1,97 +1,39 @@
 CONTENT CHANGE:
-Avg Time Out will be understated due to no modelling of traffic on Firgrove, Ladies Mile and Main Roads
-SPEED HUMPS IN DANTE, VINEYARD & LEYDEN WILL SLOW THIGS EVEN MORE.
-Change findings to 3 blocks:  Side-swipes, Fender-benders and Write-offs
+CHANGE UXSim copy since we in Under the Hood - since we are just verifying the models with it. and a quick reference to where it coems from
+the limited scope modelling needs to be clear in the Fndings section too. We need to highlight:
+
+X ROAD CLOSED X
+This modelling EXCLUDES any modelling for:
+• Sweet Valley School runs
+• Bergvliet residents local traffic movements to work, school and university
+• ALL traffic *exiting* to Firgrove Rd, Ladies Mile Rd and Main Rd.
+• New essential traffic calming measures in Dante Rd, Vineyard Rd, Ruskin Rd, Leyden Rd.
+• All Avg Time OUt will be massivelt understated based on the above.
+
+UI
+the graphs and 0% active 0% slowing 0% stopped is missing from teh corridors cards.
+the Overall summary may need to be reszied smaller to accomodate putting back the "0% active 0% slowing 0% stopped"
+
+I don tlike the stats pill centered. the stat pill must align over the corridor cards
+
+
 
 will this work on a static html site without react? https://21st.dev/community/components/reuno-ui/background-paper-shaders/default
 can we change the coolours to align with our colour scheme?
 if so can we use this background for the modal pop-over at the start.
 
+?) in mobile view the map should start zoomed into the highlighted square and not show any of the darkened map
+
+how can we enable sharing on the site for people to share via whatsapp, email and X?
+
+the AVg Time OUt seems very low at 3:49 minutes. check the calcualtion.
+how can we realistically simulate slowed exits at all 4 major exit points due to other rush hour traffic outside our model?
+
+MODEL QUESTIONS
+update the SUMO routes
 check the start time of the model - no cars seems to go through until 6:40 so the first few minutes are empty
 why arent more cars using the dereyersdal farm / tussendal rd for entry?
 check the route and rat-route for Homestead.
-
-Design Audit & Transformation Report
-
-  1. Typography: The "Architectural vs. Data" Conflict
-   * Problem: The site uses Manrope (Geometric/Architectural) for headings and Work Sans (Humanist/Clean) for the body. However, the StatsPanel mixes these
-     inconsistently—using Manrope for data values but inconsistent weights for labels. This makes the interface feel "uncalibrated."
-   * Fix: Establish a strict typographic rule.
-       * Work Sans for all small utility labels, captions, and narrative text.
-       * Manrope exclusively for architectural headings and "Critical System Stats" (big numbers) to give them a technical, precision-engineered feel.
-       * Tighten tracking: Small caps labels should have slightly increased letter-spacing (0.1em) for readability.
-
-  2. Layout: The "Above the Fold" Mandate
-   * Problem: On a standard 13-15" laptop (e.g., 900px vertical), the current vertical stack of 5 cards (Watch My Road + 4 Corridors) is mathematically
-     guaranteed to scroll. The hero-header and main-layout top padding consume ~200px, leaving only ~700px for the cards.
-   * Fix:
-       * Corridor Grid: Pivot the 4 corridor cards back to a 2x2 grid but with a more refined "Editorial Card" design to save vertical space while improving
-         readability.
-       * Watch My Road: Keep it as a full-width "Primary Focus" card but reduce its internal padding.
-       * Map Height: Constrain the map and sidebar height to a fixed calculation (calc(100vh - header_height - hero_height)) to ensure the "No-Scroll"
-         requirement is met across all desktop resolutions.
-
-  3. Desktop "Vastness" (White Space)
-   * Problem: On ultra-wide monitors, the 1700px max-width leaves huge empty gutters on the left and right, and the 1fr grid stretches elements horizontally in
-     a way that feels "loose."
-   * Fix:
-       * Asymmetric Balance: Instead of centering everything, we will use a slightly offset layout or introduce a "Technical Overlay" effect on the background.
-       * Depth with Layers: Use the "Glassmorphism" principle from your DESIGN.md more effectively. The sidebar shouldn't just be a column; it should feel like
-         a floating "Control Desk" with subtle depth.
-
-  4. The "Uniform Site" Feel
-   * Problem: Component boundaries are currently defined by background color shifts (surface-low vs surface-high), which can look "muddy."
-   * Fix: Introduce Refined Borders. Not 1px solid black, but 1px solid rgba(17, 29, 19, 0.05) (Sage-tinted borders). This provides the "Tactical Intelligence"
-     feel requested in the design specs.
-
-  ---
-
-  Proposed UI Transformation Plan
-
-
-  ┌────────────┬──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-  │ Component  │ Change Description                                                                                                                       │
-  ├────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ Header     │ Tighten the "Nav Deck" pill. Add a subtle "System Status" pulse to the clock.                                                            │
-  │ StatsPanel │ 2x2 Grid for Corridors. Cards will use a "Split Data" layout: In/Out stats on the left, Congestion Meter on the right.                   │
-  │ Typography │ Global update to weights (300/500/800) to create dramatic contrast between data and labels.                                              │
-  │ Map Bezel  │ Add a "Surgical" aesthetic: micro-borders and corner accents to make it look like a high-end control viewport.                           │
-  │ Color      │ Deepen the contrast in the Sage palette. Ensure the "Watch My Road" card feels like a privileged focus area (The "Black Box" treatment). │
-  └────────────┴──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-
-
-  Would you like me to proceed with these implementation changes to fix the layout, typography, and "Above the Fold" requirement?
- > proceed. but explain how you are addressing the feeling of too much white space and disconnected sections between headings/navigations
-✦ To address the feeling of disconnected sections and excessive white space, I am shifting from a "stacked document" layout to an "Integrated Console"
-  architecture.
-
-  The "Uniform Site" Strategy
-   1. The "Structural Anchor" (White Space Fix): Instead of centered content floating in a vast void, I am introducing a Background Utility Layer. This uses a
-      subtle 1px grid motif and "Depth Strips" that span the full width of the screen, visually "tethering" the centered content to the edges of the browser.
-      This eliminates the "island" effect.
-   2. The "Nav-to-Hero" Bridge: I will reduce the dead space between the Navigation Pill and the Hero Header by using Shared Vertical Rhythm. The Navigation's
-      sage-tinted blur will "bleed" into a subtle top-gradient on the main section, creating a continuous vertical flow rather than two separate elements.
-   3. Typographic "Calibration": I'm moving away from loose, default spacing. By using Tight Tracking (-0.05em) on headings and Monospaced Data Weights for
-      stats, the site will feel like a high-precision instrument. Manrope will act as the "Technical Frame" and Work Sans as the "Human Narrative."
-   4. The "No-Scroll" Corridor Grid: I will pivot the 4 corridor cards into a 2x2 Compressed Grid. Each card will use a "Dashboard Split" (Stats Left / Meter
-      Right) to reduce its vertical height by ~40%, ensuring all 4 fit comfortably alongside the map without a single pixel of scrolling.
-
-      UI Improvements Summary:
-   1. Uniform Site Feel: Introduced a Structural Background Grid and a Navigation Bridge that connects the nav pill to the content using consistent spacing and
-      subtle depth gradients.
-   2. White Space Optimization:
-       * Replaced the loosely centered container with a Balanced Gutter System (1600px max-width).
-       * The 2x2 Corridor Grid fills the sidebar space more densely, providing a "Command Center" feel.
-   3. Above the Fold:
-       * The Hero Header is now more compact (align-items: flex-end).
-       * The 4 Corridor Cards are now in a 2x2 grid, reducing their vertical height by ~40%.
-       * The map and stats panel are tied to height: 100vh to ensure no scrolling is required on standard desktop screens.
-   4. Typography & Readability:
-       * Strict Type Hierarchy: Manrope (ExtraBold) is now exclusively for critical stats and labels, while Work Sans handles narrative flow.
-       * Tightened Tracking: Heading tracking reduced to -0.05em for a more premium, modern look.
-       * Data Density: Combined Average In/Out stats into a single line (In / Out) to save space and improve comparison speed.
-
-?) in mobile view the map should start zoomed into the highlighted square and not show any of the darkened map
 
 DONE
 Lets update the plan and continue with the traffic simulator from @Tokai_HS_Traffic_Simulator_Plan.md and add to the existing pages.
@@ -410,3 +352,9 @@ the editorial secitons of the site feels disjointed.
 Too large white space, inconsitent bento blocks and stylitically different colour shades make the site feel disconnected through each section.
 while the goal is to visually sperate out each section - these dont folow well together. make suggestions to improve this and add it to the UX review.
 4 possible examples (FOR LAYOUT CONCEPT & SECTION CHANGES ONLY - NOT COLOUR OR VISUAL ELEMENTS) could be
+
+we need to swap the Findings and the Validation sections around as well as the navigation.
+More people will care about the Findings than the models and the validation.
+
+⛔ ROAD CLOSED - this heading is small and consistent for these points.
+use this icon instead - https://www.shadcn.io/icon/lucide-octagon-x

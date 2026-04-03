@@ -4,39 +4,50 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### Added — 2026-04-03 (Editorial Redesign & UX Audit)
+- **UI/UX Audit Document:** Created `design/UI_UX_REVIEW.md` — a full desktop and mobile audit covering colour token consistency, typography, spacing, iconography, responsive layout, and editorial section flow. 20 prioritised items across 4 tiers (Critical → Low/Polish). Includes a §14 dedicated to editorial section rhythm and layout cohesion with 7 subsections and a CSS implementation guide.
+- **Reference Layout Images:** Added `design/layout1–4` reference images (layout concept only) used to inform the editorial section redesign recommendations.
+
+### Changed — 2026-04-03 (Findings Section — 3-Column Comparison Layout)
+- **Findings Section — Layout:** Replaced the stacked single-column card format with a 3-column side-by-side comparison layout. Each column represents one severity tier: Write-off, Fender-benders, Side-swipes.
+- **Findings Section — Copy:** Rewrote all five finding paragraphs into concise bullet points (~50% shorter). Each column has a severity badge, Lucide icon, subheading, and 3–4 data-led bullets.
+- **Findings Section — Caveat Note:** Moved "What UXsim cannot tell us" out of the severity taxonomy into a standalone muted footer note below the 3 columns, where it belongs as a methodology caveat rather than a graded finding.
+- **Findings Section — CSS:** Replaced `.findings-content` / `.finding-card` system with `.findings-columns` (3-col grid), `.findings-col` (per-severity box with tinted border and background), `.findings-badge` (colour-coded severity label), `.findings-bullets` (dashed list with accent `—` markers), and `.findings-caveat` (muted footer strip).
+- **Findings Section — Grid:** Header changed from sticky `span 4` sidebar to full-width stack (`flex-direction: column`). `max-width` tightened to `1200px` to keep columns readable at large viewport widths.
+
+### Changed — 2026-04-03 (Car/Traffic Editorial Theme)
+- **Access Barrier:** CTA button label → "Start the Engine →"; warning eyebrow → "ROAD WARNING"; legal sign-off → "(no cars or humans were harmed in the making of this)".
+- **Navigation Labels:** "Simulator" → "The Road Map", "Models" → "Under the Hood", "Findings" → "The Damage Report", "Contact" → "Pit Stop".
+- **Briefing Section:** Eyebrow → "Under the Hood"; hero sentence → "Traff✱k is the dashcam you never knew you needed for Tokai's morning rush."; hover labels → "The TIA Highway Code" / "Engine Specs"; limitation badge → "⛔ ROAD CLOSED".
+- **Models Section:** Heading → "Road Tested"; TIA opener sentence updated to dashcam metaphor; calibration callout → "TUNING THE ENGINE"; methodology note → "Why the speedometers don't always agree".
+- **Findings Section:** Eyebrow → "Incident Report"; intro → "Here's what came out of the black box…"; severity tiers → Write-off / Fender-benders / Side-swipes.
+- **Footer:** Builder credit → "Need a lift building with AI?".
+
+### Fixed — 2026-04-03 (Icon)
+- **`Stopwatch` Icon Removed:** `Stopwatch` is not exported by the installed version of `lucide-react`. Replaced all usages in `App.jsx` (import + 1 usage) and `StatsPanel.jsx` (import + 3 usages) with `Timer`, which is present and visually equivalent.
+
 ### Added — 2026-04-03 (Brand Evolution & UI Refinement)
 - **Traff✱k Rebrand**: Officially renamed the application from "Tokai-Sim" to **Traff✱k**. Updated branding across the splash modal, navigation bar, and footer.
-- **Lucide Icon Integration**: Replaced custom SVG icons with high-quality Lucide icons (`Home`, `Bot`, `Map`, `Monitor`, `MessageCircleMore`) throughout the navigation system for a more consistent and professional UI.
+- **Lucide Icon Integration**: Replaced custom SVG and Braille icons with high-quality Lucide icons throughout the application for a more consistent and professional UI.
+- **Themed Navigation Labels**: Replaced generic labels with immersive, car-themed terminology: "The Road Map" (Simulator), "Under the Hood" (Models), "The Damage Report" (Findings), and "Pit Stop" (Contact).
 - **Branded Navigation**: Added a prominent "Traff✱k" logo heading to the navigation bar, integrated alongside the expanding icon menu for immediate brand recognition.
-- **Expanding Icon Navigation**: Replaced the standard text navigation and hamburger menu with a modern, expanding-icon pill menu (Home, Strategy, Calendar, Settings).
-- **Grid Alignment**: The navigation bar is now left-aligned with the map's left border (span 8), and the simulation statistics pill is perfectly left- and right-aligned with the corridor cards (span 4). Both sit in a responsive grid row above the main content and scroll natively with the page.
-- **Corridor Card Eye Icons**: Added interactive eye/hide icons to the corridor cards to clearly indicate and control visibility states.
+- **Floating Header**: Restored the fixed/floating behavior of the navigation bar, ensuring it remains pinned to the top of the viewport during scroll with a glassy backdrop-blur effect.
+- **Intelligence Card Evolution**: Refactored corridor cards with a row-based layout featuring large leading icons (Car for traffic, Timer for travel times) and grouped "In/Out" metrics for improved scanning.
+- **Persistent Visibility Toggles**: Refined the `Eye`/`EyeOff` toggle logic so icons remain bright, interactive, and high-contrast even when cards are deselected and faded.
+- **Grid Alignment**: The navigation bar is now left-aligned with the map's left border, and the simulation statistics pill is perfectly aligned with the corridor cards. Both sit in a responsive grid row above the main content.
 - **Viewport-Aware Hover Cards**: Refactored briefing and model parameter hover cards to be viewport-aware, ensuring they never render off-screen.
 
 ### Fixed — 2026-04-03 (UI/UX Refinement)
-- **Reference Error Fix**: Resolved `ReferenceError: roadLoggerDownload is not defined` in `SimMap.jsx` by correctly mapping the button click handler to `loggerDownloadRoadStats`.
+- **Reference Error Fixes**: Resolved `ReferenceError` crashes for `Monitor`, `Play`, and `loggerDownloadRoadStats` by ensuring all Lucide icons and engine functions are correctly imported and mapped.
 - **ESLint Compliance**: Fixed all remaining lint errors across `vite.config.js` (missing `__dirname`), `osm/geojson2osm.js` (missing `process` global), and `src/CardMockup.jsx` (unused variable false positive).
-- **Iconic Visual Language**: Significantly enhanced the UI by integrating Lucide icons throughout all interactive components:
-    - **Summary Pill**: Added `Car` (Total) and `Lock` (Avg Time) icons inline with metrics.
-    - **Intelligence Cards**: Added `Eye`/`EyeOff` for visibility states and `Car`/`Timer` for specific telemetry labels.
-    - **Map Controls**: Replaced Braille drag handles with `GripVertical`; updated Play/Pause, Reset, and Log buttons with polished Lucide glyphs.
-    - **Editorial Sections**: Added meaningful icons (`Activity`, `Database`, `FileText`, `Search`) to all primary and secondary headings for improved scanning.
-    - **Access Modal**: Enriched the entry experience with `Activity` branding and a `Play` icon on the initialization CTA.
-    - **Footer**: Added a `PersonStanding` icon next to the builder credit.
-- **Floating Header**: Restored the fixed/floating behavior of the navigation bar, ensuring it remains pinned to the top of the viewport during scroll with a glassy backdrop-blur effect.
-- **Menu Structure Refinement**: Removed the redundant Home icon. Promoted "Simulator" to the primary menu position, linked directly to the live map viewport.
+- **Iconic Visual Language**: Significantly enhanced icon visibility by doubling sizes (`size={28-32}`) and increasing boldness (`strokeWidth={3}`) across primary telemetry displays.
+- **Parsing Fixes**: Removed "smart quotes" in JSX attributes that were causing Internal Server Errors (500) during HMR.
 - **Top Whitespace Removal**: Eliminated excessive vertical space at the top of the application, adjusting `main-layout` padding to accommodate the new floating header height.
-- **Navigation Bar Alignment**: Re-aligned the expanding navigation menu to the left edge of the map viewport, matching the vertical baseline of the simulation area.
-- **Navigation Bar Theme & Overflow**: Updated the expanding navigation menu to use the light sage glassmorphic theme (matching the statistics pill) for better visual cohesion. Fixed a text overflow bug by increasing the active label width and implementing smoother expansion transitions.
-- **Corridor Card Balance**: Increased internal padding and gap spacing within corridor cards (1.25rem) to expand content and eliminate excessive bottom white space.
-- **Road Selection Average Times**: Fixed a bug where average travel times were missing when a specific road was selected; improved road-to-corridor matching logic in both Live and Playback engines by mapping road names to base keywords.
-- **Navigation Bar Layout**: Fixed text wrapping and jumping in the overall statistics pill by stacking labels vertically above values and removing restrictive fixed-width containers. Added `white-space: nowrap` to ensure time and vehicle metrics remain on a single line as numbers grow.
-- **Corridor Auto-Zoom:** Fixed a bug where selecting/deselecting corridor cards failed to zoom the map. The issue was caused by the map re-initializing on every corridor toggle due to `drawFrame` and `syncCanvas` being used as dependencies in the map initialization `useEffect` while they themselves depended on `selectedCorridors`. Fixed by making these functions stable via `selectedCorridorsRef` and stable `useCallback` definitions, ensuring the map stays active and `fitBounds` can execute on the existing instance.
-- **SUMO & UXSim Playback Loop:** `playbackSource` is passed as a React ref (`{ current: PlaybackSource }`) but the `loop` and `updateRoadStats` callbacks in `SimMap.jsx` used it as a direct instance, causing `TypeError: pb.isLoaded is not a function` on every animation frame — silently killing the playback loop. Fixed by resolving the ref with `playbackSource?.current ?? playbackSource`, consistent with the road-coords effect already using `playbackSource?.current || playbackSource`.
-- **Simulation Reset:** Fixed simulation reset and scenario/source switching logic to ensure the model correctly resets to 06:30 by adding `source` to the `resetSim` effect dependencies.
+- **Navigation Bar Layout**: Fixed text wrapping and jumping in the overall statistics pill by stacking labels vertically above values and removing restrictive fixed-width containers.
+- **Corridor Auto-Zoom:** Fixed a bug where selecting/deselecting corridor cards failed to zoom the map by stabilizing the map initialization effect and its dependencies.
+- **SUMO & UXSim Playback Loop:** Fixed a `TypeError` in the playback interpolation engine that was silently killing the animation loop when results mode was active.
 - **Style Guide — `surface-watch` Token:** Added `#D0DDD0` as a formal surface token for the Watch My Road / Overall Summary card.
-- **Style Guide — §1C Corridor Card Palette:** New section documenting the light pastel card gradients, accent/border colours, dark text values, stat block and congestion bar specifications for all four corridors.
-- **Style Guide — §4B Intelligence Cards:** Updated component spec to reference §1C palette, document STOPPED badge behaviour, frosted-white stat block insets, and correct congestion bar spec.
+- **Style Guide — §1C Corridor Card Palette:** Documented the light pastel card gradients, accent/border colours, and stat block specifications for all corridors.
 
 ### Changed — 2026-04-03 (Watch My Road Card — Light Palette & Layout)
 - **Watch My Road — Background:** Replaced dark `#1E3520` with `#D0DDD0` — a sage-tinted surface sitting between the Style Guide's `surface-high` (`#D1DAD1`) and the 3A corridor card, keeping the card in the botanical palette family without competing with the coloured corridor cards.

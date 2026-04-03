@@ -1,5 +1,5 @@
 # Style Guide: Editorial Organicism (Sage Edition)
-**Project:** TokaiSim v3.0  
+**Project:** Traff<span>✱</span>k v3.1  
 **Creative North Star:** "The Curated Earth" — Architectural Monographs meets Botanical Mineralogy.
 
 ---
@@ -39,30 +39,26 @@ Stat block insets use `rgba(255,255,255,0.28)` (frosted white). Congestion bar t
 
 The **Watch My Road** card uses `surface-watch` (`#D0DDD0`) with the same dark-text convention: values `#0F1E13`, labels `rgba(15,30,19,0.55)`.
 
-### C. Condition Accents
-| State | Hex | Name | Rationale |
-| :--- | :--- | :--- | :--- |
-| **Delay** | `#A64D4D` | **Crimson Earth** | Subdued red for congestion/distress. |
-| **Egress** | `#C27D60` | **Copper** | Warm mineral for system exits. |
-
 ---
 
-## 2. Typography: The Engineered Voice
-High-contrast type system balancing precision with editorial breathing room.
+## 2. Typography & Iconography
+High-contrast type system and professional Lucide icons balancing precision with editorial breathing room.
 
 ### A. Font Families
 - **Headlines/Metrics:** **Manrope** (Geometric, architectural).
 - **Body/Labels:** **Work Sans** (Wide stance, high legibility).
+- **Logo:** **Space Grotesk** (Bold, futuristic, high personality).
 
-### B. Typographic Hierarchy
-| Role | Size | Font | Weight | Details |
-| :--- | :--- | :--- | :--- | :--- |
-| **Display-LG** | `3.5rem` | Manrope | 800 | Hero titles, `-0.02em` tracking. |
-| **Headline-MD** | `1.25rem` | Manrope | 700 | Component titles. |
-| **Sim Clock** | `1.1rem` | Manrope | 500 | `tabular-nums` for playback stability. |
-| **Metric-XL** | `1.5rem` | Manrope | 300 | Large data values. |
-| **Body-LG** | `1rem` | Work Sans | 400 | `1.6` line-height for readability. |
-| **Label-SM** | `0.65rem` | Work Sans | 700 | Uppercase, `0.1em` letter-spacing. |
+### B. Iconography (Lucide System)
+Standardised icon set for telemetry and navigation. All primary telemetry icons use `strokeWidth={3}` for increased weight.
+
+| Role | Icon | Size | Weight |
+| :--- | :--- | :--- | :--- |
+| **Traffic / Total** | `Car` | 28-32px | Bold (3) |
+| **Time / Average** | `Timer` / `Clock` | 28-32px | Bold (3) |
+| **Visibility** | `Eye` / `EyeOff` | 18px | Semi (2.5) |
+| **Action** | `Play` / `Pause` | 16-20px | Solid |
+| **Navigation** | `Map`, `Bot`, `Monitor` | 20px | Regular (2) |
 
 ---
 
@@ -71,41 +67,37 @@ High-contrast type system balancing precision with editorial breathing room.
 
 - **Layout Separation:** Sidebar (`surface-low`) sits against Map/Canvas (`canvas`).
 - **Nesting Hierarchy:** Canvas → Surface-Low (Region) → Surface-High (Card).
-- **Elevation:** Use "Sunlight Shadows" only for floating modals:  
-  `box-shadow: 0 24px 48px -12px rgba(17, 29, 19, 0.08);`
+- **Elevation:** Use "Sunlight Shadows" for floating components:  
+  `box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);`
 
 ---
 
 ## 4. Components & Interactive States
 
-### A. The Control Deck (Header)
-- **Aesthetic:** Glassmorphic (`surface-low` @ 85% opacity, `24px` blur).
-- **Buttons (Default):** No border. Background `surface-high`. Text `on-surface`.
-- **Buttons (Active):** 135° Gradient (`primary` → `primary-container`). Text `canvas`.
-- **Buttons (Hover):** Background `surface-highest`.
+### A. Persistent Navigation (The Control Deck)
+- **Traff<span>✱</span>k Logo:** Left-aligned, Space Grotesk, Carbon Black with Celadon `✱`.
+- **Floating Pill:** Fixed at top, glassmorphic (`surface-low` @ 90% opacity, `20px` blur).
+- **Expanding Nav:** Minimal icons expanding to full labels on active state.
 
-### B. Intelligence Cards (Sidebar)
+### B. Summary Pill (Live Telemetry)
+- **Layout:** Vertical stacks (Label over Value).
+- **Telemetry:** Grouped metrics with large leading icons (Car, Timer, Clock).
+- **No-Wrap:** All values use `white-space: nowrap` to prevent jumping.
+
+### C. Intelligence Cards (Sidebar)
 - **Identity:** `3px` left-border using the corridor **Accent / Border** colour (see §1C).
-- **Background:** Light pastel gradient per §1C. Dark text throughout — see §1C for values.
-- **Stat Blocks:** Frosted-white inset (`rgba(255,255,255,0.28)`), `8px` radius.
-- **Congestion Meter:** Single horizontal bar — fill colour is the corridor Accent; `#8B1A1A` when stopped > 70%. Track: `rgba(0,0,0,0.12)`.
-- **Breakdown Row:** `% active | % slowing | % stopped` at 7px uppercase. Stopped segment uses `#8B1A1A` when hot.
-- **STOPPED Badge:** Appears on corridor card header when congestion > 70%. Crimson Earth tones.
-
-### C. Road Analyzer (Watch My Road)
-- **Aesthetic:** High-contrast "Black Box" (`on-surface` background).
-- **Title:** `c-3a (Celadon)` for the street name to signify "Active Selection."
+- **Row-Based Layout:** 
+    - Row 1: `Car` icon leading In/Out Traffic stat blocks.
+    - Row 2: `Timer` icon leading In/Out Average Time stat blocks.
+- **Persistent Toggles:** `Eye` icons are always visible (`zIndex: 100`) and never faded, using corridor accent backgrounds when active.
+- **Deselected State:** Card content fades to `0.25` opacity, but the visibility toggle remains full brightness.
 
 ---
 
 ## 5. Tactical Map & Telemetry
 The map is a "Digital Twin" plotted as an architectural blueprint.
 
-### A. Map Tiles
-- **OpenStreetMap Filter:**  
-  `filter: grayscale(0.2) sepia(0.1) contrast(0.9) brightness(1.05);`
-
-### B. Telemetry Symbolism (The Blueprint System)
+### A. Telemetry Symbolism (The Blueprint System)
 | Vehicle Type | Shape | State |
 | :--- | :--- | :--- |
 | **Inbound Main** | ● **Solid Circle** | Arriving via primary route. |
@@ -114,14 +106,55 @@ The map is a "Digital Twin" plotted as an architectural blueprint.
 | **Egress Rat-Run** | ◇ **Hollow Diamond**| Exiting via residential diversion. |
 | **Parked** | ■ **Slate Square** | Static / Site Plan Plot Point. |
 
-### C. Congestion Animation
-- **Subtle Breathing:** Vehicle color fades between Corridor Color and `Crimson Earth`.
-- **Duration:** 3s `ease-in-out` loop. No footprint change.
+---
+
+## 6. Editorial Sections — Content & Layout
+
+### A. Voice & Theme
+All editorial copy outside the simulator/map/controls uses a **car and traffic metaphor** — witty, tongue-in-cheek, and consistent. The simulator itself is neutral/technical.
+
+| Section | Theme Label | Example Copy |
+| :--- | :--- | :--- |
+| Access barrier | Road Warning / Start the Engine | "Start the Engine →", "ROAD WARNING" |
+| Briefing | Dashcam metaphor | "Traff✱k is the dashcam you never knew you needed" |
+| Models | Road Tested | "Tuning the Engine", "Why the speedometers don't always agree" |
+| Findings | Incident Report | Write-off / Fender-benders / Side-swipes |
+| Footer | Lift metaphor | "Need a lift building with AI?" |
+| Nav | Road idioms | "The Road Map", "Under the Hood", "The Damage Report", "Pit Stop" |
+
+### B. Findings Section — Severity Taxonomy
+The Findings section uses a 3-tier severity taxonomy expressed as a **3-column comparison layout**.
+
+| Tier | Badge label | Meaning | Badge colours |
+| :--- | :--- | :--- | :--- |
+| **Write-off** | WRITE-OFF | Critical findings — TIA assumptions fail | bg `rgba(166,77,77,0.2)` · text `#C47070` · border `rgba(166,77,77,0.4)` |
+| **Fender-benders** | FENDER-BENDERS | Significant but not fatal | bg `rgba(194,125,96,0.15)` · text `#C27D60` · border `rgba(194,125,96,0.35)` |
+| **Side-swipes** | SIDE-SWIPES | Minor but real discrepancies | bg `rgba(112,151,117,0.15)` · text `var(--c-3a)` · border `rgba(112,151,117,0.3)` |
+
+**Column box backgrounds:**
+- Write-off: `rgba(166,77,77,0.1)` with `rgba(166,77,77,0.25)` border
+- Fender-bender: `rgba(194,125,96,0.08)` with `rgba(194,125,96,0.2)` border
+- Side-swipe: `rgba(112,151,117,0.08)` with `rgba(112,151,117,0.2)` border
+
+**Bullet markers:** colour-matched `—` dash using `::before` pseudo-element (no list-style discs).
+
+**Caveat note:** muted strip below the 3 columns — `rgba(241,245,241,0.03)` bg, `rgba(241,245,241,0.07)` border, text at `rgba(241,245,241,0.4)`.
+
+### C. Editorial Section Layout Principles
+Codified from UX audit §14 — apply when building or refactoring Briefing, Models, or Findings:
+
+- **Alternating backgrounds:** Briefing → `var(--canvas)` · Models → `var(--surface-low)` · Findings → `var(--on-surface)`
+- **Shared vertical padding token:** `--section-vpad: clamp(3.5rem, 7vw, 6rem)` applied via `padding-block`
+- **Card padding token:** `--card-pad: clamp(1.25rem, 2.5vw, 1.75rem)`
+- **Card radius token:** `--card-radius: 0.875rem`
+- **Grid patterns:** Use one pattern per section — either equal 3-column (`repeat(3, 1fr)`) or 2fr/1fr asymmetric. Do not mix within a section.
+- **Mobile:** All editorial grids collapse to single column at `max-width: 768px`. Section background fills must be preserved on mobile for visual separation.
 
 ---
 
-## 6. Sizing & Spacing
-- **Sidebar Width:** `340px` (Expanded for editorial clarity).
-- **Header Height:** `72px`.
-- **Corner Radius:** `4px` (Standard components), `8px` (Map/Hero images).
+## 7. Sizing & Spacing
+- **Sidebar Width:** `340px`.
+- **Floating Header Height:** `72px`.
+- **Corner Radius:** `4px` (Small), `12px` (Cards), `100px` (Pills), `0.875rem` (Editorial cards via `--card-radius`).
 - **Standard Padding:** `1.5rem` (`space-4`).
+- **Section Vertical Padding:** `clamp(3.5rem, 7vw, 6rem)` via `--section-vpad`.

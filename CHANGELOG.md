@@ -4,11 +4,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-### Fixed — 2026-04-03 (SUMO / UXSim Playback)
+### Added — 2026-04-03 (Brand Evolution & UI Refinement)
+- **Traff✱k Rebrand**: Officially renamed the application from "Tokai-Sim" to **Traff✱k**. Updated branding across the splash modal, navigation bar, and footer.
+- **Lucide Icon Integration**: Replaced custom SVG icons with high-quality Lucide icons (`Home`, `Bot`, `Map`, `Monitor`, `MessageCircleMore`) throughout the navigation system for a more consistent and professional UI.
+- **Branded Navigation**: Added a prominent "Traff✱k" logo heading to the navigation bar, integrated alongside the expanding icon menu for immediate brand recognition.
+- **Expanding Icon Navigation**: Replaced the standard text navigation and hamburger menu with a modern, expanding-icon pill menu (Home, Strategy, Calendar, Settings).
+- **Grid Alignment**: The navigation bar is now left-aligned with the map's left border (span 8), and the simulation statistics pill is perfectly left- and right-aligned with the corridor cards (span 4). Both sit in a responsive grid row above the main content and scroll natively with the page.
+- **Corridor Card Eye Icons**: Added interactive eye/hide icons to the corridor cards to clearly indicate and control visibility states.
+- **Viewport-Aware Hover Cards**: Refactored briefing and model parameter hover cards to be viewport-aware, ensuring they never render off-screen.
+
+### Fixed — 2026-04-03 (UI/UX Refinement)
+- **Floating Header**: Restored the fixed/floating behavior of the navigation bar, ensuring it remains pinned to the top of the viewport during scroll with a glassy backdrop-blur effect.
+- **Menu Structure Refinement**: Removed the redundant Home icon. Promoted "Simulator" to the primary menu position, linked directly to the live map viewport.
+- **Top Whitespace Removal**: Eliminated excessive vertical space at the top of the application, adjusting `main-layout` padding to accommodate the new floating header height.
+- **Navigation Bar Alignment**: Re-aligned the expanding navigation menu to the left edge of the map viewport, matching the vertical baseline of the simulation area.
+- **Navigation Bar Theme & Overflow**: Updated the expanding navigation menu to use the light sage glassmorphic theme (matching the statistics pill) for better visual cohesion. Fixed a text overflow bug by increasing the active label width and implementing smoother expansion transitions.
+- **Corridor Card Balance**: Increased internal padding and gap spacing within corridor cards (1.25rem) to expand content and eliminate excessive bottom white space.
+- **Road Selection Average Times**: Fixed a bug where average travel times were missing when a specific road was selected; improved road-to-corridor matching logic in both Live and Playback engines by mapping road names to base keywords.
+- **Navigation Bar Layout**: Fixed text wrapping and jumping in the overall statistics pill by stacking labels vertically above values and removing restrictive fixed-width containers. Added `white-space: nowrap` to ensure time and vehicle metrics remain on a single line as numbers grow.
 - **Corridor Auto-Zoom:** Fixed a bug where selecting/deselecting corridor cards failed to zoom the map. The issue was caused by the map re-initializing on every corridor toggle due to `drawFrame` and `syncCanvas` being used as dependencies in the map initialization `useEffect` while they themselves depended on `selectedCorridors`. Fixed by making these functions stable via `selectedCorridorsRef` and stable `useCallback` definitions, ensuring the map stays active and `fitBounds` can execute on the existing instance.
 - **SUMO & UXSim Playback Loop:** `playbackSource` is passed as a React ref (`{ current: PlaybackSource }`) but the `loop` and `updateRoadStats` callbacks in `SimMap.jsx` used it as a direct instance, causing `TypeError: pb.isLoaded is not a function` on every animation frame — silently killing the playback loop. Fixed by resolving the ref with `playbackSource?.current ?? playbackSource`, consistent with the road-coords effect already using `playbackSource?.current || playbackSource`.
-
-### Changed — 2026-04-03 (Style Guide v3.1 — Card Palette)
+- **Simulation Reset:** Fixed simulation reset and scenario/source switching logic to ensure the model correctly resets to 06:30 by adding `source` to the `resetSim` effect dependencies.
 - **Style Guide — `surface-watch` Token:** Added `#D0DDD0` as a formal surface token for the Watch My Road / Overall Summary card.
 - **Style Guide — §1C Corridor Card Palette:** New section documenting the light pastel card gradients, accent/border colours, dark text values, stat block and congestion bar specifications for all four corridors.
 - **Style Guide — §4B Intelligence Cards:** Updated component spec to reference §1C palette, document STOPPED badge behaviour, frosted-white stat block insets, and correct congestion bar spec.

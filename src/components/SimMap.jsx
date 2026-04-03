@@ -221,8 +221,13 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
     if (!currentSel) { onRoadStatsUpdate(null); return; }
 
     if (sourceRef.current === 'live') {
-      const stats = { inbound: { total: 0, active: 0, slowing: 0, stopped: 0 }, outbound: { total: 0, active: 0, slowing: 0, stopped: 0 } };
+      const stats = { 
+        inbound:  { total: 0, active: 0, slowing: 0, stopped: 0 }, 
+        outbound: { total: 0, active: 0, slowing: 0, stopped: 0 },
+        avgInDelay: 0, avgOutDelay: 0
+      };
       const selName = currentSel.name.toLowerCase().trim();
+
       vehiclesRef.current.forEach(v => {
         const route = ROUTE_CONFIG[v.routeId]; if (!route?.segments) return;
         const isOnRoad = route.segments.some(s => s.roadName.toLowerCase().trim() === selName && v.pos >= s.startPos - 0.005 && v.pos <= s.endPos + 0.005);
@@ -231,8 +236,30 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
           if (v.v < 0.5) bucket.stopped++; else if (v.v < 2) bucket.slowing++; else bucket.active++;
         }
       });
-      stats.inbound.total = roadVisitTrackerRef.current.inbound.get(selName)?.size || 0;
-      stats.outbound.total = roadVisitTrackerRef.current.outbound.get(selName)?.size || 0;
+      
+      const totalIn = roadVisitTrackerRef.current.inbound.get(selName)?.size || 0;
+      const totalOut = roadVisitTrackerRef.current.outbound.get(selName)?.size || 0;
+      stats.inbound.total = totalIn;
+      stats.outbound.total = totalOut;
+
+      // Use corridor average delay as a proxy if we're on a corridor road
+      // Find which corridor this road belongs to (if any)
+      const cid = ['1A', '2A', '2B', '3A'].find(id => {
+        const keywords = {
+          '1A': ['main rd', 'main road', 'dreyersdal'],
+          '2A': ['homestead'],
+          '2B': ['childrens', 'children\'s'],
+          '3A': ['firgrove', 'timber']
+        }[id];
+        return keywords.some(k => selName.includes(k));
+      });
+
+      if (cid) {
+        const inD = inboundDelayRef.current[cid], outD = outboundDelayRef.current[cid];
+        stats.avgInDelay = inD.count > 0 ? (inD.total / inD.count / 60) : 0;
+        stats.avgOutDelay = outD.count > 0 ? (outD.total / outD.count / 60) : 0;
+      }
+
       onRoadStatsUpdate(stats);
     } else if (sourceRef.current === 'sumo' || sourceRef.current === 'uxsim') {
       // Playback mode: query playback source at current sim time so stats survive pause/stop.
@@ -493,7 +520,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
   
   useEffect(() => { loopRef.current = loop; }, [loop]);
   useEffect(() => { if (playing) rafRef.current = requestAnimationFrame(loopRef.current); else if (rafRef.current) cancelAnimationFrame(rafRef.current); return () => rafRef.current && cancelAnimationFrame(rafRef.current); }, [playing, loop]);
-  useEffect(() => resetSim(), [scenario, resetSim]);
+  useEffect(() => resetSim(), [scenario, source, resetSim]);
   useEffect(() => drawFrame(), [showRoutes, selectedCorridors, drawFrame]);
 
   // Supply road geometry to the playback engine so it can interpolate vehicle positions.

@@ -1,5 +1,5 @@
 // ── StatsPanel.jsx ────────────────────────────────────────────────────────────
-import { memo, useRef, useState, useCallback } from 'react';
+import { memo, useRef, useCallback } from 'react';
 
 function fmtTime(minutes) {
   if (!minutes || minutes === 0) return '—';
@@ -30,25 +30,25 @@ function StatBlock({ label, value, accent, dim, textColor, labelColor, bgColor }
   return (
     <div style={{
       background: bgColor || 'rgba(0,0,0,0.22)',
-      borderRadius: 8,
-      padding: '0.4rem 0.55rem',
+      borderRadius: 6,
+      padding: '0.35rem 0.5rem',
       display: 'flex',
       flexDirection: 'column',
-      gap: 2,
+      gap: 1,
     }}>
       <span style={{
         fontSize: 7,
         fontWeight: 900,
-        letterSpacing: '0.14em',
+        letterSpacing: '0.12em',
         textTransform: 'uppercase',
         color: labelColor || 'rgba(241,245,241,0.38)',
         lineHeight: 1,
       }}>{label}</span>
       <span style={{
         fontFamily: 'Manrope, sans-serif',
-        fontSize: '1.15rem',
+        fontSize: '1rem',
         fontWeight: 800,
-        letterSpacing: '-0.03em',
+        letterSpacing: '-0.02em',
         color: valueColor,
         lineHeight: 1,
         fontVariantNumeric: 'tabular-nums',
@@ -137,6 +137,9 @@ function CorridorCard({ id, c, isSelected, onToggle }) {
         </span>
         <span className="holo-label" style={{ color: cols.mutedDark }}>{c.label}</span>
         {isHot && <span className="holo-hot">STOPPED</span>}
+        <div className="holo-eye" style={{ color: cols.accent, opacity: isSelected ? 0.8 : 0.4 }}>
+          {isSelected ? '👁' : '✕'}
+        </div>
       </div>
 
       {/* Row 2 — 2×2 stat grid */}
@@ -243,11 +246,12 @@ const StatsPanel = memo(({ statsData, selectedCorridors, onToggleCorridor, selec
 
             {/* Row 2 — 2×2 stat grid */}
             <div className="holo-grid">
-              <StatBlock label="Total In"     value={totalIn}             textColor="#0F1E13" labelColor="rgba(15,30,19,0.55)" bgColor="rgba(255,255,255,0.28)" />
+              <StatBlock label="Total In"     value={totalIn}            textColor="#0F1E13" labelColor="rgba(15,30,19,0.55)" bgColor="rgba(255,255,255,0.28)" />
               <StatBlock label="Avg Time In"  value={fmtTime(avgInTime)}  textColor="#0F1E13" labelColor="rgba(15,30,19,0.55)" bgColor="rgba(255,255,255,0.28)" />
               <StatBlock label="Total Out"    value={totalOut}            textColor="#0F1E13" labelColor="rgba(15,30,19,0.55)" bgColor="rgba(255,255,255,0.28)" dim />
               <StatBlock label="Avg Time Out" value={fmtTime(avgOutTime)} textColor="#0F1E13" labelColor="rgba(15,30,19,0.55)" bgColor="rgba(255,255,255,0.28)" dim />
             </div>
+
 
             {/* Row 3 — congestion */}
             <CongBar pct={globalCongPct} accent="#709775" isHot={isGlobalHot} trackColor="rgba(0,0,0,0.12)" />
@@ -276,13 +280,14 @@ const StatsPanel = memo(({ statsData, selectedCorridors, onToggleCorridor, selec
               <button className="rw-close" onClick={onCloseRoad}>×</button>
             </div>
 
-            {/* Row 2 */}
+            {/* Row 2 — 2×2 stat grid */}
             <div className="holo-grid">
               <StatBlock label="Total In"     value={inbound.total}                   textColor="#0F1E13" labelColor="rgba(15,30,19,0.55)" bgColor="rgba(255,255,255,0.28)" />
               <StatBlock label="Avg Time In"  value={fmtTime(roadStats?.avgInDelay)}  textColor="#0F1E13" labelColor="rgba(15,30,19,0.55)" bgColor="rgba(255,255,255,0.28)" />
               <StatBlock label="Total Out"    value={outbound.total}                  textColor="#0F1E13" labelColor="rgba(15,30,19,0.55)" bgColor="rgba(255,255,255,0.28)" dim />
               <StatBlock label="Avg Time Out" value={fmtTime(roadStats?.avgOutDelay)} textColor="#0F1E13" labelColor="rgba(15,30,19,0.55)" bgColor="rgba(255,255,255,0.28)" dim />
             </div>
+
 
             {/* Row 3 */}
             <CongBar pct={wCongPct} accent="#709775" isHot={wIsHot} trackColor="rgba(0,0,0,0.12)" />

@@ -1,17 +1,26 @@
 CONTENT CHANGE:
 Avg Time Out will be understated due to no modelling of traffic on Firgrove, Ladies Mile and Main Roads
 SPEED HUMPS IN DANTE, VINEYARD & LEYDEN WILL SLOW THIGS EVEN MORE.
+Change findings to 3 blocks:  Side-swipes, Fender-benders and Write-offs
 
-The expanded hover text is rendering off screen
+will this work on a static html site without react? https://21st.dev/community/components/reuno-ui/background-paper-shaders/default
+can we change the coolours to align with our colour scheme?
+if so can we use this background for the modal pop-over at the start.
 
-the bottom of each corridor card has lots of white space. perhaps improve the padding between each line - and also shorten each card to make it more balanced
+implement the https://www.shadcn.io/icons/lucide icons throughout the site
+Menus bar:
+- Home - Home (top of page)
+- Simulator - https://www.shadcn.io/icon/lucide-bot
+- Models - https://www.shadcn.io/icon/lucide-map
+- Findings - https://www.shadcn.io/icon/lucide-computer
+- Contact - https://www.shadcn.io/icon/lucide-message-circle-more
 
-add the Overall Avg Time In/ Out to the right aligned numbers in the nav bar
-the reset button or moving to a different scenario does not reset to 6:30 and let the model run.
-no avg time shows when selecting a road to watch on Live or SUMO models
+Hide/show - https://www.shadcn.io/icon/lucide-eye / https://www.shadcn.io/icon/lucide-eye-off
+Traffic - https://www.shadcn.io/icon/lucide-car
+Avg Time - https://www.shadcn.io/icon/lucide-timer
+Overall Summary - https://www.shadcn.io/icon/lucide-arrow-up-from-line
+Road focus - https://www.shadcn.io/icon/lucide-arrow-down-from-line
 
-check the colours of the routes and rat-runs are consistent for each route.
-on the SUMO model check the colours of the routes and rat-runs. I am seeing some cars from Main Rd up past Homestead. And Dreyersdal Rd corridor showing "main rd" coloured cars
 
 check the start time of the model - no cars seems to go through until 6:40 so the first few minutes are empty
 why arent more cars using the dereyersdal farm / tussendal rd for entry?
@@ -327,3 +336,43 @@ lets tweak the Corridor Cards:
 4) swap the pills so that the first row shows  "Traffic In" and "Avg Time In" and the second row shows "Traffic Out" and "Avg Time Out"
 
 if it will help you can check out https://github.com/yousifamanuel/terraink.git
+
+The expanded hover text is rendering off screen. fix it so the pop-up and text alsways renders on the screen
+
+the bottom of each corridor card has lots of white space. perhaps improve the padding between each line - and also shorten each card to make it more balanced
+
+add the Overall Avg Time In/ Out to the right aligned numbers in the nav bar
+the reset button or moving to a different scenario does not reset to 6:30 and let the model run.
+no avg time shows when selecting a road to watch on Live or SUMO models
+
+check the colours of the routes and rat-runs are consistent for each route.
+on the SUMO model check the colours of the routes and rat-runs. I am seeing some cars from Main Rd up past Homestead. And Dreyersdal Rd corridor showing "main rd" coloured cars
+
+https://21st.dev/community/components/kavikatiyar/tracker-card/default
+https://21st.dev/community/components/reui/statistics-card-12/default
+https://21st.dev/community/components/reapollo/map/rich-popups-markers
+https://21st.dev/community/components/jshguo/interfaces-tooltip/bottom
+https://21st.dev/community/components/thanh/countdown-timer/default
+
+https://21st.dev/community/components/reapollo/interfaces-hover-card/top
+https://21st.dev/community/components/molecule-ui/warp-dialog/default
+https://21st.dev/community/components/easemize/modern-mobile-menu/default
+https://21st.dev/community/components/YadHakim/animated-state-icons/default
+
+use your front-end design skill and make these adjustments. be sure to use a task list and update each as you complete each task:
+- task 2 is wrong - the padding can increase to better balance each corridor card within the card - THERE IS TOO MUCH WHITE SPACE AT THE BOTTOM OF EACH CARD
+- task 5 - the avg times are still not showing when selecting a specific rd. i am not sure these are part of the mmodel and tracked caluation. if they are, then fix it. if not, just let me know
+- the numbers in the top nav bar are wrapping and showing inconsistently when running out of room
+- the "nav bar" needs to be shortened to end in line with the right-hand side of the map.
+- the numbers in the nav bar need to be in their own "pill" styled like the nav bar. these should scroll off the page just like the map elements do when scrolling odwn the page
+- the hover text boxes dont seem to be aware of the edge of the viewport - use this as an example - but keep our existing colours https://21st.dev/community/components/reapollo/interfaces-hover-card/top.
+- add an "eye/hide" icon to the top right corner of the heading row of the corridor cards that changes based on teh state of the card - whether it is selected or unselected.
+- implement this style of menu - but within our colour scheme - https://21st.dev/community/components/easemize/modern-mobile-menu/default
+
+the menu implementation is incorrect. what we visually want is the menu bar to show the icons and then change as you work through the menu [Image ...t
+   13.31.24.png] [Image ...t 13.32.35.png] as per the images. that is all. this was the prompt on using that menu feature - we dont need 2 menu systems as
+   it currently stands. also the right border of the nav/menu bar needs to align with the right boreder of the map component. and teh "numbers" need to
+   start inline with the nav/menu bar aligned left with the Corridor components, and the right-side border ends inline with the corridor right-side border
+
+you still havent fixed the text overflow on the nav bar and the menu should be left aligned with the map left-border. ALSO IT NEEDS TO USE OUR THEME
+   COLOURS. @/Users/neill/Desktop/Screenshot\ 2026-04-03\ at\ 13.52.33.png

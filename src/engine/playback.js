@@ -43,7 +43,7 @@ export class PlaybackSource {
   // flow_N_in.M — groups of 5 flows per corridor in demand generation order
   static _FLOW_CORRIDORS = ['1A', '2A', '2B', '3A'];
   static _CORRIDOR_LABELS = {
-    '1A': 'Dreyersdal Rd N', '2A': 'Homestead Ave',
+    '1A': 'Main Rd', '2A': 'Homestead Ave',
     '2B': "Children's Way",  '3A': 'Firgrove Way',
   };
   // Primary entry road for each corridor (used for delay stats)
@@ -53,9 +53,25 @@ export class PlaybackSource {
   };
 
   _flowToCorridor(vehicleId) {
+    // Expected format: "flow_N_in.M" where N is the bucket index (0-19)
+    // 0-4   -> 1A
+    // 5-9   -> 2A
+    // 10-14 -> 2B
+    // 15-19 -> 3A
     const m = vehicleId.match(/^flow_(\d+)_/);
     if (!m) return null;
-    return PlaybackSource._FLOW_CORRIDORS[Math.floor(parseInt(m[1]) / 5)] ?? null;
+    const flowIdx = parseInt(m[1]);
+    const corridorIdx = Math.floor(flowIdx / 5);
+    return PlaybackSource._FLOW_CORRIDORS[corridorIdx] ?? null;
+  }
+
+  _slugToCorridor(slug) {
+    const s = slug.toLowerCase();
+    if (s.includes('dreyersdal') || s.includes('main_rd')) return '1A';
+    if (s.includes('homestead')) return '2A';
+    if (s.includes('childrens') || s.includes('children_s')) return '2B';
+    if (s.includes('firgrove') || s.includes('timber')) return '3A';
+    return null;
   }
 
   /**
@@ -283,6 +299,16 @@ export class PlaybackSource {
     const cumulativeIn  = fs.roadVisitsIn?.[slug]  ?? 0;
     const cumulativeOut = fs.roadVisitsOut?.[slug] ?? 0;
 
+    // Use corridor average delay as a proxy if we're on a corridor road
+    const cid = this._slugToCorridor(slug);
+    let avgInDelay = 0, avgOutDelay = 0;
+    if (cid) {
+      const spawned = fs.spawned[cid] ?? 0;
+      const slowSec = fs.slowTime[cid] ?? 0;
+      avgInDelay = spawned > 0 ? (slowSec / spawned) / 60 : 0;
+      avgOutDelay = (this._avgOutDelaySec?.[cid] ?? 0) / 60;
+    }
+
     // Instantaneous speed breakdown from current frame (split by direction)
     const live = {
       inbound:  { active: 0, slowing: 0, stopped: 0 },
@@ -299,6 +325,8 @@ export class PlaybackSource {
     return {
       inbound:  { total: cumulativeIn,  ...live.inbound },
       outbound: { total: cumulativeOut, ...live.outbound },
+      avgInDelay,
+      avgOutDelay,
     };
   }
 

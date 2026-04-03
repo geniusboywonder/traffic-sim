@@ -5,6 +5,25 @@ import StatsPanel from './components/StatsPanel';
 import { PlaybackSource } from './engine/playback';
 import './App.css';
 
+function formatClock(simTime) {
+  const totalSec  = Math.floor(simTime ?? 0);
+  const baseMin   = 6 * 60 + 30;
+  const totalMin  = baseMin + Math.floor(totalSec / 60);
+  const hours24   = Math.floor(totalMin / 60) % 24;
+  const mins      = totalMin % 60;
+  const h12       = hours24 % 12 || 12;
+  const ampm      = hours24 < 12 ? 'AM' : 'PM';
+  return `${h12}:${String(mins).padStart(2, '0')} ${ampm}`;
+}
+
+function fmtTime(minutes) {
+  if (!minutes || minutes === 0) return '—';
+  const totalSec = Math.round(minutes * 60);
+  const m = Math.floor(totalSec / 60);
+  const s = totalSec % 60;
+  return `${m}:${String(s).padStart(2, '0')}`;
+}
+
 const INITIAL_STATS = {
   corridors: {
     '3A': { label: 'Firgrove Way',     current: 0, spawned: 0, exited: 0, avgInDelay: 0, avgOutDelay: 0, congestion: 0, active: 0, slowing: 0, stopped: 0 },
@@ -21,7 +40,7 @@ const AccessBarrier = ({ onInitialize }) => (
       <div className="bezel-inner barrier-content">
         <header style={{ textAlign: 'center' }}>
           <div className="barrier-title-box">
-            <h2>Tokai High School Traffic Simulator</h2>
+            <h2>Traff<span>✱</span>k - Tokai High Traffic Simulator</h2>
           </div>
         </header>
 
@@ -52,7 +71,7 @@ const BentoBriefing = () => (
         <div className="narrative-item">
           <h3 className="narrative-subtitle">Microscopic Logic</h3>
           <p className="narrative-text-large">
-            Tokai-Sim is like a super-realistic video game that lets you watch exactly what happens during the morning school drop-off at Tokai High.
+            Traff<span>✱</span>k is like a super-realistic video game that lets you watch exactly what happens during the morning school drop-off at Tokai High.
           </p>
         </div>
         <div className="narrative-item">
@@ -215,7 +234,7 @@ const Footer = () => (
   <footer className="site-footer" id="contact">
     <div className="footer-content">
       <div className="footer-brand">
-        <h2>Tokai-Sim</h2>
+        <h2>Traff<span>✱</span>k</h2>
         <p className="footer-slogan">"putting you in the driving seat"</p>
       </div>
       <div className="footer-credits">
@@ -322,18 +341,46 @@ export default function App() {
 
   const handleRoadStatsUpdate = useCallback((stats) => setRoadStats(stats), []);
 
+  const corrList = Object.values(statsData.corridors);
+  const totalIn = corrList.reduce((s, c) => s + (c.spawned || 0), 0);
+  const totalOut = corrList.reduce((s, c) => s + (c.exited || 0), 0);
+  const activeDelaysIn = corrList.filter(c => c.avgInDelay > 0);
+  const avgInTime = activeDelaysIn.length > 0 ? activeDelaysIn.reduce((s, c) => s + c.avgInDelay, 0) / activeDelaysIn.length : 0;
+  const activeDelaysOut = corrList.filter(c => c.avgOutDelay > 0);
+  const avgOutTime = activeDelaysOut.length > 0 ? activeDelaysOut.reduce((s, c) => s + c.avgOutDelay, 0) / activeDelaysOut.length : 0;
+
   return (
     <div className="app">
       <div className="noise-overlay" />
 
       {!initialized && <AccessBarrier onInitialize={() => setInitialized(true)} />}
 
-      <Header simTime={simTime} statsData={statsData} />
-
-      <main className="main-layout" id="simulator">
-        <header className="hero-header">
-          {/* Overall summary and titles moved to Header and Controls */}
-        </header>
+      <main className="main-layout" id="simulator" style={{ paddingTop: '6rem' }}>
+        <div className="scrolling-top-bar">
+          <div className="scrolling-top-bar-inner">
+            <div className="nav-container">
+              <Header />
+            </div>
+            <div className="stats-pill-container">
+              <div className="scrolling-stats-pill">
+                <div className="htc-stat">
+                  <span className="htc-label">Time</span>
+                  <span className="htc-value">{formatClock(simTime)}</span>
+                </div>
+                <div className="htc-divider" />
+                <div className="htc-stat">
+                  <span className="htc-label">Total In/Out</span>
+                  <span className="htc-value">{totalIn} / {totalOut}</span>
+                </div>
+                <div className="htc-divider" />
+                <div className="htc-stat">
+                  <span className="htc-label">Avg Time In/Out</span>
+                  <span className="htc-value">{fmtTime(avgInTime)} / {fmtTime(avgOutTime)}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <div className="content">
           <div className="map-viewport-container bezel-outer">

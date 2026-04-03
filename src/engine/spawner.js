@@ -5,10 +5,17 @@ import { ROUTE_CONFIG, CORRIDOR_ROUTES, EGRESS_ROUTES, estimateRouteLength } fro
 import { PARKING_CAPACITY, getParkingOccupancy } from './idm';
 
 export const SCENARIO_CONFIG = {
-  L: { totalTrips: 500, peakWindowMin: 75, ratRunThreshold: 0.10 },
-  M: { totalTrips: 650, peakWindowMin: 60, ratRunThreshold: 0.08 },
-  H: { totalTrips: 840, peakWindowMin: 45, ratRunThreshold: 0.06 },
+  L: { totalTrips: 500, peakWindowMin: 75, ratRunThreshold: 0.10, habitualRatRunProb: 0.06 },
+  M: { totalTrips: 650, peakWindowMin: 60, ratRunThreshold: 0.08, habitualRatRunProb: 0.08 },
+  H: { totalTrips: 840, peakWindowMin: 45, ratRunThreshold: 0.06, habitualRatRunProb: 0.10 },
 };
+
+// Simulation timing: offset skips the near-empty Gaussian tail at 06:30.
+// SIM_START_OFFSET: simTime starts here, clock displays 06:40 for this value.
+// SIM_END_SEC: when to stop the live simulation per scenario.
+// H runs past 09:00 because the queue has not cleared by then.
+export const SIM_START_OFFSET = 600; // 10 min → clock starts at 06:40
+export const SIM_END_SEC = { L: 9000, M: 9000, H: 10800 }; // H: 09:30
 
 export const DWELL_S = 45; 
 
@@ -43,6 +50,13 @@ export function spawnRate(simTimeSec, scenario) {
 export function assignRoute(corridorId, scenario, density, congestionScore = 0) {
   const cfg = SCENARIO_CONFIG[scenario], crConfig = CORRIDOR_ROUTES[corridorId];
   if (!crConfig || crConfig.ratRuns.length === 0) return crConfig?.main ?? corridorId;
+
+  // Habitual users: a base % always takes rat-runs regardless of congestion,
+  // representing commuters who know the shortcut and use it in both directions.
+  if (Math.random() < cfg.habitualRatRunProb) {
+    return crConfig.ratRuns[Math.floor(Math.random() * crConfig.ratRuns.length)];
+  }
+
   if (density < cfg.ratRunThreshold) return crConfig.main;
   const ratRunProb = Math.min(0.15 + congestionScore * 0.70, 0.85);
   if (Math.random() < ratRunProb) {

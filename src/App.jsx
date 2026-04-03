@@ -3,12 +3,13 @@ import { PersonStanding, Database, Activity, FileText, Search, Info, AlertTriang
 import Header from './components/Header';
 import SimMap from './components/SimMap';
 import StatsPanel from './components/StatsPanel';
+import { SmokeBackground } from './components/SmokeBackground';
 import { PlaybackSource } from './engine/playback';
 import './App.css';
 
 function formatClock(simTime) {
   const totalSec  = Math.floor(simTime ?? 0);
-  const baseMin   = 6 * 60 + 30;
+  const baseMin   = 6 * 60 + 40;
   const totalMin  = baseMin + Math.floor(totalSec / 60);
   const hours24   = Math.floor(totalMin / 60) % 24;
   const mins      = totalMin % 60;
@@ -37,8 +38,11 @@ const INITIAL_STATS = {
 
 const AccessBarrier = ({ onInitialize }) => (
   <div className="access-barrier" id="access-barrier">
-    <div className="bezel-outer barrier-card">
-      <div className="bezel-inner barrier-content">
+    <div className="barrier-card">
+      <div className="barrier-smoke-bg">
+        <SmokeBackground smokeColor="#96B89A" />
+      </div>
+      <div className="barrier-content">
         <header style={{ textAlign: 'center' }}>
           <div className="barrier-title-box" style={{ display: 'inline-flex', alignItems: 'center', gap: '1rem' }}>
             <Activity size={32} color="var(--c-3a)" />
@@ -141,16 +145,6 @@ const BentoBriefing = () => {
             </div>
           </div>
 
-          <div className="limitations-card">
-            <span className="limitations-title" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '1rem', color: 'var(--delay)' }}>
-              <OctagonX size={24} strokeWidth={3} />
-              ROAD CLOSED: MODELLING LIMITATIONS
-            </span>
-            <ul className="limitations-list">
-              <li>• NO SWEET VALLEY SCHOOL TRAFFIC CONDITIONS ARE AVAILABLE</li>
-              <li>• NO TRAFFIC CONDITIONS FOR EXITING TO FIRGROVE, LADIES MILE OR MAIN RD ARE AVAILABLE</li>
-            </ul>
-          </div>
         </div>
       </div>
     </section>
@@ -161,13 +155,29 @@ const ModelsSection = () => (
   <section className="models-section" id="models">
     <div className="models-grid">
       <div className="models-header">
+        <span className="models-subtitle">Under the Hood</span>
         <h2 className="models-title" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <Activity size={48} color="var(--c-3a)" />
-          Models & Validation
+          Road Tested
         </h2>
       </div>
 
       <div className="models-content">
+        <div className="road-closed-block">
+          <div className="road-closed-header">
+            <OctagonX size={22} strokeWidth={3} />
+            <span>✕ &nbsp;ROAD CLOSED&nbsp; ✕</span>
+            <OctagonX size={22} strokeWidth={3} />
+          </div>
+          <p className="road-closed-intro">This modelling <strong>EXCLUDES</strong> any modelling for:</p>
+          <ul className="road-closed-list">
+            <li>Sweet Valley School runs</li>
+            <li>Bergvliet residents local traffic movements to work, school and university</li>
+            <li>ALL traffic <em>exiting</em> to Firgrove Rd, Ladies Mile Rd and Main Rd</li>
+            <li>New essential traffic calming measures in Dante Rd, Vineyard Rd, Ruskin Rd, Leyden Rd</li>
+          </ul>
+          <p className="road-closed-footer">All Avg Time Out figures will be <strong>massively understated</strong> based on the above.</p>
+        </div>
         <div className="model-entry">
           <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <FileText size={24} color="var(--c-3a)" />

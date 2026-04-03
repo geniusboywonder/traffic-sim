@@ -78,17 +78,34 @@ export function junctionHoldDuration(jid, junctionControl, simTime, lastReleaseT
     return 0;
   }
 
-  // Final Egress Points: Busy main road wait times (7:30 - 8:30)
-  // J1: Main Rd, J9: Homestead (Sweet Valley), J13: Firgrove/Dreyersdal
+  // Final Egress Points: External rush-hour back-pressure (07:20–09:00+)
+  // J1: Main Rd exit, J9: Homestead Ave exit, J13: Firgrove/Dreyersdal exit
+  // Peak centred at simTime=5400 (08:00 relative to 06:30 start = 75+15min into sim).
   if ([1, 9, 13].includes(parseInt(jid)) && routeId.startsWith('EG-')) {
-    if (simTime >= 3000 && simTime <= 8000) {
-      const sigma = 1200; // wider peak
-      const peak = 20.0; // more delay
+    if (simTime >= 3000 && simTime <= 9000) {
+      const sigma = 1200;
+      const peak = 20.0;
       const base = 3.0;
       const multiplier = Math.exp(-Math.pow(simTime - 5400, 2) / (2 * Math.pow(sigma, 2)));
       const dynamicHold = base + (peak - base) * multiplier;
       if (gap < dynamicHold) return dynamicHold - gap;
     }
+  }
+
+  // J8: Children's Way / Ladies Mile traffic signal — queue overflow during peak.
+  // Standard 60s cycle provides base behaviour; dynamic hold adds backlog delay
+  // when more vehicles arrive per phase than can clear (peak 07:30–08:30).
+  if (parseInt(jid) === 8 && routeId.startsWith('EG-')) {
+    const baseSignal = (simTime % 60) < 30 ? 0 : 60 - (simTime % 60);
+    if (simTime >= 3600 && simTime <= 8400) {
+      const sigma = 900;
+      const peak = 12.0; // lower than give-way junctions — signal still clears some
+      const base = 0;
+      const multiplier = Math.exp(-Math.pow(simTime - 4800, 2) / (2 * Math.pow(sigma, 2)));
+      const queueOverflow = base + (peak - base) * multiplier;
+      return Math.max(baseSignal, queueOverflow);
+    }
+    return baseSignal;
   }
 
   switch (junctionControl) {

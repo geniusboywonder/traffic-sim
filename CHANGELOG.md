@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### Changed — 2026-04-03 (Under the Hood Section Rewrite)
+- **ModelsSection — Full Copy & Structure Rewrite:** Replaced the previous two-entry layout with a five-entry numbered chain narrative. Entries: ① The Foundation (TIA), ② Our Live Simulation, ③ SUMO — Professional Cross-Check, ④ UXSim — Network-Level Confirmation, ⑤ Reading the Instruments (discrepancies). Copy rewritten to clearly communicate the validation hierarchy: build on TIA → validate with SUMO → cross-check SUMO & Live with UXSim.
+- **Intro Text Added:** New `models-intro` block (span 8, paired with header span 4) with lead copy: "Three independent models. One consistent conclusion."
+- **Road Closed Block Repositioned:** Moved from standalone full-width block before content into the bottom of `models-content`, framed as an important note concluding the section.
+- **Chain Badge Component:** Added `.model-chain-badge` (numbered circle ①–⑤) beside each entry header, communicating the sequential validation chain visually.
+- **Layout Change:** `models-content` now spans 12 columns (was 8) — full-width layout suits the linear narrative better than the previous side-by-side column with empty header space.
+- **UXSim Framing Corrected:** UXSim is no longer presented as a co-equal model alongside SUMO. Its role is clearly scoped as network-level throughput validation only — it does not model speed humps, junction behaviour, or rat-run decisions.
+
 ### Added — 2026-04-03 (Simulation Engine Fixes & Modal Redesign)
 - **SmokeBackground Component:** Created `src/components/SmokeBackground.jsx` — a zero-dependency WebGL2 animated smoke shader. Raw GLSL fragment shader (fbm noise, animated drift), vanilla JS Renderer class, React hook wrapper. Accepts `smokeColor` hex prop mapped to a GLSL `u_color` uniform. Used as the Access Barrier modal background.
 - **Road Closed Block:** Added a prominent "✕ ROAD CLOSED ✕" notice to the Models/Under the Hood section with a full list of modelling exclusions: Sweet Valley school runs, Bergvliet local traffic, all exit traffic to Firgrove/Ladies Mile/Main Rd, and new traffic calming measures. Dark card on the light section background for maximum readability. Includes caveat that Avg Time Out figures are massively understated.
@@ -33,14 +41,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Lucide Icon Integration**: Replaced custom SVG and Braille icons with high-quality Lucide icons throughout the application for a more consistent and professional UI.
 - **Themed Navigation Labels**: Replaced generic labels with immersive, car-themed terminology: "The Road Map" (Simulator), "The Damage Report" (Findings), "Under the Hood" (Models), and "Pit Stop" (Contact).
 
-### Fixed — 2026-04-03 (Performance & Polish)
-- **Deselected Card Collapse**: Implemented an auto-collapsing animation for deselected corridor cards, reducing their footprint to 48px to maximize vertical dashboard space.
-- **Accessibility Floor**: Enforced a minimum typography floor of `0.65rem` (10.4px) across all telemetry labels and metadata to ensure WCAG compliance.
-- **Token-Based Theming**: Systematically audited the CSS to replace hardcoded Tailwind hex values with formal design tokens (`--on-surface`, `--muted-text`, `--surface-watch`, etc.).
-- **iOS Viewport Fix**: Switched main layout height from `100vh` to `100dvh` to resolve "hidden bottom" issues caused by browser chrome on mobile devices.
-- **Reference Error & Parsing Fixes**: Resolved multiple `ReferenceError` crashes and JSX parsing errors caused by missing imports and "smart quotes".
-- **Iconic Visual Language**: Significantly enhanced icon visibility by doubling sizes (`size={28-32}`) and increasing boldness (`strokeWidth={3}`) across primary telemetry displays.
-- **Visibility Toggle Logic**: Fixed `Eye`/`EyeOff` icons to remain bright, high-contrast, and on top of cards, ensuring visibility even when corridors are deselected and faded.
-- **Editorial Flow**: Introduced alternating section backgrounds (`canvas` -> `surface-low` -> `surface-high`) and thin accent strips to improve vertical rhythm and section differentiation.
-- **Corridor Auto-Zoom**: Fixed a bug where selecting/deselecting corridor cards failed to zoom the map by stabilizing the map initialization effect and its dependencies.
-- **SUMO & UXSim Playback Loop**: Fixed a `TypeError` in the playback interpolation engine that was silently killing the animation loop when results mode was active.
+### Fixed — 2026-04-03 (UI Refinements & Mobile Optimization)
+- **Corridor Card Visibility:** Restored visibility of congestion graphs and breakdown text for all corridor cards. Removed the aggressive 48px collapse on deselected cards to ensure telemetry remains accessible.
+- **Stats Panel Density:** Systematically reduced padding, margins, and typography sizes across the `StatsPanel`, `StatBlock`, and `CorridorCard` components. This ensures all telemetry fits within the vertical boundary of the map viewport while maintaining readability.
+- **Global Sticky Navigation:** Moved the top navigation bar outside the main simulator layout, ensuring it remains persistent and "sticky" across the entire application, including the editorial sections.
+- **Initial Map Viewport:** Optimized the initial map zoom to ensure all four entry points and the school frontage are clearly visible within the viewport on startup.
+- **Mobile Map Optimization:** Implemented mobile-specific zoom logic that focuses directly on the study area (the school zone) without the darkened peripheral map, providing a cleaner experience on smaller screens.
+- **Navigation Synchronisation:** Fixed a bug where the active navigation pill would fail to transition correctly during page scrolling.

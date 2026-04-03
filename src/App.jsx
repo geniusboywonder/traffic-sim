@@ -154,6 +154,7 @@ const BentoBriefing = () => {
 const ModelsSection = () => (
   <section className="models-section" id="models">
     <div className="models-grid">
+
       <div className="models-header">
         <span className="models-subtitle">Under the Hood</span>
         <h2 className="models-title" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
@@ -162,69 +163,83 @@ const ModelsSection = () => (
         </h2>
       </div>
 
-      <div className="road-closed-block">
-        <div className="road-closed-header">
-          <OctagonX size={22} strokeWidth={3} />
-          <span>✕ &nbsp;ROAD CLOSED&nbsp; ✕</span>
-          <OctagonX size={22} strokeWidth={3} />
-        </div>
-        <p className="road-closed-intro">This modelling <strong>EXCLUDES</strong> any modelling for:</p>
-        <ul className="road-closed-list">
-          <li>Sweet Valley School runs</li>
-          <li>Bergvliet residents local traffic movements to work, school and university</li>
-          <li>ALL traffic <em>exiting</em> to Firgrove Rd, Ladies Mile Rd and Main Rd</li>
-          <li>New essential traffic calming measures in Dante Rd, Vineyard Rd, Ruskin Rd, Leyden Rd</li>
-        </ul>
-        <p className="road-closed-footer">All Avg Time Out figures will be <strong>massively understated</strong> based on the above.</p>
+      <div className="models-intro">
+        <p>Three independent models. One consistent conclusion. Here's how we built them — and why you can trust what they show.</p>
       </div>
 
       <div className="models-content">
-        <div className="model-entry">
-          <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <FileText size={24} color="var(--c-3a)" />
-            The Western Cape Mobility Department <a href="https://www.westerncape.gov.za/mobility" target="_blank" className="editorial-link">(WCMD)</a> TIA Approach
-          </h3>
-          <p>The official TIA is a snapshot — one frame from the dashcam. It follows South Africa's TMH 16 guidelines: a straightforward, analytical method based on standard traffic engineering formulas. The TIA calculates expected trip numbers, splits them by direction, and checks road and intersection capacity using averaged flows — basically a "worst-case 15-minute peak" snapshot. It gives planners and authorities a reliable, deterministic baseline.</p>
-        </div>
 
         <div className="model-entry">
-          <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <Activity size={24} color="var(--c-3a)" />
-            SUMO & UXsim: Professional Pedigree & Model Validation
-          </h3>
-          <div className="pedigree-grid">
-            <div className="pedigree-item">
-              <h4 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Monitor size={16} />
-                SUMO (Simulation of Urban MObility)
-              </h4>
-              <p style={{fontSize: '14px'}}>Developed by the German Aerospace Center (DLR), SUMO is a world-leading microscopic simulator. It tracks every individual car, using proven car-following mathematics such as the Intelligent Driver Model (IDM). It covers acceleration, braking, reactions to others, the 28 speed humps, the 11 special junctions, and realistic rat-running behaviour.</p>
-            </div>
-            <div className="pedigree-item">
-              <h4 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Activity size={16} />
-                UXsim
-              </h4>
-              <p style={{fontSize: '14px'}}>Created by Dr. Toru Seo at the Institute of Science Tokyo, UXsim is a fast, modern mesoscopic simulator. It models traffic as flow rather than individual vehicles — using the same kinematic wave mathematics that underpin the TIA's own capacity calculations. This makes it the ideal cross-check: it speaks the same mathematical language as the TIA, but runs the full network rather than a snapshot.</p>
-            </div>
+          <span className="model-chain-badge">1</span>
+          <div className="model-entry-body">
+            <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <FileText size={22} color="var(--c-3a)" />
+              The Foundation — The Official TIA
+            </h3>
+            <p>The Traffic Impact Assessment (TIA) is the starting point — and the rulebook. Commissioned under Western Cape Mobility Department <a href="https://www.westerncape.gov.za/mobility" target="_blank" className="editorial-link">(WCMD)</a> guidelines and following South Africa's TMH 16 standard, it sets the study area's trip counts, directional splits, and the 840-vehicle High scenario demand baseline. The TIA's method is analytical: standardised traffic engineering formulas applied to the worst-case 15-minute peak window. It's a snapshot, not a simulation — but that snapshot defines the problem. Every number in our model begins here.</p>
           </div>
         </div>
 
-        <div className="calibration-box">
-          <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <CheckCircle size={28} color="var(--c-3a)" />
-            TUNING THE ENGINE
-          </h3>
-          <p>We calibrated Tokai-Sim's live engine directly to the TIA's peak-hour volumes, origin splits, and 840-vehicle baseline. SUMO then runs the same network at microscopic level (with all 28 speed humps, 11 junction overrides, and realistic rat-run logic), while UXsim independently validates total network throughput against the TIA's flow-density curves. The three layers are deliberately cross-checked so any "what-if" scenario sits on the same mathematical foundation.</p>
+        <div className="model-entry">
+          <span className="model-chain-badge">2</span>
+          <div className="model-entry-body">
+            <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <Activity size={22} color="var(--c-3a)" />
+              Our Live Simulation
+            </h3>
+            <p>The interactive engine running on your screen is calibrated directly to the TIA's figures — same trip volumes, same origin splits, same peak-hour demand curve peaking at 07:45. It then goes where the TIA cannot: every vehicle moves individually using the Intelligent Driver Model (IDM), the same car-following mathematics used by professional-grade simulators. Speed humps, junction holds, rat-run decisions, school dwell time — all modelled car by car, second by second. This is the layer that turns the TIA's static baseline into a living network.</p>
+          </div>
         </div>
 
         <div className="model-entry">
-          <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <Search size={24} color="var(--c-3a)" />
-            Why the speedometers don't always agree
-          </h3>
-          <p>Microscopic tools like SUMO are stochastic (they include realistic random driver behaviour), while the TIA and UXsim use averaged, deterministic flows. This means queue lengths or exact travel times can vary slightly between runs. We validated by running multiple SUMO simulations and comparing the average results to both UXsim and the TIA baselines. The overall trends match extremely closely. The small differences you may notice are exactly why we built the Live vs SUMO toggle.</p>
+          <span className="model-chain-badge">3</span>
+          <div className="model-entry-body">
+            <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <CheckCircle size={22} color="var(--c-3a)" />
+              SUMO — Professional Cross-Check
+            </h3>
+            <p>Once we had a live model, we needed an independent referee. SUMO (Simulation of Urban MObility), developed by the German Aerospace Center (DLR), is one of the world's most widely used microscopic traffic simulators — trusted by governments, universities, and transport authorities globally. We ran the same network in SUMO: same roads, same 28 speed humps, same 11 junction overrides, same demand inputs. SUMO's outputs closely match our Live engine across all three scenarios. That agreement is the institutional stamp on our custom model. If SUMO agrees, we're on solid ground.</p>
+          </div>
         </div>
+
+        <div className="model-entry">
+          <span className="model-chain-badge">4</span>
+          <div className="model-entry-body">
+            <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <Database size={22} color="var(--c-3a)" />
+              UXSim — Network-Level Confirmation
+            </h3>
+            <p>UXSim (developed by Dr. Toru Seo, Institute of Science Tokyo) operates at a different level — mesoscopic, modelling traffic as flow rather than individual cars. Its mathematics are kinematic wave theory: the same language the TIA uses for its capacity calculations. This is why UXSim is uniquely useful here: it doesn't replace SUMO or our Live engine, it audits them from the network level. When UXSim's flow-density curves agree with our model and SUMO on which corridors hit capacity and when, that cross-model convergence rules out individual model quirks. Note: UXSim cannot model speed humps, individual junction behaviour, or rat-run decisions — its role is throughput validation only.</p>
+          </div>
+        </div>
+
+        <div className="model-entry">
+          <span className="model-chain-badge">5</span>
+          <div className="model-entry-body">
+            <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <Search size={22} color="var(--c-3a)" />
+              Reading the Instruments — Why the Numbers Don't Always Match
+            </h3>
+            <p>Our Live engine and SUMO are stochastic — each run includes realistic random variation in driver behaviour, so exact numbers shift slightly between runs. The TIA and UXSim use deterministic, averaged flows, so they always return the same result. Our Live engine also adds layers the others don't: dynamic egress holds at J8 during peak, dwell time at the school, and real-time rat-run activation based on live congestion. These are deliberate enhancements beyond the TIA baseline — they make the simulation more realistic, but they mean it won't match the TIA figure-for-figure. The Live vs SUMO toggle exists so you can see this for yourself.</p>
+          </div>
+        </div>
+
+        <div className="road-closed-block">
+          <div className="road-closed-header">
+            <OctagonX size={22} strokeWidth={3} />
+            <span>✕ &nbsp;ROAD CLOSED&nbsp; ✕</span>
+            <OctagonX size={22} strokeWidth={3} />
+          </div>
+          <p className="road-closed-intro">This modelling <strong>EXCLUDES</strong> any modelling for:</p>
+          <ul className="road-closed-list">
+            <li>Sweet Valley School runs</li>
+            <li>Bergvliet residents local traffic movements to work, school and university</li>
+            <li>ALL traffic <em>exiting</em> to Firgrove Rd, Ladies Mile Rd and Main Rd</li>
+            <li>New essential traffic calming measures in Dante Rd, Vineyard Rd, Ruskin Rd, Leyden Rd</li>
+          </ul>
+          <p className="road-closed-footer">All Avg Time Out figures will be <strong>massively understated</strong> based on the above.</p>
+        </div>
+
       </div>
     </div>
   </section>
@@ -439,42 +454,43 @@ export default function App() {
 
       {!initialized && <AccessBarrier onInitialize={() => setInitialized(true)} />}
 
-      <main className="main-layout" id="simulator">
-        <div className="scrolling-top-bar">
-          <div className="scrolling-top-bar-inner">
-            <div className="nav-container">
-              <Header activeSection={activeSection} />
-            </div>
-            <div className="stats-pill-container">
-              <div className="scrolling-stats-pill">
-                <div className="htc-stat">
-                  <span className="htc-label">Time</span>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                    <Clock size={28} strokeWidth={3} color="var(--muted-text)" />
-                    <span className="htc-value">{formatClock(simTime)}</span>
-                  </div>
+      <div className="scrolling-top-bar">
+        <div className="scrolling-top-bar-inner">
+          <div className="nav-container">
+            <Header activeSection={activeSection} />
+          </div>
+          <div className="stats-pill-container">
+            <div className="scrolling-stats-pill">
+              <div className="htc-stat">
+                <span className="htc-label">Time</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <Clock size={28} strokeWidth={3} color="var(--muted-text)" />
+                  <span className="htc-value">{formatClock(simTime)}</span>
                 </div>
-                <div className="htc-divider" />
-                <div className="htc-stat">
-                  <span className="htc-label">Total In/Out</span>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                    <Car size={28} strokeWidth={3} color="var(--muted-text)" />
-                    <span className="htc-value">{totalIn} / {totalOut}</span>
-                  </div>
-                </div>                <div className="htc-divider" />
-                <div className="htc-stat">
-                  <span className="htc-label">Avg Time In/Out</span>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                    <Timer size={28} strokeWidth={3} color="var(--muted-text)" />
-                    <span className="htc-value">{fmtTime(avgInTime)} / {fmtTime(avgOutTime)}</span>
-                  </div>
+              </div>
+              <div className="htc-divider" />
+              <div className="htc-stat">
+                <span className="htc-label">Total In/Out</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <Car size={28} strokeWidth={3} color="var(--muted-text)" />
+                  <span className="htc-value">{totalIn} / {totalOut}</span>
+                </div>
+              </div>
+              <div className="htc-divider" />
+              <div className="htc-stat">
+                <span className="htc-label">Avg Time In/Out</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <Timer size={28} strokeWidth={3} color="var(--muted-text)" />
+                  <span className="htc-value">{fmtTime(avgInTime)} / {fmtTime(avgOutTime)}</span>
                 </div>
               </div>
             </div>
-            <div className="header-right-empty" />
           </div>
+          <div className="header-right-empty" />
         </div>
+      </div>
 
+      <main className="main-layout" id="simulator">
         <div className="content">
           <div className="map-viewport-container bezel-outer">
             <div className="bezel-inner">

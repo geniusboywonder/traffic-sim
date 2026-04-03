@@ -1,64 +1,64 @@
 <?xml version="1.0" ?>
 <routes>
   <vType id="car" accel="2.6" decel="4.5" sigma="0.5" length="5.0" maxSpeed="16.7" minGap="2.5"/>
-  <flow id="flow_0_in" type="car" from="-690833056#0" to="-690833056#0" begin="23400" end="26100" vehsPerHour="20.16" departSpeed="max">
+  <flow id="flow_0_in" type="car" from="-690833056#0" to="-690833056#0" begin="23400" end="26100" vehsPerHour="15.70" departSpeed="max">
     <stop lane="school_internal_in_0" startPos="10" endPos="50" duration="45"/>
   </flow>
-  <flow id="flow_5_in" type="car" from="-687674693#1" to="-687674693#1" begin="23400" end="26100" vehsPerHour="16.80" departSpeed="max">
+  <flow id="flow_5_in" type="car" from="-687674693#1" to="-687674693#1" begin="23400" end="26100" vehsPerHour="30.00" departSpeed="max">
     <stop lane="school_internal_in_0" startPos="10" endPos="50" duration="45"/>
   </flow>
-  <flow id="flow_10_in" type="car" from="-687674681" to="-687674681" begin="23400" end="26100" vehsPerHour="29.40" departSpeed="max">
+  <flow id="flow_10_in" type="car" from="-687674681" to="-687674681" begin="23400" end="26100" vehsPerHour="35.70" departSpeed="max">
     <stop lane="school_internal_in_0" startPos="10" endPos="50" duration="45"/>
   </flow>
-  <flow id="flow_15_in" type="car" from="27669864" to="27669864" begin="23400" end="26100" vehsPerHour="17.64" departSpeed="max">
+  <flow id="flow_15_in" type="car" from="27669864" to="27669864" begin="23400" end="26100" vehsPerHour="18.60" departSpeed="max">
     <stop lane="school_internal_in_0" startPos="10" endPos="50" duration="45"/>
   </flow>
-  <flow id="flow_1_in" type="car" from="-690833056#0" to="-690833056#0" begin="26100" end="27900" vehsPerHour="60.48" departSpeed="max">
+  <flow id="flow_1_in" type="car" from="-690833056#0" to="-690833056#0" begin="26100" end="27900" vehsPerHour="47.10" departSpeed="max">
     <stop lane="school_internal_in_0" startPos="10" endPos="50" duration="45"/>
   </flow>
-  <flow id="flow_6_in" type="car" from="-687674693#1" to="-687674693#1" begin="26100" end="27900" vehsPerHour="50.40" departSpeed="max">
+  <flow id="flow_6_in" type="car" from="-687674693#1" to="-687674693#1" begin="26100" end="27900" vehsPerHour="90.00" departSpeed="max">
     <stop lane="school_internal_in_0" startPos="10" endPos="50" duration="45"/>
   </flow>
-  <flow id="flow_11_in" type="car" from="-687674681" to="-687674681" begin="26100" end="27900" vehsPerHour="88.20" departSpeed="max">
+  <flow id="flow_11_in" type="car" from="-687674681" to="-687674681" begin="26100" end="27900" vehsPerHour="107.10" departSpeed="max">
     <stop lane="school_internal_in_0" startPos="10" endPos="50" duration="45"/>
   </flow>
-  <flow id="flow_16_in" type="car" from="27669864" to="27669864" begin="26100" end="27900" vehsPerHour="52.92" departSpeed="max">
+  <flow id="flow_16_in" type="car" from="27669864" to="27669864" begin="26100" end="27900" vehsPerHour="55.80" departSpeed="max">
     <stop lane="school_internal_in_0" startPos="10" endPos="50" duration="45"/>
   </flow>
-  <flow id="flow_2_in" type="car" from="-690833056#0" to="-690833056#0" begin="27900" end="28800" vehsPerHour="141.12" departSpeed="max">
+  <flow id="flow_2_in" type="car" from="-690833056#0" to="-690833056#0" begin="27900" end="28800" vehsPerHour="109.90" departSpeed="max">
     <stop lane="school_internal_in_0" startPos="10" endPos="50" duration="45"/>
   </flow>
-  <flow id="flow_7_in" type="car" from="-687674693#1" to="-687674693#1" begin="27900" end="28800" vehsPerHour="117.60" departSpeed="max">
+  <flow id="flow_7_in" type="car" from="-687674693#1" to="-687674693#1" begin="27900" end="28800" vehsPerHour="210.00" departSpeed="max">
     <stop lane="school_internal_in_0" startPos="10" endPos="50" duration="45"/>
   </flow>
-  <flow id="flow_12_in" type="car" from="-687674681" to="-687674681" begin="27900" end="28800" vehsPerHour="205.80" departSpeed="max">
+  <flow id="flow_12_in" type="car" from="-687674681" to="-687674681" begin="27900" end="28800" vehsPerHour="249.90" departSpeed="max">
     <stop lane="school_internal_in_0" startPos="10" endPos="50" duration="45"/>
   </flow>
-  <flow id="flow_17_in" type="car" from="27669864" to="27669864" begin="27900" end="28800" vehsPerHour="123.48" departSpeed="max">
+  <flow id="flow_17_in" type="car" from="27669864" to="27669864" begin="27900" end="28800" vehsPerHour="130.20" departSpeed="max">
     <stop lane="school_internal_in_0" startPos="10" endPos="50" duration="45"/>
   </flow>
-  <flow id="flow_3_in" type="car" from="-690833056#0" to="-690833056#0" begin="28800" end="29700" vehsPerHour="60.48" departSpeed="max">
+  <flow id="flow_3_in" type="car" from="-690833056#0" to="-690833056#0" begin="28800" end="29700" vehsPerHour="47.10" departSpeed="max">
     <stop lane="school_internal_in_0" startPos="10" endPos="50" duration="45"/>
   </flow>
-  <flow id="flow_8_in" type="car" from="-687674693#1" to="-687674693#1" begin="28800" end="29700" vehsPerHour="50.40" departSpeed="max">
+  <flow id="flow_8_in" type="car" from="-687674693#1" to="-687674693#1" begin="28800" end="29700" vehsPerHour="90.00" departSpeed="max">
     <stop lane="school_internal_in_0" startPos="10" endPos="50" duration="45"/>
   </flow>
-  <flow id="flow_13_in" type="car" from="-687674681" to="-687674681" begin="28800" end="29700" vehsPerHour="88.20" departSpeed="max">
+  <flow id="flow_13_in" type="car" from="-687674681" to="-687674681" begin="28800" end="29700" vehsPerHour="107.10" departSpeed="max">
     <stop lane="school_internal_in_0" startPos="10" endPos="50" duration="45"/>
   </flow>
-  <flow id="flow_18_in" type="car" from="27669864" to="27669864" begin="28800" end="29700" vehsPerHour="52.92" departSpeed="max">
+  <flow id="flow_18_in" type="car" from="27669864" to="27669864" begin="28800" end="29700" vehsPerHour="55.80" departSpeed="max">
     <stop lane="school_internal_in_0" startPos="10" endPos="50" duration="45"/>
   </flow>
-  <flow id="flow_4_in" type="car" from="-690833056#0" to="-690833056#0" begin="29700" end="30600" vehsPerHour="20.16" departSpeed="max">
+  <flow id="flow_4_in" type="car" from="-690833056#0" to="-690833056#0" begin="29700" end="30600" vehsPerHour="15.70" departSpeed="max">
     <stop lane="school_internal_in_0" startPos="10" endPos="50" duration="45"/>
   </flow>
-  <flow id="flow_9_in" type="car" from="-687674693#1" to="-687674693#1" begin="29700" end="30600" vehsPerHour="16.80" departSpeed="max">
+  <flow id="flow_9_in" type="car" from="-687674693#1" to="-687674693#1" begin="29700" end="30600" vehsPerHour="30.00" departSpeed="max">
     <stop lane="school_internal_in_0" startPos="10" endPos="50" duration="45"/>
   </flow>
-  <flow id="flow_14_in" type="car" from="-687674681" to="-687674681" begin="29700" end="30600" vehsPerHour="29.40" departSpeed="max">
+  <flow id="flow_14_in" type="car" from="-687674681" to="-687674681" begin="29700" end="30600" vehsPerHour="35.70" departSpeed="max">
     <stop lane="school_internal_in_0" startPos="10" endPos="50" duration="45"/>
   </flow>
-  <flow id="flow_19_in" type="car" from="27669864" to="27669864" begin="29700" end="30600" vehsPerHour="17.64" departSpeed="max">
+  <flow id="flow_19_in" type="car" from="27669864" to="27669864" begin="29700" end="30600" vehsPerHour="18.60" departSpeed="max">
     <stop lane="school_internal_in_0" startPos="10" endPos="50" duration="45"/>
   </flow>
 </routes>

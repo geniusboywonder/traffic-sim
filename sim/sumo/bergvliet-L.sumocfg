@@ -7,12 +7,12 @@
   </input>
   <output>
     <fcd-output value="C:\Users\neill\Github\tokai-sim\sim\sumo\fcd-L.xml"/>
-    <device.fcd.period value="60"/>
+    <device.fcd.period value="30"/>
     <tripinfo-output value="C:\Users\neill\Github\tokai-sim\sim\sumo\tripinfo-L.xml"/>
   </output>
   <time>
     <begin value="23400"/>
-    <end value="30600"/>
+    <end value="32400"/>
     <step-length value="1"/>
   </time>
   <processing>

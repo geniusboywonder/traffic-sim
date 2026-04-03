@@ -284,7 +284,7 @@ a {
 /* Watch My Road — spans 2 columns */
 .stat-card--watch {
   grid-column: span 2;
-  background-color: #1E3520;
+  background-color: #D0DDD0;
   border-left-color: var(--c-3a);
   flex-shrink: 0;
   padding: 0.7rem 0.75rem;
@@ -421,7 +421,7 @@ a {
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: rgba(241,245,241,0.3);
+  color: rgba(15,30,19,0.5);
   margin-bottom: 0.15rem;
 }
 
@@ -460,7 +460,7 @@ a {
 .stat-card--watch .wmy-empty-label { color: var(--c-3a); }
 .stat-card--watch .wmy-empty-hint { color: rgba(241,245,241,0.4); }
 .stat-card--watch .stat-card-label { color: var(--c-3a) !important; opacity: 1; font-size: 11px; }
-.stat-card--watch .rw-close { color: rgba(241,245,241,0.45); font-size: 1.1rem; }
+.stat-card--watch .rw-close { color: rgba(15,30,19,0.45); font-size: 1.1rem; }
 .stat-card--watch .rw-line { gap: 0.35rem; margin-bottom: 0.6rem; }
 .stat-card--watch .rw-line:last-child { margin-bottom: 0; }
 .stat-card--watch .rw-line-title { color: rgba(241,245,241,0.5); font-size: 9px; letter-spacing: 0.12em; }

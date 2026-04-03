@@ -9,19 +9,27 @@ function fmtTime(minutes) {
   return `${m}:${String(s).padStart(2, '0')}`;
 }
 
-// Corridor colour palette — dark gradient backgrounds + accent lights
+// Corridor colour palette — light pastel backgrounds, dark text
+// gradient: light pastel → slightly deeper shade of same hue
+// accent: dark corridor base for borders, bar fill, and ID badge
+// textDark / mutedDark: dark text colours for values and labels
 const CORR_BG = {
-  '1A': { from: '#1A3020', to: '#0E1C11', accent: '#4A7A56', light: '#8FB89A' },
-  '2A': { from: '#223B27', to: '#132215', accent: '#709775', light: '#A1CCA5' },
-  '2B': { from: '#3B2910', to: '#221808', accent: '#C4864A', light: '#E0B88A' },
-  '3A': { from: '#1D3322', to: '#0F1E13', accent: '#709775', light: '#A1CCA5' },
+  '1A': { from: '#8FB89A', to: '#6BA47A', accent: '#2D5438', light: '#2D5438', textDark: '#0E1C11', mutedDark: 'rgba(14,28,17,0.6)',  statBg: 'rgba(255,255,255,0.28)', trackColor: 'rgba(0,0,0,0.12)' },
+  '2A': { from: '#A1CCA5', to: '#7AAF82', accent: '#415D43', light: '#415D43', textDark: '#132215', mutedDark: 'rgba(19,34,21,0.6)',  statBg: 'rgba(255,255,255,0.28)', trackColor: 'rgba(0,0,0,0.12)' },
+  '2B': { from: '#E0B88A', to: '#C49660', accent: '#8B5A28', light: '#8B5A28', textDark: '#221808', mutedDark: 'rgba(34,24,8,0.6)',   statBg: 'rgba(255,255,255,0.28)', trackColor: 'rgba(0,0,0,0.12)' },
+  '3A': { from: '#C8E0C8', to: '#A4C4A8', accent: '#709775', light: '#384E3E', textDark: '#0F1E13', mutedDark: 'rgba(15,30,19,0.6)',  statBg: 'rgba(255,255,255,0.28)', trackColor: 'rgba(0,0,0,0.12)' },
 };
 
 // ── Stat block: label above, big number below ─────────────────────────────────
-function StatBlock({ label, value, accent, dim }) {
+// textColor / labelColor / bgColor override dark-theme defaults for light cards
+function StatBlock({ label, value, accent, dim, textColor, labelColor, bgColor }) {
+  const valueColor = textColor
+    ? (dim ? `${textColor}99` : textColor)
+    : (dim ? 'rgba(241,245,241,0.5)' : (accent || '#F1F5F1'));
+
   return (
     <div style={{
-      background: 'rgba(0,0,0,0.22)',
+      background: bgColor || 'rgba(0,0,0,0.22)',
       borderRadius: 8,
       padding: '0.4rem 0.55rem',
       display: 'flex',
@@ -33,7 +41,7 @@ function StatBlock({ label, value, accent, dim }) {
         fontWeight: 900,
         letterSpacing: '0.14em',
         textTransform: 'uppercase',
-        color: 'rgba(241,245,241,0.38)',
+        color: labelColor || 'rgba(241,245,241,0.38)',
         lineHeight: 1,
       }}>{label}</span>
       <span style={{
@@ -41,7 +49,7 @@ function StatBlock({ label, value, accent, dim }) {
         fontSize: '1.15rem',
         fontWeight: 800,
         letterSpacing: '-0.03em',
-        color: dim ? 'rgba(241,245,241,0.5)' : (accent || '#F1F5F1'),
+        color: valueColor,
         lineHeight: 1,
         fontVariantNumeric: 'tabular-nums',
       }}>{value}</span>
@@ -50,9 +58,9 @@ function StatBlock({ label, value, accent, dim }) {
 }
 
 // ── Congestion bar ────────────────────────────────────────────────────────────
-function CongBar({ pct, accent, isHot }) {
+function CongBar({ pct, accent, isHot, trackColor }) {
   return (
-    <div style={{ height: 4, background: 'rgba(241,245,241,0.08)', borderRadius: 2, overflow: 'hidden' }}>
+    <div style={{ height: 4, background: trackColor || 'rgba(241,245,241,0.08)', borderRadius: 2, overflow: 'hidden' }}>
       <div style={{
         height: '100%',
         width: `${pct}%`,
@@ -127,26 +135,26 @@ function CorridorCard({ id, c, isSelected, onToggle }) {
         <span className="holo-id" style={{ color: cols.accent, borderColor: `${cols.accent}55` }}>
           {id}
         </span>
-        <span className="holo-label">{c.label}</span>
-        {isHot && <span className="holo-hot">HOT</span>}
+        <span className="holo-label" style={{ color: cols.mutedDark }}>{c.label}</span>
+        {isHot && <span className="holo-hot">STOPPED</span>}
       </div>
 
       {/* Row 2 — 2×2 stat grid */}
       <div className="holo-grid">
-        <StatBlock label="In"      value={c.spawned}            accent={cols.light} />
-        <StatBlock label="Out"     value={c.exited}             dim />
-        <StatBlock label="Avg In"  value={fmtTime(c.avgInDelay)}  accent={cols.light} />
-        <StatBlock label="Avg Out" value={fmtTime(c.avgOutDelay)} dim />
+        <StatBlock label="Traffic In"   value={c.spawned}              accent={cols.light} textColor={cols.textDark} labelColor={cols.mutedDark} bgColor={cols.statBg} />
+        <StatBlock label="Avg Time In"  value={fmtTime(c.avgInDelay)}  accent={cols.light} textColor={cols.textDark} labelColor={cols.mutedDark} bgColor={cols.statBg} />
+        <StatBlock label="Traffic Out"  value={c.exited}               dim                 textColor={cols.textDark} labelColor={cols.mutedDark} bgColor={cols.statBg} />
+        <StatBlock label="Avg Time Out" value={fmtTime(c.avgOutDelay)} dim                 textColor={cols.textDark} labelColor={cols.mutedDark} bgColor={cols.statBg} />
       </div>
 
       {/* Row 3 — congestion bar */}
-      <CongBar pct={congPct} accent={cols.accent} isHot={isHot} />
+      <CongBar pct={congPct} accent={cols.accent} isHot={isHot} trackColor={cols.trackColor} />
 
       {/* Row 4 — % breakdown */}
-      <div className="holo-breakdown">
+      <div className="holo-breakdown" style={{ color: cols.mutedDark }}>
         <span>{pActive}% active</span>
         <span>{pSlowing}% slowing</span>
-        <span style={{ color: isHot ? '#A64D4D' : undefined }}>{pStopped}% stopped</span>
+        <span style={{ color: isHot ? '#8B1A1A' : undefined }}>{pStopped}% stopped</span>
       </div>
     </div>
   );
@@ -170,6 +178,13 @@ const StatsPanel = memo(({ statsData, selectedCorridors, onToggleCorridor, selec
   const globalCong    = corrList.reduce((s, c) => s + (c.congestion || 0), 0) / Math.max(corrList.length, 1);
   const globalCongPct = Math.min(100, Math.round(globalCong * 100));
   const isGlobalHot   = globalCong > 0.7;
+  const netActive     = corrList.reduce((s, c) => s + (c.active  || 0), 0);
+  const netSlowing    = corrList.reduce((s, c) => s + (c.slowing || 0), 0);
+  const netStopped    = corrList.reduce((s, c) => s + (c.stopped || 0), 0);
+  const netTotal      = netActive + netSlowing + netStopped || 1;
+  const netPActive    = Math.round(netActive  / netTotal * 100);
+  const netPSlowing   = Math.round(netSlowing / netTotal * 100);
+  const netPStopped   = Math.round(netStopped / netTotal * 100);
 
   const inbound  = roadStats?.inbound  || { total: 0, active: 0, slowing: 0, stopped: 0 };
   const outbound = roadStats?.outbound || { total: 0, active: 0, slowing: 0, stopped: 0 };
@@ -218,54 +233,65 @@ const StatsPanel = memo(({ statsData, selectedCorridors, onToggleCorridor, selec
 
         {!selectedRoad ? (
           <>
-            <div className="wmy-focus-hint">Click any road to focus on it</div>
+            {/* Hint — same position in both states */}
+            <div className="wmy-focus-hint">Select any road on the map to focus on it</div>
 
             {/* Row 1 */}
             <div className="holo-header">
-              <span className="holo-label" style={{ color: '#A1CCA5', fontSize: 9 }}>Overall Summary</span>
+              <span className="holo-label" style={{ color: 'rgba(15,30,19,0.6)', fontSize: 9 }}>Overall Summary</span>
             </div>
 
             {/* Row 2 — 2×2 stat grid */}
             <div className="holo-grid">
-              <StatBlock label="Total In"  value={totalIn}           accent="#A1CCA5" />
-              <StatBlock label="Total Out" value={totalOut}          dim />
-              <StatBlock label="Avg In"    value={fmtTime(avgInTime)}  accent="#A1CCA5" />
-              <StatBlock label="Avg Out"   value={fmtTime(avgOutTime)} dim />
+              <StatBlock label="Total In"     value={totalIn}             textColor="#0F1E13" labelColor="rgba(15,30,19,0.55)" bgColor="rgba(255,255,255,0.28)" />
+              <StatBlock label="Avg Time In"  value={fmtTime(avgInTime)}  textColor="#0F1E13" labelColor="rgba(15,30,19,0.55)" bgColor="rgba(255,255,255,0.28)" />
+              <StatBlock label="Total Out"    value={totalOut}            textColor="#0F1E13" labelColor="rgba(15,30,19,0.55)" bgColor="rgba(255,255,255,0.28)" dim />
+              <StatBlock label="Avg Time Out" value={fmtTime(avgOutTime)} textColor="#0F1E13" labelColor="rgba(15,30,19,0.55)" bgColor="rgba(255,255,255,0.28)" dim />
             </div>
 
             {/* Row 3 — congestion */}
-            <CongBar pct={globalCongPct} accent="#709775" isHot={isGlobalHot} />
+            <CongBar pct={globalCongPct} accent="#709775" isHot={isGlobalHot} trackColor="rgba(0,0,0,0.12)" />
 
             {/* Row 4 */}
-            <div className="holo-breakdown">
-              <span>{corrList.reduce((s, c) => s + (c.current || 0), 0)} active vehicles</span>
-              <span>{globalCongPct}% congestion</span>
+            <div className="holo-breakdown" style={{ color: 'rgba(15,30,19,0.55)' }}>
+              <span>{netPActive}% active</span>
+              <span>{netPSlowing}% slowing</span>
+              <span style={{ color: isGlobalHot ? '#8B1A1A' : undefined }}>{netPStopped}% stopped</span>
             </div>
           </>
         ) : (
           <>
+            {/* Hint — same position as idle state, clickable to return to summary */}
+            <button
+              className="wmy-focus-hint"
+              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, textAlign: 'left', width: '100%' }}
+              onClick={onCloseRoad}
+            >
+              Click here to see Overall Traffic Summary
+            </button>
+
             {/* Row 1 */}
             <div className="holo-header">
-              <span className="holo-label" style={{ color: '#A1CCA5', fontSize: 9, flex: 1 }}>{selectedRoad.name}</span>
+              <span className="holo-label" style={{ color: 'rgba(15,30,19,0.6)', fontSize: 9, flex: 1 }}>{selectedRoad.name}</span>
               <button className="rw-close" onClick={onCloseRoad}>×</button>
             </div>
 
             {/* Row 2 */}
             <div className="holo-grid">
-              <StatBlock label="In"      value={inbound.total}            accent="#A1CCA5" />
-              <StatBlock label="Out"     value={outbound.total}           dim />
-              <StatBlock label="Avg In"  value={fmtTime(roadStats?.avgInDelay)}  accent="#A1CCA5" />
-              <StatBlock label="Avg Out" value={fmtTime(roadStats?.avgOutDelay)} dim />
+              <StatBlock label="Total In"     value={inbound.total}                   textColor="#0F1E13" labelColor="rgba(15,30,19,0.55)" bgColor="rgba(255,255,255,0.28)" />
+              <StatBlock label="Avg Time In"  value={fmtTime(roadStats?.avgInDelay)}  textColor="#0F1E13" labelColor="rgba(15,30,19,0.55)" bgColor="rgba(255,255,255,0.28)" />
+              <StatBlock label="Total Out"    value={outbound.total}                  textColor="#0F1E13" labelColor="rgba(15,30,19,0.55)" bgColor="rgba(255,255,255,0.28)" dim />
+              <StatBlock label="Avg Time Out" value={fmtTime(roadStats?.avgOutDelay)} textColor="#0F1E13" labelColor="rgba(15,30,19,0.55)" bgColor="rgba(255,255,255,0.28)" dim />
             </div>
 
             {/* Row 3 */}
-            <CongBar pct={wCongPct} accent="#709775" isHot={wIsHot} />
+            <CongBar pct={wCongPct} accent="#709775" isHot={wIsHot} trackColor="rgba(0,0,0,0.12)" />
 
             {/* Row 4 */}
-            <div className="holo-breakdown">
+            <div className="holo-breakdown" style={{ color: 'rgba(15,30,19,0.55)' }}>
               <span>{wActive}% active</span>
               <span>{wSlowing}% slowing</span>
-              <span style={{ color: wIsHot ? '#A64D4D' : undefined }}>{wStopped}% stopped</span>
+              <span style={{ color: wIsHot ? '#8B1A1A' : undefined }}>{wStopped}% stopped</span>
             </div>
           </>
         )}

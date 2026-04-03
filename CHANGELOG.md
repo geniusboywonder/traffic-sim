@@ -4,6 +4,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### Changed — 2026-04-03 (Style Guide v3.1 — Card Palette)
+- **Style Guide — `surface-watch` Token:** Added `#D0DDD0` as a formal surface token for the Watch My Road / Overall Summary card.
+- **Style Guide — §1C Corridor Card Palette:** New section documenting the light pastel card gradients, accent/border colours, dark text values, stat block and congestion bar specifications for all four corridors.
+- **Style Guide — §4B Intelligence Cards:** Updated component spec to reference §1C palette, document STOPPED badge behaviour, frosted-white stat block insets, and correct congestion bar spec.
+
+### Changed — 2026-04-03 (Watch My Road Card — Light Palette & Layout)
+- **Watch My Road — Background:** Replaced dark `#1E3520` with `#D0DDD0` — a sage-tinted surface sitting between the Style Guide's `surface-high` (`#D1DAD1`) and the 3A corridor card, keeping the card in the botanical palette family without competing with the coloured corridor cards.
+- **Watch My Road — Text Colours:** All text (labels, values, breakdown, hint, close button) updated from hardcoded near-white to dark sage (`#0F1E13` / `rgba(15,30,19,0.55)`) to maintain readability on the new light background.
+- **Watch My Road — Hint Position:** "Select any road on the map to focus on it" (idle) and "Click here to see Overall Traffic Summary" (road selected) are now rendered in the same position above the heading row on the card.
+- **Watch My Road — Congestion Track:** Bar track updated to `rgba(0,0,0,0.12)` to match corridor cards on light backgrounds.
+- **Corridor Cards — STOPPED Badge:** Badge text changed from "HOT" to "STOPPED" to accurately describe the congestion condition it represents.
+
+### Changed — 2026-04-03 (Corridor Card Palette — Light Pastel)
+- **Corridor Cards — Background Palette:** Switched from dark backgrounds to light pastel gradients matching each route's map colour — 1A muted forest green (`#8FB89A→#6BA47A`), 2A celadon (`#A1CCA5→#7AAF82`), 2B pale amber (`#E0B88A→#C49660`), 3A pale sage (`#C8E0C8→#A4C4A8`). All text flipped to dark: values use deep corridor darks, labels use 60%-opacity dark. Stat block backgrounds use frosted-white (`rgba(255,255,255,0.28)`). Congestion bar track updated from near-white to `rgba(0,0,0,0.12)` for light-bg readability. Hot-state "stopped" text changed from red `#A64D4D` to dark red `#8B1A1A` for contrast on light background.
+
+### Changed — 2026-04-03 (Watch My Road & Corridor Card UI)
+- **Watch My Road — Idle Hint Text:** Changed "Click any road to focus on it" → "Select any road on the map to focus on it".
+- **Watch My Road — Road Selected Link:** Added "Click here to see Overall Traffic Summary" clickable text when a road is selected; tapping it deselects the road and returns to the network summary view.
+- **Watch My Road — Pill Layout:** Swapped stat grid so Row 1 shows Total In + Avg Time In and Row 2 shows Total Out + Avg Time Out (both summary and road-selected states).
+- **Watch My Road — Congestion Breakdown:** Summary view congestion breakdown now shows "% active | % slowing | % stopped" computed from the sum of all corridor active/slowing/stopped counts, matching corridor card logic. Replaced the previous "X active vehicles / % congestion" format.
+- **Corridor Cards — Colour Palette:** Each card now uses its route-specific colour palette aligned with map vehicle colours — 1A dark forest (`#4A7A56` accent), 2A celadon (`#709775` accent), 2B warm amber (`#C4864A` accent), 3A sage (`#A1CCA5` accent, `#C8E0C8` text) — making 3A visually distinct from 2A.
+- **Corridor Cards — Stat Labels:** "In" → "Traffic In", "Out" → "Traffic Out", "Avg In" → "Avg Time In", "Avg Out" → "Avg Time Out".
+- **Corridor Cards — Pill Layout:** Swapped stat grid so Row 1 shows Traffic In + Avg Time In and Row 2 shows Traffic Out + Avg Time Out.
+
 ### Added — 2026-04-02 (UI Overhaul & Style Guide v3.0)
 - **Integrated System Intelligence:** Combined the overall simulation summary into the "Watch My Road" card when no specific road is selected, providing network-wide context (Total In/Out, Avg Travel Times, Global Stress) in the primary analyzer card.
 - **UX Guidance:** Added bold "Click any road to focus on it" instruction to the summary view to improve discoverability.

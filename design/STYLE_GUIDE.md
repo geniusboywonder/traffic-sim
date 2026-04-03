@@ -13,6 +13,7 @@ A high-contrast mineral system designed for analytical precision within a calm b
 | `canvas` | `#F1F5F1` | Main site background. |
 | `surface-low` | `#E1E9E1` | Sidebar and secondary regions. |
 | `surface-high` | `#D1DAD1` | Component cards and interactive widgets. |
+| `surface-watch` | `#D0DDD0` | Watch My Road / Overall Summary card. Sage-tinted surface between `surface-high` and the 3A corridor card — distinguishes the primary summary card without competing with the coloured corridor cards. |
 | `on-surface` | `#111D13` | Primary body copy and headers (Carbon Black). |
 | `muted-text` | `#717977` | Metadata, disabled states, and captions (Slate Gray). |
 
@@ -23,6 +24,20 @@ A high-contrast mineral system designed for analytical precision within a calm b
 | **2A** | `#A1CCA5` | **Bright Celadon** | High-luminance botanical green. |
 | **2B** | `#D0A679` | **Mineral Ochre** | Warm mineral break. |
 | **3A** | `#709775` | **Muted Teal** | Cool medium-depth green. |
+
+### C. Corridor Card Palette (Intelligence Cards)
+Cards use light pastel backgrounds with dark text — each corridor's hue expressed as a soft gradient, accented by its dark base colour on the left border and congestion bar.
+
+| Corridor | Background (from→to) | Accent / Border | Text (values) | Text (labels/muted) |
+| :--- | :--- | :--- | :--- | :--- |
+| **1A** | `#8FB89A` → `#6BA47A` | `#2D5438` | `#0E1C11` | `rgba(14,28,17,0.6)` |
+| **2A** | `#A1CCA5` → `#7AAF82` | `#415D43` | `#132215` | `rgba(19,34,21,0.6)` |
+| **2B** | `#E0B88A` → `#C49660` | `#8B5A28` | `#221808` | `rgba(34,24,8,0.6)` |
+| **3A** | `#C8E0C8` → `#A4C4A8` | `#709775` | `#0F1E13` | `rgba(15,30,19,0.6)` |
+
+Stat block insets use `rgba(255,255,255,0.28)` (frosted white). Congestion bar track uses `rgba(0,0,0,0.12)`. Hot/stopped accent: `#8B1A1A` (dark crimson, readable on light backgrounds).
+
+The **Watch My Road** card uses `surface-watch` (`#D0DDD0`) with the same dark-text convention: values `#0F1E13`, labels `rgba(15,30,19,0.55)`.
 
 ### C. Condition Accents
 | State | Hex | Name | Rationale |
@@ -70,12 +85,12 @@ High-contrast type system balancing precision with editorial breathing room.
 - **Buttons (Hover):** Background `surface-highest`.
 
 ### B. Intelligence Cards (Sidebar)
-- **Identity:** `4px` left-border using the specific Corridor color.
-- **Congestion Meter:** A multi-segment horizontal bar:
-    - Active: `Corridor Color`
-    - Slowing: `muted-text`
-    - Stopped: `delay`
-- **Sparklines:** Stylized SVG paths (`stroke-width: 2`) matching corridor color.
+- **Identity:** `3px` left-border using the corridor **Accent / Border** colour (see §1C).
+- **Background:** Light pastel gradient per §1C. Dark text throughout — see §1C for values.
+- **Stat Blocks:** Frosted-white inset (`rgba(255,255,255,0.28)`), `8px` radius.
+- **Congestion Meter:** Single horizontal bar — fill colour is the corridor Accent; `#8B1A1A` when stopped > 70%. Track: `rgba(0,0,0,0.12)`.
+- **Breakdown Row:** `% active | % slowing | % stopped` at 7px uppercase. Stopped segment uses `#8B1A1A` when hot.
+- **STOPPED Badge:** Appears on corridor card header when congestion > 70%. Crimson Earth tones.
 
 ### C. Road Analyzer (Watch My Road)
 - **Aesthetic:** High-contrast "Black Box" (`on-surface` background).

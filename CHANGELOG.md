@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### Fixed — 2026-04-03 (SUMO / UXSim Playback)
+- **SUMO & UXSim Playback Loop:** `playbackSource` is passed as a React ref (`{ current: PlaybackSource }`) but the `loop` and `updateRoadStats` callbacks in `SimMap.jsx` used it as a direct instance, causing `TypeError: pb.isLoaded is not a function` on every animation frame — silently killing the playback loop. Fixed by resolving the ref with `playbackSource?.current ?? playbackSource`, consistent with the road-coords effect already using `playbackSource?.current || playbackSource`.
+
 ### Changed — 2026-04-03 (Style Guide v3.1 — Card Palette)
 - **Style Guide — `surface-watch` Token:** Added `#D0DDD0` as a formal surface token for the Watch My Road / Overall Summary card.
 - **Style Guide — §1C Corridor Card Palette:** New section documenting the light pastel card gradients, accent/border colours, dark text values, stat block and congestion bar specifications for all four corridors.

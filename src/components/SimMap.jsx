@@ -236,7 +236,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
       onRoadStatsUpdate(stats);
     } else if (sourceRef.current === 'sumo' || sourceRef.current === 'uxsim') {
       // Playback mode: query playback source at current sim time so stats survive pause/stop.
-      const pb = playbackSource;
+      const pb = playbackSource?.current ?? playbackSource;
       if (pb?.isLoaded()) {
         const rs = pb.getRoadStatsDetailed(pb.getStartTime() + simTimeRef.current, currentSel.name);
         onRoadStatsUpdate(rs);
@@ -263,7 +263,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
     const t = simTimeRef.current;
     
     if (sourceRef.current === 'sumo' || sourceRef.current === 'uxsim') {
-      const pb = playbackSource;
+      const pb = playbackSource?.current ?? playbackSource;
       if (!pb?.isLoaded()) { rafRef.current = requestAnimationFrame(loopRef.current); return; }
       const absT = pb.getStartTime() + t;
       const vehicles = pb.getVehicles(absT);

@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* global process */
 // geojson2osm.js — converts OSM-sourced GeoJSON back to .osm XML
 // Usage: node geojson2osm.js <roads.geojson> [signs.geojson] -o output.osm
 

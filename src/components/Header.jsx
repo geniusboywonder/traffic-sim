@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { Bot, Map, Monitor, MessageCircleMore } from 'lucide-react';
 
 const NAV_ITEMS = [
-  { id: 'simulator', icon: Bot, label: 'Simulator', href: '#simulator' },
-  { id: 'models', icon: Map, label: 'Models', href: '#models' },
-  { id: 'findings', icon: Monitor, label: 'Findings', href: '#findings' },
-  { id: 'contact', icon: MessageCircleMore, label: 'Contact', href: '#contact' },
+  { id: 'simulator', icon: Map, label: 'The Road Map', href: '#simulator' },
+  { id: 'models', icon: Bot, label: 'Under the Hood', href: '#models' },
+  { id: 'findings', icon: Monitor, label: 'The Damage Report', href: '#findings' },
+  { id: 'contact', icon: MessageCircleMore, label: 'Pit Stop', href: '#contact' },
 ];
 
 export default function Header() {

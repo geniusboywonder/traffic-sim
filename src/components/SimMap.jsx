@@ -2,6 +2,7 @@
 // Leaflet map + canvas vehicle overlay + rAF animation loop.
 
 import { useEffect, useRef, useCallback, useState } from 'react';
+import { Play, Pause, RotateCcw, Download, GripVertical, Car, Map as MapIcon } from 'lucide-react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import {
@@ -606,12 +607,14 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
       <div style={{ position: 'absolute', bottom: 90, left: 8, zIndex: 500, background: 'var(--surface-low)', borderRadius: 10, padding: '6px 10px', fontSize: 10, color: 'var(--on-surface)', display: 'flex', flexDirection: 'column', gap: 3, opacity: 0.95, boxShadow: '0 4px 12px rgba(0,0,0,0.1)', transform: `translate(${legendOffset.x}px,${legendOffset.y}px)`, userSelect: 'none' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, paddingBottom: 4, marginBottom: 2, borderBottom: '1px solid var(--surface-high)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <MapIcon size={12} strokeWidth={2.5} />
             <input type="checkbox" id="route-toggle" checked={showRoutes} onChange={onToggleRoutes} style={{ cursor: 'pointer', width: 12, height: 12 }} />
             <label htmlFor="route-toggle" style={{ cursor: 'pointer', fontWeight: 700 }}>Show Routes</label>
           </div>
-          <span onMouseDown={(e) => startDrag(legendDragRef, legendOffset, setLegendOffset, e)} style={{ cursor: 'grab', fontSize: 12, color: 'var(--muted-text)', lineHeight: 1, padding: '0 2px' }} title="Drag to move">⠿</span>
-        </div>
-        {[[COLOUR['3A'].base, 'Firgrove Way'], [COLOUR['2A'].base, 'Homestead Ave'], [COLOUR['2B'].base, "Children's Way"], [COLOUR['1A'].base, 'Main Rd'], [COLOUR.delayed, 'Delayed'], [COLOUR.dwell, 'Parked']].map(([c, l]) => (
+          <span onMouseDown={(e) => startDrag(legendDragRef, legendOffset, setLegendOffset, e)} style={{ cursor: 'grab', display: 'flex', alignItems: 'center', color: 'var(--muted-text)', padding: '0 2px' }} title="Drag to move">
+            <GripVertical size={14} />
+          </span>
+        </div>        {[[COLOUR['3A'].base, 'Firgrove Way'], [COLOUR['2A'].base, 'Homestead Ave'], [COLOUR['2B'].base, "Children's Way"], [COLOUR['1A'].base, 'Main Rd'], [COLOUR.delayed, 'Delayed'], [COLOUR.dwell, 'Parked']].map(([c, l]) => (
           <div key={l} style={{ display: 'flex', alignItems: 'center', gap: 6 }}><svg width="8" height="8"><circle cx="4" cy="4" r="3" fill={c} /></svg>{l}</div>
         ))}
       </div>
@@ -624,7 +627,9 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
         <div className="sim-controls">
           {/* Drag handle */}
           <span onMouseDown={(e) => startDrag(controlsDragRef, controlsOffset, setControlsOffset, e)}
-            style={{ cursor: 'grab', fontSize: 14, color: 'var(--muted-text)', padding: '0 4px', lineHeight: 1, flexShrink: 0 }} title="Drag to reposition">⠿</span>
+            style={{ cursor: 'grab', display: 'flex', alignItems: 'center', color: 'var(--muted-text)', padding: '0 4px', flexShrink: 0 }} title="Drag to reposition">
+            <GripVertical size={14} />
+          </span>
 
           <div style={{ width: 1, height: '1.25rem', background: 'var(--surface-high)', flexShrink: 0 }} />
 
@@ -642,7 +647,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
 
           {/* Play / Pause */}
           <button className="play-pause-btn" onClick={onPlayPause} title={playing ? 'Pause' : 'Play'}>
-            {playing ? '⏸' : '▶'}
+            {playing ? <Pause size={16} fill="currentColor" /> : <Play size={16} fill="currentColor" />}
           </button>
 
           {/* Speed */}
@@ -670,9 +675,15 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
           <div style={{ width: 1, height: '1.25rem', background: 'var(--surface-high)', flexShrink: 0 }} />
 
           {/* Reset + Logs */}
-          <button className="speed-pill" onClick={onReset} title="Reset">↺</button>
-          <button className="speed-pill" onClick={loggerDownload} title="Download vehicle log (CSV)">LOG</button>
-          <button className="speed-pill" onClick={loggerDownloadRoadStats} title="Download road stats log (CSV)">ROAD LOG</button>
+          <button className="speed-pill" onClick={onReset} title="Reset" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <RotateCcw size={14} />
+          </button>
+          <button className="speed-pill" onClick={loggerDownload} title="Download vehicle log (CSV)" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+            <Download size={14} /> LOG
+          </button>
+          <button className="speed-pill" onClick={loggerDownloadRoadStats} title="Download road snapshot log (CSV)" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+            <Download size={14} /> ROAD LOG
+          </button>
         </div>
       </div>
     </div>

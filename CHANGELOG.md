@@ -14,6 +14,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Viewport-Aware Hover Cards**: Refactored briefing and model parameter hover cards to be viewport-aware, ensuring they never render off-screen.
 
 ### Fixed — 2026-04-03 (UI/UX Refinement)
+- **Reference Error Fix**: Resolved `ReferenceError: roadLoggerDownload is not defined` in `SimMap.jsx` by correctly mapping the button click handler to `loggerDownloadRoadStats`.
+- **ESLint Compliance**: Fixed all remaining lint errors across `vite.config.js` (missing `__dirname`), `osm/geojson2osm.js` (missing `process` global), and `src/CardMockup.jsx` (unused variable false positive).
+- **Iconic Visual Language**: Significantly enhanced the UI by integrating Lucide icons throughout all interactive components:
+    - **Summary Pill**: Added `Car` (Total) and `Lock` (Avg Time) icons inline with metrics.
+    - **Intelligence Cards**: Added `Eye`/`EyeOff` for visibility states and `Car`/`Timer` for specific telemetry labels.
+    - **Map Controls**: Replaced Braille drag handles with `GripVertical`; updated Play/Pause, Reset, and Log buttons with polished Lucide glyphs.
+    - **Editorial Sections**: Added meaningful icons (`Activity`, `Database`, `FileText`, `Search`) to all primary and secondary headings for improved scanning.
+    - **Access Modal**: Enriched the entry experience with `Activity` branding and a `Play` icon on the initialization CTA.
+    - **Footer**: Added a `PersonStanding` icon next to the builder credit.
 - **Floating Header**: Restored the fixed/floating behavior of the navigation bar, ensuring it remains pinned to the top of the viewport during scroll with a glassy backdrop-blur effect.
 - **Menu Structure Refinement**: Removed the redundant Home icon. Promoted "Simulator" to the primary menu position, linked directly to the live map viewport.
 - **Top Whitespace Removal**: Eliminated excessive vertical space at the top of the application, adjusting `main-layout` padding to accommodate the new floating header height.

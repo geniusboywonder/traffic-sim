@@ -104,3 +104,114 @@ UXsim models traffic as flow, not individual cars. It cannot reproduce speed-hum
 
 ## CONTACT / FOOTER
 Created by **Neill Adamson** @geniusboywonder (https://x.com/geniusboywonder). Need some help building with AI? @: nadamson@gmail.com (sendto link)
+
+
+SUGGESTIONS
+Navigation Labels
+
+┌───────────┬───────────────────┬───────────────────────────┐
+│  Current  │ Car-theme option  │           Vibe            │
+├───────────┼───────────────────┼───────────────────────────┤
+│ Home      │ Home              │ (keep — universal anchor) │
+├───────────┼───────────────────┼───────────────────────────┤
+│ Simulator │ The Road Map      │ Where all roads meet      │
+├───────────┼───────────────────┼───────────────────────────┤
+│ Models    │ Under the Hood    │ Mechanics/engineering     │
+├───────────┼───────────────────┼───────────────────────────┤
+│ Findings  │ The Damage Report │ Crash investigation       │
+├───────────┼───────────────────┼───────────────────────────┤
+│ Contact   │ Pit Stop          │ Brief, functional stop    │
+└───────────┴───────────────────┴───────────────────────────┘
+
+---
+Access Barrier (Intro Modal)
+
+CTA button
+▎ "Initialize Simulator →" → "Start the Engine →"
+
+"DISCLAIMER" label
+▎ → "ROAD WARNING"
+
+The disclaimer text already has great conversational voice — leave the body copy alone, just re-dress the label.
+
+---
+Briefing Section
+
+┌──────────────────────────────────┬────────────────────────────┐
+│             Current              │     Car-theme version      │
+├──────────────────────────────────┼────────────────────────────┤
+│ MICROSCOPIC LOGIC eyebrow label  │ UNDER THE HOOD             │
+├──────────────────────────────────┼────────────────────────────┤
+│ "TIA Assumptions" hover trigger  │ "The TIA Highway Code"     │
+├──────────────────────────────────┼────────────────────────────┤
+│ "Model Parameters" hover trigger │ "Engine Specs"             │
+├──────────────────────────────────┼────────────────────────────┤
+│ IMPORTANT MODELLING LIMITATION   │ ROAD CLOSED or ⛔ NO ENTRY │
+└──────────────────────────────────┴────────────────────────────┘
+
+The large hero line "Traff✱k is like a super-realistic video game..." could lean further in:
+▎ "Traff✱k is the dashcam you never knew you needed for Tokai's morning rush."
+
+---
+Models Section
+
+┌────────────────────────────────────────────────────────────┬───────────────────────────────────────────────────────────────────────────┐
+│                          Current                           │                             Car-theme version                              │
+├────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────┤
+│ "Models & Validation" heading                              │ "Road Tested"                                                              │
+├────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────┤
+│ TOKAI-SIM CALIBRATION subhead                              │ TUNING THE ENGINE                                                          │
+├────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────┤
+│ "Why small differences appear — and why the trend matters" │ "Why the speedometers don't always agree"                                     │
+├────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────┤
+│ The WCMD TIA intro paragraph's first line                  │ Could open: "The official TIA is a snapshot — one frame from the dashcam." │
+└────────────────────────────────────────────────────────────┴────────────────────────────────────────────────────────────────────────────┘
+
+---
+Findings Section
+
+Your three tiers work perfectly as a severity scale:
+
+┌───────────────┬────────────────────────────────────────┬───────────────────────┐
+│     Tier      │                Meaning                 │    Colour / Weight    │
+├───────────────┼────────────────────────────────────────┼───────────────────────┤
+│ Side-swipe    │ Glancing observations, minor but noted │ Muted / informational │
+├───────────────┼────────────────────────────────────────┼───────────────────────┤
+│ Fender-bender │ Real damage, manageable                │ Amber / cautionary    │
+├───────────────┼────────────────────────────────────────┼───────────────────────┤
+│ Write-off     │ Total loss, critical finding           │ Crimson / alert       │
+└───────────────┴────────────────────────────────────────┴───────────────────────┘
+
+Each finding card would carry a small badge (WRITE-OFF, FENDER-BENDER, SIDE-SWIPE) replacing the current generic icon treatment.
+
+The section intro text could open with:
+▎ "Here's what came out of the black box."
+
+Section eyebrow: INCIDENT REPORT instead of nothing / "What the Models Say".
+
+---
+Footer
+
+The tagline "putting you in the driving seat" is already perfect — keep it verbatim.
+
+Credits micro-copy
+
+┌──────────────────────────┬───────────────────────┐
+│         Current          │       Car-theme       │
+├──────────────────────────┼───────────────────────┤
+│ "Help building with AI?" │ "Need a lift?"        │
+├──────────────────────────┼───────────────────────┤
+│ or the sub line          │ "Want to ride along?" │
+└──────────────────────────┴───────────────────────┘
+
+---
+A Few Bonus Touches
+
+- Page <title> in the browser tab: Currently "Tokai HS — Morning Traffic Simulator" → could be "Traff✱k — Buckle Up" or keep formal for sharing
+- Empty state on the Watch My Road card ("Select any road…"): → "Pick a road. Any road. Watch it sweat."
+- Simulation not yet started instructional text (currently "PLAY A SCENARIO AND WATCH THE TRAFFIC WIGGLE!"): → something like "Choose your scenario. Brace for impact."
+- The ɲeill sign-off on the barrier: Already charming — could follow "Just be lekker!" with a parenthetical like (no cars or humans were harmed in the making of this)
+
+---
+Which of these areas would you like to lock down first? I'd suggest starting with the navigation labels + Findings tier system since those are the most
+structurally impactful — they shape how every section is perceived.

@@ -7,21 +7,6 @@ will this work on a static html site without react? https://21st.dev/community/c
 can we change the coolours to align with our colour scheme?
 if so can we use this background for the modal pop-over at the start.
 
-implement the https://www.shadcn.io/icons/lucide icons throughout the site
-Menus bar:
-- Home - Home (top of page)
-- Simulator - https://www.shadcn.io/icon/lucide-bot
-- Models - https://www.shadcn.io/icon/lucide-map
-- Findings - https://www.shadcn.io/icon/lucide-computer
-- Contact - https://www.shadcn.io/icon/lucide-message-circle-more
-
-Hide/show - https://www.shadcn.io/icon/lucide-eye / https://www.shadcn.io/icon/lucide-eye-off
-Traffic - https://www.shadcn.io/icon/lucide-car
-Avg Time - https://www.shadcn.io/icon/lucide-timer
-Overall Summary - https://www.shadcn.io/icon/lucide-arrow-up-from-line
-Road focus - https://www.shadcn.io/icon/lucide-arrow-down-from-line
-
-
 check the start time of the model - no cars seems to go through until 6:40 so the first few minutes are empty
 why arent more cars using the dereyersdal farm / tussendal rd for entry?
 check the route and rat-route for Homestead.
@@ -376,3 +361,52 @@ the menu implementation is incorrect. what we visually want is the menu bar to s
 
 you still havent fixed the text overflow on the nav bar and the menu should be left aligned with the map left-border. ALSO IT NEEDS TO USE OUR THEME
    COLOURS. @/Users/neill/Desktop/Screenshot\ 2026-04-03\ at\ 13.52.33.png
+
+and stays at the top of the page. fix that. and remove the home icon. the first one can be the  Simulator and should navigate
+   to the top of map.
+
+using the https://www.shadcn.io/icons/lucide icons throughout the site
+
+we are changing the name of the app from - Tokai-Sim to Traff✱k.
+on the Modal show `Traff✱k - Tokai High Traffic Simulator`.
+On the Menu, show `Traff✱k` before any menu option in a style that suits the theme and is the leading/heading on the page.
+
+remove the large white space at the top of the app before the menu
+
+implement this text and icons in the menu bar - replacing those that are incorrect.
+Menu bar:
+- Simulator - https://www.shadcn.io/icon/lucide-bot
+- Models - https://www.shadcn.io/icon/lucide-map
+- Findings - https://www.shadcn.io/icon/lucide-computer
+- Contact - https://www.shadcn.io/icon/lucide-message-circle-more
+
+add these icons throughout the site next to import headings and metrics. identify any that might be missing an icon.
+Hide/show - https://www.shadcn.io/icon/lucide-eye / https://www.shadcn.io/icon/lucide-eye-off
+Traffic - https://www.shadcn.io/icon/lucide-car
+Avg Time - https://www.shadcn.io/icon/lucide-timer
+Overall Summary - https://www.shadcn.io/icon/lucide-arrow-up-from-line
+Road focus - https://www.shadcn.io/icon/lucide-arrow-down-from-line
+
+Neill - https://www.shadcn.io/icon/lucide-person-standing
+
+/BMad:agents:ux-expert read the @design/STYLE_GUIDE.md and @CHANGELOG.md to fully understand the project and brief.
+perform a full review of the site for desktop and mobile use.
+critically evaluate all UI and UX elements and put detailed suggestions & recommendations into an md document that can be followed by a UI developer.
+be sure to focus on consistency throughout the site, of colour palette, typography, weightings, spacing, white space, iconography, balance and overall site layout.
+include any best practise suggestions that are missing.
+
+In the Summary pill.
+- add the car icon to the Total In/out
+- add the lock icon to the AVg Time In/out
+- the icons must go on the same line as the number and be similarly sized.
+- 1 icon before both number swill suffice - think of the icon as a "row heading"
+
+in the stats pill, Avg Time In/Out must have the stop-watch icon. then all the corridor cards need to follow a similar pattern. the icon needs to appear
+   once at the start of each row. Icons car for traffic, stop watch for avg time, same for the Wathc my road card. the unhide icon cannot be seen when cards
+   are deselected because of the faded overlay. the icon needs to be brighter or not sit behind the overlay. swap the icons for "the road map" and "under the
+   hood" around
+
+the editorial secitons of the site feels disjointed.
+Too large white space, inconsitent bento blocks and stylitically different colour shades make the site feel disconnected through each section.
+while the goal is to visually sperate out each section - these dont folow well together. make suggestions to improve this and add it to the UX review.
+4 possible examples (FOR LAYOUT CONCEPT & SECTION CHANGES ONLY - NOT COLOUR OR VISUAL ELEMENTS) could be

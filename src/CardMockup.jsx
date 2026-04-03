@@ -567,9 +567,9 @@ export default function CardMockup() {
 
       {/* All sections */}
       <div style={{ maxWidth: 1400, margin: '0 auto', padding: '0 2.5rem 4rem' }}>
-        {styles.map(({ num, title, source, Card }) => (
+        {styles.map(({ num, title, source, Card: VisualCard }) => ( // eslint-disable-line no-unused-vars
           <Section key={num} num={num} title={title} source={source}>
-            {CORRIDORS.map(c => <Card key={c.id} c={c} />)}
+            {CORRIDORS.map(c => <VisualCard key={c.id} c={c} />)}
           </Section>
         ))}
       </div>

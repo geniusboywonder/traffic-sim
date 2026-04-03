@@ -1140,18 +1140,11 @@ a {
 }
 
 .findings-grid {
-  max-width: 1700px;
+  max-width: 1200px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 3rem;
-  align-items: start;
-}
-
-.findings-header {
-  grid-column: span 4;
-  position: sticky;
-  top: 7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
 }
 
 .findings-header .models-subtitle { color: rgba(241,245,241,0.4); }
@@ -1162,65 +1155,104 @@ a {
   font-size: 1rem;
   line-height: 1.65;
   margin-top: 1.5rem;
-  max-width: 28ch;
+  max-width: 52ch;
 }
 
-.findings-content {
-  grid-column: span 8;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.finding-card {
-  background: rgba(241,245,241,0.05);
-  border: 1px solid rgba(241,245,241,0.1);
-  border-radius: 1.5rem;
-  padding: 2rem 2.5rem;
+/* ── 3-column comparison layout ── */
+.findings-columns {
   display: grid;
-  grid-template-columns: 2.5rem 1fr;
-  gap: 1.5rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
   align-items: start;
 }
 
-.finding-card--alert {
-  background: rgba(166,77,77,0.12);
-  border-color: rgba(166,77,77,0.3);
+.findings-col {
+  border-radius: 1.25rem;
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.finding-card--muted {
-  background: rgba(241,245,241,0.03);
-  border-color: rgba(241,245,241,0.06);
+.findings-col--writeoff  { background: rgba(166,77,77,0.1);   border: 1px solid rgba(166,77,77,0.25); }
+.findings-col--fender    { background: rgba(194,125,96,0.08); border: 1px solid rgba(194,125,96,0.2); }
+.findings-col--sideswipe { background: rgba(112,151,117,0.08); border: 1px solid rgba(112,151,117,0.2); }
+
+.findings-col-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.finding-icon {
-  font-size: 1.25rem;
-  line-height: 1.6;
-  opacity: 0.7;
+.findings-badge {
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  padding: 0.2rem 0.5rem;
 }
 
-.finding-body h3 {
+.findings-badge--writeoff  { background: rgba(166,77,77,0.2);   color: #C47070; border: 1px solid rgba(166,77,77,0.4); }
+.findings-badge--fender    { background: rgba(194,125,96,0.15); color: #C27D60; border: 1px solid rgba(194,125,96,0.35); }
+.findings-badge--sideswipe { background: rgba(112,151,117,0.15); color: var(--c-3a); border: 1px solid rgba(112,151,117,0.3); }
+
+.findings-col-heading {
   font-size: 1.1rem;
   font-weight: 700;
-  color: #F1F5F1;
-  margin-bottom: 0.75rem;
-  letter-spacing: -0.02em;
-}
-
-.finding-body p {
-  font-size: 0.925rem;
-  color: rgba(241,245,241,0.6);
-  line-height: 1.7;
-}
-
-.finding-body p strong {
   color: rgba(241,245,241,0.9);
-  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0;
 }
 
-.finding-body p em {
-  color: var(--c-3a);
-  font-style: normal;
+.findings-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.findings-bullets li {
+  font-size: 0.9rem;
+  color: rgba(241,245,241,0.6);
+  line-height: 1.55;
+  padding-left: 1.1rem;
+  position: relative;
+}
+
+.findings-col--writeoff  .findings-bullets li::before { content: '—'; position: absolute; left: 0; color: rgba(166,77,77,0.7); font-weight: 700; }
+.findings-col--fender    .findings-bullets li::before { content: '—'; position: absolute; left: 0; color: rgba(194,125,96,0.7); font-weight: 700; }
+.findings-col--sideswipe .findings-bullets li::before { content: '—'; position: absolute; left: 0; color: rgba(112,151,117,0.7); font-weight: 700; }
+
+/* ── Methodology caveat ── */
+.findings-caveat {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  background: rgba(241,245,241,0.03);
+  border: 1px solid rgba(241,245,241,0.07);
+  border-radius: 0.875rem;
+}
+
+.findings-caveat p {
+  font-size: 0.85rem;
+  color: rgba(241,245,241,0.4);
+  line-height: 1.65;
+  margin: 0;
+}
+
+.findings-caveat p strong {
+  color: rgba(241,245,241,0.6);
+  font-weight: 600;
+}
+
+@media (max-width: 1024px) {
+  .findings-columns {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ── Footer ── */

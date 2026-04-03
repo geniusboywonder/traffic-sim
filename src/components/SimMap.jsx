@@ -548,22 +548,36 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
 
   useEffect(() => {
     const map = mapRef.current; if (!map) return;
+    const isMobile = window.innerWidth < 768;
     if (selectedCorridors.size === 0 || selectedCorridors.size === 4) {
-      map.fitBounds([[-34.0568, 18.4465], [-34.0400, 18.4625]], { padding: [18, 18] });
+      if (isMobile) {
+        // Mobile: Tight zoom on school area
+        map.fitBounds([[-34.0560, 18.4450], [-34.0410, 18.4620]], { padding: [5, 5] });
+      } else {
+        // Desktop: Zoomed into the 4 ingress points and school
+        map.fitBounds([[-34.0550, 18.4420], [-34.0390, 18.4640]], { padding: [10, 10] });
+      }
     } else {
       const points = [ [JUNCTIONS[7].lat, JUNCTIONS[7].lng] ];
       selectedCorridors.forEach(cid => { const jid = ENTRY_JUNCTIONS[cid]; if (jid && JUNCTIONS[jid]) points.push([JUNCTIONS[jid].lat, JUNCTIONS[jid].lng]); });
-      if (points.length > 0) map.fitBounds(L.latLngBounds(points), { padding: [50, 50], animate: true, duration: 0.5 });
+      if (points.length > 0) map.fitBounds(L.latLngBounds(points), { padding: [isMobile ? 20 : 50, isMobile ? 20 : 50], animate: true, duration: 0.5 });
     }
   }, [selectedCorridors]);
 
   useEffect(() => {
     if (mapRef.current) return;
+    const isMobile = window.innerWidth < 768;
     const map = L.map(containerRef.current, { zoomSnap: 0.1 }); mapRef.current = map;
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-    map.fitBounds([[-34.0568, 18.4465], [-34.0400, 18.4625]], { padding: [18, 18] });
+    
+    if (isMobile) {
+      map.fitBounds([[-34.0585, 18.4435], [-34.0395, 18.4635]], { padding: [10, 10] });
+    } else {
+      map.fitBounds([[-34.0585, 18.4400], [-34.0380, 18.4650]], { padding: [20, 20] });
+    }
+
     const outer = [[-40, 14], [-40, 23], [-30, 23], [-30, 14]], study = [[-34.0585, 18.4435], [-34.0395, 18.4435], [-34.0395, 18.4635], [-34.0585, 18.4635]];
-    L.polygon([outer, study], { fillColor: '#050d1a', fillOpacity: 0.6, fillRule: 'evenodd', stroke: false }).addTo(map);
+    L.polygon([outer, study], { fillColor: '#050d1a', fillOpacity: isMobile ? 0 : 0.6, fillRule: 'evenodd', stroke: false }).addTo(map);
     const polylines = ROAD_LINES.map(feature => {
       const pl = L.polyline(feature.geometry.coordinates.map(([lon, lat]) => [lat, lon]), { color: 'transparent', weight: 10, opacity: 0 }).addTo(map);
       pl._osmName = feature.properties?.name ?? ''; return pl;
@@ -688,7 +702,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
           <div className="speed-selector">
             {[
               { id: 'live', label: 'Live', title: 'Live IDM simulation (runs in browser)' },
-              { id: 'sumo', label: 'SUMO', title: 'Pre-computed SUMO microscopic model' },
+              { id: 'sumo', label: 'Lab', title: 'Pre-run lab simulation (SUMO microscopic model)' },
             ].map(({ id, label, title }) => (
               <button key={id} className={`speed-pill${source === id ? ' active' : ''}`}
                 onClick={() => onSourceChange?.(id)} title={title}>

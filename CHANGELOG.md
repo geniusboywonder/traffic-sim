@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### Changed — 2026-04-03 (Model Naming: Live / Lab)
+- **Player control toggle:** SUMO button label changed from "SUMO" to "Lab". Internal `id` value remains `'sumo'` — no logic changes. Tooltip updated to "Pre-run lab simulation (SUMO microscopic model)".
+- **Under the Hood copy:** Entry ③ heading updated to "Lab — Professional Cross-Check". All body copy references to "SUMO" as a user-facing term replaced with "the Lab model" or "Lab model". SUMO is still mentioned by full name once for credibility ("The Lab model runs on SUMO...").
+- **Findings section copy:** "SUMO's microscopic simulation" → "the Lab simulation"; "SUMO records ~480 vehicles" → "the Lab model records ~480 vehicles"; "UXsim and SUMO identify" → "UXSim and the Lab model identify".
+- **Rationale:** General visitors don't know what SUMO is without reading deep editorial copy. "Live" and "Lab" are immediately understood: Live = interactive browser simulation, Lab = pre-run scientific/professional model.
+
 ### Changed — 2026-04-03 (Under the Hood Section Rewrite)
 - **ModelsSection — Full Copy & Structure Rewrite:** Replaced the previous two-entry layout with a five-entry numbered chain narrative. Entries: ① The Foundation (TIA), ② Our Live Simulation, ③ SUMO — Professional Cross-Check, ④ UXSim — Network-Level Confirmation, ⑤ Reading the Instruments (discrepancies). Copy rewritten to clearly communicate the validation hierarchy: build on TIA → validate with SUMO → cross-check SUMO & Live with UXSim.
 - **Intro Text Added:** New `models-intro` block (span 8, paired with header span 4) with lead copy: "Three independent models. One consistent conclusion."

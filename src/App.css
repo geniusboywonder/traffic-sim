@@ -1136,13 +1136,13 @@ a {
 
 /* ── Road Closed Block (Models Section) ── */
 .road-closed-block {
+  grid-column: span 12;
   background: var(--on-surface);
   border-radius: 1.25rem;
   padding: 2rem 2.5rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin-bottom: 0.5rem;
 }
 
 .road-closed-header {

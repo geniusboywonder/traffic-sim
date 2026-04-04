@@ -1483,6 +1483,23 @@ a {
   opacity: 1;
 }
 
+/* Road Closed block variant — light text on dark card, tooltip wraps */
+.stat-pill--dark {
+  color: rgba(241, 245, 241, 0.92);
+  border-bottom-color: rgba(196, 112, 112, 0.6);
+  white-space: normal;
+}
+
+.stat-pill--dark::after {
+  background: rgba(241, 245, 241, 0.97);
+  color: #1a0a0a;
+  border: 1px solid rgba(196, 112, 112, 0.3);
+  white-space: normal;
+  max-width: 28ch;
+  text-align: left;
+  line-height: 1.5;
+}
+
 /* ── 3-column comparison layout ── */
 .findings-columns {
   display: grid;

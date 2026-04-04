@@ -237,7 +237,7 @@ const FindingsSection = () => (
           </div>
           <h3 className="findings-col-heading">Significant Damage</h3>
           <ul className="findings-bullets">
-            <li><strong>The school gate is the single point of failure.</strong> Every model independently flags the school approach as the most congested point in the network. The Validation model's average delay at the school entrance grows from <span className="stat-pill" data-source="Validation model avg delay, school internal road, Low scenario">33s</span> to <span className="stat-pill" data-source="Validation model avg delay, school internal road, High scenario">71s</span> between Low and High. 14 speed humps and a single-entry gate mean one stalled vehicle stalls the entire queue.</li>
+            <li><strong>The school gate is the single point of failure.</strong> Delay at the entrance doubles — from <span className="stat-pill" data-source="Validation model avg delay, school internal road, Low scenario">33s</span> to <span className="stat-pill" data-source="Validation model avg delay, school internal road, High scenario">71s</span> per vehicle — between Low and High demand. 14 speed humps and a single-entry gate mean one stalled car stalls the entire queue.</li>
             <li><strong>Rat-run pressure is structural.</strong> Dreyersdal Rd is the single most loaded road in Medium and High scenarios (Lab model). The Validation model records average delays of <span className="stat-pill" data-source="Validation model avg delay, Ruskin Rd across scenarios">74–106s on Ruskin Rd</span> and up to <span className="stat-pill" data-source="Validation model avg delay, Vineyard Rd, High scenario">86s on Vineyard Rd</span>. When the main routes fill, the rat-runs fill too.</li>
             <li><strong>Christopher Rd is the final funnel.</strong> The main route and four separate rat-run paths — from all three entry corridors — converge on Christopher Rd before the school gate. Two consecutive junctions compress all of that volume: a stop at <span className="stat-pill" data-source="Validation model — Christopher Rd top-5 most-loaded road, even in Low scenario">Starke/Christopher</span> and a yield at <span className="stat-pill" data-source="Lab model — all 3 entry corridors converge here; absorbs overflow from every direction in M &amp; H">Christopher/Vineyard</span>.</li>
           </ul>
@@ -251,7 +251,7 @@ const FindingsSection = () => (
           </div>
           <h3 className="findings-col-heading">Telling Details</h3>
           <ul className="findings-bullets">
-            <li><strong>The queue peaks at <span className="stat-pill" data-source="Lab model peak vehicles on network — all High/Med scenarios">08:15</span>, not 07:45.</strong> The TIA's critical window is 07:30–08:00, with demand peaking at 07:45. But the Lab model puts peak network loading at 08:15–08:17. The school gate can't clear vehicles as fast as they arrive — so the queue keeps growing long after the demand wave has passed.</li>
+            <li><strong>The queue peaks at 08:15, not 07:45.</strong> The TIA's critical window is 07:30–08:00, with demand peaking at 07:45. But the school gate is a hard bottleneck — vehicles queue to reach it, not just to enter the suburb. Peak network loading doesn't hit until <span className="stat-pill" data-source="Lab model peak vehicles on network — High scenario 08:17, Med scenario 08:15">08:15–08:17</span>. The TIA captures when parents arrive. The crunch happens 30 minutes later, when they still can't reach the gate.</li>
             <li><strong>Three models, one conclusion.</strong> Live, Lab, and the Validation model — three entirely different mathematical frameworks — independently flag the same roads: Starke Rd and the Dreyersdal/Vineyard corridor in the top 5 across every Medium and High scenario. That's not a modelling quirk. It's the road.</li>
           </ul>
         </div>
@@ -264,14 +264,14 @@ const FindingsSection = () => (
           <span>✕ &nbsp;ROAD CLOSED&nbsp; ✕</span>
           <OctagonX size={26} strokeWidth={3} />
         </div>
-        <p className="road-closed-intro">This modelling <strong>EXCLUDES</strong> any modelling for:</p>
+        <p className="road-closed-intro">Everything shown is <strong>inbound school traffic only.</strong> This modelling excludes:</p>
         <ul className="road-closed-list">
-          <li>Sweet Valley School runs</li>
-          <li>Bergvliet residents local traffic movements to work, school and university</li>
-          <li>ALL traffic <em>exiting</em> to Firgrove Rd, Ladies Mile Rd and Main Rd</li>
-          <li>New essential traffic calming measures in Dante Rd, Vineyard Rd, Ruskin Rd, Leyden Rd</li>
+          <li><span className="stat-pill stat-pill--dark" data-source="Sweet Valley Primary is ~200m away. Their school-run parents use the same roads and are entirely unmodelled.">Sweet Valley Primary school runs</span></li>
+          <li><span className="stat-pill stat-pill--dark" data-source="All non-school trips through the study area — commuters, local errands, other school runs — are excluded. These roads carry far more than Tokai High traffic alone.">All Bergvliet local and commuter traffic</span></li>
+          <li><span className="stat-pill stat-pill--dark" data-source="Post drop-off vehicles leaving via Firgrove Rd, Ladies Mile Rd and Main Rd create a counter-flow on the same streets. None of this is modelled. Real congestion will be worse."><em>All</em> outbound traffic after drop-off</span></li>
+          <li><span className="stat-pill stat-pill--dark" data-source="The TIA proposes calming on rat-run routes. Excluding these means modelled rat-run speeds may be slightly faster than reality — which would make congestion slightly worse than shown.">Proposed traffic calming on Dante Rd, Vineyard Rd, Ruskin Rd, Leyden Rd</span></li>
         </ul>
-        <p className="road-closed-footer">All Avg Time Out figures will be <strong>massively understated</strong> based on the above.</p>
+        <p className="road-closed-footer">Every exit time shown is a <strong>minimum bound</strong>. The real wait is longer.</p>
       </div>
 
     </div>

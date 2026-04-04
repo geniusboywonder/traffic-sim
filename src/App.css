@@ -1643,7 +1643,7 @@ a {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: clamp(2rem, 8vw, 6rem) 2rem;
+  padding: clamp(1.25rem, 4vh, 2.5rem) 2rem;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -1651,7 +1651,7 @@ a {
 }
 
 .barrier-header {
-  margin-bottom: 4rem;
+  margin-bottom: 1.75rem;
   text-align: center;
 }
 
@@ -1677,29 +1677,44 @@ a {
 .barrier-main-grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  gap: 4rem;
-  align-items: start;
+  gap: 2rem;
+  align-items: stretch;
 }
 
 .barrier-narrative {
   grid-column: span 7;
+  display: flex;
+  flex-direction: column;
 }
 
 .barrier-narrative p {
-  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  font-size: clamp(1rem, 1.8vw, 1.2rem);
   line-height: 1.6;
   color: rgba(241, 245, 241, 0.88);
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   font-weight: 500;
 }
 
+.barrier-narrative-btn {
+  margin-top: auto;
+  padding-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.disclaimer-lekker {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
 .barrier-lekker {
+  display: block;
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 700;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   color: #A1CCA5;
   line-height: 1.4;
-  margin-top: 3rem;
 }
 
 .barrier-lekker-sub {
@@ -1724,10 +1739,12 @@ a {
   grid-column: span 5;
   background: rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(20px);
-  padding: 3rem;
-  border-radius: 2.5rem;
+  padding: 2rem;
+  border-radius: 2rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
 }
 
 .disclaimer-label {
@@ -1736,7 +1753,7 @@ a {
   text-transform: uppercase;
   letter-spacing: 0.25em;
   color: #C47070;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.75rem;
   display: block;
 }
 
@@ -1746,11 +1763,6 @@ a {
   line-height: 1.7;
 }
 
-.barrier-footer {
-  margin-top: 5rem;
-  display: flex;
-  justify-content: center;
-}
 
 .access-barrier .editorial-link {
   color: #A1CCA5;

@@ -175,7 +175,7 @@ const ModelsSection = () => (
           <span className="model-chain-badge">5</span>
           <div className="model-entry-body">
             <h3>Reading the Instruments</h3>
-            <p>Our Live engine and the Lab model are stochastic — each run includes realistic random variation in driver behaviour, so exact numbers shift slightly between runs. The TIA and UXSim use deterministic, averaged flows, so they always return the same result. Our Live engine also adds layers the others don't: dynamic egress holds at J8 during peak, dwell time at the school, and real-time rat-run activation based on live congestion.</p>
+            <p>Our Live engine and the Lab model are stochastic — each run includes realistic random variation in driver behaviour, so exact numbers shift slightly between runs. The TIA and UXSim use deterministic, averaged flows, so they always return the same result. Our Live engine also adds layers the others don't: dynamic egress holds at the Ladies Mile signal during peak, dwell time at the school, and real-time rat-run activation based on live congestion.</p>
           </div>
         </div>
 
@@ -239,7 +239,7 @@ const FindingsSection = () => (
           <h3 className="findings-col-heading">The Bottlenecks</h3>
           <ul className="findings-bullets">
             <li><strong>The school gate is a single-entry hard stop.</strong> One gate. 14 speed humps on the approach. Delay per vehicle more than doubles — from <span className="stat-pill" data-source="Validation model avg delay, school internal road, Low scenario">33s</span> in Low demand to <span className="stat-pill" data-source="Validation model avg delay, school internal road, High scenario">71s</span> in High. One stalled car stalls the entire queue.</li>
-            <li><strong>Christopher Rd is where the main routes converge.</strong> All four entry corridors reach the school via <strong>Christopher Rd</strong> — through a stop at <span className="stat-pill" data-source="J4: all-way stop — every main route passes through here"><em>Starke/Christopher</em></span> and a yield at <span className="stat-pill" data-source="J5: yield-controlled — final junction before the Vineyard/Leyden school approach"><em>Christopher/Vineyard</em></span>. Rat-runs that bypass it exit via <em>Clement/Leyden</em> or <em>Dante/Ruskin</em> — different queue, same gate.</li>
+            <li><strong>Christopher Rd is where the main routes converge.</strong> All four entry corridors reach the school via <strong>Christopher Rd</strong> — through a stop at <span className="stat-pill" data-source="All-way stop at Starke/Christopher — every main route passes through here"><em>Starke/Christopher</em></span> and a yield at <span className="stat-pill" data-source="Yield-controlled junction at Christopher/Vineyard — final turn before the Leyden/Ruskin school approach"><em>Christopher/Vineyard</em></span>. Rat-runs that bypass it exit via <em>Clement/Leyden</em> or <em>Dante/Ruskin</em> — different queue, same gate.</li>
           </ul>
         </div>
 

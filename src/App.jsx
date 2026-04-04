@@ -84,7 +84,7 @@ const BentoBriefing = () => {
                   </h4>
                   <ul className="popover-list">
                     <li>• <strong>Inbound vehicles:</strong> L: 336, M: 420, H: 504</li>
-                    <li>• <strong>Cars per entryway:</strong> Children's Way: 47% | Homestead Av: 25% | 1A Dreyersdal South: 14% | 1A Dreyersdal North: 11% | Firgrove/Starke: 3%</li>
+                    <li>• <strong>Cars per entryway:</strong> Children's Way: 47% | Homestead Av: 25% | Main Rd (Dreyersdal South): 14% | Firgrove Way (Dreyersdal North + Starke): 14%</li>
                     <li>• <strong>School Drop-offs:</strong> 120 bays (98 on-site + 22 on-street)</li>
                     <li>• <strong>Avg stop time:</strong> 45 seconds | One-way system | Aristea Traffic Circle</li>
                   </ul>

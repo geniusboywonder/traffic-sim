@@ -121,21 +121,21 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
   const computeStats = useCallback((vehicles, totals, exits, inDelays, outDelays, congScores) => {
     const res = { corridors: {}, bottlenecks: {}, parking: {} };
     ['3A', '2A', '2B', '1A'].forEach(cid => {
-      // 1A-NORTH vehicles share the 1A corridor card — merge their counts in
-      const cids = cid === '1A' ? ['1A', '1A-NORTH'] : [cid];
+      // 3A (Firgrove Way) merges 1A-NORTH (Dreyersdal North) — both enter/exit via J13
+      // 1A (Main Rd) shows Dreyersdal South only
+      const cids = cid === '3A' ? ['3A', '1A-NORTH'] : [cid];
       const corrVehicles = vehicles.filter(v => cids.includes(v.corridorId) && v.state === 'inbound');
       const stopped = corrVehicles.filter(v => v.v < 0.5).length;
       const slowing = corrVehicles.filter(v => v.v >= 0.5 && v.v < 2).length;
       const active  = corrVehicles.filter(v => v.v >= 2).length;
-      // Merge 1A + 1A-NORTH delay accumulators
-      const inD  = cid === '1A'
-        ? { total: (inDelays['1A'].total  + (inDelays['1A-NORTH']?.total  ?? 0)), count: (inDelays['1A'].count  + (inDelays['1A-NORTH']?.count  ?? 0)) }
+      const inD  = cid === '3A'
+        ? { total: (inDelays['3A'].total  + (inDelays['1A-NORTH']?.total  ?? 0)), count: (inDelays['3A'].count  + (inDelays['1A-NORTH']?.count  ?? 0)) }
         : inDelays[cid];
-      const outD = cid === '1A'
-        ? { total: (outDelays['1A'].total + (outDelays['1A-NORTH']?.total ?? 0)), count: (outDelays['1A'].count + (outDelays['1A-NORTH']?.count ?? 0)) }
+      const outD = cid === '3A'
+        ? { total: (outDelays['3A'].total + (outDelays['1A-NORTH']?.total ?? 0)), count: (outDelays['3A'].count + (outDelays['1A-NORTH']?.count ?? 0)) }
         : outDelays[cid];
-      const spawned = cid === '1A' ? (totals['1A'] + (totals['1A-NORTH'] ?? 0)) : totals[cid];
-      const exited  = cid === '1A' ? (exits['1A']  + (exits['1A-NORTH']  ?? 0)) : exits[cid];
+      const spawned = cid === '3A' ? (totals['3A'] + (totals['1A-NORTH'] ?? 0)) : totals[cid];
+      const exited  = cid === '3A' ? (exits['3A']  + (exits['1A-NORTH']  ?? 0)) : exits[cid];
       res.corridors[cid] = {
         label: cid === '1A' ? 'Main Rd' : cid === '2A' ? 'Homestead Av' : cid === '2B' ? "Children's Way" : 'Firgrove Way',
         current: corrVehicles.length, spawned, exited,

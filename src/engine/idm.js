@@ -61,7 +61,7 @@ export function junctionHoldDuration(jid, junctionControl, simTime, lastReleaseT
           if (fromJid !== 29) return 0; // J17 yield only from Ruskin
           break;
         case 'starke_onto_airlie':
-          if (![4, 24].includes(fromJid)) return 0; // J22 stop only when turning from Starke
+          if (![4, 24].includes(fromJid)) return 0; // J22 stop only when turning FROM Starke onto Airlie (inbound rat-runs)
           break;
         case 'from_tussendal':
           if (fromJid !== 21) return 0; // J23 yield only from Tussendal
@@ -116,7 +116,7 @@ export function junctionHoldDuration(jid, junctionControl, simTime, lastReleaseT
     case 'stop':          return gap >= 4.0 ? 0 : 4.0 - gap;
     case 'yield':              return gap >= 2.5 ? 0 : 2.5 - gap;
     case 'critical':           return gap >= 4.5 ? 0 : 4.5 - gap;
-    case 'roundabout_planned': return gap >= 2.5 ? 0 : 2.5 - gap; // TIA §14: mini-roundabout at Ruskin/Aristea
+    case 'roundabout_planned': return gap >= 1.0 ? 0 : 1.0 - gap; // TIA §14: mini-roundabout at Ruskin/Aristea — short yield
     case 'egress':             return gap >= 1.2 ? 0 : 1.2 - gap; // TIA §11: raised intersection at Aristea exit
     case 'speed_hump':         return gap >= 1.2 ? 0 : 1.2 - gap;
     default: return 0;

@@ -58,7 +58,8 @@ export function junctionHoldDuration(jid, junctionControl, simTime, lastReleaseT
           if (fromJid !== 22) return 0; // J3 yield only from Starke south
           break;
         case 'from_christopher':
-          if (![18, 5].includes(fromJid)) return 0; // J4 priority_stop only from Christopher
+          if (![18, 5].includes(fromJid)) return 0; // J4 stop only from Christopher
+          if (routeId.startsWith('EG-') && fromJid === 5) return 0; // EG-D goes Vineyard→Christopher→Starke — no stop
           break;
         case 'from_christopher_to_vineyard':
           if (fromJid !== 4) return 0; // J5 yield only from Christopher
@@ -121,36 +122,12 @@ export function junctionHoldDuration(jid, junctionControl, simTime, lastReleaseT
     case 'none':          return 0;
     case 'traffic_signal': return (simTime % 60) < 30 ? 0 : 60 - (simTime % 60);
 
-    // 4-way stops: base hold + traffic on conflicting roads
-    // J10 (Homestead/Starke), J26 (Children's Way/Dreyersdal), J28 (Homestead/Dreyersdal)
-    case '4way_stop': {
-      const conflictRoads = {
-        10: 'Starke Road', 26: "Children's Way", 28: 'Homestead Avenue'
-      };
-      const road = conflictRoads[parseInt(jid)];
-      const hold = road ? trafficHold(road, 4.0, 0.3, 12.0) : 4.0;
-      return gap >= hold ? 0 : hold - gap;
-    }
-
-    // Priority stops: base hold + traffic on the priority road
-    case 'priority_stop': {
-      const conflictRoads = {
-        1:  'Dreyersdal Road',    // Main Rd / Dreyersdal
-        9:  'Ladies Mile Road',   // Homestead / Ladies Mile
-        13: 'Dreyersdal Road',    // Firgrove / Dreyersdal
-        15: 'Dreyersdal Road',    // Airlie / Dreyersdal
-      };
-      const road = conflictRoads[parseInt(jid)];
-      const hold = road ? trafficHold(road, 4.0, 0.4, 15.0) : 4.0;
-      return gap >= hold ? 0 : hold - gap;
-    }
-
-    // Stop signs: base hold + traffic on cross road
+    // Stop signs: base hold + traffic on cross road — directional checks above handle egress
     case 'stop': {
       const conflictRoads = {
-        4:  'Christopher Road',   // Starke/Christopher
-        15: 'Dreyersdal Road',    // Airlie/Dreyersdal
-        16: 'Vineyard Road',      // Dante/Vineyard
+        4:  'Christopher Road',
+        15: 'Dreyersdal Road',
+        16: 'Vineyard Road',
       };
       const road = conflictRoads[parseInt(jid)];
       const hold = road ? trafficHold(road, 4.0, 0.4, 14.0) : 4.0;
@@ -166,6 +143,29 @@ export function junctionHoldDuration(jid, junctionControl, simTime, lastReleaseT
       };
       const road = conflictRoads[parseInt(jid)];
       const hold = road ? trafficHold(road, 2.0, 0.2, 8.0) : 2.0;
+      return gap >= hold ? 0 : hold - gap;
+    }
+
+    // 4-way stops: traffic-aware
+    case '4way_stop': {
+      const conflictRoads = {
+        10: 'Starke Road', 26: "Children's Way", 28: 'Homestead Avenue'
+      };
+      const road = conflictRoads[parseInt(jid)];
+      const hold = road ? trafficHold(road, 4.0, 0.3, 12.0) : 4.0;
+      return gap >= hold ? 0 : hold - gap;
+    }
+
+    // Priority stops: traffic-aware
+    case 'priority_stop': {
+      const conflictRoads = {
+        1:  'Dreyersdal Road',
+        9:  'Ladies Mile Road',
+        13: 'Dreyersdal Road',
+        15: 'Dreyersdal Road',
+      };
+      const road = conflictRoads[parseInt(jid)];
+      const hold = road ? trafficHold(road, 4.0, 0.4, 15.0) : 4.0;
       return gap >= hold ? 0 : hold - gap;
     }
 

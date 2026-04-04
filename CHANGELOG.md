@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### Changed — 2026-04-04 (Simulation Engine — Egress & Physics Fixes)
+
+- **Egress route expansion:** Added EG-F (Ruskin→Clement→Leyden→J8) and EG-G (Ruskin→Starke→J9) — vehicles turning left from the Aristea/Ruskin roundabout (J29) onto Ruskin Rd. These routes conflict with inbound traffic at J7 (school ingress), modelling the real back-pressure where exiting parents must yield to arriving parents on Ruskin/Leyden. Share: 5–6% of egress traffic.
+- **Egress weights rebalanced:** Previous weights were heavily skewed toward EG-A (40% in H). Rebalanced to spread load across all 7 routes: EG-A/EG-C each 22% in H (both use Airlie Rd), EG-B 18%, EG-D/EG-E 13% each (Firgrove/Homestead, reduced due to Sweet Valley back-pressure), EG-F/EG-G 6% each (Ruskin routes).
+- **EG-C route corrected:** EG-C now correctly routes Dante→Airlie south→Tussendal→Dreyersdal Farm Rd→Main Rd (J29→J17→J14→J23→J21→J2→J1), providing a shorter Airlie leg to Main Rd that bypasses the Vineyard/Christopher congestion.
+- **Aristea/Ruskin roundabout hold reduced:** J29 hold reduced from 2.5s to 1s. The previous 2.5s was creating artificial queuing at the one junction every vehicle must pass through, contributing to Dante/Aristea deadlocks.
+- **Outbound junction holds fixed:** Outbound vehicles were incorrectly receiving holds at intermediate residential junctions (stop_directional, 4way_stop) calibrated for inbound traffic. Root cause: J22 (Starke/Airlie, `stop_directional`) was applying a 5s hold to EG-A vehicles travelling Vineyard→Airlie→Starke northbound — the opposite direction to the intended inbound restriction. Fixed by restoring the directional check: hold only applies when `fromJid` is J4 or J24 (Starke approach), not J19 (Airlie approach).
+- **Rat-run divergence window widened:** Mid-route rat-run switching trigger distance increased from 15m to 50m. At 8m/s vehicles were passing divergence waypoints before the check fired, resulting in only 9 mid-route switches for 508 H vehicles. The 50m window gives vehicles adequate time to switch routes when congestion builds.
+- **EXIT log event added:** `SimMap.jsx` now logs an `EXIT` event when each vehicle leaves the network, including `totalTrip` (full round-trip seconds) and `egressRoute` in the detail field. Enables accurate round-trip time measurement in `compare_models.py`.
+- **Egress start time null guard:** Fixed bug where `v.dwellStart` could be `null` for vehicles that transitioned without completing the dwell state, causing `null + 45 = 45` — a wildly incorrect egress start time. Now falls back to current sim time if `dwellStart` is null.
+- **compare_models.py — EXIT-based trip times:** `parse_idm()` now uses the `EXIT` event timestamp for full round-trip time calculation, falling back to `OUTBOUND_START` for older logs without EXIT events.
+- **compare_models.py — SUMO inbound/egress split:** `parse_sumo()` now streams the FCD XML to find each vehicle's first appearance on `school_internal_road`, enabling accurate inbound/egress leg split for SUMO (M: 14.3min inbound / 8.4min egress; H: 16.4min / 8.4min).
+- **compare_models.py — clock fix:** `sec_to_clock()` was double-adding the 06:30 base offset, showing all times as PM. Fixed to convert absolute seconds-since-midnight directly.
+
 ### Changed — 2026-04-04 (Model Accuracy Audit — TIA Recalibration)
 
 - **Scenario volumes corrected to TIA inbound counts:** The 840 in TIA Annexure B (COTO TMH17 Code 530) is total two-way trips — 420 unique vehicles each making one inbound + one outbound trip. Both Live and SUMO spawn inbound-only, so spawned count = inbound vehicle count. Previous volumes (L:500, M:650, H:840) were ~50–67% over TIA. Corrected to L:336 (TIA×0.80), M:420 (TIA exact), H:504 (TIA×1.20). Standard ±20% sensitivity band around the TIA baseline.

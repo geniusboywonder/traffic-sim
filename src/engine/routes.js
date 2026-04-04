@@ -267,6 +267,12 @@ const RAW_ROUTES = {
   'EG-D':   { name: 'Egress D — Dante→Starke→Firgrove',         corridor: 'egress', type: 'egress', junctions: [7,20,29,17,16,5,4,24,10,12,13], maxVehicles: 20 },
   // EG-E: Dante → Starke → Homestead Av (Exit J9)
   'EG-E':   { name: 'Egress E — Dante→Starke→Homestead',        corridor: 'egress', type: 'egress', junctions: [7,20,29,17,16,5,4,24,10,9], maxVehicles: 20 },
+  // EG-F: Ruskin Rd → Clement Rd → Leyden Rd → Children's Way (Exit J8)
+  // Conflicts with inbound at J7 — models real back-pressure on Ruskin/Leyden ingress
+  'EG-F':   { name: "Egress F — Ruskin→Clement→Leyden→Children's Way", corridor: 'egress', type: 'egress', junctions: [7,20,29,24,25,6,8], maxVehicles: 15 },
+  // EG-G: Ruskin Rd → Starke Rd → Homestead Av (Exit J9)
+  // Also conflicts with inbound on Ruskin — valid scenario, adds realistic delay
+  'EG-G':   { name: 'Egress G — Ruskin→Starke→Homestead',       corridor: 'egress', type: 'egress', junctions: [7,20,29,24,10,9], maxVehicles: 15 },
 };
 
 export const ROUTE_CONFIG = Object.fromEntries(

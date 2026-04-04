@@ -155,14 +155,16 @@ export function processDwell(vehicle, simTimeSec, vehicles) {
 }
 
 const EGRESS_WEIGHTS = {
-  // EG-A: Dante→Vineyard→Airlie→Starke→J8  (long, via Children's Way)
+  // EG-A: Dante→Vineyard→Airlie→Starke→J8  (Children's Way)
   // EG-B: Dante→Vineyard→Airlie north→J1   (Main Rd)
-  // EG-C: Dante→Airlie south→Tussendal→J1  (Main Rd, shorter Airlie leg)
+  // EG-C: Dante→Airlie south→Tussendal→J1  (Main Rd, shorter)
   // EG-D: Dante→Starke→J13                 (Firgrove)
   // EG-E: Dante→Starke→J9                  (Homestead)
-  L: { 'EG-A': 0.20, 'EG-B': 0.20, 'EG-C': 0.20, 'EG-D': 0.20, 'EG-E': 0.20 },
-  M: { 'EG-A': 0.20, 'EG-B': 0.20, 'EG-C': 0.20, 'EG-D': 0.20, 'EG-E': 0.20 },
-  H: { 'EG-A': 0.25, 'EG-B': 0.20, 'EG-C': 0.25, 'EG-D': 0.15, 'EG-E': 0.15 },
+  // EG-F: Ruskin→Clement→Leyden→J8         (conflicts with inbound at J7)
+  // EG-G: Ruskin→Starke→J9                 (conflicts with inbound on Ruskin)
+  L: { 'EG-A': 0.18, 'EG-B': 0.18, 'EG-C': 0.18, 'EG-D': 0.18, 'EG-E': 0.18, 'EG-F': 0.05, 'EG-G': 0.05 },
+  M: { 'EG-A': 0.18, 'EG-B': 0.18, 'EG-C': 0.18, 'EG-D': 0.18, 'EG-E': 0.18, 'EG-F': 0.05, 'EG-G': 0.05 },
+  H: { 'EG-A': 0.22, 'EG-B': 0.18, 'EG-C': 0.22, 'EG-D': 0.13, 'EG-E': 0.13, 'EG-F': 0.06, 'EG-G': 0.06 },
 };
 
 // Local vehicle egress bias — additive adjustment before normalisation.

@@ -155,19 +155,22 @@ export function processDwell(vehicle, simTimeSec, vehicles) {
 }
 
 const EGRESS_WEIGHTS = {
-  // Dante routes (right from J29): EG-A/B/C/D/E
-  // Ruskin routes (left from J29):  EG-F/G — bypass Dante entirely
-  L: { 'EG-A': 0.25, 'EG-B': 0.15, 'EG-C': 0.10, 'EG-D': 0.15, 'EG-E': 0.15, 'EG-F': 0.10, 'EG-G': 0.10 },
-  M: { 'EG-A': 0.25, 'EG-B': 0.15, 'EG-C': 0.10, 'EG-D': 0.15, 'EG-E': 0.15, 'EG-F': 0.10, 'EG-G': 0.10 },
-  H: { 'EG-A': 0.30, 'EG-B': 0.20, 'EG-C': 0.10, 'EG-D': 0.08, 'EG-E': 0.07, 'EG-F': 0.15, 'EG-G': 0.10 },
+  // EG-A: Dante→Vineyard→Airlie→Starke→J8  (long, via Children's Way)
+  // EG-B: Dante→Vineyard→Airlie north→J1   (Main Rd)
+  // EG-C: Dante→Airlie south→Tussendal→J1  (Main Rd, shorter Airlie leg)
+  // EG-D: Dante→Starke→J13                 (Firgrove)
+  // EG-E: Dante→Starke→J9                  (Homestead)
+  L: { 'EG-A': 0.20, 'EG-B': 0.20, 'EG-C': 0.20, 'EG-D': 0.20, 'EG-E': 0.20 },
+  M: { 'EG-A': 0.20, 'EG-B': 0.20, 'EG-C': 0.20, 'EG-D': 0.20, 'EG-E': 0.20 },
+  H: { 'EG-A': 0.25, 'EG-B': 0.20, 'EG-C': 0.25, 'EG-D': 0.15, 'EG-E': 0.15 },
 };
 
 // Local vehicle egress bias — additive adjustment before normalisation.
 // In H scenario, Sweet Valley back-pressure halves the bias toward J9/J13.
 const LOCAL_EGRESS_BIAS = {
-  '2B': { 'EG-D': +0.10, 'EG-E': +0.10, 'EG-G': +0.10, 'EG-A': -0.15, 'EG-B': -0.10, 'EG-F': -0.05 }, // Starke → Firgrove/Homestead
-  '2A': { 'EG-E': +0.15, 'EG-G': +0.10, 'EG-A': -0.10, 'EG-B': -0.10, 'EG-F': -0.05 },                 // Christopher → Homestead
-  '3A': { 'EG-D': +0.20, 'EG-A': -0.10, 'EG-B': -0.10 },                                                 // Leyden → Firgrove
+  '2B': { 'EG-D': +0.15, 'EG-E': +0.10, 'EG-A': -0.15, 'EG-B': -0.10 }, // Starke → Firgrove/Homestead
+  '2A': { 'EG-E': +0.20, 'EG-A': -0.10, 'EG-B': -0.10 },                 // Christopher → Homestead
+  '3A': { 'EG-D': +0.25, 'EG-A': -0.15, 'EG-B': -0.10 },                 // Leyden → Firgrove
 };
 
 export function pickEgressRoute(scenario = 'M', corridorId = null, isLocal = false) {

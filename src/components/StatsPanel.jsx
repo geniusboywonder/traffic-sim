@@ -25,34 +25,38 @@ function StatBlock({ label, value, accent, dim, textColor, labelColor, bgColor, 
 
   return (
     <div style={{
-      background: bgColor || 'rgba(0,0,0,0.22)',
-      borderRadius: 6,
-      padding: '0.35rem 0.5rem',
+      background: bgColor || 'rgba(0,0,0,0.15)',
+      borderRadius: 8,
+      padding: '0.2rem 0.4rem',
       display: 'flex',
       flexDirection: 'column',
-      gap: 1,
+      gap: 0,
       flex: 1,
-      minWidth: 0
+      minWidth: 0,
+      border: '1px solid rgba(255,255,255,0.08)'
     }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-        {Icon && <Icon size={10} strokeWidth={3} color={labelColor || 'rgba(241,245,241,0.38)'} />}
-        <span style={{
-          fontSize: '0.65rem',
-          fontWeight: 900,
-          letterSpacing: '0.12em',
-          textTransform: 'uppercase',
-          color: labelColor || 'rgba(241,245,241,0.38)',
-          lineHeight: 1,
-        }}>{label}</span>
-      </div>
+      <span style={{
+        fontSize: '0.6rem',
+        fontWeight: 900,
+        letterSpacing: '0.05em',
+        textTransform: 'uppercase',
+        color: labelColor || 'rgba(241,245,241,0.38)',
+        lineHeight: 1,
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis'
+      }}>{label}</span>
       <span style={{
         fontFamily: 'Manrope, sans-serif',
-        fontSize: '1rem',
+        fontSize: '1.1rem',
         fontWeight: 800,
-        letterSpacing: '-0.02em',
+        letterSpacing: '-0.03em',
         color: valueColor,
-        lineHeight: 1,
+        lineHeight: 1.1,
         fontVariantNumeric: 'tabular-nums',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis'
       }}>{value}</span>
     </div>
   );
@@ -60,12 +64,12 @@ function StatBlock({ label, value, accent, dim, textColor, labelColor, bgColor, 
 
 function CongBar({ pct, accent, isHot, trackColor }) {
   return (
-    <div style={{ height: 4, background: trackColor || 'rgba(241,245,241,0.08)', borderRadius: 2, overflow: 'hidden' }}>
+    <div style={{ height: 6, background: trackColor || 'rgba(0,0,0,0.1)', borderRadius: 3, overflow: 'hidden' }}>
       <div style={{
         height: '100%',
         width: `${pct}%`,
-        borderRadius: 2,
-        background: isHot ? 'var(--delay)' : accent,
+        borderRadius: 3,
+        background: isHot ? '#8B1A1A' : accent,
         transition: 'width 0.4s ease',
       }} />
     </div>
@@ -122,71 +126,73 @@ function CorridorCard({ id, c, isSelected, onToggle }) {
         transition: 'transform 0.5s cubic-bezier(0.32,0.72,0,1), opacity 0.3s ease, box-shadow 0.3s ease',
         willChange: 'transform',
         position: 'relative',
+        padding: '0.6rem 0.75rem',
+        gap: '0.2rem'
       }}
       onClick={() => onToggle(id)}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      {/* Visibility Toggle — ALWAYS BRIGHT & PERSISTENT */}
-      <div 
-        className="holo-eye" 
-        style={{ 
-          position: 'absolute', 
-          top: '1.25rem', 
-          right: '1.25rem', 
-          zIndex: 100, 
-          color: '#fff', 
-          opacity: 1, 
-          background: isSelected ? cols.accent : 'rgba(0,0,0,0.6)',
-          borderRadius: '50%',
-          width: '32px',
-          height: '32px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
-          transition: 'all 0.3s cubic-bezier(0.32,0.72,0,1)',
-          transform: isSelected ? 'scale(1)' : 'scale(1.1)'
-        }}
-      >
-        {isSelected ? <Eye size={18} strokeWidth={3} /> : <EyeOff size={18} strokeWidth={3} />}
-      </div>
-
-      {/* Main content container with fade applied here instead of parent */}
       <div style={{ opacity: isSelected ? 1 : 0.2, transition: 'opacity 0.3s ease' }}>
         <div ref={shimmerRef} className="holo-shimmer" />
 
-        <div className="holo-header">
-          <span className="holo-id" style={{ color: cols.accent, borderColor: `${cols.accent}55` }}>
-            {id}
-          </span>
-          <span className="holo-label" style={{ color: cols.mutedDark }}>{c.label}</span>
-          {isHot && <span className="holo-hot">STOPPED</span>}
+        <div className="holo-header" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <span className="holo-id" style={{ color: cols.accent, borderColor: `${cols.accent}55` }}>
+              {id}
+            </span>
+            <span className="holo-label" style={{ color: cols.mutedDark }}>{c.label}</span>
+            {isHot && <span className="holo-hot">STOPPED</span>}
+          </div>
+          <div 
+            className="holo-eye" 
+            style={{ 
+              color: isSelected ? cols.accent : cols.mutedDark,
+              opacity: isSelected ? 1 : 0.6,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.3s ease'
+            }}
+          >
+            {isSelected ? <Eye size={14} strokeWidth={3} /> : <EyeOff size={14} strokeWidth={3} />}
+          </div>
         </div>
 
-        <div className="holo-grid" style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginTop: '1.25rem' }}>
+        <div className="holo-grid" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '0.4rem', marginTop: '0.5rem', minWidth: 0 }}>
           {/* Row 1 — Traffic */}
-          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-            <Car size={32} strokeWidth={3} color={cols.mutedDark} style={{ flexShrink: 0 }} />
+          <div style={{ display: 'grid', gridTemplateColumns: '20px 1fr 1fr', gap: '0.4rem', alignItems: 'center', minWidth: 0 }}>
+            <Car size={18} strokeWidth={2.5} color={cols.mutedDark} style={{ flexShrink: 0, opacity: 0.8 }} />
             <StatBlock label="In"  value={c.spawned} accent={cols.light} textColor={cols.textDark} labelColor={cols.mutedDark} bgColor={cols.statBg} />
             <StatBlock label="Out" value={c.exited}  dim                 textColor={cols.textDark} labelColor={cols.mutedDark} bgColor={cols.statBg} />
           </div>
           {/* Row 2 — Time */}
-          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-            <Timer size={32} strokeWidth={3} color={cols.mutedDark} style={{ flexShrink: 0 }} />
+          <div style={{ display: 'grid', gridTemplateColumns: '20px 1fr 1fr', gap: '0.4rem', alignItems: 'center', minWidth: 0 }}>
+            <Timer size={18} strokeWidth={2.5} color={cols.mutedDark} style={{ flexShrink: 0, opacity: 0.8 }} />
             <StatBlock label="In"  value={fmtTime(c.avgInDelay)}  accent={cols.light} textColor={cols.textDark} labelColor={cols.mutedDark} bgColor={cols.statBg} />
             <StatBlock label="Out" value={fmtTime(c.avgOutDelay)} dim                 textColor={cols.textDark} labelColor={cols.mutedDark} bgColor={cols.statBg} />
           </div>
         </div>
 
-        <div style={{ marginTop: '1.25rem' }}>
+        <div style={{ marginTop: '0.5rem' }}>
           <CongBar pct={congPct} accent={cols.accent} isHot={isHot} trackColor={cols.trackColor} />
         </div>
 
-        <div className="holo-breakdown" style={{ color: cols.mutedDark, marginTop: '0.6rem' }}>
+        <div className="holo-breakdown" style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          marginTop: '0.4rem',
+          fontSize: '0.5rem',
+          fontWeight: 900,
+          letterSpacing: '0.05em',
+          textTransform: 'uppercase',
+          color: cols.mutedDark,
+          opacity: 0.8,
+          padding: '0 0.1rem'
+        }}>
           <span>{pActive}% active</span>
           <span>{pSlowing}% slowing</span>
-          <span style={{ color: isHot ? 'var(--delay)' : undefined }}>{pStopped}% stopped</span>
+          <span style={{ color: isHot ? '#8B1A1A' : undefined }}>{pStopped}% stopped</span>
         </div>
       </div>
     </div>
@@ -267,27 +273,37 @@ const StatsPanel = memo(({ statsData, selectedCorridors, onToggleCorridor, selec
             </div>
             <div className="holo-header">
               <ArrowUpFromLine size={14} strokeWidth={3} color="rgba(15,30,19,0.6)" style={{ marginRight: '0.3rem' }} />
-              <span className="holo-label" style={{ color: 'rgba(15,30,19,0.6)', fontSize: '0.65rem' }}>Overall Summary</span>
+              <span className="holo-label" style={{ color: 'rgba(15,30,19,0.6)', fontSize: '0.6rem' }}>Overall Summary</span>
             </div>
-            <div className="holo-grid" style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginTop: '1.25rem' }}>
-              <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                <Car size={32} strokeWidth={3} color={summaryCols.mutedDark} style={{ flexShrink: 0 }} />
+            <div className="holo-grid" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '0.4rem', marginTop: '0.5rem', minWidth: 0 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '20px 1fr 1fr', gap: '0.4rem', alignItems: 'center', minWidth: 0 }}>
+                <Car size={18} strokeWidth={2.5} color={summaryCols.mutedDark} style={{ flexShrink: 0, opacity: 0.8 }} />
                 <StatBlock label="In"  value={totalIn}  textColor={summaryCols.textDark} labelColor={summaryCols.mutedDark} bgColor={summaryCols.statBg} />
                 <StatBlock label="Out" value={totalOut} textColor={summaryCols.textDark} labelColor={summaryCols.mutedDark} bgColor={summaryCols.statBg} dim />
               </div>
-              <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                <Timer size={32} strokeWidth={3} color={summaryCols.mutedDark} style={{ flexShrink: 0 }} />
+              <div style={{ display: 'grid', gridTemplateColumns: '20px 1fr 1fr', gap: '0.4rem', alignItems: 'center', minWidth: 0 }}>
+                <Timer size={18} strokeWidth={2.5} color={summaryCols.mutedDark} style={{ flexShrink: 0, opacity: 0.8 }} />
                 <StatBlock label="In"  value={fmtTime(avgInTime)}  textColor={summaryCols.textDark} labelColor={summaryCols.mutedDark} bgColor={summaryCols.statBg} />
                 <StatBlock label="Out" value={fmtTime(avgOutTime)} textColor={summaryCols.textDark} labelColor={summaryCols.mutedDark} bgColor={summaryCols.statBg} dim />
               </div>
             </div>
-            <div style={{ marginTop: '1.25rem' }}>
+            <div style={{ marginTop: '0.5rem' }}>
               <CongBar pct={globalCongPct} accent="var(--c-3a)" isHot={isGlobalHot} trackColor="rgba(0,0,0,0.12)" />
             </div>
-            <div className="holo-breakdown" style={{ color: 'rgba(15,30,19,0.55)', marginTop: '0.6rem' }}>
+            <div className="holo-breakdown" style={{ 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              marginTop: '0.4rem',
+              fontSize: '0.5rem',
+              fontWeight: 900,
+              letterSpacing: '0.05em',
+              textTransform: 'uppercase',
+              color: 'rgba(15,30,19,0.55)',
+              padding: '0 0.1rem'
+            }}>
               <span>{netPActive}% active</span>
               <span>{netPSlowing}% slowing</span>
-              <span style={{ color: isGlobalHot ? 'var(--delay)' : undefined }}>{netPStopped}% stopped</span>
+              <span style={{ color: isGlobalHot ? '#8B1A1A' : undefined }}>{netPStopped}% stopped</span>
             </div>
           </>
         ) : (
@@ -297,28 +313,38 @@ const StatsPanel = memo(({ statsData, selectedCorridors, onToggleCorridor, selec
             </button>
             <div className="holo-header">
               <ArrowDownFromLine size={14} strokeWidth={3} color="rgba(15,30,19,0.6)" style={{ marginRight: '0.3rem' }} />
-              <span className="holo-label" style={{ color: 'rgba(15,30,19,0.6)', fontSize: '0.65rem', flex: 1 }}>{selectedRoad.name}</span>
+              <span className="holo-label" style={{ color: 'rgba(15,30,19,0.6)', fontSize: '0.6rem', flex: 1 }}>{selectedRoad.name}</span>
               <button className="rw-close" onClick={onCloseRoad}><X size={14} /></button>
             </div>
-            <div className="holo-grid" style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginTop: '1.25rem' }}>
-              <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                <Car size={32} strokeWidth={3} color={summaryCols.mutedDark} style={{ flexShrink: 0 }} />
+            <div className="holo-grid" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '0.4rem', marginTop: '0.5rem', minWidth: 0 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '20px 1fr 1fr', gap: '0.4rem', alignItems: 'center', minWidth: 0 }}>
+                <Car size={18} strokeWidth={2.5} color={summaryCols.mutedDark} style={{ flexShrink: 0, opacity: 0.8 }} />
                 <StatBlock label="In"  value={inbound.total}  textColor={summaryCols.textDark} labelColor={summaryCols.mutedDark} bgColor={summaryCols.statBg} />
                 <StatBlock label="Out" value={outbound.total} textColor={summaryCols.textDark} labelColor={summaryCols.mutedDark} bgColor={summaryCols.statBg} dim />
               </div>
-              <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                <Timer size={32} strokeWidth={3} color={summaryCols.mutedDark} style={{ flexShrink: 0 }} />
+              <div style={{ display: 'grid', gridTemplateColumns: '20px 1fr 1fr', gap: '0.4rem', alignItems: 'center', minWidth: 0 }}>
+                <Timer size={18} strokeWidth={2.5} color={summaryCols.mutedDark} style={{ flexShrink: 0, opacity: 0.8 }} />
                 <StatBlock label="In"  value={fmtTime(roadStats?.avgInDelay)}  textColor={summaryCols.textDark} labelColor={summaryCols.mutedDark} bgColor={summaryCols.statBg} />
                 <StatBlock label="Out" value={fmtTime(roadStats?.avgOutDelay)} textColor={summaryCols.textDark} labelColor={summaryCols.mutedDark} bgColor={summaryCols.statBg} dim />
               </div>
             </div>
-            <div style={{ marginTop: '1.25rem' }}>
+            <div style={{ marginTop: '0.5rem' }}>
               <CongBar pct={wCongPct} accent="var(--c-3a)" isHot={wIsHot} trackColor="rgba(0,0,0,0.12)" />
             </div>
-            <div className="holo-breakdown" style={{ color: 'rgba(15,30,19,0.55)', marginTop: '0.6rem' }}>
+            <div className="holo-breakdown" style={{ 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              marginTop: '0.4rem',
+              fontSize: '0.5rem',
+              fontWeight: 900,
+              letterSpacing: '0.05em',
+              textTransform: 'uppercase',
+              color: 'rgba(15,30,19,0.55)',
+              padding: '0 0.1rem'
+            }}>
               <span>{wActive}% active</span>
               <span>{wSlowing}% slowing</span>
-              <span style={{ color: wIsHot ? 'var(--delay)' : undefined }}>{wStopped}% stopped</span>
+              <span style={{ color: wIsHot ? '#8B1A1A' : undefined }}>{wStopped}% stopped</span>
             </div>
           </>
         )}

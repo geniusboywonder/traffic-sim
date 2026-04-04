@@ -1,39 +1,4 @@
-CONTENT CHANGE:
-CHANGE UXSim copy since we in Under the Hood - since we are just verifying the models with it. and a quick reference to where it coems from
-the limited scope modelling needs to be clear in the Fndings section too. We need to highlight:
-
-X ROAD CLOSED X
-This modelling EXCLUDES any modelling for:
-• Sweet Valley School runs
-• Bergvliet residents local traffic movements to work, school and university
-• ALL traffic *exiting* to Firgrove Rd, Ladies Mile Rd and Main Rd.
-• New essential traffic calming measures in Dante Rd, Vineyard Rd, Ruskin Rd, Leyden Rd.
-• All Avg Time OUt will be massivelt understated based on the above.
-
-UI
-the graphs and 0% active 0% slowing 0% stopped is missing from teh corridors cards.
-the Overall summary may need to be reszied smaller to accomodate putting back the "0% active 0% slowing 0% stopped"
-
-I don tlike the stats pill centered. the stat pill must align over the corridor cards
-
-
-
-will this work on a static html site without react? https://21st.dev/community/components/reuno-ui/background-paper-shaders/default
-can we change the coolours to align with our colour scheme?
-if so can we use this background for the modal pop-over at the start.
-
-?) in mobile view the map should start zoomed into the highlighted square and not show any of the darkened map
-
 how can we enable sharing on the site for people to share via whatsapp, email and X?
-
-the AVg Time OUt seems very low at 3:49 minutes. check the calcualtion.
-how can we realistically simulate slowed exits at all 4 major exit points due to other rush hour traffic outside our model?
-
-MODEL QUESTIONS
-update the SUMO routes
-check the start time of the model - no cars seems to go through until 6:40 so the first few minutes are empty
-why arent more cars using the dereyersdal farm / tussendal rd for entry?
-check the route and rat-route for Homestead.
 
 DONE
 Lets update the plan and continue with the traffic simulator from @Tokai_HS_Traffic_Simulator_Plan.md and add to the existing pages.
@@ -358,3 +323,76 @@ More people will care about the Findings than the models and the validation.
 
 ⛔ ROAD CLOSED - this heading is small and consistent for these points.
 use this icon instead - https://www.shadcn.io/icon/lucide-octagon-x
+
+the AVg Time OUt seems very low at 3:49 minutes. check the calcualtion.
+how can we realistically simulate slowed exits at all 4 major exit points due to other rush hour traffic outside our model?
+
+MODEL QUESTIONS
+update the SUMO routes
+check the start time of the model - no cars seems to go through until 6:40 so the first few minutes are empty
+why arent more cars using the dereyersdal farm / tussendal rd for entry?
+
+Q1 - the AvgTimeIn and AvgTimeOut must be calculated in the same manner - the change in state is the thing that determines which is which. I am fine with
+  how it is defined and labelled now. Q2 - Add "N/A" to the Watch My Road card for the Live and Sumo models for this value. Q3 Change the start time to 6:40.
+  Set the end-time to be for whenever the traffic queue clears in each scenario. Q4 Dreyersdal Farm Rd and Tussendal are rat-runs. but they just dont seem to
+  be activated on ingress and are much higher on egress. Does this feel right? Once you know the route, dont you use it going in too? Q5 - J8 is a traffic
+  ligt stop, but not all cars will clear in a single traffic light during peak time. there should be backlog building. Confirm what the holds are for J1, J9,
+  J13 and J8.
+
+  Corrdidors cards:
+the graphs and 0% active 0% slowing 0% stopped is missing from teh corridors cards.
+the Overall summary may need to be reszied and the whte space reduced smaller to accomodate putting back the graphs and text on the cars to ensure they all still fit within the height of the map boundary
+
+the menu/navg bar is broken - its not sticky any longer and transitioning between menu items as you scroll.
+
+the map is not starting zoomed to show the 4 entry points and the school within the viewport. fix this. in mobile view the map should start zoomed into the highlighted square and not show any of the darkened map
+
+your layout, stle and copy changes for the Under the Hood section has been changed. Revert them.
+also, i think we need to move the "road closed" notice to this section and make it highly readble. The copy should be
+X ROAD CLOSED X
+This modelling EXCLUDES any modelling for:
+• Sweet Valley School runs
+• Bergvliet residents local traffic movements to work, school and university
+• ALL traffic *exiting* to Firgrove Rd, Ladies Mile Rd and Main Rd.
+• New essential traffic calming measures in Dante Rd, Vineyard Rd, Ruskin Rd, Leyden Rd.
+• All Avg Time OUt will be massivelt understated based on the above.
+
+your UI fixes are getting worse. 1) the map and corridors cards now go beyond the fold. WTF?!?! and clicking on the nav bar returns to the bottom of the map
+   and the top is "cut off" under the nav bar. there 2 issues are related. [Image ...t 21.07.59.png] 2) the text sizing on the graphs on each corridor card
+   overflow the boundary. it needs adjusting. if you need a reference look at how good they looked before you made these changes. [Image ...t 17.19.10.png] 3)
+   the section is not readble and the layout is poor. what happened to the 3 blocks with sideswipe, fender bender and writes offs? [Image ...t 21.22.41.png]
+   review the @design/UI_UX_REVIEW.md and explain your recommendations. 4) the nav pill and stats pill overlap  when the nav pill dynamically chagnes
+   size.[Image ...t 14.55.52.png] . 5) menu is no transitioning to next section when scrolled to that section. 6) this section is so "off" and clashes with the
+   previous section. wth is it trying to do. [Image ...t 21.27.19.png]
+
+   we need to rewrite the copy and restructure the under the hood section. we need to explain -4) TIA approach 2) Our Live Model 3) THe SUMO model (and its
+credibility). 4) Brief mention of UXSim and its differentce and purpose and how it validates the models of 2 & 3. 5) why there are discrepencies. the focus is
+not on UXSim as a major player - just its role in validating what we have built. Appraoch is build our model on TIA approach. Validate our model with SUMO.
+Validate SUMO & ours with UXSim.
+
+can you think of a better naming we can use for the Live and SUMO models. People wont know
+  what SUMO is unless they read deep into the text. How can we differenetiate in easy laymans terms between the two and still fit it on the player control?
+Lab.
+
+ taking the @docs/sim-analysis-findings.md can you update the web copy for each of the findings. keep the existing bullet points if they are still valid.
+    perhaps some of the key number should be in a hover state, but only the most important ones? we may need to expand the width of the 3 boxes so as to fit
+  in
+    all the points and reduce the white space to the left and right.  this copy can be replaced "Here's what came out of the black box. UXSim analysed all
+  three scenarios compared against the Lab simulation.". rather lets put in some key points of all the models. then the 3 boxes. remove the text  "What UXsim
+  cannot tell us: UXsim models traffic as flow, not individual cars. It cannot reproduce speed-hump braking or individual junction holds. Its role is
+  network-level validation."
+
+the hovers are not wrking - there is no text in the hovers and they are hard to read
+cant see this text "(no cars or humans were harmed in the making of this)" because of its text colour. change the colour and the text to "(no cars or humans were harmed while making this)
+start the map zoomed as much as possoble in the view port to have all 4 entry points and the school on the border of the viewport.
+start the player tool bar at the top of the map.
+the stats on the damage report are too large and the 3 bottom of the finding blocks dont fit on the screen     make the numbers smaller so the 3 blocks fit and no additional scrolling is needed.
+change "UXSim — Network-Level Confirmation'  to "Validation - Network-Level Confirmation"
+in any text sections not under the "under the hood" refer to SUMO as "Lab model" and UXsim as "Validation model"
+change the link on "Neill Adamson" to https://neill.adamson.co.za/. keep the X link on @geniusbouwonder.
+
+move this under Congestion "Three models, one answer . . ."
+make this the first bullet point "The crunch peaks at "
+this is a valid point "The rat-runs don't relieve pressure . . .' but the examples used are also on the main routes. It needs to better distinguish between "entry via" Ruskin/Vineyard since those roads are also part of the normal main routes.
+needs consideration "Christopher Rd is the physical funnel. . ." its the main route, but you can get there via rat-runs from Leyden/Ruskin.
+this "A 7-minute trip ... " has ��� in it.

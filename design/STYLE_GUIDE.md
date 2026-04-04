@@ -79,6 +79,7 @@ Standardised icon set for telemetry and navigation. All primary telemetry icons 
 - **No-Wrap:** All values use `white-space: nowrap` to prevent jumping.
 
 ### C. Intelligence Cards (Sidebar)
+- **Identity:** `3px` left-border using the corridor **Accent / Border** colour (see §1C).
 - **Row-Based Layout:** 
     - Row 1: `Car` icon leading In/Out Traffic stat blocks.
     - Row 2: `Timer` icon leading In/Out Average Time stat blocks.
@@ -101,7 +102,60 @@ The map is a "Digital Twin" plotted as an architectural blueprint.
 
 ---
 
-## 6. Mobile Responsiveness
+## 6. Editorial Sections — Content & Layout
+
+### A. Voice & Theme
+All editorial copy outside the simulator/map/controls uses a **car and traffic metaphor** — witty, tongue-in-cheek, and consistent. The simulator itself is neutral/technical.
+
+| Section | Theme Label | Example Copy |
+| :--- | :--- | :--- |
+| Access barrier | Road Warning / Start the Engine | "Start the Engine →", "ROAD WARNING" |
+| Briefing | Dashcam metaphor | "Traff<span>✱</span>k is the dashcam you never knew you needed" |
+| Models | Road Tested | "Tuning the Engine", "Why the speedometers don't always agree" |
+| Findings | Incident Report | Write-off / Fender-benders / Side-swipes |
+| Footer | Lift metaphor | "Need a lift building with AI?" |
+| Nav | Road idioms | "The Road Map", "Under the Hood", "The Damage Report", "Pit Stop" |
+
+### B. Findings Section — Severity Taxonomy
+The Findings section uses a 3-tier severity taxonomy expressed as a **3-column comparison layout**.
+
+| Tier | Badge label | Meaning | Badge colours |
+| :--- | :--- | :--- | :--- |
+| **Write-off** | WRITE-OFF | Critical findings — TIA assumptions fail | bg `rgba(166,77,77,0.2)` · text `#C47070` · border `rgba(166,77,77,0.4)` |
+| **Fender-benders** | FENDER-BENDERS | Significant but not fatal | bg `rgba(194,125,96,0.15)` · text `#C27D60` · border `rgba(194,125,96,0.35)` |
+| **Side-swipes** | SIDE-SWIPES | Minor but real discrepancies | bg `rgba(112,151,117,0.15)` · text `var(--c-3a)` · border `rgba(112,151,117,0.3)` |
+
+**Column box backgrounds:**
+- Write-off: `rgba(166,77,77,0.1)` with `rgba(166,77,77,0.25)` border
+- Fender-bender: `rgba(194,125,96,0.08)` with `rgba(194,125,96,0.2)` border
+- Side-swipe: `rgba(112,151,117,0.08)` with `rgba(112,151,117,0.2)` border
+
+**Bullet markers:** colour-matched `—` dash using `::before` pseudo-element (no list-style discs).
+
+**Caveat note:** muted strip below the 3 columns — `rgba(241,245,241,0.03)` bg, `rgba(241,245,241,0.07)` border, text at `rgba(241,245,241,0.4)`.
+
+### C. Editorial Section Layout Principles
+Codified from UX audit §14 — apply when building or refactoring Briefing, Models, or Findings:
+
+- **Alternating backgrounds:** Briefing → `var(--canvas)` · Models → `var(--surface-low)` · Findings → `var(--surface-high)`
+- **Shared vertical padding token:** `--section-vpad: clamp(3.5rem, 7vw, 6rem)` applied via `padding-block`
+- **Card padding token:** `--card-pad: clamp(1.25rem, 2.5vw, 1.75rem)`
+- **Card radius token:** `--card-radius: 0.875rem`
+- **Grid patterns:** Use one pattern per section — either equal 3-column (`repeat(3, 1fr)`) or 2fr/1fr asymmetric. Do not mix within a section.
+- **Mobile:** All editorial grids collapse to single column at `max-width: 768px`. Section background fills must be preserved on mobile for visual separation.
+
+---
+
+## 7. Sizing & Spacing
+- **Sidebar Width:** `340px`.
+- **Floating Header Height:** `72px`.
+- **Corner Radius:** `4px` (Small), `12px` (Cards), `100px` (Pills), `0.875rem` (Editorial cards via `--card-radius`).
+- **Standard Padding:** `1.5rem` (`space-4`).
+- **Section Vertical Padding:** `clamp(3.5rem, 7vw, 6rem)` via `--section-vpad`.
+
+---
+
+## 8. Mobile Responsiveness
 - **Breakpoint (1024px):** Dashboard stacks; stats pill hides.
 - **Breakpoint (768px):** Editorial grids collapse to single column; section backgrounds preserved edge-to-edge.
 - **iOS Safari:** Uses `100dvh` for full-screen reliability.

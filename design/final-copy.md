@@ -215,3 +215,74 @@ A Few Bonus Touches
 ---
 Which of these areas would you like to lock down first? I'd suggest starting with the navigation labels + Findings tier system since those are the most
 structurally impactful — they shape how every section is perceived.
+
+Proposed: Under the Hood Rewrite                                                                                                                              
+                                                                                                                                                                
+  Section Header                                                                                                                                                
+                                                                                                                                                                
+  Eyebrow: Under the Hood                                                                                                                                       
+  Title: Road Tested
+                                                                                                                                                                
+  ---                                                       
+  ROAD CLOSED block — stays as-is
+                                 
+  ---
+  Intro line (new)                                                                                                                                              
+                  
+  ▎ "Three independent models. One consistent conclusion. Here's how we built them — and why you can trust what they show."                                     
+                                                                                                                                                                
+  ---
+  Entry 1 — THE FOUNDATION                                                                                                                                      
+                                                            
+  Icon: FileText | Label: The Official TIA
+                                                                                                                                                                
+  The Traffic Impact Assessment (TIA) is the starting point — and the rulebook. Commissioned under Western Cape Mobility Department guidelines and following    
+  South Africa's TMH 16 standard, it sets the study area's trip counts, directional splits, and the 840-vehicle High scenario demand baseline. The TIA's method 
+  is analytical: standardised traffic engineering formulas applied to the worst-case 15-minute peak window. It's a snapshot, not a simulation — but that        
+  snapshot defines the problem. Every number in our model begins here.
+
+  ---
+  Entry 2 — THE LIVE MODEL
+
+  Icon: Activity | Label: Our Live Simulation
+
+  The interactive engine running on your screen is calibrated directly to the TIA's figures — same trip volumes, same origin splits, same peak-hour demand curve
+   peaking at 07:45. It then goes where the TIA cannot: every vehicle moves individually using the Intelligent Driver Model (IDM), the same car-following
+  mathematics used by professional-grade simulators. Speed humps, junction holds, rat-run decisions, school dwell time — all modelled car by car, second by     
+  second. This is the layer that turns the TIA's static baseline into a living network.
+
+  ---
+  Entry 3 — THE VALIDATOR
+                         
+  Icon: CheckCircle | Label: SUMO: Professional Cross-Check
+                                                                                                                                                                
+  Once we had a live model, we needed an independent referee. SUMO (Simulation of Urban MObility), developed by the German Aerospace Center (DLR), is one of the
+   world's most widely used microscopic traffic simulators — trusted by governments, universities, and transport authorities globally. We ran the same network  
+  in SUMO: same roads, same 28 speed humps, same 11 junction overrides, same demand inputs. SUMO's outputs closely match our Live engine across all three       
+  scenarios. That agreement is the institutional stamp on our custom model. If SUMO agrees, we're on solid ground.
+
+  ---
+  Entry 4 — THE CROSS-CHECK
+                           
+  Icon: Layers (or GitMerge) | Label: UXSim: Network-Level Confirmation
+                                                                                                                                                                
+  UXSim (developed by Dr. Toru Seo, Institute of Science Tokyo) operates at a different level — mesoscopic, modelling traffic as flow rather than individual    
+  cars. Its mathematics are kinematic wave theory: the same language the TIA uses for its capacity calculations. This is why UXSim is uniquely useful here: it  
+  doesn't replace SUMO or our Live engine, it audits them from the network level. When UXSim's flow-density curves agree with our model and SUMO on which       
+  corridors hit capacity and when, that cross-model convergence rules out individual model quirks. Note: UXSim cannot model speed humps, individual junction
+  behaviour, or rat-run decisions — its role is throughput validation only.
+
+  ---
+  Entry 5 — WHY THE NUMBERS DON'T ALWAYS MATCH
+                                              
+  Icon: Search | Label: Reading the Instruments
+                                                                                                                                                                
+  Our Live engine and SUMO are stochastic — each run includes realistic random variation in driver behaviour, so exact numbers shift slightly between runs. The 
+  TIA and UXSim use deterministic, averaged flows, so they always return the same result. Our Live engine also adds layers the others don't: dynamic egress     
+  holds at J8 during peak, dwell time at the school, and real-time rat-run activation based on live congestion. These are deliberate enhancements beyond the TIA
+   baseline — they make the simulation more realistic, but they mean it won't match the TIA figure-for-figure. The Live vs SUMO toggle exists so you can see
+  this for yourself.
+
+  ---
+  Layout proposal: Keep the current stacked model-entry layout but add a subtle visual "chain" element — a connector line or numbered badge (①②③④) running left
+  of the entries to show the validation hierarchy. No grid changes needed — the linear narrative works best here.

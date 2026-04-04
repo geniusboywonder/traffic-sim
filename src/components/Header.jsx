@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Bot, Map, Monitor, MessageCircleMore } from 'lucide-react';
 
 const NAV_ITEMS = [
@@ -10,15 +10,14 @@ const NAV_ITEMS = [
 
 export default function Header({ activeSection }) {
   const [manualActive, setManualActive] = useState(null);
-  const [lastObserved, setLastObserved] = useState(activeSection);
 
-  // If the observer reports a change, clear the manual override
-  if (activeSection !== lastObserved) {
-    setLastObserved(activeSection);
+  // When the observed section changes, it clears any manual user click override
+  useEffect(() => {
     setManualActive(null);
-  }
+  }, [activeSection]);
 
   const active = useMemo(() => {
+    // If user clicked, that wins. Otherwise, the scroll-observer wins.
     if (manualActive) return manualActive;
     
     const sectionToNav = {
@@ -44,7 +43,10 @@ export default function Header({ activeSection }) {
             <a
               key={item.id}
               href={item.href}
-              onClick={() => setManualActive(item.id)}
+              onClick={() => {
+                setManualActive(item.id);
+                // Allow the browser to naturally jump to the #hash location
+              }}
               className={`nav-pill ${isActive ? 'active' : ''}`}
             >
               <div className="nav-pill-content">

@@ -4,7 +4,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### Changed — 2026-04-04 (Share, Copy, UI Polish)
+
+- **Share Buttons:** Added share widget to top-right header slot. Uses native Web Share API on mobile/modern desktop (opens OS share sheet). Falls back to WhatsApp, X and Email icon buttons on older desktop. Styled to match the glassy nav/stats pill. URL: `https://traffic.adamson.co.za`.
+- **Findings Section — Full Copy & Structure Rewrite:** Restructured three columns around clear message themes: Write-off = The Congestion, Fender-bender = The Bottlenecks, Side-swipe = The Routes. "Three models, one answer" moved to Write-off as validation. "Rat-run" bullet moved to Side-swipe; rewritten to distinguish main collector roads from final-approach convergence. Christopher Rd bullet corrected: it's the main-route convergence point; rat-run bypasses (Clement/Leyden, Dante/Ruskin) named and clarified.
+- **Road/Junction Styling Convention:** Road names in bold (`**Vineyard Rd**`), junction intersections in italic (`*Starke/Christopher*`). Removed `.road-name` chip style.
+- **Road Name Abbreviations:** Standardised across all visible text — Road → Rd, Avenue → Av. Applied to App.jsx copy, SimMap legend, corridor labels, junction popups, playback labels.
+- **Road Closed Block:** Dark red `#1e0a0a` background, solid `2.5px #C47070` border with glow. Intro reframed as "inbound school traffic only". List items wrapped in `stat-pill--dark` hover cards with context. Footer: "Every exit time shown is a minimum bound."
+- **Stat-pill Tooltips:** Fixed invisible text (was `color: var(--canvas)` — circular CSS ref). Hardcoded `#1a2a1d` bg + `rgba(241,245,241,0.95)` text.
+- **Speed Hump Count:** Corrected from 28 to 14 (excluded Main Rd and Ladies Mile which don't affect the model).
+- **Player Toolbar:** Moved from bottom of map to top (`top: 0.75rem`).
+- **Initial Map Zoom:** Tighter bounds with minimal padding so entry points and school sit at viewport edge.
+- **Findings Stat Numbers:** Reduced font size from `clamp(2–3rem)` to `clamp(1.4–1.9rem)` so all three blocks fit without scrolling.
+- **UXSim renamed "Validation model":** In all copy outside the Under the Hood section. Under the Hood retains SUMO/UXSim by full name for credibility.
+- **Under the Hood Entry ④:** Renamed from "UXSim — Network-Level Confirmation" to "Validation — Network-Level Confirmation".
+- **Access Barrier:** Button moved from full-width footer into left narrative column, bottom-aligned with Road Warning card. "Just be lekker" moved into Road Warning card as separator block. Sub-text colour fixed. Disclaimer updated to include WCED and City of Cape Town.
+- **J-number references removed:** All J4, J5, J8 etc. replaced with plain-language junction descriptions in visible copy.
+- **Neill Adamson footer link:** Name links to `https://neill.adamson.co.za/`; `@geniusboywonder` keeps X link separately.
+
+### Changed — 2026-04-03 (Access Barrier Transformation)
+- **Full-Screen Hero Redesign:** Replaced the centered card modal with a high-fidelity, full-screen "Hero" introduction.
+- **Improved Visual Fidelity:** Increased the prominence of the `SmokeBackground` WebGL animation and added a radial "veil" gradient for better text legibility and depth.
+- **Component Extraction:** Moved `AccessBarrier` to its own component file (`src/components/AccessBarrier.jsx`) for better maintainability.
+- **Responsive Layout:** Implemented a refined 12-column grid for large screens that stacks gracefully on mobile, with polished typography using `clamp()` for fluid scaling.
+- **Enhanced "Start" Action:** Upgraded the "Start the Engine" button to a more prominent, high-contrast pill with hover elevation and color shifts.
+
 ### Fixed — 2026-04-03 (CSS)
+- **Under the Hood Grid Layout:** Fixed a layout regression where the models-content section failed to span the full width of its parent container. Implemented a refined 2-column grid: entries 1 & 2 share Row 1, entries 3 & 4 share Row 2, and entry 5 spans both columns on Row 3. Adjusted padding and typography constraints for better visual balance in the 2nd column layout.
 - **App.css line 1338 — Stray `}` removed:** Orphaned closing brace from a parallel UI edit caused PostCSS parse failure. Removed stray brace and duplicate `.model-entry-body` rule block that followed it (parallel team's version retained).
 
 ### Changed — 2026-04-03 (Findings Section Rewrite)

@@ -14,7 +14,7 @@ export const SCENARIO_CONFIG = {
 // SIM_START_OFFSET: simTime starts here, clock displays 06:40 for this value.
 // SIM_END_SEC: when to stop the live simulation per scenario.
 // H runs past 09:00 because the queue has not cleared by then.
-export const SIM_START_OFFSET = 600; // 10 min → clock starts at 06:40
+export const SIM_START_OFFSET = 0; // clock starts at 06:30
 export const SIM_END_SEC = { L: 9000, M: 9000, H: 10800 }; // H: 09:30
 
 export const DWELL_S = 45; 

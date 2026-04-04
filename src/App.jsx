@@ -12,7 +12,7 @@ import './App.css';
 
 function formatClock(simTime) {
   const totalSec  = Math.floor(simTime ?? 0);
-  const baseMin   = 6 * 60 + 40;
+  const baseMin   = 6 * 60 + 30;
   const totalMin  = baseMin + Math.floor(totalSec / 60);
   const hours24   = Math.floor(totalMin / 60) % 24;
   const mins      = totalMin % 60;

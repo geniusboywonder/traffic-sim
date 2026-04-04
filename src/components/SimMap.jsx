@@ -393,7 +393,12 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
         if (v.holdUntil === null) {
           while (v.lastJunctionIdx < juncs.length - 1 && v.pos >= juncs[v.lastJunctionIdx + 1].pos) {
             const jid = juncs[v.lastJunctionIdx+1].junctionId, j = JUNCTIONS[jid];
-            if (j && !['egress','roundabout_planned'].includes(j.control)) {
+            // Outbound vehicles: only apply holds at the final exit junction (J1/J8/J9/J13).
+            // Intermediate residential junctions (stop_directional, 4way_stop etc.) are
+            // calibrated for inbound traffic — applying them to outbound causes deadlocks.
+            const isExitJunction = v.state === 'outbound' && [1, 8, 9, 13].includes(parseInt(jid));
+            const applyHold = v.state === 'inbound' || isExitJunction;
+            if (applyHold && j && !['egress','roundabout_planned'].includes(j.control)) {
               const s = junctionStateRef.current.get(jid) ?? { lastRelease: 0, frameReleases: 0 };
               const h = junctionHoldDuration(jid, j.control, t, s.lastRelease, v.routeId, v.corridorId);
               if (h > 0) { v.holdUntil = t + h; v.holdingAt = jid; junctionStateRef.current.set(jid, s); break; }

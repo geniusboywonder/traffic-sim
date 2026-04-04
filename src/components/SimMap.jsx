@@ -463,6 +463,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
         if (corridorExitsRef.current[v.corridorId] !== undefined) {
           corridorExitsRef.current[v.corridorId]++;
           const d = outboundDelayRef.current[v.corridorId]; d.total += Math.max(0, t - (v.dwellStart + 45)); d.count++;
+          logEvent('EXIT', v, { simTime: t, detail: `totalTrip=${(t - v.spawnTime).toFixed(1)}s egressRoute=${v.routeId}` });
         }
       } else remaining.push(v);
     });

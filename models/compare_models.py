@@ -32,7 +32,8 @@ SIM_START_S      = 23400    # 06:30 in seconds since midnight
 BASE_MIN         = 6 * 60 + 30
 
 def sec_to_clock(s):
-    total_min = BASE_MIN + int(s) // 60
+    """Convert absolute seconds-since-midnight to 12h clock string."""
+    total_min = int(s) // 60
     h = (total_min // 60) % 24
     m = total_min % 60
     h12 = h % 12 or 12
@@ -40,6 +41,7 @@ def sec_to_clock(s):
     return f"{h12}:{m:02d} {ap}"
 
 def sim_to_clock(sim_s):
+    """Convert relative sim seconds (0 = 06:30) to 12h clock string."""
     return sec_to_clock(SIM_START_S + sim_s)
 
 # ---------------------------------------------------------------------------
@@ -54,14 +56,20 @@ def parse_idm(log_path: Path, roads_path: Path):
     spawns  = log[log["event"] == "SPAWN"][["id", "simTime"]].rename(columns={"simTime": "spawn_t"})
     dwells  = log[log["event"] == "DWELL_START"][["id", "simTime"]].rename(columns={"simTime": "dwell_t"})
     ob_st   = log[log["event"] == "OUTBOUND_START"][["id", "simTime"]].rename(columns={"simTime": "depart_t"})
+    exits   = log[log["event"] == "EXIT"][["id", "simTime"]].rename(columns={"simTime": "exit_t"})
 
-    trips = spawns.merge(dwells, on="id", how="left").merge(ob_st, on="id", how="left")
+    trips = spawns.merge(dwells, on="id", how="left").merge(ob_st, on="id", how="left").merge(exits, on="id", how="left")
     trips["inbound_s"]  = trips["dwell_t"]  - trips["spawn_t"]
-    trips["outbound_s"] = trips["depart_t"] - trips["dwell_t"] - SCHOOL_DWELL_S
+    trips["outbound_s"] = trips["exit_t"] - trips["dwell_t"] - SCHOOL_DWELL_S
+
+    # Use exit_t for total trip if available, else fall back to depart_t (old logs)
+    trips["total_s"] = trips.apply(
+        lambda r: r["exit_t"] - r["spawn_t"] if pd.notna(r.get("exit_t")) else r["depart_t"] - r["spawn_t"],
+        axis=1
+    )
 
     # Only vehicles that completed the full journey
-    completed = trips.dropna(subset=["depart_t"]).copy()
-    completed["total_s"] = completed["depart_t"] - completed["spawn_t"]
+    completed = trips.dropna(subset=["total_s"]).copy()
     completed["delay_s"] = (completed["total_s"] - FREE_FLOW_TRIP_S).clip(lower=0)
     completed["delay_ratio"] = completed["delay_s"] / FREE_FLOW_TRIP_S
 
@@ -486,22 +494,22 @@ def save_csv(idm, sumo, uxsim, scenario, out_path: Path):
 
 SCENARIO_DEFAULTS = {
     "L": {
-        "idm_log":       "models/l/traffic-sim-log-2026-04-01T11-26-56.csv",
-        "idm_roads":     "models/l/traffic-road-stats-2026-04-01T11-30-46.csv",
+        "idm_log":       "models/l/l-traffic-sim-log-2026-04-04T14-14-24.csv",
+        "idm_roads":     "models/l/traffic-road-stats-2026-04-04T14-44-08 - L.csv",
         "sumo_tripinfo": "sim/sumo/tripinfo-L.xml",
         "sumo_json":     "public/sim-results/scenario-L-sumo.json",
         "uxsim_json":    "public/sim-results/scenario-L-uxsim.json",
     },
     "M": {
-        "idm_log":       None,
-        "idm_roads":     None,
+        "idm_log":       "models/m/m-traffic-sim-log-2026-04-04T14-10-47.csv",
+        "idm_roads":     "models/m/traffic-road-stats-2026-04-04T14-49-41 - M.csv",
         "sumo_tripinfo": "sim/sumo/tripinfo-M.xml",
         "sumo_json":     "public/sim-results/scenario-M-sumo.json",
         "uxsim_json":    "public/sim-results/scenario-M-uxsim.json",
     },
     "H": {
-        "idm_log":       None,
-        "idm_roads":     None,
+        "idm_log":       "models/h/h-traffic-sim-log-2026-04-04T14-13-01.csv",
+        "idm_roads":     "models/h/traffic-road-stats-2026-04-04T14-51-15 - H.csv",
         "sumo_tripinfo": "sim/sumo/tripinfo-H.xml",
         "sumo_json":     "public/sim-results/scenario-H-sumo.json",
         "uxsim_json":    "public/sim-results/scenario-H-uxsim.json",

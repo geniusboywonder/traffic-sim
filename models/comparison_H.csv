@@ -1,16 +1,16 @@
 metric,idm,sumo,uxsim
 scenario,H,H,H
-trips_spawned,508,445,N/A
-trips_completed,508,445,N/A
+trips_spawned,508,394,N/A
+trips_completed,508,394,N/A
 completion_rate_pct,100.0,100.0,N/A
-trip_mean_s,796.7,1903.6,426.1
-trip_median_s,650.0,1433.0,N/A
-trip_p85_s,1419.5,3429.0,N/A
-trip_p95_s,1693.2,4139.8,N/A
-delay_mean_s,412.1,1338.6,6.1
-delay_ratio_pct,98.1,318.7,N/A
-stopped_time_mean_s,412.1,961.7,N/A
-peak_congestion_clock,2:33 PM,1:00 PM,2:21 PM
+trip_mean_s,1066.7,1540.8,426.1
+trip_median_s,877.5,1204.0,N/A
+trip_p85_s,1740.0,2597.8,N/A
+trip_p95_s,2006.5,3529.8,N/A
+delay_mean_s,646.7,985.8,6.1
+delay_ratio_pct,154.0,234.7,N/A
+stopped_time_mean_s,646.7,663.6,N/A
+peak_congestion_clock,8:10 AM,6:30 AM,7:51 AM
 peak_vehicles_on_net,N/A,N/A,100
 vehicles_at_end,N/A,0,0
 clears_by_end,N/A,N/A,True

@@ -158,11 +158,12 @@ export function stepAllVehicles(vehicles, dt, routeConfigs, simTime) {
 
       const group = approaches.get(toJid) || [];
       
-      // PHYSICS SEARCH: vehicles are blocked by any vehicle ahead on the same
-      // road segment regardless of state — outbound vehicles share physical road
-      // space with inbound vehicles and must queue behind them.
+      // PHYSICS SEARCH: vehicles are blocked by same-state vehicles ahead on the
+      // same road segment. Inbound and outbound use separate road directions and
+      // should not block each other — reverting cross-state blocking which caused
+      // Aristea Rd deadlock (outbound queued behind inbound approaching J7).
       const sameSegmentLeaders = group
-        .filter(o => o !== v && o.distToTarget < v.distToTarget && !o.isParking)
+        .filter(o => o !== v && o.distToTarget < v.distToTarget && !o.isParking && o.state === v.state)
         .sort((a, b) => b.distToTarget - a.distToTarget);
 
       if (sameSegmentLeaders.length > 0) {
@@ -173,6 +174,7 @@ export function stepAllVehicles(vehicles, dt, routeConfigs, simTime) {
         for (const r of Object.values(routeConfigs)) {
           // Inbound vehicles don't look ahead onto egress routes (different road direction)
           if (v.state === 'inbound' && r.type === 'egress') continue;
+          if (v.state === 'outbound' && r.type !== 'egress') continue;
           
           const idx = r.junctions?.indexOf(toJid);
           if (idx !== -1 && idx < r.junctions.length - 1) nextTargetJids.push(r.junctions[idx + 1]);

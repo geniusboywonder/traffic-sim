@@ -1,13 +1,13 @@
 // ── spawner.js ────────────────────────────────────────────────────────────────
 // Vehicle spawn scheduler, bell-curve inflow, rat-run logic, dwell → outbound.
 
-import { ROUTE_CONFIG, CORRIDOR_ROUTES, EGRESS_ROUTES, estimateRouteLength } from './routes';
+import { ROUTE_CONFIG, CORRIDOR_ROUTES, estimateRouteLength } from './routes';
 import { PARKING_CAPACITY, getParkingOccupancy } from './idm';
 
 export const SCENARIO_CONFIG = {
-  L: { totalTrips: 500, peakWindowMin: 75, ratRunThreshold: 0.10, habitualRatRunProb: 0.01 },
-  M: { totalTrips: 650, peakWindowMin: 60, ratRunThreshold: 0.08, habitualRatRunProb: 0.02 },
-  H: { totalTrips: 840, peakWindowMin: 45, ratRunThreshold: 0.06, habitualRatRunProb: 0.03 },
+  L: { totalTrips: 336, peakWindowMin: 75, ratRunThreshold: 0.15, habitualRatRunProb: 0.005 },
+  M: { totalTrips: 420, peakWindowMin: 60, ratRunThreshold: 0.10, habitualRatRunProb: 0.01  },
+  H: { totalTrips: 504, peakWindowMin: 45, ratRunThreshold: 0.06, habitualRatRunProb: 0.03  },
 };
 
 // Simulation timing: offset skips the near-empty Gaussian tail at 06:30.
@@ -19,14 +19,25 @@ export const SIM_END_SEC = { L: 9000, M: 9000, H: 10800 }; // H: 09:30
 
 export const DWELL_S = 45; 
 
-const RAW = { '1A': 11, '2A': 21, '2B': 25, '3A': 13 }; // TIA Section 13: Dreyersdal S = 13%
+const RAW = { '1A': 14, '1A-NORTH': 11, '2A': 25, '2B': 47, '3A': 3 }; // TIA-aligned: Dreyersdal S=14%, Dreyersdal N=11%, Homestead=25%, Children's Way=47%, Firgrove/Starke=3%
 const SUM  = Object.values(RAW).reduce((a, b) => a + b, 0);
 export const CORRIDOR_SPLITS = Object.fromEntries(Object.entries(RAW).map(([k, v]) => [k, v / SUM]));
 
 // All modelled segments are TIA Class 5 Local Streets (30 km/h). The arterial/collector
 // approach roads (Main Rd, Ladies Mile, Firgrove) are off-map — the route starts after
 // the turn-off at the entry junction.
-export const CORRIDOR_ROAD_CLASS = { '1A': 'local', '2A': 'local', '2B': 'local', '3A': 'local' };
+export const CORRIDOR_ROAD_CLASS = { '1A': 'local', '1A-NORTH': 'local', '2A': 'local', '2B': 'local', '3A': 'local' };
+
+// Local vehicle fractions per corridor (% of that corridor's spawns that are local residents).
+// Local residents originate inside the network — absorbed into nearest external corridor.
+// They get higher habitual rat-run probability (know the area) and biased egress routing.
+const LOCAL_FRACTION = {
+  '1A':       0.07,  // 1% local / 14% total (Leyden/Ruskin residents)
+  '1A-NORTH': 0.0,   // pure external (Dreyersdal North)
+  '2A':       0.16,  // 4% local / 25% total (Christopher Rd residents)
+  '2B':       0.47,  // 22% local / 47% total (Starke N+S residents)
+  '3A':       1.0,   // all local (Firgrove/Starke local)
+};
 
 // TIA trapezoidal profile: 35% of demand falls 07:30–08:00 → peak centred at 07:45 (simTime=4500).
 // Sigma controls spread: H is tightest (fast ramp), L is widest (spread across full 2 hrs).
@@ -47,13 +58,19 @@ export function spawnRate(simTimeSec, scenario) {
   return (cfg.totalTrips / NORMS[scenario]) * gaussianRate(simTimeSec, centre, sigma);
 }
 
-export function assignRoute(corridorId, scenario, density, congestionScore = 0) {
+export function assignRoute(corridorId, scenario, density, congestionScore = 0, isLocal = false) {
   const cfg = SCENARIO_CONFIG[scenario], crConfig = CORRIDOR_ROUTES[corridorId];
   if (!crConfig || crConfig.ratRuns.length === 0) return crConfig?.main ?? corridorId;
 
+  // H scenario: 1A Dreyersdal back-pressure from Sweet Valley Primary next door
+  const h1aBoost = (scenario === 'H' && corridorId === '1A') ? 0.08 : 0;
+  // Local residents know the area — higher habitual rat-run rate
+  const localBoost = isLocal ? cfg.habitualRatRunProb * 2 : 0;
+  const habitualProb = Math.min(cfg.habitualRatRunProb + h1aBoost + localBoost, 0.85);
+
   // Habitual users: a base % always takes rat-runs regardless of congestion,
   // representing commuters who know the shortcut and use it in both directions.
-  if (Math.random() < cfg.habitualRatRunProb) {
+  if (Math.random() < habitualProb) {
     return crConfig.ratRuns[Math.floor(Math.random() * crConfig.ratRuns.length)];
   }
 
@@ -102,9 +119,11 @@ export function spawnTick(state, simTimeSec, dt, scenario, vehicles) {
     state.accumulators[cid] = (state.accumulators[cid] ?? 0) + rate * CORRIDOR_SPLITS[cid] * dt;
     while (state.accumulators[cid] >= 1) {
       state.accumulators[cid] -= 1;
-      const rid = assignRoute(cid, scenario, density, congestion);
+      const isLocal = Math.random() < (LOCAL_FRACTION[cid] ?? 0);
+      const rid = assignRoute(cid, scenario, density, congestion, isLocal);
       newVehicles.push({
         id: _nextId++, routeId: rid, corridorId: cid, pos: 0, v: 0, state: 'inbound',
+        isLocal,
         roadClass: CORRIDOR_ROAD_CLASS[cid] ?? 'local',
         routeLen: estimateRouteLength(ROUTE_CONFIG[rid]?.geometry),
         spawnTime: simTimeSec, dwellStart: null, lastJunctionIdx: 0, allJunctions: null, holdUntil: null
@@ -135,12 +154,43 @@ export function processDwell(vehicle, simTimeSec, vehicles) {
   }
 }
 
-export function pickEgressRoute() {
+const EGRESS_WEIGHTS = {
+  L: { 'EG-A': 0.30, 'EG-B': 0.20, 'EG-C': 0.15, 'EG-D': 0.15, 'EG-E': 0.20 },
+  M: { 'EG-A': 0.30, 'EG-B': 0.20, 'EG-C': 0.15, 'EG-D': 0.15, 'EG-E': 0.20 },
+  H: { 'EG-A': 0.40, 'EG-B': 0.25, 'EG-C': 0.15, 'EG-D': 0.10, 'EG-E': 0.10 },
+};
+
+// Local vehicle egress bias — additive adjustment before normalisation.
+// In H scenario, Sweet Valley back-pressure halves the bias toward J9/J13.
+const LOCAL_EGRESS_BIAS = {
+  '2B': { 'EG-D': +0.15, 'EG-E': +0.10, 'EG-A': -0.15, 'EG-B': -0.10 }, // Starke → Firgrove/Homestead
+  '2A': { 'EG-E': +0.20, 'EG-A': -0.10, 'EG-B': -0.10 },                 // Christopher → Homestead
+  '3A': { 'EG-D': +0.25, 'EG-A': -0.15, 'EG-B': -0.10 },                 // Leyden → Firgrove
+};
+
+export function pickEgressRoute(scenario = 'M', corridorId = null, isLocal = false) {
+  let weights = { ...EGRESS_WEIGHTS[scenario] ?? EGRESS_WEIGHTS['M'] };
+
+  if (isLocal && corridorId && LOCAL_EGRESS_BIAS[corridorId]) {
+    const bias = LOCAL_EGRESS_BIAS[corridorId];
+    for (const [k, v] of Object.entries(bias)) {
+      // In H scenario, halve the local bias toward J9/J13 (Sweet Valley blocking)
+      const factor = (scenario === 'H' && (k === 'EG-D' || k === 'EG-E')) ? 0.5 : 1.0;
+      weights[k] = Math.max(0, (weights[k] ?? 0) + v * factor);
+    }
+    // Renormalise
+    const total = Object.values(weights).reduce((a, b) => a + b, 0);
+    for (const k of Object.keys(weights)) weights[k] /= total;
+  }
+
   const r = Math.random();
   let cum = 0;
-  for (const rt of EGRESS_ROUTES) { cum += rt.weight; if (r < cum) return rt.id; }
-  return EGRESS_ROUTES[EGRESS_ROUTES.length - 1].id;
+  for (const [id, w] of Object.entries(weights)) {
+    cum += w;
+    if (r < cum) return id;
+  }
+  return 'EG-A';
 }
 
 export { estimateRouteLength };
-export function createSpawnerState() { return { accumulators: { '1A': 0, '2A': 0, '2B': 0, '3A': 0 } }; }
+export function createSpawnerState() { return { accumulators: { '1A': 0, '1A-NORTH': 0, '2A': 0, '2B': 0, '3A': 0 } }; }

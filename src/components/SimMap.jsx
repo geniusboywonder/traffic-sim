@@ -96,10 +96,10 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
     e.preventDefault();
   }, []);
   const junctionStateRef = useRef(new Map()), junctionMarkersRef = useRef({});
-  const corridorTotalsRef = useRef({ '1A': 0, '2A': 0, '2B': 0, '3A': 0 });
-  const corridorExitsRef = useRef({ '1A': 0, '2A': 0, '2B': 0, '3A': 0 });
-  const inboundDelayRef = useRef({ '1A': { total: 0, count: 0 }, '2A': { total: 0, count: 0 }, '2B': { total: 0, count: 0 }, '3A': { total: 0, count: 0 } });
-  const outboundDelayRef = useRef({ '1A': { total: 0, count: 0 }, '2A': { total: 0, count: 0 }, '2B': { total: 0, count: 0 }, '3A': { total: 0, count: 0 } });
+  const corridorTotalsRef = useRef({ '1A': 0, '1A-NORTH': 0, '2A': 0, '2B': 0, '3A': 0 });
+  const corridorExitsRef = useRef({ '1A': 0, '1A-NORTH': 0, '2A': 0, '2B': 0, '3A': 0 });
+  const inboundDelayRef = useRef({ '1A': { total: 0, count: 0 }, '1A-NORTH': { total: 0, count: 0 }, '2A': { total: 0, count: 0 }, '2B': { total: 0, count: 0 }, '3A': { total: 0, count: 0 } });
+  const outboundDelayRef = useRef({ '1A': { total: 0, count: 0 }, '1A-NORTH': { total: 0, count: 0 }, '2A': { total: 0, count: 0 }, '2B': { total: 0, count: 0 }, '3A': { total: 0, count: 0 } });
   const pulsePhaseRef = useRef(0);
   const congestionScoresRef = useRef({ '1A': 0, '2A': 0, '2B': 0, '3A': 0 });
   const roadVisitTrackerRef = useRef({ inbound: new Map(), outbound: new Map() });
@@ -121,15 +121,25 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
   const computeStats = useCallback((vehicles, totals, exits, inDelays, outDelays, congScores) => {
     const res = { corridors: {}, bottlenecks: {}, parking: {} };
     ['3A', '2A', '2B', '1A'].forEach(cid => {
-      const corrVehicles = vehicles.filter(v => v.corridorId === cid && v.state === 'inbound');
+      // 1A-NORTH vehicles share the 1A corridor card — merge their counts in
+      const cids = cid === '1A' ? ['1A', '1A-NORTH'] : [cid];
+      const corrVehicles = vehicles.filter(v => cids.includes(v.corridorId) && v.state === 'inbound');
       const stopped = corrVehicles.filter(v => v.v < 0.5).length;
       const slowing = corrVehicles.filter(v => v.v >= 0.5 && v.v < 2).length;
       const active  = corrVehicles.filter(v => v.v >= 2).length;
-      const inD = inDelays[cid], outD = outDelays[cid];
+      // Merge 1A + 1A-NORTH delay accumulators
+      const inD  = cid === '1A'
+        ? { total: (inDelays['1A'].total  + (inDelays['1A-NORTH']?.total  ?? 0)), count: (inDelays['1A'].count  + (inDelays['1A-NORTH']?.count  ?? 0)) }
+        : inDelays[cid];
+      const outD = cid === '1A'
+        ? { total: (outDelays['1A'].total + (outDelays['1A-NORTH']?.total ?? 0)), count: (outDelays['1A'].count + (outDelays['1A-NORTH']?.count ?? 0)) }
+        : outDelays[cid];
+      const spawned = cid === '1A' ? (totals['1A'] + (totals['1A-NORTH'] ?? 0)) : totals[cid];
+      const exited  = cid === '1A' ? (exits['1A']  + (exits['1A-NORTH']  ?? 0)) : exits[cid];
       res.corridors[cid] = {
         label: cid === '1A' ? 'Main Rd' : cid === '2A' ? 'Homestead Av' : cid === '2B' ? "Children's Way" : 'Firgrove Way',
-        current: corrVehicles.length, spawned: totals[cid], exited: exits[cid],
-        avgInDelay: inD.count > 0 ? (inD.total / inD.count / 60) : 0,
+        current: corrVehicles.length, spawned, exited,
+        avgInDelay:  inD.count  > 0 ? (inD.total  / inD.count  / 60) : 0,
         avgOutDelay: outD.count > 0 ? (outD.total / outD.count / 60) : 0,
         congestion: congScores?.[cid] ?? 0, stopped, slowing, active
       };
@@ -277,10 +287,10 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
     loggerClear();
     vehiclesRef.current = []; simTimeRef.current = 0; spawnerStateRef.current = createSpawnerState();
     junctionStateRef.current = new Map(); resetVehicleIds();
-    corridorTotalsRef.current = { '1A': 0, '2A': 0, '2B': 0, '3A': 0 };
-    corridorExitsRef.current = { '1A': 0, '2A': 0, '2B': 0, '3A': 0 };
-    inboundDelayRef.current = { '1A': { total: 0, count: 0 }, '2A': { total: 0, count: 0 }, '2B': { total: 0, count: 0 }, '3A': { total: 0, count: 0 } };
-    outboundDelayRef.current = { '1A': { total: 0, count: 0 }, '2A': { total: 0, count: 0 }, '2B': { total: 0, count: 0 }, '3A': { total: 0, count: 0 } };
+    corridorTotalsRef.current = { '1A': 0, '1A-NORTH': 0, '2A': 0, '2B': 0, '3A': 0 };
+    corridorExitsRef.current = { '1A': 0, '1A-NORTH': 0, '2A': 0, '2B': 0, '3A': 0 };
+    inboundDelayRef.current = { '1A': { total: 0, count: 0 }, '1A-NORTH': { total: 0, count: 0 }, '2A': { total: 0, count: 0 }, '2B': { total: 0, count: 0 }, '3A': { total: 0, count: 0 } };
+    outboundDelayRef.current = { '1A': { total: 0, count: 0 }, '1A-NORTH': { total: 0, count: 0 }, '2A': { total: 0, count: 0 }, '2B': { total: 0, count: 0 }, '3A': { total: 0, count: 0 } };
     roadVisitTrackerRef.current = { inbound: new Map(), outbound: new Map() };
     onRoadStatsUpdate(null);
     const ctx = canvasRef.current?.getContext('2d'); ctx?.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
@@ -403,7 +413,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
             const p = getParkingOccupancy(vehiclesRef.current);
             if (!p.isFull) {
               const d = inboundDelayRef.current[v.corridorId]; d.total += (t - v.spawnTime); d.count++;
-              const egressId = pickEgressRoute(); v.state = 'outbound'; v.routeId = egressId; v.pos = 0;
+              const egressId = pickEgressRoute(scenarioRef.current, v.corridorId, v.isLocal); v.state = 'outbound'; v.routeId = egressId; v.pos = 0;
               v.routeLen = estimateRouteLength(ROUTE_CONFIG[egressId].geometry); v.allJunctions = getRouteJunctions(egressId);
               v.lastJunctionIdx = 0; v.targetDwellPos = 0.02 + Math.random() * 0.08; v.isParking = true;
               v.holdUntil = null; v.holdingAt = null; junctionStateRef.current.set(7, { lastRelease: t });
@@ -413,7 +423,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
           const p = getParkingOccupancy(vehiclesRef.current);
           if (!p.isFull) {
             const d = inboundDelayRef.current[v.corridorId]; d.total += (t - v.spawnTime); d.count++;
-            const egressId = pickEgressRoute(); v.state = 'outbound'; v.routeId = egressId; v.pos = 0;
+            const egressId = pickEgressRoute(scenarioRef.current, v.corridorId, v.isLocal); v.state = 'outbound'; v.routeId = egressId; v.pos = 0;
             v.routeLen = estimateRouteLength(ROUTE_CONFIG[egressId].geometry); v.allJunctions = getRouteJunctions(egressId);
             v.lastJunctionIdx = 0; v.targetDwellPos = 0.02 + Math.random() * 0.08; v.isParking = true;
             v.holdUntil = null; v.holdingAt = null; junctionStateRef.current.set(7, { lastRelease: t });

@@ -222,15 +222,21 @@ export function roadRoute(waypoints) {
 // geometry: computed lazily on first access (expensive to pre-compute all 19).
 
 const RAW_ROUTES = {
-  // ── Corridor 1A — Main Rd / Dreyersdal N (entry J1) ──────────────────────
+  // ── Corridor 1A — Main Rd / Dreyersdal South (entry J1) ─────────────────
   // Main path: Dreyersdal -> Airlie -> Starke -> Christopher -> Vineyard -> Leyden -> Ruskin
-  '1A':     { name: 'Route 1A — Main Rd (N1)',         corridor: '1A', type: 'main',   junctions: [1,2,15,18,4,5,6,7],            maxVehicles: 50 },
-  '1A-RR1': { name: 'Rat-run 1A-1: Dreyersdal→Airlie', corridor: '1A', type: 'ratrun', junctions: [1,2,15,18,4,5,6,7],            maxVehicles: 25 },
-  '1A-RR2': { name: 'Rat-run 1A-2: →Starke→Vineyard',  corridor: '1A', type: 'ratrun', junctions: [1,2,3,27,22,19,16,5,6,7],      maxVehicles: 25 },
-  '1A-RR3': { name: 'Rat-run 1A-3: →Starke→Ruskin',    corridor: '1A', type: 'ratrun', junctions: [1,2,3,27,22,19,16,17,7],       maxVehicles: 20 },
-  '1A-RR4': { name: 'Rat-run 1A-4: →Tussendal→Ruskin', corridor: '1A', type: 'ratrun', junctions: [1,2,3,27,22,19,23,14,17,7],    maxVehicles: 20 },
-  '1A-RR5': { name: 'Rat-run 1A-5: FarmRd→Tussendal',  corridor: '1A', type: 'ratrun', junctions: [1,2,3,21,23,14,17,7],          maxVehicles: 20 },
-  '1A-RR6': { name: 'Rat-run 1A-6: FarmRd→Vineyard',   corridor: '1A', type: 'ratrun', junctions: [1,2,3,21,23,19,16,5,6,7],      maxVehicles: 20 },
+  '1A':     { name: 'Route 1A — Dreyersdal South (Main Rd)',  corridor: '1A', type: 'main',   junctions: [1,2,15,18,4,5,6,7],            maxVehicles: 50 },
+  '1A-RR1': { name: 'Rat-run 1A-1: Dreyersdal→Airlie',        corridor: '1A', type: 'ratrun', junctions: [1,2,15,18,4,5,6,7],            maxVehicles: 25 },
+  '1A-RR2': { name: 'Rat-run 1A-2: →Starke→Vineyard',         corridor: '1A', type: 'ratrun', junctions: [1,2,3,27,22,19,16,5,6,7],      maxVehicles: 25 },
+  '1A-RR3': { name: 'Rat-run 1A-3: →Starke→Ruskin',           corridor: '1A', type: 'ratrun', junctions: [1,2,3,27,22,19,16,17,7],       maxVehicles: 20 },
+  '1A-RR4': { name: 'Rat-run 1A-4: →Tussendal→Ruskin',        corridor: '1A', type: 'ratrun', junctions: [1,2,3,27,22,19,23,14,17,7],    maxVehicles: 20 },
+  '1A-RR5': { name: 'Rat-run 1A-5: FarmRd→Tussendal',         corridor: '1A', type: 'ratrun', junctions: [1,2,3,21,23,14,17,7],          maxVehicles: 20 },
+  '1A-RR6': { name: 'Rat-run 1A-6: FarmRd→Vineyard',          corridor: '1A', type: 'ratrun', junctions: [1,2,3,21,23,19,16,5,6,7],      maxVehicles: 20 },
+
+  // ── Corridor 1A-NORTH — Dreyersdal North (entry J13 / Firgrove Way) ──────
+  // Enters at Firgrove/Dreyersdal junction, travels east along Dreyersdal to school.
+  '1A-NORTH':     { name: 'Route 1A Dreyersdal North (Firgrove entry)', corridor: '1A', type: 'main',   junctions: [13,15,18,4,5,6,7],       maxVehicles: 40 },
+  '1A-NORTH-RR1': { name: 'Rat-run 1A-N-1: →Airlie→Vineyard',          corridor: '1A', type: 'ratrun', junctions: [13,15,22,19,16,5,6,7],   maxVehicles: 20 },
+  '1A-NORTH-RR2': { name: 'Rat-run 1A-N-2: →Airlie→Ruskin',            corridor: '1A', type: 'ratrun', junctions: [13,15,22,19,16,17,7],    maxVehicles: 15 },
 
   // ── Corridor 2A — Homestead Av (entry J9) ────────────────────────────────
   '2A':     { name: 'Route 2A — Homestead Av',        corridor: '2A', type: 'main',   junctions: [9,28,18,4,5,6,7],              maxVehicles: 60 },
@@ -279,10 +285,11 @@ export const ROUTE_CONFIG = Object.fromEntries(
 
 // Grouped by corridor for spawner use
 export const CORRIDOR_ROUTES = {
-  '1A': { main: '1A',  ratRuns: ['1A-RR1','1A-RR2','1A-RR3','1A-RR4','1A-RR5','1A-RR6'] },
-  '2A': { main: '2A',  ratRuns: ['2A-RR1','2A-RR2'] },
-  '2B': { main: '2B',  ratRuns: ['2B-RR1','2B-RR2','2B-RR3'] },
-  '3A': { main: '3A',  ratRuns: ['3A-RR1','3A-RR2'] },
+  '1A':       { main: '1A',       ratRuns: ['1A-RR1','1A-RR2','1A-RR3','1A-RR4','1A-RR5','1A-RR6'] },
+  '1A-NORTH': { main: '1A-NORTH', ratRuns: ['1A-NORTH-RR1','1A-NORTH-RR2'] },
+  '2A':       { main: '2A',       ratRuns: ['2A-RR1','2A-RR2'] },
+  '2B':       { main: '2B',       ratRuns: ['2B-RR1','2B-RR2','2B-RR3'] },
+  '3A':       { main: '3A',       ratRuns: ['3A-RR1','3A-RR2'] },
 };
 
 // ── Rat-run divergence points ────────────────────────────────────────────────
@@ -296,6 +303,10 @@ export const RAT_RUN_SWITCHES = {
     { atJid: 22, toRouteId: '1A-RR2' },
     { atJid: 22, toRouteId: '1A-RR3' },
     { atJid: 22, toRouteId: '1A-RR4' }
+  ],
+  '1A-NORTH': [
+    { atJid: 15, toRouteId: '1A-NORTH-RR1' },
+    { atJid: 15, toRouteId: '1A-NORTH-RR2' },
   ],
   '2A': [
     { atJid: 28, toRouteId: '2A-RR1' },

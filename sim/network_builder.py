@@ -379,8 +379,8 @@ def build_world(sim_start=23400, sim_end=30600, timestep=60, reaction_time=1.5):
             end_node          = school_gate,
             length            = SCHOOL_LINK_LENGTH_M,
             free_flow_speed   = SCHOOL_LINK_SPEED_MS,
-            jam_density       = 0.2,
-            number_of_lanes   = 2,
+            jam_density       = 0.15,   # tighter jam density — single-lane drop-off
+            number_of_lanes   = 1,      # one-way single lane forces queuing backpressure
             merge_priority    = 0.5,
         )
         W.addLink(
@@ -389,8 +389,8 @@ def build_world(sim_start=23400, sim_end=30600, timestep=60, reaction_time=1.5):
             end_node          = n7,
             length            = SCHOOL_LINK_LENGTH_M,
             free_flow_speed   = SCHOOL_LINK_SPEED_MS,
-            jam_density       = 0.2,
-            number_of_lanes   = 2,
+            jam_density       = 0.15,
+            number_of_lanes   = 1,
             merge_priority    = 0.5,
         )
     else:

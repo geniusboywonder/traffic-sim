@@ -111,11 +111,11 @@ export function junctionHoldDuration(jid, junctionControl, simTime, lastReleaseT
   switch (junctionControl) {
     case 'none':          return 0;
     case 'traffic_signal': return (simTime % 60) < 30 ? 0 : 60 - (simTime % 60);
-    case '4way_stop':     return gap >= 4.0 ? 0 : 4.0 - gap;
+    case '4way_stop':     return gap >= 5.5 ? 0 : 5.5 - gap; // Increased: realistic all-way stop gap acceptance
     case 'priority_stop': return gap >= 5.0 ? 0 : 5.0 - gap;
     case 'stop':          return gap >= 4.0 ? 0 : 4.0 - gap;
     case 'yield':              return gap >= 2.5 ? 0 : 2.5 - gap;
-    case 'critical':           return gap >= 4.5 ? 0 : 4.5 - gap;
+    case 'critical':           return gap >= 6.5 ? 0 : 6.5 - gap; // School gate — increased to model internal road queue friction
     case 'roundabout_planned': return gap >= 1.0 ? 0 : 1.0 - gap; // TIA §14: mini-roundabout at Ruskin/Aristea — short yield
     case 'egress':             return gap >= 1.2 ? 0 : 1.2 - gap; // TIA §11: raised intersection at Aristea exit
     case 'speed_hump':         return gap >= 1.2 ? 0 : 1.2 - gap;

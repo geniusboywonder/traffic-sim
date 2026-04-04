@@ -37,6 +37,7 @@ export const JUNCTIONS = {
   27: { lat: -34.053388, lng: 18.454687, name: "Children's Way / Starke Rd",           control: 'stop_directional' },
   28: { lat: -34.044726, lng: 18.449741, name: 'Homestead Av / Dreyersdal Rd',        control: '4way_stop' },
   29: { lat: -34.051135, lng: 18.450243, name: 'Ruskin Rd / Aristea Rd — roundabout', control: 'roundabout_planned' },
+  30: { lat: -34.047500, lng: 18.448042, name: 'Mutual Way / Homestead Av',           control: 'yield' },
   101: { lat: -34.0478486, lng: 18.4515591, name: 'Speed Hump (node/303887567)', control: 'speed_hump' },
   102: { lat: -34.0487467, lng: 18.4520261, name: 'Speed Hump (node/303887579)', control: 'speed_hump' },
   103: { lat: -34.0556745, lng: 18.4598811, name: 'Speed Hump (node/303887630)', control: 'speed_hump' },
@@ -242,6 +243,7 @@ const RAW_ROUTES = {
   '2A':     { name: 'Route 2A — Homestead Av',        corridor: '2A', type: 'main',   junctions: [9,28,18,4,5,6,7],              maxVehicles: 60 },
   '2A-RR1': { name: 'Rat-run 2A-1: →Homestead/Starke→Clement→Leyden', corridor: '2A', type: 'ratrun', junctions: [9,28,10,24,25,6,7], maxVehicles: 30 },
   '2A-RR2': { name: 'Rat-run 2A-2: →Homestead/Starke→Clement→Christopher', corridor: '2A', type: 'ratrun', junctions: [9,28,10,24,4,5,6,7], maxVehicles: 30 },
+  '2A-RR3': { name: 'Rat-run 2A-3: →Mutual Way→Clement→Leyden', corridor: '2A', type: 'ratrun', junctions: [9,30,25,6,7], maxVehicles: 20 },
 
   // ── Corridor 2B — Children's Way (entry J8) ───────────────────────────────
   // Standard path: Children's Way -> Dreyersdal -> Christopher -> Vineyard -> Leyden -> Ruskin
@@ -293,7 +295,7 @@ export const ROUTE_CONFIG = Object.fromEntries(
 export const CORRIDOR_ROUTES = {
   '1A':       { main: '1A',       ratRuns: ['1A-RR1','1A-RR2','1A-RR3','1A-RR4','1A-RR5','1A-RR6'] },
   '1A-NORTH': { main: '1A-NORTH', ratRuns: ['1A-NORTH-RR1','1A-NORTH-RR2'] },
-  '2A':       { main: '2A',       ratRuns: ['2A-RR1','2A-RR2'] },
+  '2A':       { main: '2A',       ratRuns: ['2A-RR1','2A-RR2','2A-RR3'] },
   '2B':       { main: '2B',       ratRuns: ['2B-RR1','2B-RR2','2B-RR3'] },
   '3A':       { main: '3A',       ratRuns: ['3A-RR1','3A-RR2'] },
 };
@@ -316,7 +318,8 @@ export const RAT_RUN_SWITCHES = {
   ],
   '2A': [
     { atJid: 28, toRouteId: '2A-RR1' },
-    { atJid: 28, toRouteId: '2A-RR2' }
+    { atJid: 28, toRouteId: '2A-RR2' },
+    { atJid: 9,  toRouteId: '2A-RR3' },  // Mutual Way diverges at J9 entry
   ],
   '2B': [
     { atJid: 26, toRouteId: '2B-RR1' },

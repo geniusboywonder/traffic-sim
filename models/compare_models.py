@@ -198,19 +198,17 @@ def parse_sumo(tripinfo_path: Path, json_path: Path):
     road_active_max   = defaultdict(int)
     road_stopped_max  = defaultdict(int)
     road_throughput   = defaultdict(int)
-    total_q_by_t      = {}
+    total_v_by_t      = {}  # total vehicles on network per frame
 
     for fr in frames:
         t_sim = fr["t"] - SIM_START_S
-        total_q = 0
+        # Count all vehicles (inbound + queued + outbound) as network load
+        total_v_by_t[t_sim] = len(fr.get("vehicles", []))
         for rs in fr.get("road_stats", []):
             rid = rs["road_id"]
-            q   = rs.get("queued", 0)
-            ib  = rs.get("inbound", 0) + q
+            ib  = rs.get("inbound", 0) + rs.get("outbound", 0)
             road_active_max[rid]  = max(road_active_max[rid], ib)
-            road_stopped_max[rid] = max(road_stopped_max[rid], q)
-            total_q += q
-        total_q_by_t[t_sim] = total_q
+            road_stopped_max[rid] = max(road_stopped_max[rid], rs.get("outbound", 0))
 
     # Road throughput from cumulative inbound counts (last frame)
     if frames:
@@ -222,9 +220,9 @@ def parse_sumo(tripinfo_path: Path, json_path: Path):
     road_stopped_series = pd.Series(road_stopped_max).sort_values(ascending=False)
     road_throughput_s   = pd.Series(road_throughput).sort_values(ascending=False)
 
-    # Peak congestion time
-    q_series = pd.Series(total_q_by_t).sort_index()
-    peak_sim_t = q_series.idxmax() if not q_series.empty else 0
+    # Peak congestion time — frame with most vehicles on network
+    v_series = pd.Series(total_v_by_t).sort_index()
+    peak_sim_t = v_series.idxmax() if not v_series.empty else 0
 
     # School throughput per 15-min from cumulative in/out
     school_ids = [r for r in road_active_max if "school" in r.lower()]

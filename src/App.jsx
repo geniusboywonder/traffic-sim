@@ -251,7 +251,7 @@ const FindingsSection = () => (
           </div>
           <h3 className="findings-col-heading">Telling Details</h3>
           <ul className="findings-bullets">
-            <li><strong>The queue peaks at <span className="stat-pill" data-source="Lab model peak vehicles on network — all High/Med scenarios">08:15</span>, not 07:45.</strong> TIA analysis centres on 07:30–08:00. But Lab model peak network loading hits at 08:15–08:17. The school gate keeps queueing vehicles 30 minutes after peak demand has passed. Demand peaks at 07:45. Congestion peaks half an hour later.</li>
+            <li><strong>The queue peaks at <span className="stat-pill" data-source="Lab model peak vehicles on network — all High/Med scenarios">08:15</span>, not 07:45.</strong> The TIA's critical window is 07:30–08:00, with demand peaking at 07:45. But the Lab model puts peak network loading at 08:15–08:17. The school gate can't clear vehicles as fast as they arrive — so the queue keeps growing long after the demand wave has passed.</li>
             <li><strong>Three models, one conclusion.</strong> Live, Lab, and the Validation model — built on entirely different mathematics — independently identify the same roads. School internal road appears in the top 3 congested roads in every model, every scenario. Starke Rd and the Dreyersdal/Vineyard corridor appear in the top 5 across all models in Medium and High. That's not a modelling quirk. It's the road.</li>
           </ul>
         </div>

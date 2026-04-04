@@ -142,7 +142,7 @@ function CorridorCard({ id, c, isSelected, onToggle }) {
               {id}
             </span>
             <span className="holo-label" style={{ color: cols.mutedDark }}>{c.label}</span>
-            {isHot && <span className="holo-hot">STOPPED</span>}
+            {isHot && <span className="holo-hot" style={{display:'none'}}></span>}
           </div>
           <div 
             className="holo-eye" 
@@ -350,9 +350,9 @@ const StatsPanel = memo(({ statsData, selectedCorridors, onToggleCorridor, selec
         )}
       </div>
       <div className="corridor-grid">
-        {Object.entries(corridors).map(([id, c]) => (
-          <CorridorCard key={id} id={id} c={c} isSelected={selectedCorridors.has(id)} onToggle={onToggleCorridor} />
-        ))}
+        {['3A', '2B', '2A', '1A'].map(id => corridors[id] ? (
+          <CorridorCard key={id} id={id} c={corridors[id]} isSelected={selectedCorridors.has(id)} onToggle={onToggleCorridor} />
+        ) : null)}
       </div>
     </aside>
   );

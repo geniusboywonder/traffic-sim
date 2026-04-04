@@ -30,9 +30,18 @@ export function idmAccel(v, dv, s, p, holdActive = false) {
   return Math.max(accel, -9.0);
 }
 
-export function junctionHoldDuration(jid, junctionControl, simTime, lastReleaseTime, routeId = '', corridorId = '') {
+export function junctionHoldDuration(jid, junctionControl, simTime, lastReleaseTime, routeId = '', corridorId = '', roadCounts = null) {
   const j = JUNCTIONS[jid];
   const gap = simTime - (lastReleaseTime ?? 0);
+
+  // ── Traffic-aware hold helper ─────────────────────────────────────────────
+  // Returns additional hold seconds based on conflicting road vehicle count.
+  // base: minimum hold, perVehicle: seconds added per conflicting vehicle, max: cap.
+  const trafficHold = (roadName, base, perVehicle, max) => {
+    if (!roadCounts) return base;
+    const n = roadCounts[roadName] ?? 0;
+    return Math.min(base + n * perVehicle, max);
+  };
 
   // Directional logic for specific junctions
   if (j?.direction_only) {
@@ -111,13 +120,64 @@ export function junctionHoldDuration(jid, junctionControl, simTime, lastReleaseT
   switch (junctionControl) {
     case 'none':          return 0;
     case 'traffic_signal': return (simTime % 60) < 30 ? 0 : 60 - (simTime % 60);
-    case '4way_stop':     return gap >= 5.5 ? 0 : 5.5 - gap; // Increased: realistic all-way stop gap acceptance
-    case 'priority_stop': return gap >= 5.0 ? 0 : 5.0 - gap;
-    case 'stop':          return gap >= 4.0 ? 0 : 4.0 - gap;
-    case 'yield':              return gap >= 2.5 ? 0 : 2.5 - gap;
-    case 'critical':           return gap >= 6.5 ? 0 : 6.5 - gap; // School gate — increased to model internal road queue friction
-    case 'roundabout_planned': return gap >= 1.0 ? 0 : 1.0 - gap; // TIA §14: mini-roundabout at Ruskin/Aristea — short yield
-    case 'egress':             return gap >= 1.2 ? 0 : 1.2 - gap; // TIA §11: raised intersection at Aristea exit
+
+    // 4-way stops: base hold + traffic on conflicting roads
+    // J10 (Homestead/Starke), J26 (Children's Way/Dreyersdal), J28 (Homestead/Dreyersdal)
+    case '4way_stop': {
+      const conflictRoads = {
+        10: 'Starke Road', 26: "Children's Way", 28: 'Homestead Avenue'
+      };
+      const road = conflictRoads[parseInt(jid)];
+      const hold = road ? trafficHold(road, 4.0, 0.3, 12.0) : 4.0;
+      return gap >= hold ? 0 : hold - gap;
+    }
+
+    // Priority stops: base hold + traffic on the priority road
+    case 'priority_stop': {
+      const conflictRoads = {
+        1:  'Dreyersdal Road',    // Main Rd / Dreyersdal
+        9:  'Ladies Mile Road',   // Homestead / Ladies Mile
+        13: 'Dreyersdal Road',    // Firgrove / Dreyersdal
+        15: 'Dreyersdal Road',    // Airlie / Dreyersdal
+      };
+      const road = conflictRoads[parseInt(jid)];
+      const hold = road ? trafficHold(road, 4.0, 0.4, 15.0) : 4.0;
+      return gap >= hold ? 0 : hold - gap;
+    }
+
+    // Stop signs: base hold + traffic on cross road
+    case 'stop': {
+      const conflictRoads = {
+        4:  'Christopher Road',   // Starke/Christopher
+        15: 'Dreyersdal Road',    // Airlie/Dreyersdal
+        16: 'Vineyard Road',      // Dante/Vineyard
+      };
+      const road = conflictRoads[parseInt(jid)];
+      const hold = road ? trafficHold(road, 4.0, 0.4, 14.0) : 4.0;
+      return gap >= hold ? 0 : hold - gap;
+    }
+
+    // Yields: light traffic-awareness
+    case 'yield': {
+      const conflictRoads = {
+        2:  'Dreyersdal Road',
+        5:  'Vineyard Road',
+        17: 'Ruskin Road',
+      };
+      const road = conflictRoads[parseInt(jid)];
+      const hold = road ? trafficHold(road, 2.0, 0.2, 8.0) : 2.0;
+      return gap >= hold ? 0 : hold - gap;
+    }
+
+    case 'critical': {
+      // School gate: traffic-aware — more vehicles on Leyden/Ruskin = longer hold
+      const leydenCount = (roadCounts?.['Leyden Road'] ?? 0) + (roadCounts?.['Ruskin Road'] ?? 0);
+      const hold = Math.min(4.5 + leydenCount * 0.2, 10.0);
+      return gap >= hold ? 0 : hold - gap;
+    }
+
+    case 'roundabout_planned': return gap >= 1.0 ? 0 : 1.0 - gap;
+    case 'egress':             return gap >= 1.2 ? 0 : 1.2 - gap;
     case 'speed_hump':         return gap >= 1.2 ? 0 : 1.2 - gap;
     default: return 0;
   }

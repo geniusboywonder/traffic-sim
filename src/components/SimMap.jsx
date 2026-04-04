@@ -342,6 +342,20 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
 
     if (t >= 9000) { drawFrame(); onAutoStop(); return; }
 
+    // ── Road vehicle counts for traffic-aware junction holds ─────────────────
+    // Count inbound vehicles currently on each named road segment.
+    const roadCounts = {};
+    vehiclesRef.current.forEach(v => {
+      if (v.state !== 'inbound') return;
+      const route = ROUTE_CONFIG[v.routeId];
+      if (!route?.segments) return;
+      for (const s of route.segments) {
+        if (v.pos >= s.startPos - 0.005 && v.pos <= s.endPos + 0.005) {
+          roadCounts[s.roadName] = (roadCounts[s.roadName] ?? 0) + 1;
+        }
+      }
+    });
+
     const { newVehicles, congestionScores } = spawnTick(spawnerStateRef.current, t, dt, scenarioRef.current, vehiclesRef.current);
     Object.assign(congestionScoresRef.current, congestionScores);
     newVehicles.forEach(v => {
@@ -395,7 +409,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
             const jid = juncs[v.lastJunctionIdx+1].junctionId, j = JUNCTIONS[jid];
             if (j && !['egress','roundabout_planned'].includes(j.control)) {
               const s = junctionStateRef.current.get(jid) ?? { lastRelease: 0, frameReleases: 0 };
-              const h = junctionHoldDuration(jid, j.control, t, s.lastRelease, v.routeId, v.corridorId);
+              const h = junctionHoldDuration(jid, j.control, t, s.lastRelease, v.routeId, v.corridorId, roadCounts);
               if (h > 0) { v.holdUntil = t + h; v.holdingAt = jid; junctionStateRef.current.set(jid, s); break; }
               s.lastRelease = t; junctionStateRef.current.set(jid, s);
             }
@@ -408,7 +422,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
         v.pos = 1.0; v.v = 0;
         if (v.holdUntil === null) {
           const s = junctionStateRef.current.get(7) ?? { lastRelease: 0 };
-          const h = junctionHoldDuration(7, 'critical', t, s.lastRelease);
+          const h = junctionHoldDuration(7, 'critical', t, s.lastRelease, '', '', roadCounts);
           if (h > 0) { v.holdUntil = t + h; } else {
             const p = getParkingOccupancy(vehiclesRef.current);
             if (!p.isFull) {
@@ -455,7 +469,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
           const j = JUNCTIONS[finalJid];
           if (j) {
             const s = junctionStateRef.current.get(finalJid) ?? { lastRelease: 0 };
-            const h = junctionHoldDuration(finalJid, j.control, t, s.lastRelease, v.routeId, v.corridorId);
+            const h = junctionHoldDuration(finalJid, j.control, t, s.lastRelease, v.routeId, v.corridorId, roadCounts);
             if (h > 0) { v.holdUntil = t + h; v.holdingAt = finalJid; remaining.push(v); return; }
             s.lastRelease = t; junctionStateRef.current.set(finalJid, s);
           }

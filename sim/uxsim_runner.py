@@ -7,20 +7,20 @@ Usage:
     python uxsim_runner.py --scenario M   # run one scenario only
 
 Outputs (relative to repo root):
-    public/sim-results/scenario-L.json
-    public/sim-results/scenario-M.json
-    public/sim-results/scenario-H.json
+    public/sim-results/scenario-L-uxsim.json
+    public/sim-results/scenario-M-uxsim.json
+    public/sim-results/scenario-H-uxsim.json
 
-TIA demand figures (AM peak 06:30-08:30):
-    L = 420 total vehicle trips
-    M = 650 total vehicle trips
-    H = 840 total vehicle trips
+TIA-aligned demand figures (inbound vehicle counts, AM peak 06:30-09:00):
+    L = 336  (TIA × 0.80 — modest modal shift)
+    M = 420  (TIA exact — COTO530, no reductions)
+    H = 504  (TIA × 1.20 — higher car dependency)
 
-Corridor splits (from TIA §13):
-    1A (Main Rd / Dreyersdal — N1):    24%
-    2A (Dreyersdal / Firgrove — N2):   20%
-    2B (Ladies Mile / Children's — N3): 35%
-    3A (Ladies Mile / Homestead — N4): 21%
+Corridor splits (TIA-aligned, mesoscopic — both Dreyersdal ends absorbed into N1):
+    1A Dreyersdal (N1): 25%  (South 14% + North 11% combined)
+    2A Homestead  (N4): 25%
+    2B Children's (N3): 47%
+    3A Firgrove   (N2):  3%
 
 Arrival time distribution (trapezoidal peak, empirical school pattern):
     06:30-07:15  15% of demand
@@ -50,19 +50,21 @@ SIM_START = 23400   # 06:30
 SIM_END   = 32400   # 09:00 — extended to allow traffic to clear post-peak
 TIMESTEP  = 30      # seconds between output frames
 
-# Total vehicle trips per scenario (TIA §13)
+# Total inbound vehicle trips per scenario (TIA-aligned)
 SCENARIO_DEMAND = {
-    "L": 420,
-    "M": 650,
-    "H": 840,
+    "L": 336,
+    "M": 420,
+    "H": 504,
 }
 
-# Corridor entry nodes and their demand share
+# Corridor entry nodes and their demand share (TIA-aligned, mesoscopic)
+# Both Dreyersdal ends (South 14% + North 11%) absorbed into N1 — UXSim is
+# mesoscopic flow model, no geometric distinction between entry directions.
 CORRIDORS = [
-    {"node_id": "N1", "share": 0.24, "label": "1A Main/Dreyersdal"},
-    {"node_id": "N2", "share": 0.20, "label": "2A Dreyersdal/Firgrove"},
-    {"node_id": "N3", "share": 0.35, "label": "2B Ladies Mile/Childrens"},
-    {"node_id": "N4", "share": 0.21, "label": "3A Ladies Mile/Homestead"},
+    {"node_id": "N1", "share": 0.25, "label": "1A Dreyersdal (both ends)"},
+    {"node_id": "N4", "share": 0.25, "label": "2A Homestead"},
+    {"node_id": "N3", "share": 0.47, "label": "2B Children's Way"},
+    {"node_id": "N2", "share": 0.03, "label": "3A Firgrove/Starke"},
 ]
 
 # Arrival time distribution: list of (t_start, t_end, share_of_total)

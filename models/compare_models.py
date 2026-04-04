@@ -523,22 +523,22 @@ def save_csv(idm, sumo, uxsim, scenario, out_path: Path):
 
 SCENARIO_DEFAULTS = {
     "L": {
-        "idm_log":       "models/l/traffic-sim-log-2026-04-04T17-46-05.csv",
-        "idm_roads":     "models/l/traffic-road-stats-2026-04-04T17-46-07.csv",
+        "idm_log":       "models/l/traffic-sim-log-2026-04-04T18-52-17.csv",
+        "idm_roads":     "models/l/traffic-road-stats-2026-04-04T18-52-18.csv",
         "sumo_tripinfo": "sim/sumo/tripinfo-L.xml",
         "sumo_json":     "public/sim-results/scenario-L-sumo.json",
         "uxsim_json":    "public/sim-results/scenario-L-uxsim.json",
     },
     "M": {
-        "idm_log":       "models/m/traffic-sim-log-2026-04-04T17-47-26.csv",
-        "idm_roads":     "models/m/traffic-road-stats-2026-04-04T17-47-28.csv",
+        "idm_log":       "models/m/traffic-sim-log-2026-04-04T18-51-21.csv",
+        "idm_roads":     "models/m/traffic-road-stats-2026-04-04T18-51-23.csv",
         "sumo_tripinfo": "sim/sumo/tripinfo-M.xml",
         "sumo_json":     "public/sim-results/scenario-M-sumo.json",
         "uxsim_json":    "public/sim-results/scenario-M-uxsim.json",
     },
     "H": {
-        "idm_log":       "models/h/traffic-sim-log-2026-04-04T17-49-01.csv",
-        "idm_roads":     "models/h/traffic-road-stats-2026-04-04T17-49-03.csv",
+        "idm_log":       "models/h/traffic-sim-log-2026-04-04T18-49-19.csv",
+        "idm_roads":     "models/h/traffic-road-stats-2026-04-04T18-49-21.csv",
         "sumo_tripinfo": "sim/sumo/tripinfo-H.xml",
         "sumo_json":     "public/sim-results/scenario-H-sumo.json",
         "uxsim_json":    "public/sim-results/scenario-H-uxsim.json",

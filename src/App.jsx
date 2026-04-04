@@ -231,9 +231,9 @@ const FindingsSection = () => (
         <div className="findings-col findings-col--writeoff">
           <div className="findings-col-top">
             <span className="findings-badge findings-badge--writeoff">Write-off</span>
-            <AlertTriangle size={20} color="#8B1A1A" />
+            <h3 className="findings-col-heading">The Congestion</h3>
+            <AlertTriangle size={16} color="#8B1A1A" style={{flexShrink:0}} />
           </div>
-          <h3 className="findings-col-heading">The Congestion</h3>
           <ul className="findings-bullets">
             <li><strong>Traffic does not clear by 08:30.</strong> The TIA assumes the school run is done by 08:30. The Live engine shows <span className="stat-pill" data-source="IDM Live — 68 vehicles still arriving at school between 08:30 and 09:00, High scenario">68 vehicles</span> still arriving at school after 08:30 in the High scenario. The Lab model confirms vehicles still queued at 09:00 in every scenario — including Low demand.</li>
             <li><strong>A 7-minute trip becomes a 26-minute ordeal.</strong> That's the <span className="stat-pill" data-source="Lab model (SUMO) mean trip duration, High scenario — 394 vehicles, TIA-aligned volumes">Lab model mean</span> under High demand. The Live engine shows <span className="stat-pill" data-source="IDM Live mean trip, High scenario — 508 vehicles, TIA×1.2 demand">18 minutes</span>. Both models agree on what matters most: <span className="stat-pill" data-source="IDM Live avg stopped 11.2 min, SUMO avg stopped 11.1 min — High scenario. Two independent models, 6-second difference.">11 minutes spent completely stopped</span>. <span className="stat-pill" data-source="P95 trip time: IDM Live 34 min, Lab model 59 min — High scenario">1 in 20 drivers</span> takes over half an hour for a 3km trip.</li>
@@ -245,9 +245,9 @@ const FindingsSection = () => (
         <div className="findings-col findings-col--fender">
           <div className="findings-col-top">
             <span className="findings-badge findings-badge--fender">Fender-bender</span>
-            <Clock size={20} color="#A05E3D" />
+            <h3 className="findings-col-heading">The Bottlenecks</h3>
+            <Clock size={16} color="#A05E3D" style={{flexShrink:0}} />
           </div>
-          <h3 className="findings-col-heading">The Bottlenecks</h3>
           <ul className="findings-bullets">
             <li><strong>The school gate is a single-entry hard stop.</strong> One gate. 14 speed humps on the approach. The Lab model shows vehicles spending <span className="stat-pill" data-source="SUMO Lab — vehicles spend mean 6 minutes on the school internal road, crawling bumper-to-bumper at walking pace (0.6 km/h vs 5 km/h free-flow) while bays fill and empty. All scenarios.">6 minutes on the school internal road</span> — crawling bumper-to-bumper at walking pace while waiting for a drop-off bay. The 45-second stop is embedded inside that crawl. One stalled car stalls the entire queue.</li>
             <li><strong>Christopher Rd is where the main routes converge.</strong> All four entry corridors reach the school via <strong>Christopher Rd</strong> — through a stop at <span className="stat-pill" data-source="All-way stop at Starke/Christopher — every main route passes through here"><em>Starke/Christopher</em></span> and a yield at <span className="stat-pill" data-source="Yield-controlled junction at Christopher/Vineyard — final turn before the Leyden/Ruskin school approach"><em>Christopher/Vineyard</em></span>. Rat-runs that bypass it exit via <em>Clement/Leyden</em> or <em>Dante/Ruskin</em> — different queue, same gate.</li>
@@ -259,9 +259,9 @@ const FindingsSection = () => (
         <div className="findings-col findings-col--sideswipe">
           <div className="findings-col-top">
             <span className="findings-badge findings-badge--sideswipe">Side-swipe</span>
-            <CheckCircle size={20} color="var(--c-3a)" />
+            <h3 className="findings-col-heading">The Routes</h3>
+            <CheckCircle size={16} color="var(--c-3a)" style={{flexShrink:0}} />
           </div>
-          <h3 className="findings-col-heading">The Routes</h3>
           <ul className="findings-bullets">
             <li><strong>The crunch peaks after 08:00 — not 07:45.</strong> The TIA's window is 07:30–08:00. But the school gate can't process vehicles as fast as they arrive. All three models show peak loading between <span className="stat-pill" data-source="IDM Live: L=7:56, M=8:08, H=7:58 — SUMO Lab: L=8:04, M=8:13, H=8:14 — UXSim Validation: L=7:52, M=7:55, H=8:00">07:52 and 08:14</span> — well after the TIA's window closes. The TIA captures when parents arrive. It misses when the queue is longest.</li>
             <li><strong>Rat-runs don't save time — they join a different queue.</strong> At High demand, <span className="stat-pill" data-source="IDM Live High scenario — 130 of 508 vehicles (25.6%) assigned to rat-run routes. Top route: Starke→Vineyard→Ruskin (5.5% of all vehicles).">1 in 4 vehicles</span> takes an alternative route through the suburb. Every one of those routes still connects to the same final approach: via <em>Christopher/Vineyard</em>, <em>Clement/Leyden</em>, or <em>Dante/Ruskin</em>. Those final segments carry the combined load of main-route and rat-run traffic. The shortcut ends in the same jam.</li>

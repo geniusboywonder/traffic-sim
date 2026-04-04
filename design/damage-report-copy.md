@@ -54,9 +54,11 @@
 
 ### FENDER-BENDER — The Bottlenecks
 
-**The school gate is a single-entry hard stop.** One gate. 14 speed humps on the approach. The Lab model shows vehicles queuing on the school internal road for <span class="stat-pill" data-source="SUMO Lab — vehicles spend mean 6 minutes queuing on school internal road before their 45s stop, all scenarios">6 minutes</span> before they can even stop. One stalled car stalls the entire queue — and that queue backs up onto Leyden Rd, Ruskin Rd, and beyond.
+**The school gate is a single-entry hard stop.** One gate. 14 speed humps on the approach. The Lab model shows vehicles spending <span class="stat-pill" data-source="SUMO Lab — vehicles spend mean 6 minutes on the school internal road, crawling bumper-to-bumper at walking pace (0.6 km/h vs 5 km/h free-flow) while waiting for a drop-off bay. All scenarios.">6 minutes on the school internal road</span> — crawling bumper-to-bumper at walking pace while waiting for a drop-off bay. The 45-second stop is embedded inside that crawl. One stalled car stalls the entire queue — and that queue backs up onto Leyden Rd, Ruskin Rd, and beyond.
 
 **Christopher Rd is where the main routes converge.** All four entry corridors reach the school via **Christopher Rd** — through a stop at <span class="stat-pill" data-source="All-way stop at Starke/Christopher — every main route passes through here"><em>Starke/Christopher</em></span> and a yield at <span class="stat-pill" data-source="Yield-controlled junction at Christopher/Vineyard — final turn before the Leyden/Ruskin school approach"><em>Christopher/Vineyard</em></span>. Rat-runs that bypass it exit via <em>Clement/Leyden</em> or <em>Dante/Ruskin</em> — different queue, same gate.
+
+**Aristea Rd is the only way out.** Every vehicle leaving the school must exit via Aristea Rd onto the Ruskin/Aristea roundabout — there is no alternative. From there, 4 of 5 egress routes pass through **Vineyard Rd** before reaching any exit point. The Live engine records <span class="stat-pill" data-source="IDM Live — Vineyard Rd outbound, max 6 vehicles stopped simultaneously at peak (08:17), High scenario">Vineyard Rd backing up at 08:17</span> under High demand — inbound and outbound traffic competing for the same residential road. **Dante Rd** is the first turn every exiting vehicle makes from the roundabout, making it a structural pinch point regardless of which exit they're heading for.
 
 ---
 

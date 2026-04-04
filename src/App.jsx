@@ -211,12 +211,12 @@ const FindingsSection = () => (
             <span className="findings-stat-label">free-flow trip — TIA baseline</span>
           </div>
           <div className="findings-stat findings-stat--alert">
-            <span className="findings-stat-num">~32 min</span>
+            <span className="findings-stat-num">~26 min</span>
             <span className="findings-stat-label">Lab model mean trip — High scenario</span>
           </div>
           <div className="findings-stat findings-stat--alert">
-            <span className="findings-stat-num">108</span>
-            <span className="findings-stat-label">vehicles still active after 08:30 — every scenario</span>
+            <span className="findings-stat-num">68</span>
+            <span className="findings-stat-label">vehicles still arriving at school after 08:30 — High scenario</span>
           </div>
           <div className="findings-stat findings-stat--alert">
             <span className="findings-stat-num">3</span>
@@ -235,9 +235,9 @@ const FindingsSection = () => (
           </div>
           <h3 className="findings-col-heading">The Congestion</h3>
           <ul className="findings-bullets">
-            <li><strong>Traffic does not clear by 08:30.</strong> The TIA assumes the school run is done by 08:30. The Lab model records <span className="stat-pill" data-source="Lab model — 106–108 vehicles still active at 08:29 across all three scenarios">~108 vehicles</span> still active at 08:29 in every scenario — including Low demand. Our Live engine shows <span className="stat-pill" data-source="Live engine High scenario — 192 of 840 spawned trips still incomplete at sim end">192 vehicles</span> unfinished in the High scenario.</li>
-            <li><strong>A 7-minute trip becomes a 32-minute ordeal.</strong> That's the <span className="stat-pill" data-source="Lab model mean trip duration, High scenario">Lab model mean</span> under High demand — with <span className="stat-pill" data-source="Lab model avg time fully stopped (not slow — stopped), High scenario">16 min spent completely stopped</span>. <span className="stat-pill" data-source="P95 trip time: Live engine 65 min, Lab model 69 min — High scenario">1 in 20 drivers</span> takes over an hour for a 3km trip.</li>
-            <li><strong>Three models, one answer.</strong> Live, Lab and the Validation model each use different mathematics — and each independently identifies <strong>Dreyersdal Rd</strong>, <strong>Starke Rd</strong> and the <em>Vineyard/Christopher</em> corridor as the most congested roads in Medium and High demand. That's not a modelling quirk. It's the infrastructure.</li>
+            <li><strong>Traffic does not clear by 08:30.</strong> The TIA assumes the school run is done by 08:30. The Live engine shows <span className="stat-pill" data-source="IDM Live — 68 vehicles still arriving at school between 08:30 and 09:00, High scenario">68 vehicles</span> still arriving at school after 08:30 in the High scenario. The Lab model confirms vehicles still queued at 09:00 in every scenario — including Low demand.</li>
+            <li><strong>A 7-minute trip becomes a 26-minute ordeal.</strong> That's the <span className="stat-pill" data-source="Lab model (SUMO) mean trip duration, High scenario — 394 vehicles, TIA-aligned volumes">Lab model mean</span> under High demand. The Live engine shows <span className="stat-pill" data-source="IDM Live mean trip, High scenario — 508 vehicles, TIA×1.2 demand">18 minutes</span>. Both models agree on what matters most: <span className="stat-pill" data-source="IDM Live avg stopped 11.2 min, SUMO avg stopped 11.1 min — High scenario. Two independent models, 6-second difference.">11 minutes spent completely stopped</span>. <span className="stat-pill" data-source="P95 trip time: IDM Live 34 min, Lab model 59 min — High scenario">1 in 20 drivers</span> takes over half an hour for a 3km trip.</li>
+            <li><strong>Three models, one answer.</strong> Live, Lab and the Validation model each use different mathematics — and each independently identifies <strong>Dreyersdal Rd</strong>, <strong>Vineyard Rd</strong> and the <em>Starke/Christopher</em> corridor as the most congested roads in Medium and High demand. That's not a modelling quirk. It's the infrastructure.</li>
           </ul>
         </div>
 
@@ -249,8 +249,9 @@ const FindingsSection = () => (
           </div>
           <h3 className="findings-col-heading">The Bottlenecks</h3>
           <ul className="findings-bullets">
-            <li><strong>The school gate is a single-entry hard stop.</strong> One gate. 14 speed humps on the approach. Delay per vehicle more than doubles — from <span className="stat-pill" data-source="Validation model avg delay, school internal road, Low scenario">33s</span> in Low demand to <span className="stat-pill" data-source="Validation model avg delay, school internal road, High scenario">71s</span> in High. One stalled car stalls the entire queue.</li>
+            <li><strong>The school gate is a single-entry hard stop.</strong> One gate. 14 speed humps on the approach. The Lab model shows vehicles spending <span className="stat-pill" data-source="SUMO Lab — vehicles spend mean 6 minutes on the school internal road, crawling bumper-to-bumper at walking pace (0.6 km/h vs 5 km/h free-flow) while bays fill and empty. All scenarios.">6 minutes on the school internal road</span> — crawling bumper-to-bumper at walking pace while waiting for a drop-off bay. The 45-second stop is embedded inside that crawl. One stalled car stalls the entire queue.</li>
             <li><strong>Christopher Rd is where the main routes converge.</strong> All four entry corridors reach the school via <strong>Christopher Rd</strong> — through a stop at <span className="stat-pill" data-source="All-way stop at Starke/Christopher — every main route passes through here"><em>Starke/Christopher</em></span> and a yield at <span className="stat-pill" data-source="Yield-controlled junction at Christopher/Vineyard — final turn before the Leyden/Ruskin school approach"><em>Christopher/Vineyard</em></span>. Rat-runs that bypass it exit via <em>Clement/Leyden</em> or <em>Dante/Ruskin</em> — different queue, same gate.</li>
+            <li><strong>Aristea Rd is the only way out.</strong> Every vehicle leaving the school must exit via <strong>Aristea Rd</strong> onto the Ruskin/Aristea roundabout — there is no alternative. From there, 4 of 5 egress routes pass through <strong>Vineyard Rd</strong> before reaching any exit point. <span className="stat-pill" data-source="IDM Live — Vineyard Rd outbound, 6 vehicles stopped simultaneously at peak 08:17, High scenario. Inbound and outbound traffic competing for the same road.">Vineyard Rd backs up at 08:17</span> under High demand — inbound and outbound traffic competing for the same residential road. <strong>Dante Rd</strong> is the first turn every exiting vehicle makes from the roundabout, making it a structural pinch point regardless of which exit they're heading for.</li>
           </ul>
         </div>
 
@@ -262,8 +263,8 @@ const FindingsSection = () => (
           </div>
           <h3 className="findings-col-heading">The Routes</h3>
           <ul className="findings-bullets">
-            <li><strong>The crunch peaks at 08:15 — not 07:45.</strong> The TIA's window is 07:30–08:00. But the school gate can't process vehicles as fast as they arrive. Peak loading hits <span className="stat-pill" data-source="Lab model peak vehicles on network — Med: 08:15, High: 08:17">08:15–08:17</span> — 30 minutes after the demand wave. The TIA captures when parents arrive. It misses when the queue is longest.</li>
-            <li><strong>Rat-runs don't save time — they join a different queue.</strong> Every alternative route through the suburb still connects to the same final approach: via <em>Christopher/Vineyard</em>, <em>Clement/Leyden</em>, or <em>Dante/Ruskin</em>. Those final segments carry the combined load of main-route and rat-run traffic. The Validation model records <span className="stat-pill" data-source="Validation model avg delay, Vineyard Rd, High scenario">86s of delay on Vineyard Rd</span> and <span className="stat-pill" data-source="Validation model avg delay, Ruskin Rd — Low: 106s, Med: 91s, High: 74s">74–106s on Ruskin Rd</span>. The shortcut ends in the same jam.</li>
+            <li><strong>The crunch peaks after 08:00 — not 07:45.</strong> The TIA's window is 07:30–08:00. But the school gate can't process vehicles as fast as they arrive. All three models show peak loading between <span className="stat-pill" data-source="IDM Live: L=7:56, M=8:08, H=7:58 — SUMO Lab: L=8:04, M=8:13, H=8:14 — UXSim Validation: L=7:52, M=7:55, H=8:00">07:52 and 08:14</span> — well after the TIA's window closes. The TIA captures when parents arrive. It misses when the queue is longest.</li>
+            <li><strong>Rat-runs don't save time — they join a different queue.</strong> At High demand, <span className="stat-pill" data-source="IDM Live High scenario — 130 of 508 vehicles (25.6%) assigned to rat-run routes. Top route: Starke→Vineyard→Ruskin (5.5% of all vehicles).">1 in 4 vehicles</span> takes an alternative route through the suburb. Every one of those routes still connects to the same final approach: via <em>Christopher/Vineyard</em>, <em>Clement/Leyden</em>, or <em>Dante/Ruskin</em>. Those final segments carry the combined load of main-route and rat-run traffic. The shortcut ends in the same jam.</li>
           </ul>
         </div>
 

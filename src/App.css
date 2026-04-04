@@ -231,8 +231,54 @@ a {
   justify-content: center; /* Center the stats pill */
 }
 
-.header-right-empty {
+.header-share-slot {
   flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.share-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 100px;
+  border: 1px solid rgba(0,0,0,0.12);
+  background: var(--surface-low);
+  color: var(--on-surface);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.share-btn:hover {
+  background: var(--surface-high);
+  border-color: rgba(0,0,0,0.2);
+}
+
+.share-btn--native span { font-size: 0.78rem; }
+
+.share-btn--wa  { color: #25D366; border-color: rgba(37,211,102,0.25); }
+.share-btn--wa:hover  { background: rgba(37,211,102,0.08); }
+
+.share-btn--x   { color: #000; border-color: rgba(0,0,0,0.18); }
+.share-btn--x:hover   { background: rgba(0,0,0,0.06); }
+
+.share-btn--mail { color: var(--on-surface); }
+
+@media (max-width: 600px) {
+  .share-btn--native span { display: none; }
+  .share-btn--native { padding: 0.4rem 0.55rem; }
 }
 
 /* ── Expanding Icon Nav ── */

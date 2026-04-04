@@ -142,7 +142,7 @@ function CorridorCard({ id, c, isSelected, onToggle }) {
               {id}
             </span>
             <span className="holo-label" style={{ color: cols.mutedDark }}>{c.label}</span>
-            {isHot && <span className="holo-hot">STOPPED</span>}
+            {isHot && <span className="holo-hot" style={{display:'none'}}></span>}
           </div>
           <div 
             className="holo-eye" 
@@ -322,11 +322,6 @@ const StatsPanel = memo(({ statsData, selectedCorridors, onToggleCorridor, selec
                 <StatBlock label="In"  value={inbound.total}  textColor={summaryCols.textDark} labelColor={summaryCols.mutedDark} bgColor={summaryCols.statBg} />
                 <StatBlock label="Out" value={outbound.total} textColor={summaryCols.textDark} labelColor={summaryCols.mutedDark} bgColor={summaryCols.statBg} dim />
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '20px 1fr 1fr', gap: '0.4rem', alignItems: 'center', minWidth: 0 }}>
-                <Timer size={18} strokeWidth={2.5} color={summaryCols.mutedDark} style={{ flexShrink: 0, opacity: 0.8 }} />
-                <StatBlock label="In"  value={fmtTime(roadStats?.avgInDelay)}  textColor={summaryCols.textDark} labelColor={summaryCols.mutedDark} bgColor={summaryCols.statBg} />
-                <StatBlock label="Out" value={fmtTime(roadStats?.avgOutDelay)} textColor={summaryCols.textDark} labelColor={summaryCols.mutedDark} bgColor={summaryCols.statBg} dim />
-              </div>
             </div>
             <div style={{ marginTop: '0.5rem' }}>
               <CongBar pct={wCongPct} accent="var(--c-3a)" isHot={wIsHot} trackColor="rgba(0,0,0,0.12)" />
@@ -350,9 +345,9 @@ const StatsPanel = memo(({ statsData, selectedCorridors, onToggleCorridor, selec
         )}
       </div>
       <div className="corridor-grid">
-        {Object.entries(corridors).map(([id, c]) => (
-          <CorridorCard key={id} id={id} c={c} isSelected={selectedCorridors.has(id)} onToggle={onToggleCorridor} />
-        ))}
+        {['3A', '2B', '2A', '1A'].map(id => corridors[id] ? (
+          <CorridorCard key={id} id={id} c={corridors[id]} isSelected={selectedCorridors.has(id)} onToggle={onToggleCorridor} />
+        ) : null)}
       </div>
     </aside>
   );

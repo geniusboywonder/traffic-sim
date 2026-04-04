@@ -257,16 +257,22 @@ const RAW_ROUTES = {
 
   // ── Egress routes (post drop-off) ─────────────────────────────────────────
   // All start at J7 (school gate) → J20 (Aristea exit) → J29 (roundabout) → right onto Dante
-  // EG-A (40%): Dante → Vineyard → Airlie → Starke → Children's Way → Ladies Mile
+  // EG-A: Dante → Vineyard → Airlie → Starke → Children's Way → Ladies Mile
   'EG-A':   { name: "Egress A — Dante→Vineyard→Children's Way", corridor: 'egress', type: 'egress', junctions: [7,20,29,17,16,19,22,27,26,8], maxVehicles: 30 },
-  // EG-B (25%): Dante → Vineyard → Airlie → Dreyersdal Rd → Main Rd
+  // EG-B: Dante → Vineyard → Airlie north → Dreyersdal Rd → Main Rd
   'EG-B':   { name: 'Egress B — Dante→Vineyard→Airlie→Main Rd', corridor: 'egress', type: 'egress', junctions: [7,20,29,17,16,19,15,2,1], maxVehicles: 20 },
-  // EG-C (15%): Dante south → Tussendal Ave → Dreyersdal Farm Rd → Main Rd
-  'EG-C':   { name: 'Egress C — Dante→Tussendal→Main Rd',       corridor: 'egress', type: 'egress', junctions: [7,20,29,17,14,23,21,2,1], maxVehicles: 15 },
-  // EG-D (15%): Dante -> Starke -> Firgrove Service Rd (Exit J13)
+  // EG-C: Dante → Airlie south → Tussendal → Dreyersdal Farm Rd → Main Rd
+  'EG-C':   { name: 'Egress C — Dante→Airlie→Tussendal→Main Rd', corridor: 'egress', type: 'egress', junctions: [7,20,29,17,14,23,21,2,1], maxVehicles: 20 },
+  // EG-D: Dante → Starke → Firgrove Service Rd (Exit J13)
   'EG-D':   { name: 'Egress D — Dante→Starke→Firgrove',         corridor: 'egress', type: 'egress', junctions: [7,20,29,17,16,5,4,24,10,12,13], maxVehicles: 20 },
-  // EG-E (15%): Dante -> Starke -> Homestead Av (Exit J9)
+  // EG-E: Dante → Starke → Homestead Av (Exit J9)
   'EG-E':   { name: 'Egress E — Dante→Starke→Homestead',        corridor: 'egress', type: 'egress', junctions: [7,20,29,17,16,5,4,24,10,9], maxVehicles: 20 },
+  // EG-F: Ruskin Rd → Clement Rd → Leyden Rd → Children's Way (Exit J8)
+  // Conflicts with inbound at J7 — models real back-pressure on Ruskin/Leyden ingress
+  'EG-F':   { name: "Egress F — Ruskin→Clement→Leyden→Children's Way", corridor: 'egress', type: 'egress', junctions: [7,20,29,24,25,6,8], maxVehicles: 15 },
+  // EG-G: Ruskin Rd → Starke Rd → Homestead Av (Exit J9)
+  // Also conflicts with inbound on Ruskin — valid scenario, adds realistic delay
+  'EG-G':   { name: 'Egress G — Ruskin→Starke→Homestead',       corridor: 'egress', type: 'egress', junctions: [7,20,29,24,10,9], maxVehicles: 15 },
 };
 
 export const ROUTE_CONFIG = Object.fromEntries(

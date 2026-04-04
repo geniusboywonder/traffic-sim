@@ -375,7 +375,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
             const nextWp = v.allJunctions[v.lastJunctionIdx + 1];
             if (nextWp) {
               const distToNext = (nextWp.pos - v.pos) * (v.routeLen || 1000);
-              if (distToNext < 15) {
+              if (distToNext < 50) {
                 const candidates = sws.filter(sw => sw.atJid === nextWp.junctionId);
                 if (candidates.length > 0 && Math.random() < (0.25 + (congestionScoresRef.current[v.corridorId] || 0) * 0.6)) {
                   const s = candidates[Math.floor(Math.random() * candidates.length)];
@@ -462,7 +462,10 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
         } else if (v.holdUntil > t) { remaining.push(v); return; }
         if (corridorExitsRef.current[v.corridorId] !== undefined) {
           corridorExitsRef.current[v.corridorId]++;
-          const d = outboundDelayRef.current[v.corridorId]; d.total += Math.max(0, t - (v.dwellStart + 45)); d.count++;
+          const d = outboundDelayRef.current[v.corridorId];
+          const egressStart = v.dwellStart != null ? v.dwellStart + 45 : t;
+          d.total += Math.max(0, t - egressStart); d.count++;
+          logEvent('EXIT', v, { simTime: t, detail: `totalTrip=${(t - v.spawnTime).toFixed(1)}s egressRoute=${v.routeId}` });
         }
       } else remaining.push(v);
     });

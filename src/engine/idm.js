@@ -61,7 +61,7 @@ export function junctionHoldDuration(jid, junctionControl, simTime, lastReleaseT
           if (fromJid !== 29) return 0; // J17 yield only from Ruskin
           break;
         case 'starke_onto_airlie':
-          if (![4, 24].includes(fromJid)) return 0; // J22 stop only when turning from Starke
+          if (![4, 24].includes(fromJid)) return 0; // J22 stop only when turning FROM Starke onto Airlie (inbound rat-runs)
           break;
         case 'from_tussendal':
           if (fromJid !== 21) return 0; // J23 yield only from Tussendal
@@ -116,7 +116,7 @@ export function junctionHoldDuration(jid, junctionControl, simTime, lastReleaseT
     case 'stop':          return gap >= 4.0 ? 0 : 4.0 - gap;
     case 'yield':              return gap >= 2.5 ? 0 : 2.5 - gap;
     case 'critical':           return gap >= 4.5 ? 0 : 4.5 - gap;
-    case 'roundabout_planned': return gap >= 2.5 ? 0 : 2.5 - gap; // TIA §14: mini-roundabout at Ruskin/Aristea
+    case 'roundabout_planned': return gap >= 1.0 ? 0 : 1.0 - gap; // TIA §14: mini-roundabout at Ruskin/Aristea — short yield
     case 'egress':             return gap >= 1.2 ? 0 : 1.2 - gap; // TIA §11: raised intersection at Aristea exit
     case 'speed_hump':         return gap >= 1.2 ? 0 : 1.2 - gap;
     default: return 0;
@@ -158,8 +158,10 @@ export function stepAllVehicles(vehicles, dt, routeConfigs, simTime) {
 
       const group = approaches.get(toJid) || [];
       
-      // PHYSICS SEARCH: Inbound vehicles now care about Outbound vehicles in front of them
-      // on the same segment (re-entry awareness).
+      // PHYSICS SEARCH: vehicles are blocked by same-state vehicles ahead on the
+      // same road segment. Inbound and outbound use separate road directions and
+      // should not block each other — reverting cross-state blocking which caused
+      // Aristea Rd deadlock (outbound queued behind inbound approaching J7).
       const sameSegmentLeaders = group
         .filter(o => o !== v && o.distToTarget < v.distToTarget && !o.isParking && o.state === v.state)
         .sort((a, b) => b.distToTarget - a.distToTarget);
@@ -170,7 +172,7 @@ export function stepAllVehicles(vehicles, dt, routeConfigs, simTime) {
       } else if (toJid) {
         const nextTargetJids = [];
         for (const r of Object.values(routeConfigs)) {
-          // Direction consistency for look-ahead
+          // Inbound vehicles don't look ahead onto egress routes (different road direction)
           if (v.state === 'inbound' && r.type === 'egress') continue;
           if (v.state === 'outbound' && r.type !== 'egress') continue;
           
@@ -179,7 +181,8 @@ export function stepAllVehicles(vehicles, dt, routeConfigs, simTime) {
         }
         let bGap = 9999, bLeader = null;
         for (const nid of nextTargetJids) {
-          const pot = (approaches.get(nid) || []).filter(o => !o.isParking && o.state === v.state).sort((a, b) => a.distFromStart - b.distFromStart)[0];
+          // Look ahead sees all vehicles regardless of state — shared road space
+          const pot = (approaches.get(nid) || []).filter(o => !o.isParking).sort((a, b) => a.distFromStart - b.distFromStart)[0];
           if (pot) {
             const pg = Math.max(v.distToTarget + pot.distFromStart - 4.5, 0.1);
             if (pg < bGap) { bGap = pg; bLeader = pot; }

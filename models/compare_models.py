@@ -32,7 +32,8 @@ SIM_START_S      = 23400    # 06:30 in seconds since midnight
 BASE_MIN         = 6 * 60 + 30
 
 def sec_to_clock(s):
-    total_min = BASE_MIN + int(s) // 60
+    """Convert absolute seconds-since-midnight to 12h clock string."""
+    total_min = int(s) // 60
     h = (total_min // 60) % 24
     m = total_min % 60
     h12 = h % 12 or 12
@@ -40,6 +41,7 @@ def sec_to_clock(s):
     return f"{h12}:{m:02d} {ap}"
 
 def sim_to_clock(sim_s):
+    """Convert relative sim seconds (0 = 06:30) to 12h clock string."""
     return sec_to_clock(SIM_START_S + sim_s)
 
 # ---------------------------------------------------------------------------
@@ -54,14 +56,20 @@ def parse_idm(log_path: Path, roads_path: Path):
     spawns  = log[log["event"] == "SPAWN"][["id", "simTime"]].rename(columns={"simTime": "spawn_t"})
     dwells  = log[log["event"] == "DWELL_START"][["id", "simTime"]].rename(columns={"simTime": "dwell_t"})
     ob_st   = log[log["event"] == "OUTBOUND_START"][["id", "simTime"]].rename(columns={"simTime": "depart_t"})
+    exits   = log[log["event"] == "EXIT"][["id", "simTime"]].rename(columns={"simTime": "exit_t"})
 
-    trips = spawns.merge(dwells, on="id", how="left").merge(ob_st, on="id", how="left")
+    trips = spawns.merge(dwells, on="id", how="left").merge(ob_st, on="id", how="left").merge(exits, on="id", how="left")
     trips["inbound_s"]  = trips["dwell_t"]  - trips["spawn_t"]
-    trips["outbound_s"] = trips["depart_t"] - trips["dwell_t"] - SCHOOL_DWELL_S
+    trips["outbound_s"] = trips["exit_t"] - trips["dwell_t"] - SCHOOL_DWELL_S
+
+    # Use exit_t for total trip if available, else fall back to depart_t (old logs)
+    trips["total_s"] = trips.apply(
+        lambda r: r["exit_t"] - r["spawn_t"] if pd.notna(r.get("exit_t")) else r["depart_t"] - r["spawn_t"],
+        axis=1
+    )
 
     # Only vehicles that completed the full journey
-    completed = trips.dropna(subset=["depart_t"]).copy()
-    completed["total_s"] = completed["depart_t"] - completed["spawn_t"]
+    completed = trips.dropna(subset=["total_s"]).copy()
     completed["delay_s"] = (completed["total_s"] - FREE_FLOW_TRIP_S).clip(lower=0)
     completed["delay_ratio"] = completed["delay_s"] / FREE_FLOW_TRIP_S
 
@@ -111,8 +119,8 @@ def parse_idm(log_path: Path, roads_path: Path):
         "trip_p95_s": completed["total_s"].quantile(0.95),
         "delay_mean_s": completed["delay_s"].mean(),
         "delay_ratio_mean": completed["delay_ratio"].mean(),
-        "inbound_mean_s": completed["inbound_s"].mean(),
-        "outbound_mean_s": completed["outbound_s"].mean(),
+        "inbound_mean_s": completed["inbound_s"].mean() if completed["inbound_s"].notna().any() else None,
+        "egress_mean_s":  completed["outbound_s"].mean() if completed["outbound_s"].notna().any() else None,
         "stopped_time_mean_s": completed["delay_s"].mean(),  # proxy
         "peak_congestion_sim_t": peak_sim_t,
         "peak_congestion_clock": sim_to_clock(peak_sim_t),
@@ -146,6 +154,32 @@ def parse_sumo(tripinfo_path: Path, json_path: Path):
             "depart":      float(t.get("depart", 0)),
         })
     df = pd.DataFrame(rows)
+
+    # Infer inbound leg end time from FCD: first timestep vehicle appears on school_internal
+    fcd_path = tripinfo_path.parent / tripinfo_path.name.replace("tripinfo", "fcd")
+    school_arrival = {}  # vid -> abs time first seen on school_internal
+    if fcd_path.exists():
+        import xml.etree.ElementTree as ET2
+        current_t = None
+        for event, elem in ET2.iterparse(str(fcd_path), events=("start", "end")):
+            if event == "start" and elem.tag == "timestep":
+                current_t = float(elem.get("time", 0))
+            elif event == "end" and elem.tag == "vehicle":
+                vid = elem.get("id", "")
+                lane = elem.get("lane", "")
+                if "school_internal" in lane and vid not in school_arrival:
+                    school_arrival[vid] = current_t
+                elem.clear()
+        print(f"[parse_sumo] FCD school arrivals: {len(school_arrival)} vehicles")
+
+    df["school_arrival_t"] = df["id"].map(school_arrival)
+    df["inbound_s"] = df.apply(
+        lambda r: (r["school_arrival_t"] - r["depart"]) if pd.notna(r.get("school_arrival_t")) else None, axis=1
+    )
+    df["egress_s"] = df.apply(
+        lambda r: (r["duration"] - (r["school_arrival_t"] - r["depart"]) - r["stopTime"])
+                  if pd.notna(r.get("school_arrival_t")) else None, axis=1
+    )
 
     # Total trips = vehicles that were created (read from JSON)
     with open(json_path) as f:
@@ -217,7 +251,8 @@ def parse_sumo(tripinfo_path: Path, json_path: Path):
         "trip_p95_s": completed["duration"].quantile(0.95),
         "delay_mean_s": completed["timeLoss"].mean(),
         "delay_ratio_mean": (completed["timeLoss"] / FREE_FLOW_TRIP_S).mean(),
-        "inbound_mean_s": (completed["duration"] - completed["stopTime"]).mean() / 2,
+        "inbound_mean_s": completed["inbound_s"].mean() if "inbound_s" in completed and completed["inbound_s"].notna().any() else None,
+        "egress_mean_s":  completed["egress_s"].mean()  if "egress_s"  in completed and completed["egress_s"].notna().any()  else None,
         "stopped_time_mean_s": completed["waitingTime"].mean(),
         "peak_congestion_sim_t": peak_sim_t,
         "peak_congestion_clock": sim_to_clock(peak_sim_t),
@@ -344,12 +379,16 @@ def print_report(idm, sumo, uxsim, scenario):
     print("\n── 2. TRIP DURATION ───────────────────────────────────────────────────────────")
     ux_trip = fmt(uxsim['est_trip_s']) if uxsim else "—"
     ux_delay = fmt(uxsim['avg_delay_s']) if uxsim else "—"
+    sumo_ib = fmt(sumo.get('inbound_mean_s')) if sumo.get('inbound_mean_s') else "—"
+    sumo_eg = fmt(sumo.get('egress_mean_s')) if sumo.get('egress_mean_s') else "—"
     rows = [
-        ("Mean trip time",        fmt(idm['trip_mean_s']),   fmt(sumo['trip_mean_s']),   ux_trip + " (est)"),
-        ("Median trip time",      fmt(idm['trip_median_s']), fmt(sumo['trip_median_s']), "—"),
-        ("P85 trip time",         fmt(idm['trip_p85_s']),    fmt(sumo['trip_p85_s']),    "—"),
-        ("P95 trip time",         fmt(idm['trip_p95_s']),    fmt(sumo['trip_p95_s']),    "—"),
-        ("Mean delay",            fmt(idm['delay_mean_s']),  fmt(sumo['delay_mean_s']),  ux_delay),
+        ("Mean trip time (full)",     fmt(idm['trip_mean_s']),   fmt(sumo['trip_mean_s']),   ux_trip + " (est)"),
+        ("  → Inbound leg mean",      fmt(idm.get('inbound_mean_s')), sumo_ib,               "—"),
+        ("  → Egress leg mean",       fmt(idm.get('egress_mean_s')),  sumo_eg,               "—"),
+        ("Median trip time",          fmt(idm['trip_median_s']), fmt(sumo['trip_median_s']), "—"),
+        ("P85 trip time",             fmt(idm['trip_p85_s']),    fmt(sumo['trip_p85_s']),    "—"),
+        ("P95 trip time",             fmt(idm['trip_p95_s']),    fmt(sumo['trip_p95_s']),    "—"),
+        ("Mean delay",                fmt(idm['delay_mean_s']),  fmt(sumo['delay_mean_s']),  ux_delay),
     ]
     _print_table3(rows)
 
@@ -486,22 +525,22 @@ def save_csv(idm, sumo, uxsim, scenario, out_path: Path):
 
 SCENARIO_DEFAULTS = {
     "L": {
-        "idm_log":       "models/l/traffic-sim-log-2026-04-01T11-26-56.csv",
-        "idm_roads":     "models/l/traffic-road-stats-2026-04-01T11-30-46.csv",
+        "idm_log":       "models/l/l-traffic-sim-log-2026-04-04T14-14-24.csv",
+        "idm_roads":     "models/l/traffic-road-stats-2026-04-04T14-44-08 - L.csv",
         "sumo_tripinfo": "sim/sumo/tripinfo-L.xml",
         "sumo_json":     "public/sim-results/scenario-L-sumo.json",
         "uxsim_json":    "public/sim-results/scenario-L-uxsim.json",
     },
     "M": {
-        "idm_log":       None,
-        "idm_roads":     None,
+        "idm_log":       "models/m/m-traffic-sim-log-2026-04-04T14-10-47.csv",
+        "idm_roads":     "models/m/traffic-road-stats-2026-04-04T14-49-41 - M.csv",
         "sumo_tripinfo": "sim/sumo/tripinfo-M.xml",
         "sumo_json":     "public/sim-results/scenario-M-sumo.json",
         "uxsim_json":    "public/sim-results/scenario-M-uxsim.json",
     },
     "H": {
-        "idm_log":       None,
-        "idm_roads":     None,
+        "idm_log":       "models/h/h-traffic-sim-log-2026-04-04T14-13-01.csv",
+        "idm_roads":     "models/h/traffic-road-stats-2026-04-04T14-51-15 - H.csv",
         "sumo_tripinfo": "sim/sumo/tripinfo-H.xml",
         "sumo_json":     "public/sim-results/scenario-H-sumo.json",
         "uxsim_json":    "public/sim-results/scenario-H-uxsim.json",

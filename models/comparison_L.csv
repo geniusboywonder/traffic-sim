@@ -10,7 +10,7 @@ trip_p95_s,610.0,2350.7,N/A
 delay_mean_s,102.3,667.0,3.6
 delay_ratio_pct,24.4,158.8,N/A
 stopped_time_mean_s,102.3,396.5,N/A
-peak_congestion_clock,7:41 AM,6:30 AM,7:56 AM
+peak_congestion_clock,7:41 AM,8:04 AM,7:56 AM
 peak_vehicles_on_net,N/A,N/A,70
 vehicles_at_end,N/A,0,0
 clears_by_end,N/A,N/A,True

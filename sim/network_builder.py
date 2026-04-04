@@ -77,8 +77,10 @@ SCHOOL_GATE_LON  = 18.4455
 SCHOOL_GATE_LAT  = -34.0512
 SCHOOL_GATE_ID   = "School-Gate"
 
-# Internal school link: ~62 m at 5 km/h ≈ 45 s free-flow (models dwell time)
-SCHOOL_LINK_LENGTH_M  = 62
+# Internal school link: ~120m at 5km/h ≈ 86s free-flow
+# Length > eular_dx (50m) so UXSim can resolve queue backpressure on the link.
+# The extra length models the full school internal road including parking approach.
+SCHOOL_LINK_LENGTH_M  = 120
 SCHOOL_LINK_SPEED_MS  = 5 / 3.6
 SCHOOL_LINK_CAPACITY  = 350   # matches E14 in network-L2
 
@@ -267,13 +269,13 @@ def build_world(sim_start=23400, sim_end=30600, timestep=60, reaction_time=1.5):
     # ── 3. Create UXsim World ─────────────────────────────────────────────────
     W = uxsim.World(
         name               = "bergvliet",
-        deltan             = 5,           # vehicles per platoon
+        deltan             = 3,           # smaller platoon — better resolution at TIA volumes
         reaction_time      = reaction_time,
-        duo_update_time    = 600,
+        duo_update_time    = 120,         # route recalc every 2min — captures peak dynamics
         duo_update_weight  = 0.5,
         duo_noise          = 0.01,
         eular_dt           = timestep,
-        eular_dx           = 100,
+        eular_dx           = 50,          # 50m cells — school internal road (62m) now visible
         random_seed        = 42,
         print_mode         = 0,
     )

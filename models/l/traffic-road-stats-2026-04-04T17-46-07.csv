@@ -1,0 +1,2889 @@
+simTime,road,direction,total_cumulative,active,slowing,stopped
+552.5,"Childrens Way",inbound,1,0,0,0
+552.5,"Dreyersdal Road",inbound,1,1,0,0
+627.5,"Childrens Way",inbound,1,0,0,0
+627.5,"Christopher Road",inbound,1,0,0,0
+627.5,"Vineyard Road",inbound,1,1,0,0
+627.5,"Dreyersdal Road",inbound,1,0,0,0
+707.5,"Childrens Way",inbound,1,0,0,0
+707.5,"Christopher Road",inbound,1,0,0,0
+707.5,"Vineyard Road",inbound,1,0,0,0
+707.5,"Leyden Road",inbound,1,0,0,0
+707.5,"Dreyersdal Road",inbound,1,0,0,0
+707.5,"Tokai High School Internal Road",outbound,1,1,0,0
+782.5,"Childrens Way",inbound,1,0,0,0
+782.5,"Christopher Road",inbound,1,0,0,0
+782.5,"Vineyard Road",inbound,1,0,0,0
+782.5,"Leyden Road",inbound,1,0,0,0
+782.5,"Dreyersdal Road",inbound,1,0,0,0
+782.5,"Tokai High School Internal Road",inbound,1,0,0,0
+782.5,"Tokai High School Internal Road",outbound,1,1,0,0
+782.5,"Homestead Avenue",inbound,1,1,0,0
+857.5,"Childrens Way",inbound,2,0,0,0
+857.5,"Christopher Road",inbound,1,0,0,0
+857.5,"Ruskin Road",outbound,1,0,0,0
+857.5,"Vineyard Road",inbound,1,0,0,0
+857.5,"Vineyard Road",outbound,1,1,0,0
+857.5,"Aristea Road",outbound,1,0,0,0
+857.5,"Dante Road",outbound,1,0,0,0
+857.5,"Leyden Road",inbound,1,0,0,0
+857.5,"Dreyersdal Road",inbound,3,2,0,0
+857.5,"Tokai High School Internal Road",inbound,1,0,0,0
+857.5,"Tokai High School Internal Road",outbound,1,0,0,0
+857.5,"Homestead Avenue",inbound,1,0,0,0
+937.5,"Childrens Way",inbound,2,0,0,0
+937.5,"Starke Road",outbound,1,1,0,0
+937.5,"Christopher Road",inbound,3,0,0,0
+937.5,"Christopher Road",outbound,1,0,0,0
+937.5,"Ruskin Road",outbound,1,0,0,0
+937.5,"Vineyard Road",inbound,3,2,0,0
+937.5,"Vineyard Road",outbound,1,0,0,0
+937.5,"Aristea Road",outbound,1,0,0,0
+937.5,"Dante Road",outbound,1,0,0,0
+937.5,"Leyden Road",inbound,2,1,0,0
+937.5,"Dreyersdal Road",inbound,3,0,0,0
+937.5,"Tokai High School Internal Road",inbound,1,0,0,0
+937.5,"Tokai High School Internal Road",outbound,1,0,0,0
+937.5,"Homestead Avenue",inbound,1,0,0,0
+1017.5,"Childrens Way",inbound,2,0,0,0
+1017.5,"Starke Road",outbound,1,0,0,0
+1017.5,"Christopher Road",inbound,3,0,0,0
+1017.5,"Christopher Road",outbound,1,0,0,0
+1017.5,"Ruskin Road",outbound,1,0,0,0
+1017.5,"Vineyard Road",inbound,3,0,0,0
+1017.5,"Vineyard Road",outbound,1,0,0,0
+1017.5,"Aristea Road",outbound,1,0,0,0
+1017.5,"Dante Road",outbound,1,0,0,0
+1017.5,"Leyden Road",inbound,3,0,0,0
+1017.5,"Dreyersdal Road",inbound,3,0,0,0
+1017.5,"Firgrove Way Service Road",outbound,1,1,0,0
+1017.5,"Tokai High School Internal Road",inbound,3,0,0,2
+1017.5,"Tokai High School Internal Road",outbound,3,0,0,0
+1017.5,"Homestead Avenue",inbound,1,0,0,0
+1097.5,"Childrens Way",inbound,3,0,0,0
+1097.5,"Starke Road",outbound,1,0,0,0
+1097.5,"Christopher Road",inbound,3,0,0,0
+1097.5,"Christopher Road",outbound,1,0,0,0
+1097.5,"Ruskin Road",outbound,1,0,0,0
+1097.5,"Vineyard Road",inbound,3,0,0,0
+1097.5,"Vineyard Road",outbound,1,0,0,0
+1097.5,"Aristea Road",outbound,3,2,0,0
+1097.5,"Dante Road",outbound,1,0,0,0
+1097.5,"Leyden Road",inbound,3,0,0,0
+1097.5,"Dreyersdal Road",inbound,5,2,0,0
+1097.5,"Firgrove Way Service Road",outbound,1,0,0,0
+1097.5,"Tokai High School Internal Road",inbound,3,0,0,0
+1097.5,"Tokai High School Internal Road",outbound,3,0,0,0
+1097.5,"Homestead Avenue",inbound,1,0,0,0
+1172.5,"Childrens Way",inbound,3,0,0,0
+1172.5,"Starke Road",outbound,3,3,0,0
+1172.5,"Christopher Road",inbound,4,0,0,0
+1172.5,"Christopher Road",outbound,3,0,0,0
+1172.5,"Ruskin Road",outbound,3,0,0,0
+1172.5,"Vineyard Road",inbound,4,0,0,0
+1172.5,"Vineyard Road",outbound,3,0,0,0
+1172.5,"Aristea Road",outbound,3,0,0,0
+1172.5,"Dante Road",outbound,3,0,0,0
+1172.5,"Leyden Road",inbound,4,1,0,0
+1172.5,"Dreyersdal Road",inbound,5,1,0,0
+1172.5,"Firgrove Way Service Road",outbound,1,0,0,0
+1172.5,"Tokai High School Internal Road",inbound,3,0,0,0
+1172.5,"Tokai High School Internal Road",outbound,3,0,0,0
+1172.5,"Homestead Avenue",inbound,2,1,0,0
+1247.5,"Childrens Way",inbound,4,0,0,0
+1247.5,"Starke Road",outbound,3,1,0,0
+1247.5,"Christopher Road",inbound,5,0,0,0
+1247.5,"Christopher Road",outbound,3,0,0,0
+1247.5,"Ruskin Road",outbound,3,0,0,0
+1247.5,"Vineyard Road",inbound,5,1,0,0
+1247.5,"Vineyard Road",outbound,3,0,0,0
+1247.5,"Aristea Road",outbound,3,0,0,0
+1247.5,"Dante Road",outbound,3,0,0,0
+1247.5,"Leyden Road",inbound,4,0,0,0
+1247.5,"Dreyersdal Road",inbound,8,3,0,0
+1247.5,"Firgrove Way Service Road",outbound,1,0,0,0
+1247.5,"Tokai High School Internal Road",inbound,4,0,0,1
+1247.5,"Tokai High School Internal Road",outbound,4,0,0,0
+1247.5,"Homestead Avenue",inbound,2,0,0,0
+1247.5,"Homestead Avenue",outbound,1,1,0,0
+1327.5,"Childrens Way",inbound,4,0,0,0
+1327.5,"Starke Road",outbound,3,0,0,0
+1327.5,"Christopher Road",inbound,7,0,0,0
+1327.5,"Christopher Road",outbound,3,0,0,0
+1327.5,"Ruskin Road",outbound,3,0,0,0
+1327.5,"Vineyard Road",inbound,7,1,0,0
+1327.5,"Vineyard Road",outbound,3,0,0,0
+1327.5,"Aristea Road",outbound,4,1,0,0
+1327.5,"Dante Road",outbound,3,0,0,0
+1327.5,"Leyden Road",inbound,6,0,0,1
+1327.5,"Dreyersdal Road",inbound,8,1,0,0
+1327.5,"Firgrove Way Service Road",outbound,2,0,0,0
+1327.5,"Tokai High School Internal Road",inbound,4,0,0,0
+1327.5,"Tokai High School Internal Road",outbound,5,1,0,0
+1327.5,"Homestead Avenue",inbound,2,0,0,0
+1327.5,"Homestead Avenue",outbound,1,0,0,0
+1402.5,"Childrens Way",inbound,5,0,0,0
+1402.5,"Starke Road",outbound,4,2,0,0
+1402.5,"Christopher Road",inbound,7,0,0,0
+1402.5,"Christopher Road",outbound,4,0,0,0
+1402.5,"Ruskin Road",outbound,4,0,0,0
+1402.5,"Vineyard Road",inbound,7,0,0,0
+1402.5,"Vineyard Road",outbound,4,0,0,0
+1402.5,"Aristea Road",outbound,4,0,0,0
+1402.5,"Dante Road",outbound,4,0,0,0
+1402.5,"Leyden Road",inbound,7,0,0,0
+1402.5,"Dreyersdal Road",inbound,9,2,0,0
+1402.5,"Firgrove Way Service Road",outbound,2,0,0,0
+1402.5,"Tokai High School Internal Road",inbound,7,0,0,2
+1402.5,"Tokai High School Internal Road",outbound,7,1,0,0
+1402.5,"Homestead Avenue",inbound,2,0,0,0
+1402.5,"Homestead Avenue",outbound,1,0,0,0
+1482.5,"Childrens Way",inbound,6,1,0,0
+1482.5,"Starke Road",outbound,4,1,0,0
+1482.5,"Christopher Road",inbound,9,0,0,0
+1482.5,"Christopher Road",outbound,4,0,0,0
+1482.5,"Ruskin Road",outbound,6,1,0,0
+1482.5,"Vineyard Road",inbound,9,2,0,0
+1482.5,"Vineyard Road",outbound,5,1,0,0
+1482.5,"Aristea Road",outbound,7,1,0,0
+1482.5,"Dante Road",outbound,5,0,0,0
+1482.5,"Leyden Road",inbound,8,1,0,0
+1482.5,"Dreyersdal Road",inbound,10,1,0,0
+1482.5,"Firgrove Way Service Road",outbound,2,0,0,0
+1482.5,"Tokai High School Internal Road",inbound,7,0,0,0
+1482.5,"Tokai High School Internal Road",outbound,7,1,0,0
+1482.5,"Homestead Avenue",inbound,3,0,0,0
+1482.5,"Homestead Avenue",outbound,1,0,0,0
+1557.5,"Childrens Way",inbound,6,0,0,0
+1557.5,"Childrens Way",outbound,2,2,0,0
+1557.5,"Starke Road",outbound,6,0,0,0
+1557.5,"Christopher Road",inbound,11,1,0,0
+1557.5,"Christopher Road",outbound,4,0,0,0
+1557.5,"Ruskin Road",outbound,7,0,0,0
+1557.5,"Vineyard Road",inbound,10,1,0,0
+1557.5,"Vineyard Road",outbound,6,0,0,0
+1557.5,"Aristea Road",outbound,7,0,0,0
+1557.5,"Dante Road",outbound,7,0,0,0
+1557.5,"Airlie Road",outbound,3,1,0,0
+1557.5,"Leyden Road",inbound,9,0,0,0
+1557.5,"Dreyersdal Road",inbound,12,1,0,0
+1557.5,"Firgrove Way Service Road",outbound,3,0,0,0
+1557.5,"Tokai High School Internal Road",inbound,9,0,0,2
+1557.5,"Tokai High School Internal Road",outbound,9,0,0,0
+1557.5,"Homestead Avenue",inbound,3,0,0,0
+1557.5,"Homestead Avenue",outbound,1,0,0,0
+1632.5,"Childrens Way",inbound,7,0,0,0
+1632.5,"Childrens Way",outbound,2,0,0,0
+1632.5,"Tussendal Avenue",outbound,1,0,0,0
+1632.5,"Starke Road",outbound,6,0,0,0
+1632.5,"Christopher Road",inbound,11,0,0,0
+1632.5,"Christopher Road",outbound,4,0,0,0
+1632.5,"Ruskin Road",outbound,7,0,0,0
+1632.5,"Vineyard Road",inbound,11,0,0,0
+1632.5,"Vineyard Road",outbound,6,0,0,0
+1632.5,"Aristea Road",outbound,8,1,0,0
+1632.5,"Dante Road",outbound,7,0,0,0
+1632.5,"Airlie Road",outbound,3,0,0,0
+1632.5,"Leyden Road",inbound,11,0,0,1
+1632.5,"Dreyersdal Road",inbound,13,2,0,0
+1632.5,"Firgrove Way Service Road",outbound,3,0,0,0
+1632.5,"Dreyersdal Farm Road",outbound,1,1,0,0
+1632.5,"Tokai High School Internal Road",inbound,10,0,0,1
+1632.5,"Tokai High School Internal Road",outbound,10,1,0,0
+1632.5,"Homestead Avenue",inbound,4,1,0,0
+1632.5,"Homestead Avenue",outbound,1,0,0,0
+1707.5,"Childrens Way",inbound,8,0,0,0
+1707.5,"Childrens Way",outbound,2,0,0,0
+1707.5,"Tussendal Avenue",outbound,1,0,0,0
+1707.5,"Starke Road",outbound,7,1,0,0
+1707.5,"Christopher Road",inbound,13,0,0,0
+1707.5,"Christopher Road",outbound,5,0,0,0
+1707.5,"Ruskin Road",outbound,9,0,0,0
+1707.5,"Vineyard Road",inbound,13,2,0,0
+1707.5,"Vineyard Road",outbound,8,1,0,0
+1707.5,"Aristea Road",outbound,9,0,0,0
+1707.5,"Dante Road",outbound,9,0,0,0
+1707.5,"Airlie Road",outbound,3,0,0,0
+1707.5,"Leyden Road",inbound,11,0,0,0
+1707.5,"Dreyersdal Road",inbound,15,2,0,0
+1707.5,"Dreyersdal Road",outbound,1,0,0,0
+1707.5,"Firgrove Way Service Road",outbound,3,0,0,0
+1707.5,"Dreyersdal Farm Road",outbound,1,0,0,0
+1707.5,"Tokai High School Internal Road",inbound,11,0,0,1
+1707.5,"Tokai High School Internal Road",outbound,11,1,0,0
+1707.5,"Homestead Avenue",inbound,4,0,0,0
+1707.5,"Homestead Avenue",outbound,1,0,0,0
+1782.5,"Childrens Way",inbound,9,1,0,0
+1782.5,"Childrens Way",outbound,3,1,0,0
+1782.5,"Tussendal Avenue",outbound,1,0,0,0
+1782.5,"Starke Road",outbound,8,1,0,0
+1782.5,"Christopher Road",inbound,15,0,0,0
+1782.5,"Christopher Road",outbound,5,0,0,0
+1782.5,"Ruskin Road",outbound,11,1,0,0
+1782.5,"Vineyard Road",inbound,15,2,0,0
+1782.5,"Vineyard Road",outbound,9,1,0,0
+1782.5,"Aristea Road",outbound,11,0,0,0
+1782.5,"Dante Road",outbound,10,0,0,0
+1782.5,"Airlie Road",outbound,4,0,0,0
+1782.5,"Leyden Road",inbound,13,0,0,0
+1782.5,"Dreyersdal Road",inbound,16,1,0,0
+1782.5,"Dreyersdal Road",outbound,1,0,0,0
+1782.5,"Firgrove Way Service Road",outbound,3,0,0,0
+1782.5,"Dreyersdal Farm Road",outbound,1,0,0,0
+1782.5,"Tokai High School Internal Road",inbound,11,0,0,0
+1782.5,"Tokai High School Internal Road",outbound,13,2,0,0
+1782.5,"Homestead Avenue",inbound,4,0,0,0
+1782.5,"Homestead Avenue",outbound,1,0,0,0
+1857.5,"Childrens Way",inbound,10,1,0,0
+1857.5,"Childrens Way",outbound,3,0,0,0
+1857.5,"Tussendal Avenue",outbound,1,0,0,0
+1857.5,"Starke Road",outbound,10,2,0,0
+1857.5,"Christopher Road",inbound,16,1,0,0
+1857.5,"Christopher Road",outbound,7,0,0,0
+1857.5,"Ruskin Road",outbound,11,0,0,0
+1857.5,"Vineyard Road",inbound,15,0,0,0
+1857.5,"Vineyard Road",outbound,10,0,0,0
+1857.5,"Aristea Road",outbound,11,0,0,0
+1857.5,"Dante Road",outbound,11,0,0,0
+1857.5,"Airlie Road",outbound,4,0,0,0
+1857.5,"Leyden Road",inbound,15,0,0,0
+1857.5,"Dreyersdal Road",inbound,18,2,0,0
+1857.5,"Dreyersdal Road",outbound,1,0,0,0
+1857.5,"Firgrove Way Service Road",outbound,4,1,0,0
+1857.5,"Dreyersdal Farm Road",outbound,1,0,0,0
+1857.5,"Tokai High School Internal Road",inbound,14,0,0,2
+1857.5,"Tokai High School Internal Road",outbound,15,2,0,0
+1857.5,"Homestead Avenue",inbound,5,0,0,0
+1857.5,"Homestead Avenue",outbound,1,0,0,0
+1937.5,"Childrens Way",inbound,11,1,0,0
+1937.5,"Childrens Way",outbound,3,0,0,0
+1937.5,"Tussendal Avenue",outbound,1,0,0,0
+1937.5,"Starke Road",outbound,10,1,0,0
+1937.5,"Christopher Road",inbound,18,1,0,0
+1937.5,"Christopher Road",outbound,8,1,0,0
+1937.5,"Ruskin Road",outbound,13,0,0,0
+1937.5,"Vineyard Road",inbound,17,1,0,0
+1937.5,"Vineyard Road",outbound,11,0,0,0
+1937.5,"Aristea Road",outbound,14,1,0,0
+1937.5,"Dante Road",outbound,13,1,0,0
+1937.5,"Airlie Road",outbound,4,0,0,0
+1937.5,"Leyden Road",inbound,16,0,0,1
+1937.5,"Dreyersdal Road",inbound,20,2,0,0
+1937.5,"Dreyersdal Road",outbound,1,0,0,0
+1937.5,"Firgrove Way Service Road",outbound,4,0,0,0
+1937.5,"Dreyersdal Farm Road",outbound,1,0,0,0
+1937.5,"Tokai High School Internal Road",inbound,15,0,0,0
+1937.5,"Tokai High School Internal Road",outbound,15,1,0,0
+1937.5,"Homestead Avenue",inbound,5,0,0,0
+1937.5,"Homestead Avenue",outbound,2,0,0,0
+2012.5,"Childrens Way",inbound,12,1,0,0
+2012.5,"Childrens Way",outbound,3,0,0,0
+2012.5,"Tussendal Avenue",outbound,1,0,0,0
+2012.5,"Starke Road",outbound,13,3,0,0
+2012.5,"Christopher Road",inbound,20,1,0,0
+2012.5,"Christopher Road",outbound,9,0,0,0
+2012.5,"Ruskin Road",outbound,15,0,0,0
+2012.5,"Vineyard Road",inbound,20,2,0,0
+2012.5,"Vineyard Road",outbound,13,0,0,0
+2012.5,"Aristea Road",outbound,15,0,0,0
+2012.5,"Dante Road",outbound,15,1,0,0
+2012.5,"Airlie Road",outbound,5,0,0,0
+2012.5,"Leyden Road",inbound,18,1,0,0
+2012.5,"Dreyersdal Road",inbound,22,2,0,0
+2012.5,"Dreyersdal Road",outbound,1,0,0,0
+2012.5,"Firgrove Way Service Road",outbound,5,0,0,0
+2012.5,"Dreyersdal Farm Road",outbound,1,0,0,0
+2012.5,"Tokai High School Internal Road",inbound,17,0,0,2
+2012.5,"Tokai High School Internal Road",outbound,17,0,0,0
+2012.5,"Homestead Avenue",inbound,6,0,0,0
+2012.5,"Homestead Avenue",outbound,2,0,0,0
+2087.5,"Childrens Way",inbound,13,1,0,0
+2087.5,"Childrens Way",outbound,4,0,0,1
+2087.5,"Tussendal Avenue",outbound,1,0,0,0
+2087.5,"Starke Road",outbound,14,2,0,0
+2087.5,"Christopher Road",inbound,22,0,0,0
+2087.5,"Christopher Road",outbound,10,0,0,0
+2087.5,"Ruskin Road",outbound,16,1,0,0
+2087.5,"Vineyard Road",inbound,22,1,0,0
+2087.5,"Vineyard Road",outbound,14,0,0,0
+2087.5,"Aristea Road",outbound,16,0,0,0
+2087.5,"Dante Road",outbound,15,0,0,0
+2087.5,"Airlie Road",outbound,5,0,0,0
+2087.5,"Leyden Road",inbound,21,1,0,0
+2087.5,"Dreyersdal Road",inbound,24,2,0,0
+2087.5,"Dreyersdal Road",outbound,1,0,0,0
+2087.5,"Firgrove Way Service Road",outbound,5,0,0,0
+2087.5,"Dreyersdal Farm Road",outbound,1,0,0,0
+2087.5,"Tokai High School Internal Road",inbound,18,0,0,1
+2087.5,"Tokai High School Internal Road",outbound,20,3,0,0
+2087.5,"Homestead Avenue",inbound,6,0,0,0
+2087.5,"Homestead Avenue",outbound,3,0,0,0
+2162.5,"Childrens Way",inbound,14,1,0,0
+2162.5,"Childrens Way",outbound,4,0,0,0
+2162.5,"Tussendal Avenue",outbound,1,0,0,0
+2162.5,"Starke Road",outbound,15,1,0,0
+2162.5,"Christopher Road",inbound,23,0,0,0
+2162.5,"Christopher Road",outbound,11,0,0,0
+2162.5,"Ruskin Road",outbound,17,0,0,0
+2162.5,"Vineyard Road",inbound,23,0,0,0
+2162.5,"Vineyard Road",outbound,16,1,0,0
+2162.5,"Aristea Road",outbound,18,1,0,0
+2162.5,"Dante Road",outbound,17,0,0,0
+2162.5,"Airlie Road",outbound,5,0,0,0
+2162.5,"Leyden Road",inbound,23,1,0,0
+2162.5,"Dreyersdal Road",inbound,27,4,0,0
+2162.5,"Dreyersdal Road",outbound,1,0,0,0
+2162.5,"Firgrove Way Service Road",outbound,6,0,0,0
+2162.5,"Dreyersdal Farm Road",outbound,1,0,0,0
+2162.5,"Tokai High School Internal Road",inbound,21,0,0,2
+2162.5,"Tokai High School Internal Road",outbound,22,2,0,0
+2162.5,"Homestead Avenue",inbound,7,0,0,0
+2162.5,"Homestead Avenue",outbound,4,0,0,0
+2237.5,"Childrens Way",inbound,15,0,0,0
+2237.5,"Childrens Way",outbound,4,0,0,0
+2237.5,"Tussendal Avenue",outbound,1,0,0,0
+2237.5,"Starke Road",outbound,17,3,0,0
+2237.5,"Christopher Road",inbound,27,2,0,0
+2237.5,"Christopher Road",outbound,12,0,0,0
+2237.5,"Ruskin Road",outbound,20,1,0,0
+2237.5,"Vineyard Road",inbound,25,1,0,0
+2237.5,"Vineyard Road",outbound,17,0,0,0
+2237.5,"Aristea Road",outbound,21,1,0,0
+2237.5,"Dante Road",outbound,19,1,0,0
+2237.5,"Airlie Road",outbound,6,0,0,0
+2237.5,"Leyden Road",inbound,24,1,0,0
+2237.5,"Dreyersdal Road",inbound,30,4,0,0
+2237.5,"Dreyersdal Road",outbound,1,0,0,0
+2237.5,"Firgrove Way Service Road",outbound,6,0,0,0
+2237.5,"Dreyersdal Farm Road",outbound,1,0,0,0
+2237.5,"Tokai High School Internal Road",inbound,23,0,0,1
+2237.5,"Tokai High School Internal Road",outbound,23,1,0,0
+2237.5,"Homestead Avenue",inbound,8,0,0,0
+2237.5,"Homestead Avenue",outbound,4,0,0,0
+2317.5,"Childrens Way",inbound,16,0,0,0
+2317.5,"Childrens Way",outbound,5,0,0,0
+2317.5,"Tussendal Avenue",outbound,4,2,0,0
+2317.5,"Starke Road",inbound,1,1,0,0
+2317.5,"Starke Road",outbound,17,0,0,0
+2317.5,"Christopher Road",inbound,30,2,0,0
+2317.5,"Christopher Road",outbound,12,0,0,0
+2317.5,"Ruskin Road",outbound,22,0,0,0
+2317.5,"Vineyard Road",inbound,29,2,0,0
+2317.5,"Vineyard Road",outbound,18,1,0,0
+2317.5,"Aristea Road",outbound,23,1,0,0
+2317.5,"Dante Road",outbound,22,0,0,0
+2317.5,"Airlie Road",outbound,9,0,0,0
+2317.5,"Leyden Road",inbound,27,0,1,1
+2317.5,"Dreyersdal Road",inbound,32,2,0,0
+2317.5,"Dreyersdal Road",outbound,1,0,0,0
+2317.5,"Firgrove Way Service Road",inbound,1,0,0,0
+2317.5,"Firgrove Way Service Road",outbound,8,1,0,0
+2317.5,"Dreyersdal Farm Road",outbound,2,1,0,0
+2317.5,"Tokai High School Internal Road",inbound,25,0,0,2
+2317.5,"Tokai High School Internal Road",outbound,25,0,0,0
+2317.5,"Homestead Avenue",inbound,8,0,0,0
+2317.5,"Homestead Avenue",outbound,4,0,0,0
+2392.5,"Childrens Way",inbound,18,1,0,0
+2392.5,"Childrens Way",outbound,5,0,0,0
+2392.5,"Tussendal Avenue",outbound,4,0,0,0
+2392.5,"Starke Road",inbound,1,1,0,0
+2392.5,"Starke Road",outbound,18,1,0,0
+2392.5,"Christopher Road",inbound,31,0,0,0
+2392.5,"Christopher Road",outbound,13,0,0,0
+2392.5,"Ruskin Road",outbound,24,1,0,0
+2392.5,"Vineyard Road",inbound,31,1,0,0
+2392.5,"Vineyard Road",outbound,19,0,0,0
+2392.5,"Aristea Road",outbound,24,0,0,0
+2392.5,"Dante Road",outbound,23,0,0,0
+2392.5,"Airlie Road",outbound,10,1,0,0
+2392.5,"Leyden Road",inbound,30,1,0,0
+2392.5,"Dreyersdal Road",inbound,35,4,0,0
+2392.5,"Dreyersdal Road",outbound,3,0,0,0
+2392.5,"Firgrove Way Service Road",inbound,1,0,0,0
+2392.5,"Firgrove Way Service Road",outbound,8,0,0,0
+2392.5,"Dreyersdal Farm Road",outbound,4,1,0,0
+2392.5,"Tokai High School Internal Road",inbound,27,0,0,2
+2392.5,"Tokai High School Internal Road",outbound,29,3,0,0
+2392.5,"Homestead Avenue",inbound,9,0,0,0
+2392.5,"Homestead Avenue",outbound,4,0,0,0
+2467.5,"Childrens Way",inbound,19,0,0,0
+2467.5,"Childrens Way",outbound,5,0,0,0
+2467.5,"Tussendal Avenue",outbound,4,0,0,0
+2467.5,"Starke Road",inbound,1,0,0,0
+2467.5,"Starke Road",outbound,19,1,0,0
+2467.5,"Christopher Road",inbound,36,2,0,0
+2467.5,"Christopher Road",outbound,14,0,0,0
+2467.5,"Ruskin Road",outbound,26,1,0,0
+2467.5,"Vineyard Road",inbound,34,2,0,0
+2467.5,"Vineyard Road",outbound,21,1,0,0
+2467.5,"Aristea Road",outbound,27,1,0,0
+2467.5,"Dante Road",outbound,25,0,0,0
+2467.5,"Airlie Road",outbound,10,0,0,0
+2467.5,"Leyden Road",inbound,32,1,0,0
+2467.5,"Dreyersdal Road",inbound,38,3,0,0
+2467.5,"Dreyersdal Road",outbound,5,1,0,0
+2467.5,"Firgrove Way Service Road",inbound,1,0,0,0
+2467.5,"Firgrove Way Service Road",outbound,9,1,0,0
+2467.5,"Dreyersdal Farm Road",outbound,4,0,0,0
+2467.5,"Tokai High School Internal Road",inbound,30,0,0,1
+2467.5,"Tokai High School Internal Road",outbound,31,3,0,0
+2467.5,"Homestead Avenue",inbound,10,0,0,0
+2467.5,"Homestead Avenue",outbound,4,0,0,0
+2537.5,"Childrens Way",inbound,21,1,0,0
+2537.5,"Childrens Way",outbound,6,1,0,0
+2537.5,"Tussendal Avenue",outbound,5,1,0,0
+2537.5,"Starke Road",inbound,1,0,0,0
+2537.5,"Starke Road",outbound,20,0,0,0
+2537.5,"Christopher Road",inbound,39,4,0,0
+2537.5,"Christopher Road",outbound,14,0,0,0
+2537.5,"Ruskin Road",outbound,29,0,0,0
+2537.5,"Vineyard Road",inbound,36,0,0,0
+2537.5,"Vineyard Road",outbound,23,1,0,0
+2537.5,"Aristea Road",outbound,30,1,0,0
+2537.5,"Dante Road",outbound,29,1,0,0
+2537.5,"Airlie Road",outbound,13,1,0,0
+2537.5,"Leyden Road",inbound,36,1,0,1
+2537.5,"Dreyersdal Road",inbound,40,2,0,0
+2537.5,"Dreyersdal Road",outbound,5,0,0,0
+2537.5,"Firgrove Way Service Road",inbound,1,0,0,0
+2537.5,"Firgrove Way Service Road",outbound,9,0,0,0
+2537.5,"Dreyersdal Farm Road",outbound,4,0,0,0
+2537.5,"Tokai High School Internal Road",inbound,34,0,0,3
+2537.5,"Tokai High School Internal Road",outbound,34,1,0,0
+2537.5,"Homestead Avenue",inbound,11,1,0,0
+2537.5,"Homestead Avenue",outbound,5,1,0,0
+2617.5,"Childrens Way",inbound,22,0,0,0
+2617.5,"Childrens Way",outbound,7,1,0,0
+2617.5,"Tussendal Avenue",outbound,5,0,0,0
+2617.5,"Starke Road",inbound,1,0,0,0
+2617.5,"Starke Road",outbound,22,1,0,0
+2617.5,"Christopher Road",inbound,41,1,0,0
+2617.5,"Christopher Road",outbound,14,0,0,0
+2617.5,"Ruskin Road",outbound,31,0,0,0
+2617.5,"Vineyard Road",inbound,40,1,0,0
+2617.5,"Vineyard Road",outbound,26,1,0,0
+2617.5,"Aristea Road",outbound,33,2,0,0
+2617.5,"Dante Road",outbound,31,0,0,0
+2617.5,"Airlie Road",outbound,16,0,0,0
+2617.5,"Leyden Road",inbound,39,0,0,2
+2617.5,"Dreyersdal Road",inbound,44,4,0,0
+2617.5,"Dreyersdal Road",outbound,8,3,0,0
+2617.5,"Firgrove Way Service Road",inbound,1,0,0,0
+2617.5,"Firgrove Way Service Road",outbound,9,0,0,0
+2617.5,"Dreyersdal Farm Road",outbound,5,0,0,0
+2617.5,"Tokai High School Internal Road",inbound,36,0,0,2
+2617.5,"Tokai High School Internal Road",outbound,37,3,0,0
+2617.5,"Homestead Avenue",inbound,12,1,0,0
+2617.5,"Homestead Avenue",outbound,5,0,0,0
+2687.5,"Childrens Way",inbound,24,1,0,0
+2687.5,"Childrens Way",outbound,8,0,0,0
+2687.5,"Tussendal Avenue",outbound,6,1,0,0
+2687.5,"Starke Road",inbound,1,0,0,0
+2687.5,"Starke Road",outbound,23,1,0,0
+2687.5,"Christopher Road",inbound,44,1,0,0
+2687.5,"Christopher Road",outbound,15,0,0,0
+2687.5,"Ruskin Road",outbound,34,0,0,0
+2687.5,"Vineyard Road",inbound,43,2,0,0
+2687.5,"Vineyard Road",outbound,26,0,0,0
+2687.5,"Aristea Road",outbound,36,2,0,0
+2687.5,"Dante Road",outbound,34,1,0,0
+2687.5,"Airlie Road",outbound,18,1,0,0
+2687.5,"Leyden Road",inbound,42,2,0,0
+2687.5,"Dreyersdal Road",inbound,47,4,0,0
+2687.5,"Dreyersdal Road",outbound,8,0,0,0
+2687.5,"Firgrove Way Service Road",inbound,1,0,0,0
+2687.5,"Firgrove Way Service Road",outbound,9,0,0,0
+2687.5,"Dreyersdal Farm Road",outbound,5,0,0,0
+2687.5,"Tokai High School Internal Road",inbound,39,0,0,3
+2687.5,"Tokai High School Internal Road",outbound,40,1,0,0
+2687.5,"Homestead Avenue",inbound,12,0,0,0
+2687.5,"Homestead Avenue",outbound,5,0,0,0
+2757.5,"Childrens Way",inbound,25,1,0,0
+2757.5,"Childrens Way",outbound,8,0,0,0
+2757.5,"Tussendal Avenue",outbound,10,3,0,0
+2757.5,"Starke Road",inbound,1,0,0,0
+2757.5,"Starke Road",outbound,23,0,0,0
+2757.5,"Christopher Road",inbound,47,1,0,0
+2757.5,"Christopher Road",outbound,15,0,0,0
+2757.5,"Ruskin Road",outbound,37,1,0,0
+2757.5,"Vineyard Road",inbound,46,2,0,0
+2757.5,"Vineyard Road",outbound,26,0,0,0
+2757.5,"Aristea Road",outbound,39,2,0,0
+2757.5,"Dante Road",outbound,36,0,0,0
+2757.5,"Airlie Road",outbound,21,0,0,0
+2757.5,"Leyden Road",inbound,44,0,0,1
+2757.5,"Dreyersdal Road",inbound,51,4,0,0
+2757.5,"Dreyersdal Road",outbound,8,0,0,0
+2757.5,"Firgrove Way Service Road",inbound,1,0,0,0
+2757.5,"Firgrove Way Service Road",outbound,9,0,0,0
+2757.5,"Dreyersdal Farm Road",outbound,7,2,0,0
+2757.5,"Tokai High School Internal Road",inbound,43,0,0,3
+2757.5,"Tokai High School Internal Road",outbound,43,1,0,0
+2757.5,"Homestead Avenue",inbound,13,0,0,0
+2757.5,"Homestead Avenue",outbound,6,0,0,0
+2832.5,"Childrens Way",inbound,27,0,0,0
+2832.5,"Childrens Way",outbound,8,0,0,0
+2832.5,"Tussendal Avenue",outbound,10,0,0,0
+2832.5,"Starke Road",inbound,2,0,0,0
+2832.5,"Starke Road",outbound,24,1,0,0
+2832.5,"Christopher Road",inbound,50,0,0,0
+2832.5,"Christopher Road",outbound,16,0,0,0
+2832.5,"Ruskin Road",outbound,39,0,0,0
+2832.5,"Alban Road",outbound,1,0,0,0
+2832.5,"Vineyard Road",inbound,51,3,0,0
+2832.5,"Vineyard Road",outbound,29,1,0,0
+2832.5,"Aristea Road",outbound,42,2,0,0
+2832.5,"Dante Road",outbound,39,0,0,0
+2832.5,"Airlie Road",inbound,1,0,0,0
+2832.5,"Airlie Road",outbound,22,1,0,0
+2832.5,"Leyden Road",inbound,48,1,0,1
+2832.5,"Dreyersdal Road",inbound,55,5,0,0
+2832.5,"Dreyersdal Road",outbound,11,0,0,0
+2832.5,"Firgrove Way Service Road",inbound,1,0,0,0
+2832.5,"Firgrove Way Service Road",outbound,9,0,0,0
+2832.5,"Clement Road",outbound,1,1,0,0
+2832.5,"Dreyersdal Farm Road",outbound,10,2,0,0
+2832.5,"Tokai High School Internal Road",inbound,46,0,0,3
+2832.5,"Tokai High School Internal Road",outbound,46,2,0,0
+2832.5,"Homestead Avenue",inbound,14,0,0,0
+2832.5,"Homestead Avenue",outbound,6,0,0,0
+2902.5,"Childrens Way",inbound,29,1,0,0
+2902.5,"Childrens Way",outbound,8,0,0,0
+2902.5,"Tussendal Avenue",outbound,11,1,0,0
+2902.5,"Starke Road",inbound,2,0,0,0
+2902.5,"Starke Road",outbound,24,0,0,0
+2902.5,"Christopher Road",inbound,53,1,0,0
+2902.5,"Christopher Road",outbound,16,0,0,0
+2902.5,"Ruskin Road",outbound,42,0,0,0
+2902.5,"Alban Road",outbound,1,0,0,0
+2902.5,"Vineyard Road",inbound,53,2,0,0
+2902.5,"Vineyard Road",outbound,30,1,0,0
+2902.5,"Aristea Road",outbound,44,1,0,0
+2902.5,"Dante Road",outbound,42,1,0,0
+2902.5,"Airlie Road",inbound,1,0,0,0
+2902.5,"Airlie Road",outbound,24,0,0,0
+2902.5,"Leyden Road",inbound,51,0,0,1
+2902.5,"Leyden Road",outbound,1,0,0,0
+2902.5,"Dreyersdal Road",inbound,57,4,0,0
+2902.5,"Dreyersdal Road",outbound,15,2,0,0
+2902.5,"Firgrove Way Service Road",inbound,1,0,0,0
+2902.5,"Firgrove Way Service Road",outbound,9,0,0,0
+2902.5,"Clement Road",outbound,1,0,0,0
+2902.5,"Dreyersdal Farm Road",outbound,10,0,0,0
+2902.5,"Tokai High School Internal Road",inbound,48,0,0,2
+2902.5,"Tokai High School Internal Road",outbound,50,4,0,0
+2902.5,"Homestead Avenue",inbound,15,0,0,0
+2902.5,"Homestead Avenue",outbound,7,1,0,0
+2972.5,"Childrens Way",inbound,31,1,0,0
+2972.5,"Childrens Way",outbound,8,0,0,0
+2972.5,"Tussendal Avenue",outbound,12,1,0,0
+2972.5,"Starke Road",inbound,3,1,0,0
+2972.5,"Starke Road",outbound,26,2,0,0
+2972.5,"Christopher Road",inbound,58,2,0,0
+2972.5,"Christopher Road",outbound,17,0,0,0
+2972.5,"Ruskin Road",outbound,44,0,0,0
+2972.5,"Alban Road",outbound,2,0,0,0
+2972.5,"Vineyard Road",inbound,58,4,0,0
+2972.5,"Vineyard Road",outbound,32,2,0,0
+2972.5,"Aristea Road",outbound,47,1,0,0
+2972.5,"Dante Road",outbound,44,0,0,0
+2972.5,"Airlie Road",inbound,1,0,0,0
+2972.5,"Airlie Road",outbound,25,0,0,0
+2972.5,"Leyden Road",inbound,54,1,0,0
+2972.5,"Leyden Road",outbound,1,0,0,0
+2972.5,"Dreyersdal Road",inbound,61,3,0,0
+2972.5,"Dreyersdal Road",outbound,15,0,0,0
+2972.5,"Firgrove Way Service Road",inbound,1,0,0,0
+2972.5,"Firgrove Way Service Road",outbound,9,0,0,0
+2972.5,"Clement Road",outbound,1,0,0,0
+2972.5,"Dreyersdal Farm Road",outbound,11,1,0,0
+2972.5,"Tokai High School Internal Road",inbound,52,0,0,2
+2972.5,"Tokai High School Internal Road",outbound,53,4,0,0
+2972.5,"Homestead Avenue",inbound,16,0,0,0
+2972.5,"Homestead Avenue",outbound,7,0,0,0
+3047.5,"Childrens Way",inbound,33,1,0,0
+3047.5,"Childrens Way",outbound,9,1,0,0
+3047.5,"Tussendal Avenue",outbound,12,0,0,0
+3047.5,"Starke Road",inbound,4,1,0,0
+3047.5,"Starke Road",outbound,27,0,0,0
+3047.5,"Christopher Road",inbound,59,0,0,0
+3047.5,"Christopher Road",outbound,18,1,0,0
+3047.5,"Ruskin Road",outbound,48,0,0,0
+3047.5,"Alban Road",outbound,2,0,0,0
+3047.5,"Vineyard Road",inbound,61,2,0,0
+3047.5,"Vineyard Road",outbound,35,1,0,0
+3047.5,"Aristea Road",outbound,51,1,0,0
+3047.5,"Dante Road",outbound,48,1,0,0
+3047.5,"Airlie Road",inbound,2,0,0,0
+3047.5,"Airlie Road",outbound,28,1,0,0
+3047.5,"Leyden Road",inbound,59,0,1,2
+3047.5,"Leyden Road",outbound,1,0,0,0
+3047.5,"Dreyersdal Road",inbound,64,5,0,0
+3047.5,"Dreyersdal Road",outbound,18,1,0,0
+3047.5,"Firgrove Way Service Road",inbound,2,0,0,0
+3047.5,"Firgrove Way Service Road",outbound,9,0,0,0
+3047.5,"Clement Road",outbound,1,0,0,0
+3047.5,"Dreyersdal Farm Road",outbound,12,0,0,0
+3047.5,"Tokai High School Internal Road",inbound,55,0,0,2
+3047.5,"Tokai High School Internal Road",outbound,56,3,0,0
+3047.5,"Homestead Avenue",inbound,17,0,0,0
+3047.5,"Homestead Avenue",outbound,9,0,0,0
+3117.5,"Childrens Way",inbound,35,1,0,0
+3117.5,"Childrens Way",outbound,9,0,0,0
+3117.5,"Tussendal Avenue",outbound,13,1,0,0
+3117.5,"Starke Road",inbound,4,1,0,0
+3117.5,"Starke Road",outbound,30,3,0,0
+3117.5,"Christopher Road",inbound,63,0,0,1
+3117.5,"Christopher Road",outbound,20,0,0,0
+3117.5,"Ruskin Road",outbound,50,0,0,0
+3117.5,"Alban Road",outbound,3,1,0,0
+3117.5,"Vineyard Road",inbound,64,2,0,0
+3117.5,"Vineyard Road",outbound,37,1,0,0
+3117.5,"Aristea Road",outbound,54,1,0,0
+3117.5,"Dante Road",outbound,50,0,0,0
+3117.5,"Airlie Road",inbound,2,0,0,0
+3117.5,"Airlie Road",outbound,29,0,0,0
+3117.5,"Leyden Road",inbound,62,2,0,0
+3117.5,"Leyden Road",outbound,1,0,0,0
+3117.5,"Dreyersdal Road",inbound,69,7,0,0
+3117.5,"Dreyersdal Road",outbound,19,1,0,0
+3117.5,"Firgrove Way Service Road",inbound,2,0,0,0
+3117.5,"Firgrove Way Service Road",outbound,9,0,0,0
+3117.5,"Clement Road",outbound,1,0,0,0
+3117.5,"Dreyersdal Farm Road",outbound,12,0,0,0
+3117.5,"Tokai High School Internal Road",inbound,59,0,0,3
+3117.5,"Tokai High School Internal Road",outbound,60,3,0,0
+3117.5,"Homestead Avenue",inbound,18,0,0,0
+3117.5,"Homestead Avenue",outbound,9,0,0,0
+3187.5,"Childrens Way",inbound,37,1,0,0
+3187.5,"Childrens Way",outbound,9,0,0,0
+3187.5,"Tussendal Avenue",outbound,13,0,0,0
+3187.5,"Starke Road",inbound,4,0,0,0
+3187.5,"Starke Road",outbound,32,3,0,0
+3187.5,"Christopher Road",inbound,68,1,0,0
+3187.5,"Christopher Road",outbound,21,0,0,0
+3187.5,"Ruskin Road",outbound,54,1,0,0
+3187.5,"Alban Road",outbound,3,0,0,0
+3187.5,"Vineyard Road",inbound,70,5,0,0
+3187.5,"Vineyard Road",outbound,39,1,0,0
+3187.5,"Aristea Road",outbound,58,1,0,0
+3187.5,"Dante Road",outbound,53,1,0,0
+3187.5,"Airlie Road",inbound,2,0,0,0
+3187.5,"Airlie Road",outbound,30,1,0,0
+3187.5,"Leyden Road",inbound,65,1,0,0
+3187.5,"Leyden Road",outbound,1,0,0,0
+3187.5,"Dreyersdal Road",inbound,73,7,0,0
+3187.5,"Dreyersdal Road",outbound,20,1,0,0
+3187.5,"Firgrove Way Service Road",inbound,2,0,0,0
+3187.5,"Firgrove Way Service Road",outbound,10,1,0,0
+3187.5,"Clement Road",outbound,1,0,0,0
+3187.5,"Dreyersdal Farm Road",outbound,13,0,0,0
+3187.5,"Tokai High School Internal Road",inbound,62,0,0,2
+3187.5,"Tokai High School Internal Road",outbound,64,4,0,0
+3187.5,"Homestead Avenue",inbound,19,0,0,0
+3187.5,"Homestead Avenue",outbound,10,0,0,0
+3257.5,"Childrens Way",inbound,39,1,0,0
+3257.5,"Childrens Way",outbound,10,0,0,0
+3257.5,"Tussendal Avenue",outbound,13,0,0,0
+3257.5,"Starke Road",inbound,4,0,0,0
+3257.5,"Starke Road",outbound,37,5,0,0
+3257.5,"Christopher Road",inbound,72,0,0,0
+3257.5,"Christopher Road",outbound,24,0,0,0
+3257.5,"Ruskin Road",outbound,57,1,0,0
+3257.5,"Alban Road",outbound,3,0,0,0
+3257.5,"Vineyard Road",inbound,74,4,0,0
+3257.5,"Vineyard Road",outbound,43,1,0,0
+3257.5,"Aristea Road",outbound,61,1,0,0
+3257.5,"Dante Road",outbound,56,0,0,0
+3257.5,"Airlie Road",inbound,2,0,0,0
+3257.5,"Airlie Road",outbound,31,0,0,0
+3257.5,"Leyden Road",inbound,70,0,1,1
+3257.5,"Leyden Road",outbound,1,0,0,0
+3257.5,"Dreyersdal Road",inbound,77,7,0,0
+3257.5,"Dreyersdal Road",outbound,20,0,0,0
+3257.5,"Firgrove Way Service Road",inbound,2,0,0,0
+3257.5,"Firgrove Way Service Road",outbound,12,2,0,0
+3257.5,"Clement Road",outbound,1,0,0,0
+3257.5,"Dreyersdal Farm Road",outbound,13,0,0,0
+3257.5,"Tokai High School Internal Road",inbound,65,0,0,1
+3257.5,"Tokai High School Internal Road",outbound,68,7,0,0
+3257.5,"Homestead Avenue",inbound,20,0,0,0
+3257.5,"Homestead Avenue",outbound,11,0,0,0
+3327.5,"Childrens Way",inbound,41,1,0,0
+3327.5,"Childrens Way",outbound,12,1,0,0
+3327.5,"Tussendal Avenue",outbound,13,0,0,0
+3327.5,"Starke Road",inbound,4,0,0,0
+3327.5,"Starke Road",outbound,39,3,0,0
+3327.5,"Christopher Road",inbound,77,1,0,0
+3327.5,"Christopher Road",outbound,25,0,0,0
+3327.5,"Ruskin Road",outbound,61,1,0,0
+3327.5,"Alban Road",outbound,3,0,0,0
+3327.5,"Vineyard Road",inbound,78,4,0,0
+3327.5,"Vineyard Road",outbound,46,1,0,0
+3327.5,"Aristea Road",outbound,65,1,0,0
+3327.5,"Dante Road",outbound,60,1,0,0
+3327.5,"Airlie Road",inbound,2,0,0,0
+3327.5,"Airlie Road",outbound,33,1,0,0
+3327.5,"Leyden Road",inbound,74,0,0,1
+3327.5,"Leyden Road",outbound,1,0,0,0
+3327.5,"Dreyersdal Road",inbound,81,5,0,0
+3327.5,"Dreyersdal Road",outbound,20,0,0,0
+3327.5,"Firgrove Way Service Road",inbound,2,0,0,0
+3327.5,"Firgrove Way Service Road",outbound,12,0,0,0
+3327.5,"Clement Road",outbound,1,0,0,0
+3327.5,"Dreyersdal Farm Road",outbound,13,0,0,0
+3327.5,"Tokai High School Internal Road",inbound,71,0,0,4
+3327.5,"Tokai High School Internal Road",outbound,73,4,0,0
+3327.5,"Homestead Avenue",inbound,22,1,0,0
+3327.5,"Homestead Avenue",outbound,13,1,0,0
+3392.5,"Childrens Way",inbound,43,2,0,0
+3392.5,"Childrens Way",outbound,14,1,0,1
+3392.5,"Tussendal Avenue",outbound,13,0,0,0
+3392.5,"Starke Road",inbound,4,0,0,0
+3392.5,"Starke Road",outbound,41,1,0,0
+3392.5,"Christopher Road",inbound,80,0,0,0
+3392.5,"Christopher Road",outbound,26,1,0,0
+3392.5,"Ruskin Road",outbound,64,2,0,0
+3392.5,"Alban Road",outbound,3,0,0,0
+3392.5,"Vineyard Road",inbound,82,3,0,0
+3392.5,"Vineyard Road",outbound,49,0,0,0
+3392.5,"Aristea Road",outbound,70,3,0,0
+3392.5,"Dante Road",outbound,63,1,0,0
+3392.5,"Airlie Road",inbound,2,0,0,0
+3392.5,"Airlie Road",outbound,36,1,0,0
+3392.5,"Leyden Road",inbound,79,1,0,2
+3392.5,"Leyden Road",outbound,1,0,0,0
+3392.5,"Dreyersdal Road",inbound,85,5,0,0
+3392.5,"Dreyersdal Road",outbound,21,1,0,0
+3392.5,"Firgrove Way Service Road",inbound,2,0,0,0
+3392.5,"Firgrove Way Service Road",outbound,14,1,0,0
+3392.5,"Clement Road",outbound,1,0,0,0
+3392.5,"Dreyersdal Farm Road",outbound,13,0,0,0
+3392.5,"Tokai High School Internal Road",inbound,74,0,0,2
+3392.5,"Tokai High School Internal Road",outbound,76,5,0,0
+3392.5,"Homestead Avenue",inbound,23,1,0,0
+3392.5,"Homestead Avenue",outbound,13,0,0,0
+3482.5,"Childrens Way",inbound,46,1,0,0
+3482.5,"Childrens Way",outbound,14,0,0,0
+3482.5,"Tussendal Avenue",outbound,13,0,0,0
+3482.5,"Starke Road",inbound,5,0,0,0
+3482.5,"Starke Road",outbound,46,4,0,0
+3482.5,"Christopher Road",inbound,86,1,0,1
+3482.5,"Christopher Road",outbound,30,0,0,0
+3482.5,"Ruskin Road",outbound,71,2,0,0
+3482.5,"Alban Road",outbound,3,0,0,0
+3482.5,"Vineyard Road",inbound,87,4,0,0
+3482.5,"Vineyard Road",outbound,56,1,0,0
+3482.5,"Aristea Road",outbound,75,1,0,0
+3482.5,"Dante Road",outbound,70,1,0,0
+3482.5,"Airlie Road",inbound,3,0,0,0
+3482.5,"Airlie Road",outbound,38,1,0,0
+3482.5,"Leyden Road",inbound,83,0,0,1
+3482.5,"Leyden Road",outbound,1,0,0,0
+3482.5,"Dreyersdal Road",inbound,91,6,0,0
+3482.5,"Dreyersdal Road",outbound,23,2,0,0
+3482.5,"Firgrove Way Service Road",inbound,2,0,0,0
+3482.5,"Firgrove Way Service Road",outbound,14,0,0,0
+3482.5,"Clement Road",outbound,1,0,0,0
+3482.5,"Dreyersdal Farm Road",outbound,13,0,0,0
+3482.5,"Tokai High School Internal Road",inbound,81,0,0,2
+3482.5,"Tokai High School Internal Road",outbound,82,4,1,0
+3482.5,"Homestead Avenue",inbound,24,0,0,0
+3482.5,"Homestead Avenue",outbound,14,1,0,0
+3547.5,"Childrens Way",inbound,48,1,0,0
+3547.5,"Childrens Way",outbound,14,0,0,0
+3547.5,"Tussendal Avenue",outbound,14,1,0,0
+3547.5,"Starke Road",inbound,6,1,0,0
+3547.5,"Starke Road",outbound,48,7,0,0
+3547.5,"Christopher Road",inbound,90,2,0,0
+3547.5,"Christopher Road",outbound,33,1,0,0
+3547.5,"Ruskin Road",outbound,75,2,0,0
+3547.5,"Alban Road",outbound,3,0,0,0
+3547.5,"Vineyard Road",inbound,91,2,1,1
+3547.5,"Vineyard Road",outbound,58,0,0,0
+3547.5,"Aristea Road",outbound,80,2,0,0
+3547.5,"Dante Road",outbound,73,1,0,0
+3547.5,"Airlie Road",inbound,3,0,0,0
+3547.5,"Airlie Road",outbound,39,0,0,0
+3547.5,"Leyden Road",inbound,88,0,0,3
+3547.5,"Leyden Road",outbound,1,0,0,0
+3547.5,"Dreyersdal Road",inbound,96,6,0,0
+3547.5,"Dreyersdal Road",outbound,24,2,0,0
+3547.5,"Firgrove Way Service Road",inbound,3,0,0,0
+3547.5,"Firgrove Way Service Road",outbound,14,0,0,0
+3547.5,"Clement Road",outbound,1,0,0,0
+3547.5,"Dreyersdal Farm Road",outbound,13,0,0,0
+3547.5,"Tokai High School Internal Road",inbound,84,0,0,2
+3547.5,"Tokai High School Internal Road",outbound,85,3,0,0
+3547.5,"Homestead Avenue",inbound,25,0,0,0
+3547.5,"Homestead Avenue",outbound,15,1,0,0
+3607.5,"Childrens Way",inbound,50,1,0,0
+3607.5,"Childrens Way",outbound,14,0,0,0
+3607.5,"Tussendal Avenue",outbound,16,2,0,0
+3607.5,"Starke Road",inbound,6,1,0,0
+3607.5,"Starke Road",outbound,50,3,0,0
+3607.5,"Christopher Road",inbound,94,2,0,0
+3607.5,"Christopher Road",outbound,34,0,0,0
+3607.5,"Ruskin Road",outbound,79,2,0,0
+3607.5,"Alban Road",outbound,3,0,0,0
+3607.5,"Vineyard Road",inbound,95,3,0,0
+3607.5,"Vineyard Road",outbound,61,1,0,0
+3607.5,"Aristea Road",outbound,82,1,0,0
+3607.5,"Dante Road",outbound,78,1,0,0
+3607.5,"Airlie Road",inbound,3,0,0,0
+3607.5,"Airlie Road",outbound,42,1,0,0
+3607.5,"Leyden Road",inbound,92,2,0,0
+3607.5,"Leyden Road",outbound,1,0,0,0
+3607.5,"Dreyersdal Road",inbound,100,6,0,0
+3607.5,"Dreyersdal Road",outbound,24,0,0,0
+3607.5,"Firgrove Way Service Road",inbound,3,0,0,0
+3607.5,"Firgrove Way Service Road",outbound,17,2,0,0
+3607.5,"Clement Road",outbound,1,0,0,0
+3607.5,"Dreyersdal Farm Road",outbound,14,1,0,0
+3607.5,"Tokai High School Internal Road",inbound,87,0,0,2
+3607.5,"Tokai High School Internal Road",outbound,90,6,0,0
+3607.5,"Homestead Avenue",inbound,26,0,0,0
+3607.5,"Homestead Avenue",outbound,17,2,0,0
+3672.5,"Childrens Way",inbound,52,1,0,0
+3672.5,"Childrens Way",outbound,16,2,0,0
+3672.5,"Tussendal Avenue",outbound,17,1,0,0
+3672.5,"Starke Road",inbound,6,0,0,0
+3672.5,"Starke Road",outbound,52,1,0,0
+3672.5,"Christopher Road",inbound,99,1,0,0
+3672.5,"Christopher Road",outbound,34,0,0,0
+3672.5,"Ruskin Road",outbound,82,2,0,0
+3672.5,"Alban Road",outbound,3,0,0,0
+3672.5,"Vineyard Road",inbound,101,4,0,0
+3672.5,"Vineyard Road",outbound,63,1,0,0
+3672.5,"Aristea Road",outbound,86,1,0,0
+3672.5,"Dante Road",outbound,81,1,0,0
+3672.5,"Airlie Road",inbound,3,0,0,0
+3672.5,"Airlie Road",outbound,45,0,0,0
+3672.5,"Leyden Road",inbound,97,2,0,1
+3672.5,"Leyden Road",outbound,1,0,0,0
+3672.5,"Dreyersdal Road",inbound,105,7,0,0
+3672.5,"Dreyersdal Road",outbound,27,2,0,0
+3672.5,"Firgrove Way Service Road",inbound,3,0,0,0
+3672.5,"Firgrove Way Service Road",outbound,17,0,0,0
+3672.5,"Clement Road",outbound,1,0,0,0
+3672.5,"Dreyersdal Farm Road",outbound,16,1,0,0
+3672.5,"Tokai High School Internal Road",inbound,92,0,0,3
+3672.5,"Tokai High School Internal Road",outbound,94,5,0,0
+3672.5,"Homestead Avenue",inbound,28,1,0,0
+3672.5,"Homestead Avenue",outbound,18,1,0,0
+3732.5,"Childrens Way",inbound,54,1,0,0
+3732.5,"Childrens Way",outbound,16,0,0,0
+3732.5,"Tussendal Avenue",outbound,18,1,0,0
+3732.5,"Starke Road",inbound,6,0,0,0
+3732.5,"Starke Road",outbound,55,3,0,0
+3732.5,"Christopher Road",inbound,104,2,0,0
+3732.5,"Christopher Road",outbound,35,0,0,0
+3732.5,"Ruskin Road",outbound,85,2,0,0
+3732.5,"Alban Road",outbound,4,0,0,0
+3732.5,"Vineyard Road",inbound,105,3,0,0
+3732.5,"Vineyard Road",outbound,65,1,0,0
+3732.5,"Aristea Road",outbound,90,1,0,0
+3732.5,"Dante Road",outbound,83,0,0,0
+3732.5,"Airlie Road",inbound,3,0,0,0
+3732.5,"Airlie Road",outbound,47,0,0,0
+3732.5,"Leyden Road",inbound,102,1,0,2
+3732.5,"Leyden Road",outbound,1,0,0,0
+3732.5,"Dreyersdal Road",inbound,109,7,0,0
+3732.5,"Dreyersdal Road",outbound,28,0,0,0
+3732.5,"Firgrove Way Service Road",inbound,3,0,0,0
+3732.5,"Firgrove Way Service Road",outbound,18,0,0,0
+3732.5,"Clement Road",outbound,1,0,0,0
+3732.5,"Dreyersdal Farm Road",outbound,17,1,0,0
+3732.5,"Tokai High School Internal Road",inbound,97,0,0,4
+3732.5,"Tokai High School Internal Road",outbound,99,5,0,0
+3732.5,"Homestead Avenue",inbound,29,1,0,0
+3732.5,"Homestead Avenue",outbound,18,0,0,0
+3797.5,"Childrens Way",inbound,57,1,0,0
+3797.5,"Childrens Way",outbound,17,0,0,1
+3797.5,"Tussendal Avenue",outbound,18,0,0,0
+3797.5,"Starke Road",inbound,6,0,0,0
+3797.5,"Starke Road",outbound,58,4,0,0
+3797.5,"Christopher Road",inbound,108,1,0,0
+3797.5,"Christopher Road",outbound,38,0,0,0
+3797.5,"Ruskin Road",outbound,89,1,0,0
+3797.5,"Alban Road",outbound,4,0,0,0
+3797.5,"Vineyard Road",inbound,110,4,0,0
+3797.5,"Vineyard Road",outbound,69,1,0,0
+3797.5,"Aristea Road",outbound,94,1,0,0
+3797.5,"Dante Road",outbound,88,1,0,0
+3797.5,"Airlie Road",inbound,3,0,0,0
+3797.5,"Airlie Road",outbound,48,1,0,0
+3797.5,"Leyden Road",inbound,106,1,1,1
+3797.5,"Leyden Road",outbound,1,0,0,0
+3797.5,"Dreyersdal Road",inbound,114,7,0,0
+3797.5,"Dreyersdal Road",outbound,29,0,0,0
+3797.5,"Firgrove Way Service Road",inbound,3,0,0,0
+3797.5,"Firgrove Way Service Road",outbound,18,0,0,0
+3797.5,"Clement Road",outbound,1,0,0,0
+3797.5,"Dreyersdal Farm Road",outbound,18,1,0,0
+3797.5,"Tokai High School Internal Road",inbound,102,0,0,3
+3797.5,"Tokai High School Internal Road",outbound,103,6,0,0
+3797.5,"Homestead Avenue",inbound,30,1,0,0
+3797.5,"Homestead Avenue",outbound,19,1,0,0
+3867.5,"Childrens Way",inbound,59,1,0,0
+3867.5,"Childrens Way",outbound,18,0,0,0
+3867.5,"Tussendal Avenue",outbound,20,2,0,0
+3867.5,"Starke Road",inbound,6,0,0,0
+3867.5,"Starke Road",outbound,60,4,0,0
+3867.5,"Christopher Road",inbound,113,1,0,0
+3867.5,"Christopher Road",outbound,39,0,0,0
+3867.5,"Ruskin Road",outbound,95,2,0,0
+3867.5,"Alban Road",outbound,4,0,0,0
+3867.5,"Vineyard Road",inbound,115,4,0,0
+3867.5,"Vineyard Road",outbound,71,1,0,0
+3867.5,"Aristea Road",outbound,101,2,0,0
+3867.5,"Dante Road",outbound,93,2,0,0
+3867.5,"Airlie Road",inbound,3,0,0,0
+3867.5,"Airlie Road",outbound,51,0,0,0
+3867.5,"Leyden Road",inbound,111,1,0,0
+3867.5,"Leyden Road",outbound,1,0,0,0
+3867.5,"Dreyersdal Road",inbound,118,6,0,0
+3867.5,"Dreyersdal Road",outbound,31,1,0,0
+3867.5,"Firgrove Way Service Road",inbound,3,0,0,0
+3867.5,"Firgrove Way Service Road",outbound,19,0,0,0
+3867.5,"Clement Road",outbound,1,0,0,0
+3867.5,"Dreyersdal Farm Road",outbound,18,0,0,0
+3867.5,"Tokai High School Internal Road",inbound,107,0,0,5
+3867.5,"Tokai High School Internal Road",outbound,110,4,0,0
+3867.5,"Homestead Avenue",inbound,31,0,0,0
+3867.5,"Homestead Avenue",outbound,19,0,0,0
+3932.5,"Childrens Way",inbound,62,1,0,0
+3932.5,"Childrens Way",outbound,19,1,0,0
+3932.5,"Tussendal Avenue",outbound,21,1,0,0
+3932.5,"Starke Road",inbound,6,0,0,0
+3932.5,"Starke Road",outbound,63,3,0,0
+3932.5,"Christopher Road",inbound,118,2,0,0
+3932.5,"Christopher Road",outbound,41,1,0,0
+3932.5,"Ruskin Road",outbound,99,1,0,0
+3932.5,"Alban Road",outbound,4,0,0,0
+3932.5,"Vineyard Road",inbound,119,2,0,1
+3932.5,"Vineyard Road",outbound,77,2,0,0
+3932.5,"Aristea Road",outbound,104,1,0,0
+3932.5,"Dante Road",outbound,98,0,0,0
+3932.5,"Airlie Road",inbound,3,0,0,0
+3932.5,"Airlie Road",outbound,55,1,0,0
+3932.5,"Leyden Road",inbound,116,1,1,1
+3932.5,"Leyden Road",outbound,1,0,0,0
+3932.5,"Dreyersdal Road",inbound,124,7,0,0
+3932.5,"Dreyersdal Road",outbound,32,2,0,0
+3932.5,"Firgrove Way Service Road",inbound,3,0,0,0
+3932.5,"Firgrove Way Service Road",outbound,22,2,0,0
+3932.5,"Clement Road",outbound,1,0,0,0
+3932.5,"Dreyersdal Farm Road",outbound,20,2,0,0
+3932.5,"Tokai High School Internal Road",inbound,112,0,0,2
+3932.5,"Tokai High School Internal Road",outbound,113,7,0,0
+3932.5,"Homestead Avenue",inbound,33,1,0,0
+3932.5,"Homestead Avenue",outbound,19,0,0,0
+3997.5,"Childrens Way",inbound,64,1,0,0
+3997.5,"Childrens Way",outbound,19,0,0,0
+3997.5,"Tussendal Avenue",outbound,21,0,0,0
+3997.5,"Starke Road",inbound,7,1,0,0
+3997.5,"Starke Road",outbound,66,5,0,0
+3997.5,"Christopher Road",inbound,123,1,0,0
+3997.5,"Christopher Road",outbound,44,0,0,0
+3997.5,"Ruskin Road",outbound,105,2,0,0
+3997.5,"Alban Road",outbound,4,0,0,0
+3997.5,"Vineyard Road",inbound,125,6,0,0
+3997.5,"Vineyard Road",outbound,81,3,0,0
+3997.5,"Aristea Road",outbound,110,1,0,0
+3997.5,"Dante Road",outbound,103,1,0,0
+3997.5,"Airlie Road",inbound,3,0,0,0
+3997.5,"Airlie Road",outbound,55,0,0,0
+3997.5,"Leyden Road",inbound,119,0,0,1
+3997.5,"Leyden Road",outbound,1,0,0,0
+3997.5,"Dreyersdal Road",inbound,129,7,0,0
+3997.5,"Dreyersdal Road",outbound,36,2,0,0
+3997.5,"Firgrove Way Service Road",inbound,4,0,0,0
+3997.5,"Firgrove Way Service Road",outbound,23,0,0,0
+3997.5,"Clement Road",outbound,1,0,0,0
+3997.5,"Dreyersdal Farm Road",outbound,21,0,0,0
+3997.5,"Tokai High School Internal Road",inbound,117,0,0,4
+3997.5,"Tokai High School Internal Road",outbound,118,4,0,0
+3997.5,"Homestead Avenue",inbound,34,1,0,0
+3997.5,"Homestead Avenue",outbound,20,1,0,0
+4067.5,"Childrens Way",inbound,67,1,0,0
+4067.5,"Childrens Way",outbound,19,0,0,0
+4067.5,"Tussendal Avenue",outbound,21,0,0,0
+4067.5,"Starke Road",inbound,7,1,0,0
+4067.5,"Starke Road",outbound,72,8,0,0
+4067.5,"Christopher Road",inbound,127,1,0,0
+4067.5,"Christopher Road",outbound,48,0,0,0
+4067.5,"Ruskin Road",outbound,108,1,0,0
+4067.5,"Alban Road",outbound,5,1,0,0
+4067.5,"Vineyard Road",inbound,130,5,0,0
+4067.5,"Vineyard Road",outbound,86,1,0,0
+4067.5,"Aristea Road",outbound,115,2,0,0
+4067.5,"Dante Road",outbound,107,0,0,0
+4067.5,"Airlie Road",inbound,4,0,0,0
+4067.5,"Airlie Road",outbound,58,0,0,0
+4067.5,"Leyden Road",inbound,126,1,2,1
+4067.5,"Leyden Road",outbound,1,0,0,0
+4067.5,"Dreyersdal Road",inbound,134,7,0,0
+4067.5,"Dreyersdal Road",outbound,37,1,0,0
+4067.5,"Firgrove Way Service Road",inbound,4,0,0,0
+4067.5,"Firgrove Way Service Road",outbound,24,1,0,0
+4067.5,"Clement Road",outbound,1,0,0,0
+4067.5,"Dreyersdal Farm Road",outbound,21,0,0,0
+4067.5,"Tokai High School Internal Road",inbound,120,0,0,2
+4067.5,"Tokai High School Internal Road",outbound,122,6,0,0
+4067.5,"Homestead Avenue",inbound,35,0,0,0
+4067.5,"Homestead Avenue",outbound,22,0,0,0
+4132.5,"Childrens Way",inbound,69,2,0,0
+4132.5,"Childrens Way",outbound,21,0,0,2
+4132.5,"Tussendal Avenue",outbound,21,0,0,0
+4132.5,"Starke Road",inbound,7,0,0,0
+4132.5,"Starke Road",outbound,74,5,0,0
+4132.5,"Christopher Road",inbound,134,3,0,0
+4132.5,"Christopher Road",outbound,51,1,0,0
+4132.5,"Ruskin Road",outbound,113,1,0,0
+4132.5,"Alban Road",outbound,5,0,0,0
+4132.5,"Vineyard Road",inbound,135,5,0,0
+4132.5,"Vineyard Road",outbound,89,1,0,0
+4132.5,"Aristea Road",outbound,119,1,0,0
+4132.5,"Dante Road",outbound,112,2,0,0
+4132.5,"Airlie Road",inbound,4,0,0,0
+4132.5,"Airlie Road",outbound,58,0,0,0
+4132.5,"Leyden Road",inbound,130,0,0,2
+4132.5,"Leyden Road",outbound,2,1,0,0
+4132.5,"Dreyersdal Road",inbound,139,5,0,0
+4132.5,"Dreyersdal Road",outbound,37,0,0,0
+4132.5,"Firgrove Way Service Road",inbound,4,0,0,0
+4132.5,"Firgrove Way Service Road",outbound,25,1,0,0
+4132.5,"Clement Road",outbound,2,0,0,0
+4132.5,"Dreyersdal Farm Road",outbound,21,0,0,0
+4132.5,"Tokai High School Internal Road",inbound,125,0,0,4
+4132.5,"Tokai High School Internal Road",outbound,128,5,0,0
+4132.5,"Homestead Avenue",inbound,36,0,0,0
+4132.5,"Homestead Avenue",outbound,24,1,0,0
+4197.5,"Childrens Way",inbound,72,1,0,0
+4197.5,"Childrens Way",outbound,21,0,0,0
+4197.5,"Tussendal Avenue",outbound,22,1,0,0
+4197.5,"Starke Road",inbound,8,1,0,0
+4197.5,"Starke Road",outbound,78,5,0,0
+4197.5,"Christopher Road",inbound,138,4,0,0
+4197.5,"Christopher Road",outbound,55,1,0,0
+4197.5,"Ruskin Road",outbound,116,1,0,0
+4197.5,"Alban Road",outbound,5,0,0,0
+4197.5,"Vineyard Road",inbound,138,2,0,0
+4197.5,"Vineyard Road",outbound,92,0,0,0
+4197.5,"Aristea Road",outbound,123,2,0,0
+4197.5,"Dante Road",outbound,115,1,0,0
+4197.5,"Airlie Road",inbound,4,0,0,0
+4197.5,"Airlie Road",outbound,59,0,0,0
+4197.5,"Leyden Road",inbound,136,1,1,1
+4197.5,"Leyden Road",outbound,2,0,0,0
+4197.5,"Dreyersdal Road",inbound,144,7,0,0
+4197.5,"Dreyersdal Road",outbound,37,0,0,0
+4197.5,"Firgrove Way Service Road",inbound,4,0,0,0
+4197.5,"Firgrove Way Service Road",outbound,27,1,0,0
+4197.5,"Clement Road",outbound,2,0,0,0
+4197.5,"Dreyersdal Farm Road",outbound,21,0,0,0
+4197.5,"Tokai High School Internal Road",inbound,130,0,0,2
+4197.5,"Tokai High School Internal Road",outbound,133,8,0,0
+4197.5,"Homestead Avenue",inbound,38,1,0,0
+4197.5,"Homestead Avenue",outbound,25,0,0,0
+4262.5,"Childrens Way",inbound,74,1,0,0
+4262.5,"Childrens Way",outbound,22,1,0,0
+4262.5,"Tussendal Avenue",outbound,23,1,0,0
+4262.5,"Starke Road",inbound,8,0,0,0
+4262.5,"Starke Road",outbound,81,5,0,0
+4262.5,"Christopher Road",inbound,143,1,0,0
+4262.5,"Christopher Road",outbound,57,1,0,0
+4262.5,"Ruskin Road",outbound,121,1,0,0
+4262.5,"Alban Road",outbound,6,1,0,0
+4262.5,"Vineyard Road",inbound,146,6,0,0
+4262.5,"Vineyard Road",outbound,96,2,0,0
+4262.5,"Aristea Road",outbound,128,1,0,0
+4262.5,"Dante Road",outbound,120,1,0,0
+4262.5,"Airlie Road",inbound,4,0,0,0
+4262.5,"Airlie Road",outbound,61,0,0,0
+4262.5,"Leyden Road",inbound,140,1,0,1
+4262.5,"Leyden Road",outbound,2,0,0,0
+4262.5,"Dreyersdal Road",inbound,150,8,0,0
+4262.5,"Dreyersdal Road",outbound,38,1,0,0
+4262.5,"Firgrove Way Service Road",inbound,4,0,0,0
+4262.5,"Firgrove Way Service Road",outbound,29,2,0,0
+4262.5,"Clement Road",outbound,2,0,0,0
+4262.5,"Dreyersdal Farm Road",outbound,22,0,0,0
+4262.5,"Tokai High School Internal Road",inbound,137,0,0,6
+4262.5,"Tokai High School Internal Road",outbound,138,4,0,0
+4262.5,"Homestead Avenue",inbound,39,0,0,0
+4262.5,"Homestead Avenue",outbound,25,0,0,0
+4332.5,"Childrens Way",inbound,77,1,0,0
+4332.5,"Childrens Way",outbound,22,0,0,0
+4332.5,"Tussendal Avenue",outbound,24,1,0,0
+4332.5,"Starke Road",inbound,8,0,0,0
+4332.5,"Starke Road",outbound,84,3,0,0
+4332.5,"Christopher Road",inbound,149,1,0,0
+4332.5,"Christopher Road",outbound,58,0,0,0
+4332.5,"Ruskin Road",outbound,125,2,0,0
+4332.5,"Alban Road",outbound,7,0,0,0
+4332.5,"Vineyard Road",inbound,152,5,0,0
+4332.5,"Vineyard Road",outbound,98,0,0,0
+4332.5,"Aristea Road",outbound,135,3,0,0
+4332.5,"Dante Road",outbound,124,1,0,0
+4332.5,"Airlie Road",inbound,4,0,0,0
+4332.5,"Airlie Road",outbound,65,1,0,0
+4332.5,"Leyden Road",inbound,147,1,1,1
+4332.5,"Leyden Road",outbound,3,1,0,0
+4332.5,"Dreyersdal Road",inbound,155,7,0,0
+4332.5,"Dreyersdal Road",outbound,40,2,0,0
+4332.5,"Firgrove Way Service Road",inbound,4,0,0,0
+4332.5,"Firgrove Way Service Road",outbound,32,1,0,0
+4332.5,"Clement Road",outbound,3,0,0,0
+4332.5,"Dreyersdal Farm Road",outbound,23,1,0,0
+4332.5,"Tokai High School Internal Road",inbound,142,0,0,4
+4332.5,"Tokai High School Internal Road",outbound,144,6,0,0
+4332.5,"Homestead Avenue",inbound,41,1,0,0
+4332.5,"Homestead Avenue",outbound,27,1,0,0
+4402.5,"Childrens Way",inbound,79,1,0,0
+4402.5,"Childrens Way",outbound,22,0,0,0
+4402.5,"Tussendal Avenue",outbound,26,1,0,0
+4402.5,"Starke Road",inbound,9,1,0,0
+4402.5,"Starke Road",outbound,86,3,0,0
+4402.5,"Christopher Road",inbound,154,2,0,0
+4402.5,"Christopher Road",outbound,59,1,0,0
+4402.5,"Ruskin Road",outbound,129,1,0,0
+4402.5,"Alban Road",outbound,9,1,0,0
+4402.5,"Vineyard Road",inbound,156,1,0,1
+4402.5,"Vineyard Road",outbound,101,1,0,0
+4402.5,"Aristea Road",outbound,139,1,0,0
+4402.5,"Dante Road",outbound,128,1,0,0
+4402.5,"Airlie Road",inbound,4,0,0,0
+4402.5,"Airlie Road",outbound,67,1,0,0
+4402.5,"Leyden Road",inbound,154,2,0,1
+4402.5,"Leyden Road",outbound,3,0,0,0
+4402.5,"Dreyersdal Road",inbound,160,7,0,0
+4402.5,"Dreyersdal Road",outbound,42,2,0,0
+4402.5,"Firgrove Way Service Road",inbound,5,0,0,0
+4402.5,"Firgrove Way Service Road",outbound,33,1,0,0
+4402.5,"Clement Road",outbound,3,0,0,0
+4402.5,"Dreyersdal Farm Road",outbound,25,2,0,0
+4402.5,"Tokai High School Internal Road",inbound,147,0,0,4
+4402.5,"Tokai High School Internal Road",outbound,151,8,0,0
+4402.5,"Homestead Avenue",inbound,42,1,0,0
+4402.5,"Homestead Avenue",outbound,28,1,0,0
+4472.5,"Childrens Way",inbound,82,1,0,0
+4472.5,"Childrens Way",outbound,22,0,0,0
+4472.5,"Tussendal Avenue",outbound,27,0,0,0
+4472.5,"Starke Road",inbound,9,1,0,0
+4472.5,"Starke Road",outbound,87,2,0,0
+4472.5,"Christopher Road",inbound,160,2,0,0
+4472.5,"Christopher Road",outbound,60,0,0,0
+4472.5,"Ruskin Road",outbound,133,1,0,0
+4472.5,"Alban Road",outbound,10,0,0,0
+4472.5,"Vineyard Road",inbound,162,4,0,0
+4472.5,"Vineyard Road",outbound,102,0,0,0
+4472.5,"Aristea Road",outbound,145,2,0,0
+4472.5,"Dante Road",outbound,132,2,0,0
+4472.5,"Airlie Road",inbound,4,0,0,0
+4472.5,"Airlie Road",outbound,70,1,0,0
+4472.5,"Leyden Road",inbound,158,3,0,0
+4472.5,"Leyden Road",outbound,4,0,0,0
+4472.5,"Dreyersdal Road",inbound,166,8,0,0
+4472.5,"Dreyersdal Road",outbound,46,4,0,0
+4472.5,"Firgrove Way Service Road",inbound,5,0,0,0
+4472.5,"Firgrove Way Service Road",outbound,34,0,0,0
+4472.5,"Clement Road",outbound,5,1,0,0
+4472.5,"Dreyersdal Farm Road",outbound,27,1,0,0
+4472.5,"Tokai High School Internal Road",inbound,153,0,0,3
+4472.5,"Tokai High School Internal Road",outbound,155,7,0,0
+4472.5,"Homestead Avenue",inbound,43,0,0,0
+4472.5,"Homestead Avenue",outbound,29,0,0,0
+4537.5,"Childrens Way",inbound,85,1,0,0
+4537.5,"Childrens Way",outbound,23,1,0,0
+4537.5,"Tussendal Avenue",outbound,29,1,0,0
+4537.5,"Starke Road",inbound,9,0,0,0
+4537.5,"Starke Road",outbound,90,3,0,0
+4537.5,"Christopher Road",inbound,166,2,0,0
+4537.5,"Christopher Road",outbound,62,1,0,0
+4537.5,"Ruskin Road",outbound,139,2,0,0
+4537.5,"Alban Road",outbound,11,1,0,0
+4537.5,"Vineyard Road",inbound,168,5,0,0
+4537.5,"Vineyard Road",outbound,107,1,0,0
+4537.5,"Aristea Road",outbound,152,2,0,0
+4537.5,"Dante Road",outbound,138,2,0,0
+4537.5,"Airlie Road",inbound,4,0,0,0
+4537.5,"Airlie Road",outbound,73,0,0,0
+4537.5,"Leyden Road",inbound,164,2,0,2
+4537.5,"Leyden Road",outbound,5,0,0,0
+4537.5,"Dreyersdal Road",inbound,171,7,0,0
+4537.5,"Dreyersdal Road",outbound,47,2,0,0
+4537.5,"Firgrove Way Service Road",inbound,5,0,0,0
+4537.5,"Firgrove Way Service Road",outbound,36,2,0,0
+4537.5,"Clement Road",outbound,6,1,0,0
+4537.5,"Dreyersdal Farm Road",outbound,28,1,0,0
+4537.5,"Tokai High School Internal Road",inbound,157,0,0,2
+4537.5,"Tokai High School Internal Road",outbound,160,7,0,0
+4537.5,"Homestead Avenue",inbound,45,1,0,0
+4537.5,"Homestead Avenue",outbound,29,0,0,0
+4607.5,"Childrens Way",inbound,87,1,0,0
+4607.5,"Childrens Way",outbound,24,0,0,1
+4607.5,"Tussendal Avenue",outbound,30,1,0,0
+4607.5,"Starke Road",inbound,9,0,0,0
+4607.5,"Starke Road",outbound,95,7,0,0
+4607.5,"Christopher Road",inbound,171,3,0,0
+4607.5,"Christopher Road",outbound,67,1,0,0
+4607.5,"Ruskin Road",outbound,144,1,0,0
+4607.5,"Alban Road",outbound,11,0,0,0
+4607.5,"Vineyard Road",inbound,173,4,0,0
+4607.5,"Vineyard Road",outbound,113,2,0,0
+4607.5,"Aristea Road",outbound,156,1,0,0
+4607.5,"Dante Road",outbound,143,0,0,0
+4607.5,"Airlie Road",inbound,4,0,0,0
+4607.5,"Airlie Road",outbound,74,0,0,0
+4607.5,"Leyden Road",inbound,170,2,0,1
+4607.5,"Leyden Road",outbound,6,0,0,0
+4607.5,"Dreyersdal Road",inbound,178,9,0,0
+4607.5,"Dreyersdal Road",outbound,49,0,0,1
+4607.5,"Firgrove Way Service Road",inbound,5,0,0,0
+4607.5,"Firgrove Way Service Road",outbound,36,0,0,0
+4607.5,"Clement Road",outbound,6,0,0,0
+4607.5,"Dreyersdal Farm Road",outbound,29,0,0,0
+4607.5,"Tokai High School Internal Road",inbound,163,0,0,2
+4607.5,"Tokai High School Internal Road",outbound,167,10,0,0
+4607.5,"Homestead Avenue",inbound,46,0,0,0
+4607.5,"Homestead Avenue",outbound,29,0,0,0
+4672.5,"Childrens Way",inbound,90,1,0,0
+4672.5,"Childrens Way",outbound,24,0,0,0
+4672.5,"Tussendal Avenue",outbound,30,0,0,0
+4672.5,"Starke Road",inbound,9,0,0,0
+4672.5,"Starke Road",outbound,99,5,0,0
+4672.5,"Christopher Road",inbound,178,3,0,0
+4672.5,"Christopher Road",outbound,69,0,0,0
+4672.5,"Ruskin Road",outbound,149,2,0,0
+4672.5,"Alban Road",outbound,11,0,0,0
+4672.5,"Vineyard Road",inbound,179,4,0,0
+4672.5,"Vineyard Road",outbound,116,2,0,0
+4672.5,"Aristea Road",outbound,162,2,0,0
+4672.5,"Dante Road",outbound,147,1,0,0
+4672.5,"Airlie Road",inbound,4,0,0,0
+4672.5,"Airlie Road",outbound,75,0,0,0
+4672.5,"Leyden Road",inbound,175,2,0,0
+4672.5,"Leyden Road",outbound,6,0,0,0
+4672.5,"Dreyersdal Road",inbound,182,6,0,0
+4672.5,"Dreyersdal Road",outbound,49,0,0,0
+4672.5,"Firgrove Way Service Road",inbound,5,0,0,0
+4672.5,"Firgrove Way Service Road",outbound,37,1,0,0
+4672.5,"Clement Road",outbound,6,0,0,0
+4672.5,"Dreyersdal Farm Road",outbound,30,1,0,0
+4672.5,"Tokai High School Internal Road",inbound,171,0,0,5
+4672.5,"Tokai High School Internal Road",outbound,173,6,0,0
+4672.5,"Homestead Avenue",inbound,48,1,0,0
+4672.5,"Homestead Avenue",outbound,33,2,0,1
+4737.5,"Childrens Way",inbound,92,1,0,0
+4737.5,"Childrens Way",outbound,25,0,0,1
+4737.5,"Tussendal Avenue",outbound,30,0,0,0
+4737.5,"Starke Road",inbound,9,0,0,0
+4737.5,"Starke Road",outbound,102,4,0,0
+4737.5,"Christopher Road",inbound,182,2,0,0
+4737.5,"Christopher Road",outbound,72,0,0,0
+4737.5,"Ruskin Road",outbound,155,2,0,0
+4737.5,"Alban Road",outbound,11,0,0,0
+4737.5,"Vineyard Road",inbound,184,3,0,0
+4737.5,"Vineyard Road",outbound,122,2,0,0
+4737.5,"Aristea Road",outbound,168,2,0,0
+4737.5,"Dante Road",outbound,153,2,0,0
+4737.5,"Airlie Road",inbound,5,1,0,0
+4737.5,"Airlie Road",outbound,79,2,0,0
+4737.5,"Leyden Road",inbound,181,3,0,1
+4737.5,"Leyden Road",outbound,6,0,0,0
+4737.5,"Dreyersdal Road",inbound,187,6,0,0
+4737.5,"Dreyersdal Road",outbound,52,2,0,0
+4737.5,"Firgrove Way Service Road",inbound,5,0,0,0
+4737.5,"Firgrove Way Service Road",outbound,38,1,0,0
+4737.5,"Clement Road",outbound,6,0,0,0
+4737.5,"Dreyersdal Farm Road",outbound,30,0,0,0
+4737.5,"Tokai High School Internal Road",inbound,176,0,0,4
+4737.5,"Tokai High School Internal Road",outbound,177,5,0,0
+4737.5,"Homestead Avenue",inbound,49,1,0,0
+4737.5,"Homestead Avenue",outbound,35,0,0,1
+4832.5,"Childrens Way",inbound,96,1,0,0
+4832.5,"Childrens Way",outbound,29,2,0,1
+4832.5,"Tussendal Avenue",outbound,32,2,0,0
+4832.5,"Starke Road",inbound,11,1,0,1
+4832.5,"Starke Road",outbound,110,6,0,0
+4832.5,"Christopher Road",inbound,189,4,0,0
+4832.5,"Christopher Road",outbound,75,0,0,0
+4832.5,"Ruskin Road",outbound,162,1,0,0
+4832.5,"Alban Road",outbound,12,0,0,0
+4832.5,"Vineyard Road",inbound,191,4,0,0
+4832.5,"Vineyard Road",outbound,127,0,0,0
+4832.5,"Aristea Road",outbound,175,1,0,0
+4832.5,"Dante Road",outbound,161,1,0,0
+4832.5,"Airlie Road",inbound,5,0,0,0
+4832.5,"Airlie Road",outbound,85,1,0,0
+4832.5,"Leyden Road",inbound,188,2,0,0
+4832.5,"Leyden Road",outbound,6,0,0,0
+4832.5,"Dreyersdal Road",inbound,194,6,0,0
+4832.5,"Dreyersdal Road",outbound,53,1,0,0
+4832.5,"Firgrove Way Service Road",inbound,6,0,0,0
+4832.5,"Firgrove Way Service Road",outbound,40,1,0,0
+4832.5,"Clement Road",outbound,6,0,0,0
+4832.5,"Dreyersdal Farm Road",outbound,30,0,0,0
+4832.5,"Tokai High School Internal Road",inbound,183,0,0,5
+4832.5,"Tokai High School Internal Road",outbound,186,6,0,0
+4832.5,"Homestead Avenue",inbound,51,1,0,0
+4832.5,"Homestead Avenue",outbound,36,1,0,0
+4922.5,"Childrens Way",inbound,99,1,0,0
+4922.5,"Childrens Way",outbound,30,1,0,0
+4922.5,"Tussendal Avenue",outbound,33,0,0,0
+4922.5,"Starke Road",inbound,11,1,0,0
+4922.5,"Starke Road",outbound,113,2,0,0
+4922.5,"Christopher Road",inbound,195,3,0,0
+4922.5,"Christopher Road",outbound,76,0,0,0
+4922.5,"Ruskin Road",outbound,168,1,0,0
+4922.5,"Alban Road",outbound,12,0,0,0
+4922.5,"Vineyard Road",inbound,199,4,0,0
+4922.5,"Vineyard Road",outbound,133,1,0,0
+4922.5,"Aristea Road",outbound,183,4,0,0
+4922.5,"Dante Road",outbound,167,2,0,0
+4922.5,"Airlie Road",inbound,6,0,0,0
+4922.5,"Airlie Road",outbound,89,1,0,0
+4922.5,"Leyden Road",inbound,195,1,0,1
+4922.5,"Leyden Road",outbound,6,0,0,0
+4922.5,"Dreyersdal Road",inbound,202,8,0,0
+4922.5,"Dreyersdal Road",outbound,56,2,0,0
+4922.5,"Firgrove Way Service Road",inbound,6,0,0,0
+4922.5,"Firgrove Way Service Road",outbound,43,2,0,0
+4922.5,"Clement Road",outbound,6,0,0,0
+4922.5,"Dreyersdal Farm Road",outbound,33,1,0,0
+4922.5,"Tokai High School Internal Road",inbound,190,0,0,4
+4922.5,"Tokai High School Internal Road",outbound,193,6,0,0
+4922.5,"Homestead Avenue",inbound,53,1,0,0
+4922.5,"Homestead Avenue",outbound,38,2,0,0
+4992.5,"Childrens Way",inbound,102,1,0,0
+4992.5,"Childrens Way",outbound,33,1,1,1
+4992.5,"Tussendal Avenue",outbound,33,0,0,0
+4992.5,"Starke Road",inbound,11,0,0,0
+4992.5,"Starke Road",outbound,118,3,0,0
+4992.5,"Christopher Road",inbound,201,2,0,0
+4992.5,"Christopher Road",outbound,79,0,0,0
+4992.5,"Ruskin Road",outbound,172,1,0,0
+4992.5,"Alban Road",outbound,14,0,0,0
+4992.5,"Vineyard Road",inbound,205,4,0,0
+4992.5,"Vineyard Road",outbound,136,0,0,0
+4992.5,"Aristea Road",outbound,188,2,0,0
+4992.5,"Dante Road",outbound,172,3,0,0
+4992.5,"Airlie Road",inbound,6,0,0,0
+4992.5,"Airlie Road",outbound,90,0,0,0
+4992.5,"Leyden Road",inbound,201,2,0,1
+4992.5,"Leyden Road",outbound,7,1,0,0
+4992.5,"Dreyersdal Road",inbound,207,7,0,0
+4992.5,"Dreyersdal Road",outbound,57,1,0,0
+4992.5,"Firgrove Way Service Road",inbound,6,0,0,0
+4992.5,"Firgrove Way Service Road",outbound,44,1,0,0
+4992.5,"Clement Road",outbound,8,1,0,0
+4992.5,"Dreyersdal Farm Road",outbound,33,0,0,0
+4992.5,"Tokai High School Internal Road",inbound,196,0,0,2
+4992.5,"Tokai High School Internal Road",outbound,198,8,0,0
+4992.5,"Homestead Avenue",inbound,54,0,0,0
+4992.5,"Homestead Avenue",outbound,38,0,0,0
+5062.5,"Childrens Way",inbound,105,1,0,0
+5062.5,"Childrens Way",outbound,33,0,0,0
+5062.5,"Tussendal Avenue",outbound,34,0,0,0
+5062.5,"Starke Road",inbound,12,1,0,0
+5062.5,"Starke Road",outbound,119,3,0,0
+5062.5,"Christopher Road",inbound,206,2,0,0
+5062.5,"Christopher Road",outbound,80,0,0,0
+5062.5,"Ruskin Road",outbound,179,2,0,0
+5062.5,"Alban Road",outbound,14,0,0,0
+5062.5,"Vineyard Road",inbound,210,3,0,0
+5062.5,"Vineyard Road",outbound,141,1,0,0
+5062.5,"Aristea Road",outbound,195,2,0,0
+5062.5,"Dante Road",outbound,178,3,0,0
+5062.5,"Airlie Road",inbound,6,0,0,0
+5062.5,"Airlie Road",outbound,94,2,0,0
+5062.5,"Leyden Road",inbound,207,1,0,2
+5062.5,"Leyden Road",outbound,8,0,0,0
+5062.5,"Dreyersdal Road",inbound,213,7,0,0
+5062.5,"Dreyersdal Road",outbound,58,1,0,0
+5062.5,"Firgrove Way Service Road",inbound,6,0,0,0
+5062.5,"Firgrove Way Service Road",outbound,44,0,0,0
+5062.5,"Clement Road",outbound,8,0,0,0
+5062.5,"Dreyersdal Farm Road",outbound,34,1,0,0
+5062.5,"Tokai High School Internal Road",inbound,201,0,0,4
+5062.5,"Tokai High School Internal Road",outbound,204,6,0,0
+5062.5,"Homestead Avenue",inbound,55,0,0,0
+5062.5,"Homestead Avenue",outbound,40,1,0,0
+5132.5,"Childrens Way",inbound,107,1,0,0
+5132.5,"Childrens Way",outbound,35,2,0,0
+5132.5,"Tussendal Avenue",outbound,35,1,0,0
+5132.5,"Starke Road",inbound,12,0,0,0
+5132.5,"Starke Road",outbound,123,3,0,0
+5132.5,"Christopher Road",inbound,212,1,0,0
+5132.5,"Christopher Road",outbound,82,1,0,0
+5132.5,"Ruskin Road",outbound,184,2,0,0
+5132.5,"Alban Road",outbound,14,0,0,0
+5132.5,"Vineyard Road",inbound,217,5,0,1
+5132.5,"Vineyard Road",outbound,147,2,0,0
+5132.5,"Aristea Road",outbound,199,1,0,0
+5132.5,"Dante Road",outbound,183,1,0,0
+5132.5,"Airlie Road",inbound,6,0,0,0
+5132.5,"Airlie Road",outbound,99,1,0,0
+5132.5,"Leyden Road",inbound,212,0,0,2
+5132.5,"Leyden Road",outbound,8,0,0,0
+5132.5,"Dreyersdal Road",inbound,218,7,0,0
+5132.5,"Dreyersdal Road",outbound,62,4,0,0
+5132.5,"Firgrove Way Service Road",inbound,6,0,0,0
+5132.5,"Firgrove Way Service Road",outbound,45,1,0,0
+5132.5,"Clement Road",outbound,8,0,0,0
+5132.5,"Dreyersdal Farm Road",outbound,35,1,0,0
+5132.5,"Tokai High School Internal Road",inbound,207,0,0,3
+5132.5,"Tokai High School Internal Road",outbound,210,9,0,0
+5132.5,"Homestead Avenue",inbound,57,1,0,0
+5132.5,"Homestead Avenue",outbound,40,0,0,0
+5207.5,"Childrens Way",inbound,110,1,0,0
+5207.5,"Childrens Way",outbound,36,0,0,1
+5207.5,"Tussendal Avenue",outbound,36,1,0,0
+5207.5,"Starke Road",inbound,12,0,0,0
+5207.5,"Starke Road",outbound,126,4,0,0
+5207.5,"Christopher Road",inbound,217,2,0,0
+5207.5,"Christopher Road",outbound,85,1,0,0
+5207.5,"Ruskin Road",outbound,190,3,0,0
+5207.5,"Alban Road",outbound,15,0,0,0
+5207.5,"Vineyard Road",inbound,223,4,0,0
+5207.5,"Vineyard Road",outbound,149,0,0,0
+5207.5,"Aristea Road",outbound,206,1,0,0
+5207.5,"Dante Road",inbound,1,1,0,0
+5207.5,"Dante Road",outbound,187,2,0,0
+5207.5,"Airlie Road",inbound,7,0,0,0
+5207.5,"Airlie Road",outbound,100,0,0,0
+5207.5,"Leyden Road",inbound,218,0,1,1
+5207.5,"Leyden Road",outbound,8,0,0,0
+5207.5,"Dreyersdal Road",inbound,223,6,0,0
+5207.5,"Dreyersdal Road",outbound,63,1,0,0
+5207.5,"Firgrove Way Service Road",inbound,7,1,0,0
+5207.5,"Firgrove Way Service Road",outbound,46,0,0,0
+5207.5,"Clement Road",outbound,9,1,0,0
+5207.5,"Dreyersdal Farm Road",outbound,35,0,0,0
+5207.5,"Tokai High School Internal Road",inbound,213,0,0,3
+5207.5,"Tokai High School Internal Road",outbound,216,7,0,0
+5207.5,"Homestead Avenue",inbound,58,0,0,0
+5207.5,"Homestead Avenue",outbound,40,0,0,0
+5277.5,"Childrens Way",inbound,112,1,0,0
+5277.5,"Childrens Way",outbound,37,1,0,0
+5277.5,"Tussendal Avenue",outbound,39,3,0,0
+5277.5,"Starke Road",inbound,13,2,0,0
+5277.5,"Starke Road",outbound,129,2,0,0
+5277.5,"Christopher Road",inbound,222,2,0,0
+5277.5,"Christopher Road",outbound,86,0,0,0
+5277.5,"Ruskin Road",inbound,1,0,1,0
+5277.5,"Ruskin Road",outbound,196,1,0,0
+5277.5,"Alban Road",outbound,15,0,0,0
+5277.5,"Vineyard Road",inbound,227,4,0,0
+5277.5,"Vineyard Road",outbound,153,1,0,0
+5277.5,"Aristea Road",outbound,211,0,0,0
+5277.5,"Dante Road",inbound,1,0,0,0
+5277.5,"Dante Road",outbound,195,3,0,0
+5277.5,"Airlie Road",inbound,8,1,0,0
+5277.5,"Airlie Road",outbound,105,1,0,0
+5277.5,"Leyden Road",inbound,223,1,1,1
+5277.5,"Leyden Road",outbound,9,0,0,0
+5277.5,"Dreyersdal Road",inbound,229,5,0,1
+5277.5,"Dreyersdal Road",outbound,64,1,0,0
+5277.5,"Firgrove Way Service Road",inbound,7,0,0,0
+5277.5,"Firgrove Way Service Road",outbound,47,0,0,0
+5277.5,"Clement Road",outbound,9,0,0,0
+5277.5,"Dreyersdal Farm Road",outbound,37,1,0,0
+5277.5,"Tokai High School Internal Road",inbound,219,0,0,4
+5277.5,"Tokai High School Internal Road",outbound,220,5,0,0
+5277.5,"Homestead Avenue",inbound,60,1,0,0
+5277.5,"Homestead Avenue",outbound,43,1,0,0
+5352.5,"Childrens Way",inbound,115,1,0,0
+5352.5,"Childrens Way",outbound,37,0,0,0
+5352.5,"Tussendal Avenue",outbound,41,1,0,0
+5352.5,"Starke Road",inbound,13,0,0,0
+5352.5,"Starke Road",outbound,131,2,0,0
+5352.5,"Christopher Road",inbound,228,3,0,1
+5352.5,"Christopher Road",outbound,88,0,0,0
+5352.5,"Ruskin Road",inbound,2,1,0,0
+5352.5,"Ruskin Road",outbound,200,1,0,0
+5352.5,"Alban Road",outbound,16,1,0,0
+5352.5,"Vineyard Road",inbound,233,1,0,1
+5352.5,"Vineyard Road",outbound,158,3,0,0
+5352.5,"Aristea Road",outbound,218,2,0,0
+5352.5,"Dante Road",inbound,2,0,0,0
+5352.5,"Dante Road",outbound,199,1,0,0
+5352.5,"Airlie Road",inbound,8,0,0,0
+5352.5,"Airlie Road",outbound,109,1,0,0
+5352.5,"Leyden Road",inbound,229,2,0,1
+5352.5,"Leyden Road",outbound,9,0,0,0
+5352.5,"Dreyersdal Road",inbound,234,8,0,0
+5352.5,"Dreyersdal Road",outbound,69,3,0,1
+5352.5,"Firgrove Way Service Road",inbound,7,0,0,0
+5352.5,"Firgrove Way Service Road",outbound,48,1,0,0
+5352.5,"Clement Road",outbound,9,0,0,0
+5352.5,"Dreyersdal Farm Road",outbound,41,2,0,0
+5352.5,"Tokai High School Internal Road",inbound,223,0,0,3
+5352.5,"Tokai High School Internal Road",outbound,227,6,0,0
+5352.5,"Homestead Avenue",inbound,61,1,0,0
+5352.5,"Homestead Avenue",outbound,44,1,0,0
+5427.5,"Childrens Way",inbound,117,0,0,0
+5427.5,"Childrens Way",outbound,37,0,0,0
+5427.5,"Tussendal Avenue",outbound,42,1,0,0
+5427.5,"Starke Road",inbound,13,0,0,0
+5427.5,"Starke Road",outbound,134,3,0,0
+5427.5,"Christopher Road",inbound,232,1,0,0
+5427.5,"Christopher Road",outbound,92,1,0,0
+5427.5,"Ruskin Road",inbound,2,0,0,0
+5427.5,"Ruskin Road",outbound,205,2,0,0
+5427.5,"Alban Road",outbound,16,0,0,0
+5427.5,"Vineyard Road",inbound,239,4,0,1
+5427.5,"Vineyard Road",outbound,160,0,0,0
+5427.5,"Aristea Road",outbound,223,2,0,0
+5427.5,"Dante Road",inbound,2,0,0,0
+5427.5,"Dante Road",outbound,203,1,0,0
+5427.5,"Airlie Road",inbound,8,0,0,0
+5427.5,"Airlie Road",outbound,110,0,0,0
+5427.5,"Leyden Road",inbound,233,0,0,4
+5427.5,"Leyden Road",outbound,10,0,0,0
+5427.5,"Dreyersdal Road",inbound,240,8,0,0
+5427.5,"Dreyersdal Road",outbound,72,1,0,0
+5427.5,"Firgrove Way Service Road",inbound,7,0,0,0
+5427.5,"Firgrove Way Service Road",outbound,48,0,0,0
+5427.5,"Clement Road",outbound,10,0,0,0
+5427.5,"Dreyersdal Farm Road",outbound,41,0,0,0
+5427.5,"Tokai High School Internal Road",inbound,231,0,0,3
+5427.5,"Tokai High School Internal Road",outbound,231,6,0,0
+5427.5,"Homestead Avenue",inbound,62,0,0,0
+5427.5,"Homestead Avenue",outbound,46,1,0,0
+5497.5,"Childrens Way",inbound,120,1,0,0
+5497.5,"Childrens Way",outbound,37,0,0,0
+5497.5,"Tussendal Avenue",outbound,45,2,0,0
+5497.5,"Starke Road",inbound,13,0,0,0
+5497.5,"Starke Road",outbound,136,3,0,0
+5497.5,"Christopher Road",inbound,238,2,0,0
+5497.5,"Christopher Road",outbound,94,1,0,0
+5497.5,"Ruskin Road",inbound,2,0,0,0
+5497.5,"Ruskin Road",outbound,212,2,0,0
+5497.5,"Alban Road",outbound,16,0,0,0
+5497.5,"Vineyard Road",inbound,244,4,0,0
+5497.5,"Vineyard Road",outbound,164,3,0,0
+5497.5,"Aristea Road",outbound,229,2,0,0
+5497.5,"Dante Road",inbound,2,0,0,0
+5497.5,"Dante Road",outbound,210,1,0,0
+5497.5,"Airlie Road",inbound,8,0,0,0
+5497.5,"Airlie Road",outbound,113,0,0,0
+5497.5,"Leyden Road",inbound,238,1,0,1
+5497.5,"Leyden Road",outbound,10,0,0,0
+5497.5,"Dreyersdal Road",inbound,244,6,0,0
+5497.5,"Dreyersdal Road",outbound,73,1,0,0
+5497.5,"Firgrove Way Service Road",inbound,7,0,0,0
+5497.5,"Firgrove Way Service Road",outbound,49,1,0,0
+5497.5,"Clement Road",outbound,10,0,0,0
+5497.5,"Dreyersdal Farm Road",outbound,43,1,0,0
+5497.5,"Tokai High School Internal Road",inbound,235,0,0,4
+5497.5,"Tokai High School Internal Road",outbound,238,5,0,0
+5497.5,"Homestead Avenue",inbound,63,0,0,0
+5497.5,"Homestead Avenue",outbound,48,1,0,0
+5567.5,"Childrens Way",inbound,122,1,0,0
+5567.5,"Childrens Way",outbound,38,1,0,0
+5567.5,"Tussendal Avenue",outbound,46,1,0,0
+5567.5,"Starke Road",inbound,13,0,0,0
+5567.5,"Starke Road",outbound,141,4,0,0
+5567.5,"Christopher Road",inbound,243,2,0,0
+5567.5,"Christopher Road",outbound,96,0,0,0
+5567.5,"Ruskin Road",inbound,2,0,0,0
+5567.5,"Ruskin Road",outbound,216,1,0,0
+5567.5,"Alban Road",outbound,16,0,0,0
+5567.5,"Vineyard Road",inbound,249,3,0,1
+5567.5,"Vineyard Road",outbound,169,2,0,0
+5567.5,"Aristea Road",outbound,233,1,0,0
+5567.5,"Dante Road",inbound,2,0,0,0
+5567.5,"Dante Road",outbound,215,1,0,0
+5567.5,"Airlie Road",inbound,8,0,0,0
+5567.5,"Airlie Road",outbound,117,1,0,0
+5567.5,"Leyden Road",inbound,244,0,1,2
+5567.5,"Leyden Road",outbound,10,0,0,0
+5567.5,"Dreyersdal Road",inbound,248,5,0,0
+5567.5,"Dreyersdal Road",outbound,75,1,0,0
+5567.5,"Firgrove Way Service Road",inbound,7,0,0,0
+5567.5,"Firgrove Way Service Road",outbound,50,1,0,0
+5567.5,"Clement Road",outbound,10,0,0,0
+5567.5,"Dreyersdal Farm Road",outbound,45,2,0,0
+5567.5,"Tokai High School Internal Road",inbound,241,0,0,2
+5567.5,"Tokai High School Internal Road",outbound,243,8,0,0
+5567.5,"Homestead Avenue",inbound,65,1,0,0
+5567.5,"Homestead Avenue",outbound,49,1,0,0
+5642.5,"Childrens Way",inbound,124,0,0,0
+5642.5,"Childrens Way",outbound,39,0,0,0
+5642.5,"Tussendal Avenue",outbound,46,0,0,0
+5642.5,"Starke Road",inbound,13,0,0,0
+5642.5,"Starke Road",outbound,144,4,0,0
+5642.5,"Christopher Road",inbound,247,1,0,0
+5642.5,"Christopher Road",outbound,99,0,0,0
+5642.5,"Ruskin Road",inbound,2,0,0,0
+5642.5,"Ruskin Road",outbound,223,2,0,0
+5642.5,"Alban Road",outbound,16,0,0,0
+5642.5,"Vineyard Road",inbound,254,3,0,0
+5642.5,"Vineyard Road",outbound,174,3,0,0
+5642.5,"Aristea Road",outbound,241,2,0,0
+5642.5,"Dante Road",inbound,2,0,0,0
+5642.5,"Dante Road",outbound,221,1,0,0
+5642.5,"Airlie Road",inbound,8,0,0,0
+5642.5,"Airlie Road",outbound,118,1,0,0
+5642.5,"Leyden Road",inbound,249,2,0,1
+5642.5,"Leyden Road",outbound,10,0,0,0
+5642.5,"Dreyersdal Road",inbound,255,9,0,0
+5642.5,"Dreyersdal Road",outbound,78,0,0,1
+5642.5,"Firgrove Way Service Road",inbound,7,0,0,0
+5642.5,"Firgrove Way Service Road",outbound,51,1,0,0
+5642.5,"Clement Road",outbound,10,0,0,0
+5642.5,"Dreyersdal Farm Road",outbound,46,0,0,0
+5642.5,"Tokai High School Internal Road",inbound,246,0,0,3
+5642.5,"Tokai High School Internal Road",outbound,248,5,0,0
+5642.5,"Homestead Avenue",inbound,66,0,0,0
+5642.5,"Homestead Avenue",outbound,50,1,0,0
+5712.5,"Childrens Way",inbound,127,1,0,0
+5712.5,"Childrens Way",outbound,41,1,0,2
+5712.5,"Tussendal Avenue",outbound,46,0,0,0
+5712.5,"Starke Road",inbound,14,1,0,0
+5712.5,"Starke Road",outbound,150,6,0,0
+5712.5,"Christopher Road",inbound,253,3,0,0
+5712.5,"Christopher Road",outbound,102,0,0,0
+5712.5,"Ruskin Road",inbound,2,0,0,0
+5712.5,"Ruskin Road",outbound,228,2,0,0
+5712.5,"Alban Road",outbound,16,0,0,0
+5712.5,"Vineyard Road",inbound,259,4,0,0
+5712.5,"Vineyard Road",outbound,180,2,0,0
+5712.5,"Aristea Road",outbound,245,1,0,0
+5712.5,"Dante Road",inbound,2,0,0,0
+5712.5,"Dante Road",outbound,227,2,0,0
+5712.5,"Airlie Road",inbound,8,0,0,0
+5712.5,"Airlie Road",outbound,122,0,0,0
+5712.5,"Leyden Road",inbound,253,1,0,1
+5712.5,"Leyden Road",outbound,10,0,0,0
+5712.5,"Dreyersdal Road",inbound,258,6,0,0
+5712.5,"Dreyersdal Road",outbound,80,2,0,0
+5712.5,"Firgrove Way Service Road",inbound,8,0,0,0
+5712.5,"Firgrove Way Service Road",outbound,52,1,0,0
+5712.5,"Clement Road",outbound,10,0,0,0
+5712.5,"Dreyersdal Farm Road",outbound,46,0,0,0
+5712.5,"Tokai High School Internal Road",inbound,250,0,0,3
+5712.5,"Tokai High School Internal Road",outbound,253,5,0,0
+5712.5,"Homestead Avenue",inbound,67,0,0,0
+5712.5,"Homestead Avenue",outbound,51,0,0,0
+5787.5,"Childrens Way",inbound,129,1,0,0
+5787.5,"Childrens Way",outbound,42,0,0,1
+5787.5,"Tussendal Avenue",outbound,47,1,0,0
+5787.5,"Starke Road",inbound,15,2,0,0
+5787.5,"Starke Road",outbound,152,4,0,0
+5787.5,"Christopher Road",inbound,257,1,0,0
+5787.5,"Christopher Road",outbound,105,1,0,0
+5787.5,"Ruskin Road",inbound,2,0,0,0
+5787.5,"Ruskin Road",outbound,232,1,0,0
+5787.5,"Alban Road",outbound,16,0,0,0
+5787.5,"Vineyard Road",inbound,264,4,0,0
+5787.5,"Vineyard Road",outbound,183,0,0,0
+5787.5,"Aristea Road",outbound,251,3,0,0
+5787.5,"Dante Road",inbound,2,0,0,0
+5787.5,"Dante Road",outbound,231,1,0,0
+5787.5,"Airlie Road",inbound,9,1,0,0
+5787.5,"Airlie Road",outbound,125,0,0,0
+5787.5,"Leyden Road",inbound,258,0,1,2
+5787.5,"Leyden Road",outbound,10,0,0,0
+5787.5,"Dreyersdal Road",inbound,263,5,0,0
+5787.5,"Dreyersdal Road",outbound,82,2,0,0
+5787.5,"Firgrove Way Service Road",inbound,8,0,0,0
+5787.5,"Firgrove Way Service Road",outbound,56,2,0,0
+5787.5,"Clement Road",outbound,10,0,0,0
+5787.5,"Dreyersdal Farm Road",outbound,46,0,0,0
+5787.5,"Tokai High School Internal Road",inbound,255,0,0,1
+5787.5,"Tokai High School Internal Road",outbound,257,5,1,0
+5787.5,"Homestead Avenue",inbound,68,0,0,0
+5787.5,"Homestead Avenue",outbound,51,0,0,0
+5857.5,"Childrens Way",inbound,131,1,0,0
+5857.5,"Childrens Way",outbound,42,0,0,0
+5857.5,"Tussendal Avenue",outbound,47,0,0,0
+5857.5,"Starke Road",inbound,15,0,0,0
+5857.5,"Starke Road",outbound,156,5,0,0
+5857.5,"Christopher Road",inbound,261,2,0,0
+5857.5,"Christopher Road",outbound,109,1,0,0
+5857.5,"Ruskin Road",inbound,3,1,0,0
+5857.5,"Ruskin Road",outbound,238,2,0,0
+5857.5,"Alban Road",outbound,16,0,0,0
+5857.5,"Vineyard Road",inbound,268,2,0,0
+5857.5,"Vineyard Road",outbound,188,1,0,0
+5857.5,"Aristea Road",outbound,255,1,0,0
+5857.5,"Dante Road",inbound,3,0,0,0
+5857.5,"Dante Road",outbound,236,1,0,0
+5857.5,"Airlie Road",inbound,9,0,0,0
+5857.5,"Airlie Road",outbound,126,1,0,0
+5857.5,"Leyden Road",inbound,263,0,0,1
+5857.5,"Leyden Road",outbound,10,0,0,0
+5857.5,"Dreyersdal Road",inbound,267,6,0,0
+5857.5,"Dreyersdal Road",outbound,82,2,0,0
+5857.5,"Firgrove Way Service Road",inbound,8,0,0,0
+5857.5,"Firgrove Way Service Road",outbound,58,2,0,0
+5857.5,"Clement Road",outbound,10,0,0,0
+5857.5,"Dreyersdal Farm Road",outbound,47,1,0,0
+5857.5,"Tokai High School Internal Road",inbound,261,0,0,5
+5857.5,"Tokai High School Internal Road",outbound,264,4,0,0
+5857.5,"Homestead Avenue",inbound,69,0,0,0
+5857.5,"Homestead Avenue",outbound,51,0,0,0
+5932.5,"Childrens Way",inbound,133,1,0,0
+5932.5,"Childrens Way",outbound,42,0,0,0
+5932.5,"Tussendal Avenue",outbound,47,0,0,0
+5932.5,"Starke Road",inbound,15,0,0,0
+5932.5,"Starke Road",outbound,160,6,0,0
+5932.5,"Christopher Road",inbound,266,1,0,0
+5932.5,"Christopher Road",outbound,112,0,0,0
+5932.5,"Ruskin Road",inbound,3,0,0,0
+5932.5,"Ruskin Road",outbound,241,2,0,0
+5932.5,"Alban Road",outbound,17,1,0,0
+5932.5,"Vineyard Road",inbound,274,3,0,0
+5932.5,"Vineyard Road",outbound,192,0,0,0
+5932.5,"Aristea Road",outbound,260,2,0,0
+5932.5,"Dante Road",inbound,3,0,0,0
+5932.5,"Dante Road",outbound,240,1,0,0
+5932.5,"Airlie Road",inbound,10,1,0,0
+5932.5,"Airlie Road",outbound,127,0,0,0
+5932.5,"Leyden Road",inbound,268,2,0,1
+5932.5,"Leyden Road",outbound,10,0,0,0
+5932.5,"Dreyersdal Road",inbound,271,5,0,0
+5932.5,"Dreyersdal Road",outbound,85,2,0,0
+5932.5,"Firgrove Way Service Road",inbound,8,0,0,0
+5932.5,"Firgrove Way Service Road",outbound,59,0,0,0
+5932.5,"Clement Road",outbound,10,0,0,0
+5932.5,"Dreyersdal Farm Road",outbound,47,0,0,0
+5932.5,"Tokai High School Internal Road",inbound,265,0,0,1
+5932.5,"Tokai High School Internal Road",outbound,268,7,0,0
+5932.5,"Homestead Avenue",inbound,71,1,0,0
+5932.5,"Homestead Avenue",outbound,53,1,0,0
+6007.5,"Childrens Way",inbound,135,1,0,0
+6007.5,"Childrens Way",outbound,42,0,0,0
+6007.5,"Tussendal Avenue",outbound,49,2,0,0
+6007.5,"Starke Road",inbound,15,0,0,0
+6007.5,"Starke Road",outbound,163,4,0,0
+6007.5,"Christopher Road",inbound,270,2,0,0
+6007.5,"Christopher Road",outbound,114,0,0,0
+6007.5,"Ruskin Road",inbound,3,0,0,0
+6007.5,"Ruskin Road",outbound,246,2,0,0
+6007.5,"Alban Road",outbound,19,1,0,0
+6007.5,"Vineyard Road",inbound,279,4,0,0
+6007.5,"Vineyard Road",outbound,195,1,0,0
+6007.5,"Aristea Road",outbound,265,0,0,0
+6007.5,"Dante Road",inbound,3,0,0,0
+6007.5,"Dante Road",outbound,244,0,0,0
+6007.5,"Airlie Road",inbound,10,0,0,0
+6007.5,"Airlie Road",outbound,129,0,0,0
+6007.5,"Leyden Road",inbound,272,1,0,0
+6007.5,"Leyden Road",outbound,11,0,0,0
+6007.5,"Dreyersdal Road",inbound,275,4,0,0
+6007.5,"Dreyersdal Road",outbound,85,0,0,0
+6007.5,"Firgrove Way Service Road",inbound,8,0,0,0
+6007.5,"Firgrove Way Service Road",outbound,62,1,0,0
+6007.5,"Clement Road",outbound,11,0,0,0
+6007.5,"Dreyersdal Farm Road",outbound,47,0,0,0
+6007.5,"Tokai High School Internal Road",inbound,273,0,0,6
+6007.5,"Tokai High School Internal Road",outbound,274,3,0,0
+6007.5,"Homestead Avenue",inbound,72,1,0,0
+6007.5,"Homestead Avenue",outbound,55,2,0,0
+6082.5,"Childrens Way",inbound,137,1,0,0
+6082.5,"Childrens Way",outbound,42,0,0,0
+6082.5,"Tussendal Avenue",outbound,49,0,0,0
+6082.5,"Starke Road",inbound,15,0,0,0
+6082.5,"Starke Road",outbound,166,5,0,0
+6082.5,"Christopher Road",inbound,273,1,0,0
+6082.5,"Christopher Road",outbound,117,0,0,0
+6082.5,"Ruskin Road",inbound,3,0,0,0
+6082.5,"Ruskin Road",outbound,250,2,0,0
+6082.5,"Alban Road",outbound,19,0,0,0
+6082.5,"Vineyard Road",inbound,282,2,0,0
+6082.5,"Vineyard Road",outbound,198,1,0,0
+6082.5,"Aristea Road",outbound,271,2,0,0
+6082.5,"Dante Road",inbound,3,0,0,0
+6082.5,"Dante Road",outbound,248,1,0,0
+6082.5,"Airlie Road",inbound,10,0,0,0
+6082.5,"Airlie Road",outbound,129,0,0,0
+6082.5,"Leyden Road",inbound,277,2,0,1
+6082.5,"Leyden Road",outbound,12,0,0,0
+6082.5,"Dreyersdal Road",inbound,279,5,0,0
+6082.5,"Dreyersdal Road",outbound,86,1,0,0
+6082.5,"Firgrove Way Service Road",inbound,8,0,0,0
+6082.5,"Firgrove Way Service Road",outbound,63,1,0,0
+6082.5,"Clement Road",outbound,12,0,0,0
+6082.5,"Dreyersdal Farm Road",outbound,49,1,0,0
+6082.5,"Tokai High School Internal Road",inbound,275,0,0,1
+6082.5,"Tokai High School Internal Road",outbound,277,5,0,0
+6082.5,"Homestead Avenue",inbound,73,1,0,0
+6082.5,"Homestead Avenue",outbound,56,1,0,0
+6157.5,"Childrens Way",inbound,139,1,0,0
+6157.5,"Childrens Way",outbound,42,0,0,0
+6157.5,"Tussendal Avenue",outbound,50,1,0,0
+6157.5,"Starke Road",inbound,15,0,0,0
+6157.5,"Starke Road",outbound,171,7,0,0
+6157.5,"Christopher Road",inbound,278,1,0,0
+6157.5,"Christopher Road",outbound,121,0,0,0
+6157.5,"Ruskin Road",inbound,3,0,0,0
+6157.5,"Ruskin Road",outbound,255,1,0,0
+6157.5,"Alban Road",outbound,19,0,0,0
+6157.5,"Vineyard Road",inbound,287,4,0,0
+6157.5,"Vineyard Road",outbound,203,0,0,0
+6157.5,"Aristea Road",outbound,275,1,0,0
+6157.5,"Dante Road",inbound,3,0,0,0
+6157.5,"Dante Road",outbound,255,2,0,0
+6157.5,"Airlie Road",inbound,10,0,0,0
+6157.5,"Airlie Road",outbound,132,1,0,0
+6157.5,"Leyden Road",inbound,280,0,0,1
+6157.5,"Leyden Road",outbound,12,0,0,0
+6157.5,"Dreyersdal Road",inbound,283,4,0,0
+6157.5,"Dreyersdal Road",outbound,87,0,0,0
+6157.5,"Firgrove Way Service Road",inbound,8,0,0,0
+6157.5,"Firgrove Way Service Road",outbound,65,1,0,0
+6157.5,"Clement Road",outbound,12,0,0,0
+6157.5,"Dreyersdal Farm Road",outbound,49,0,0,0
+6157.5,"Tokai High School Internal Road",inbound,282,0,0,6
+6157.5,"Tokai High School Internal Road",outbound,282,1,0,0
+6157.5,"Homestead Avenue",inbound,74,1,0,0
+6157.5,"Homestead Avenue",outbound,57,0,0,0
+6232.5,"Childrens Way",inbound,141,1,0,0
+6232.5,"Childrens Way",outbound,43,0,0,0
+6232.5,"Tussendal Avenue",outbound,52,1,0,0
+6232.5,"Starke Road",inbound,15,0,0,0
+6232.5,"Starke Road",outbound,172,4,0,0
+6232.5,"Christopher Road",inbound,282,2,0,0
+6232.5,"Christopher Road",outbound,122,0,0,0
+6232.5,"Ruskin Road",inbound,3,0,0,0
+6232.5,"Ruskin Road",outbound,259,2,0,0
+6232.5,"Alban Road",outbound,19,0,0,0
+6232.5,"Vineyard Road",inbound,290,2,0,0
+6232.5,"Vineyard Road",outbound,204,0,0,0
+6232.5,"Aristea Road",outbound,280,2,0,0
+6232.5,"Dante Road",inbound,3,0,0,0
+6232.5,"Dante Road",outbound,257,1,0,0
+6232.5,"Airlie Road",inbound,10,0,0,0
+6232.5,"Airlie Road",outbound,134,0,0,0
+6232.5,"Leyden Road",inbound,285,1,0,1
+6232.5,"Leyden Road",outbound,12,0,0,0
+6232.5,"Dreyersdal Road",inbound,288,5,0,0
+6232.5,"Dreyersdal Road",outbound,88,1,0,0
+6232.5,"Firgrove Way Service Road",inbound,9,1,0,0
+6232.5,"Firgrove Way Service Road",outbound,68,1,0,0
+6232.5,"Clement Road",outbound,12,0,0,0
+6232.5,"Dreyersdal Farm Road",outbound,51,2,0,0
+6232.5,"Tokai High School Internal Road",inbound,285,0,0,3
+6232.5,"Tokai High School Internal Road",outbound,286,3,0,0
+6232.5,"Homestead Avenue",inbound,75,1,0,0
+6232.5,"Homestead Avenue",outbound,57,0,0,0
+6307.5,"Childrens Way",inbound,142,0,0,0
+6307.5,"Childrens Way",outbound,43,0,0,0
+6307.5,"Tussendal Avenue",outbound,55,3,0,0
+6307.5,"Starke Road",inbound,16,1,0,0
+6307.5,"Starke Road",outbound,172,0,0,0
+6307.5,"Christopher Road",inbound,285,0,0,0
+6307.5,"Christopher Road",outbound,122,0,0,0
+6307.5,"Ruskin Road",inbound,3,0,0,0
+6307.5,"Ruskin Road",outbound,263,0,0,0
+6307.5,"Alban Road",outbound,19,0,0,0
+6307.5,"Vineyard Road",inbound,295,3,0,0
+6307.5,"Vineyard Road",outbound,208,2,0,0
+6307.5,"Aristea Road",outbound,283,1,0,0
+6307.5,"Dante Road",inbound,3,0,0,0
+6307.5,"Dante Road",outbound,263,0,0,0
+6307.5,"Airlie Road",inbound,10,0,0,0
+6307.5,"Airlie Road",outbound,140,2,0,0
+6307.5,"Leyden Road",inbound,289,1,0,1
+6307.5,"Leyden Road",outbound,12,0,0,0
+6307.5,"Dreyersdal Road",inbound,291,5,0,0
+6307.5,"Dreyersdal Road",outbound,91,1,0,0
+6307.5,"Firgrove Way Service Road",inbound,9,0,0,0
+6307.5,"Firgrove Way Service Road",outbound,71,0,0,0
+6307.5,"Clement Road",outbound,12,0,0,0
+6307.5,"Dreyersdal Farm Road",outbound,53,2,0,0
+6307.5,"Tokai High School Internal Road",inbound,288,0,0,1
+6307.5,"Tokai High School Internal Road",outbound,290,6,0,0
+6307.5,"Homestead Avenue",inbound,76,1,0,0
+6307.5,"Homestead Avenue",outbound,58,0,0,0
+6382.5,"Childrens Way",inbound,144,1,0,0
+6382.5,"Childrens Way",outbound,43,0,0,0
+6382.5,"Tussendal Avenue",outbound,55,0,0,0
+6382.5,"Starke Road",inbound,16,1,0,0
+6382.5,"Starke Road",outbound,174,2,0,0
+6382.5,"Christopher Road",inbound,289,0,0,0
+6382.5,"Christopher Road",outbound,123,0,0,0
+6382.5,"Ruskin Road",inbound,3,0,0,0
+6382.5,"Ruskin Road",outbound,267,0,0,0
+6382.5,"Alban Road",outbound,19,0,0,0
+6382.5,"Vineyard Road",inbound,299,3,0,0
+6382.5,"Vineyard Road",outbound,211,1,0,0
+6382.5,"Aristea Road",outbound,288,2,0,0
+6382.5,"Dante Road",inbound,3,0,0,0
+6382.5,"Dante Road",outbound,267,1,0,0
+6382.5,"Airlie Road",inbound,10,0,0,0
+6382.5,"Airlie Road",outbound,142,1,0,0
+6382.5,"Leyden Road",inbound,293,1,0,0
+6382.5,"Leyden Road",outbound,12,0,0,0
+6382.5,"Dreyersdal Road",inbound,295,5,0,0
+6382.5,"Dreyersdal Road",outbound,96,4,0,0
+6382.5,"Firgrove Way Service Road",inbound,9,0,0,0
+6382.5,"Firgrove Way Service Road",outbound,71,0,0,0
+6382.5,"Clement Road",outbound,12,0,0,0
+6382.5,"Dreyersdal Farm Road",outbound,55,1,0,0
+6382.5,"Tokai High School Internal Road",inbound,292,0,0,1
+6382.5,"Tokai High School Internal Road",outbound,295,6,0,0
+6382.5,"Homestead Avenue",inbound,76,0,0,0
+6382.5,"Homestead Avenue",outbound,58,0,0,0
+6462.5,"Childrens Way",inbound,146,1,0,0
+6462.5,"Childrens Way",outbound,45,0,0,1
+6462.5,"Tussendal Avenue",outbound,57,2,0,0
+6462.5,"Starke Road",inbound,16,0,0,0
+6462.5,"Starke Road",outbound,176,1,0,0
+6462.5,"Christopher Road",inbound,294,1,0,0
+6462.5,"Christopher Road",outbound,123,0,0,0
+6462.5,"Ruskin Road",inbound,3,0,0,0
+6462.5,"Ruskin Road",outbound,271,2,0,0
+6462.5,"Alban Road",outbound,21,0,0,0
+6462.5,"Vineyard Road",inbound,303,3,0,0
+6462.5,"Vineyard Road",outbound,212,1,0,0
+6462.5,"Aristea Road",outbound,292,1,0,0
+6462.5,"Dante Road",inbound,3,0,0,0
+6462.5,"Dante Road",outbound,269,1,0,0
+6462.5,"Airlie Road",inbound,10,0,0,0
+6462.5,"Airlie Road",outbound,145,0,0,0
+6462.5,"Leyden Road",inbound,298,1,0,1
+6462.5,"Leyden Road",outbound,12,0,0,0
+6462.5,"Dreyersdal Road",inbound,298,4,0,0
+6462.5,"Dreyersdal Road",outbound,98,1,0,0
+6462.5,"Firgrove Way Service Road",inbound,9,0,0,0
+6462.5,"Firgrove Way Service Road",outbound,71,0,0,0
+6462.5,"Clement Road",outbound,13,1,0,0
+6462.5,"Dreyersdal Farm Road",outbound,56,1,0,0
+6462.5,"Tokai High School Internal Road",inbound,297,0,0,2
+6462.5,"Tokai High School Internal Road",outbound,299,5,0,0
+6462.5,"Homestead Avenue",inbound,77,0,0,0
+6462.5,"Homestead Avenue",outbound,60,1,0,0
+6537.5,"Childrens Way",inbound,147,0,0,0
+6537.5,"Childrens Way",outbound,45,0,0,0
+6537.5,"Tussendal Avenue",outbound,57,0,0,0
+6537.5,"Starke Road",inbound,16,0,0,0
+6537.5,"Starke Road",outbound,178,2,0,0
+6537.5,"Christopher Road",inbound,298,2,0,0
+6537.5,"Christopher Road",outbound,126,1,0,0
+6537.5,"Ruskin Road",inbound,3,0,0,0
+6537.5,"Ruskin Road",outbound,274,0,0,0
+6537.5,"Alban Road",outbound,21,0,0,0
+6537.5,"Vineyard Road",inbound,307,3,0,0
+6537.5,"Vineyard Road",outbound,216,2,0,0
+6537.5,"Aristea Road",outbound,297,2,0,0
+6537.5,"Dante Road",inbound,3,0,0,0
+6537.5,"Dante Road",outbound,274,1,0,0
+6537.5,"Airlie Road",inbound,10,0,0,0
+6537.5,"Airlie Road",outbound,146,0,0,0
+6537.5,"Leyden Road",inbound,301,0,0,0
+6537.5,"Leyden Road",outbound,13,0,0,0
+6537.5,"Dreyersdal Road",inbound,301,3,0,0
+6537.5,"Dreyersdal Road",outbound,100,1,0,0
+6537.5,"Firgrove Way Service Road",inbound,9,0,0,0
+6537.5,"Firgrove Way Service Road",outbound,71,0,0,0
+6537.5,"Clement Road",outbound,13,0,0,0
+6537.5,"Dreyersdal Farm Road",outbound,57,1,0,0
+6537.5,"Tokai High School Internal Road",inbound,301,0,0,2
+6537.5,"Tokai High School Internal Road",outbound,304,5,0,0
+6537.5,"Homestead Avenue",inbound,78,0,0,0
+6537.5,"Homestead Avenue",outbound,60,0,0,0
+6612.5,"Childrens Way",inbound,149,1,0,0
+6612.5,"Childrens Way",outbound,45,0,0,0
+6612.5,"Tussendal Avenue",outbound,59,2,0,0
+6612.5,"Starke Road",inbound,16,0,0,0
+6612.5,"Starke Road",outbound,181,5,0,0
+6612.5,"Christopher Road",inbound,300,0,0,0
+6612.5,"Christopher Road",outbound,128,0,0,0
+6612.5,"Ruskin Road",inbound,3,0,0,0
+6612.5,"Ruskin Road",outbound,279,1,0,0
+6612.5,"Alban Road",outbound,21,0,0,0
+6612.5,"Vineyard Road",inbound,310,2,0,0
+6612.5,"Vineyard Road",outbound,218,1,0,0
+6612.5,"Aristea Road",outbound,300,0,0,0
+6612.5,"Dante Road",inbound,3,0,0,0
+6612.5,"Dante Road",outbound,278,1,0,0
+6612.5,"Airlie Road",inbound,10,0,0,0
+6612.5,"Airlie Road",outbound,148,0,0,0
+6612.5,"Leyden Road",inbound,305,1,0,1
+6612.5,"Leyden Road",outbound,13,0,0,0
+6612.5,"Dreyersdal Road",inbound,304,4,0,0
+6612.5,"Dreyersdal Road",outbound,101,1,0,0
+6612.5,"Firgrove Way Service Road",inbound,9,0,0,0
+6612.5,"Firgrove Way Service Road",outbound,71,0,0,0
+6612.5,"Clement Road",outbound,13,0,0,0
+6612.5,"Dreyersdal Farm Road",outbound,57,0,0,0
+6612.5,"Tokai High School Internal Road",inbound,304,0,0,0
+6612.5,"Tokai High School Internal Road",outbound,306,6,0,0
+6612.5,"Homestead Avenue",inbound,79,0,0,0
+6612.5,"Homestead Avenue",outbound,60,0,0,0
+6687.5,"Childrens Way",inbound,150,0,0,0
+6687.5,"Childrens Way",outbound,45,0,0,0
+6687.5,"Tussendal Avenue",outbound,60,1,0,0
+6687.5,"Starke Road",inbound,16,0,0,0
+6687.5,"Starke Road",outbound,183,2,0,0
+6687.5,"Christopher Road",inbound,304,2,0,0
+6687.5,"Christopher Road",outbound,130,0,0,0
+6687.5,"Ruskin Road",inbound,3,0,0,0
+6687.5,"Ruskin Road",outbound,283,1,0,0
+6687.5,"Alban Road",outbound,21,0,0,0
+6687.5,"Vineyard Road",inbound,312,1,0,0
+6687.5,"Vineyard Road",outbound,221,2,0,0
+6687.5,"Aristea Road",outbound,304,0,0,0
+6687.5,"Dante Road",inbound,3,0,0,0
+6687.5,"Dante Road",outbound,282,1,0,0
+6687.5,"Airlie Road",inbound,10,0,0,0
+6687.5,"Airlie Road",outbound,149,0,0,0
+6687.5,"Leyden Road",inbound,308,1,0,0
+6687.5,"Leyden Road",outbound,13,0,0,0
+6687.5,"Dreyersdal Road",inbound,307,3,0,0
+6687.5,"Dreyersdal Road",outbound,102,1,0,0
+6687.5,"Firgrove Way Service Road",inbound,9,0,0,0
+6687.5,"Firgrove Way Service Road",outbound,74,1,0,0
+6687.5,"Clement Road",outbound,13,0,0,0
+6687.5,"Dreyersdal Farm Road",outbound,59,2,0,0
+6687.5,"Tokai High School Internal Road",inbound,308,0,0,2
+6687.5,"Tokai High School Internal Road",outbound,310,4,0,0
+6687.5,"Homestead Avenue",inbound,80,1,0,0
+6687.5,"Homestead Avenue",outbound,62,0,0,0
+6762.5,"Childrens Way",inbound,151,0,0,0
+6762.5,"Childrens Way",outbound,45,0,0,0
+6762.5,"Tussendal Avenue",outbound,61,1,0,0
+6762.5,"Starke Road",inbound,16,0,0,0
+6762.5,"Starke Road",outbound,186,4,0,0
+6762.5,"Christopher Road",inbound,306,1,0,0
+6762.5,"Christopher Road",outbound,133,0,0,0
+6762.5,"Ruskin Road",inbound,3,0,0,0
+6762.5,"Ruskin Road",outbound,286,1,0,0
+6762.5,"Alban Road",outbound,21,0,0,0
+6762.5,"Vineyard Road",inbound,315,1,0,1
+6762.5,"Vineyard Road",outbound,222,0,0,0
+6762.5,"Aristea Road",outbound,308,1,0,0
+6762.5,"Dante Road",inbound,3,0,0,0
+6762.5,"Dante Road",outbound,285,2,0,0
+6762.5,"Airlie Road",inbound,10,0,0,0
+6762.5,"Airlie Road",outbound,150,0,0,0
+6762.5,"Leyden Road",inbound,311,0,0,2
+6762.5,"Leyden Road",outbound,13,0,0,0
+6762.5,"Dreyersdal Road",inbound,310,4,0,0
+6762.5,"Dreyersdal Road",outbound,104,1,0,0
+6762.5,"Firgrove Way Service Road",inbound,9,0,0,0
+6762.5,"Firgrove Way Service Road",outbound,75,1,0,0
+6762.5,"Clement Road",outbound,13,0,0,0
+6762.5,"Dreyersdal Farm Road",outbound,60,0,0,0
+6762.5,"Tokai High School Internal Road",inbound,312,0,0,2
+6762.5,"Tokai High School Internal Road",outbound,312,2,0,0
+6762.5,"Homestead Avenue",inbound,80,0,0,0
+6762.5,"Homestead Avenue",outbound,63,0,0,0
+6842.5,"Childrens Way",inbound,153,1,0,0
+6842.5,"Childrens Way",outbound,45,0,0,0
+6842.5,"Tussendal Avenue",outbound,63,1,0,0
+6842.5,"Starke Road",inbound,16,0,0,0
+6842.5,"Starke Road",outbound,188,3,0,0
+6842.5,"Christopher Road",inbound,309,1,0,0
+6842.5,"Christopher Road",outbound,135,0,0,0
+6842.5,"Ruskin Road",inbound,3,0,0,0
+6842.5,"Ruskin Road",outbound,289,0,0,0
+6842.5,"Alban Road",outbound,21,0,0,0
+6842.5,"Vineyard Road",inbound,318,2,0,0
+6842.5,"Vineyard Road",outbound,225,1,0,0
+6842.5,"Aristea Road",outbound,311,1,0,0
+6842.5,"Dante Road",inbound,3,0,0,0
+6842.5,"Dante Road",outbound,289,1,0,0
+6842.5,"Airlie Road",inbound,10,0,0,0
+6842.5,"Airlie Road",outbound,152,0,0,0
+6842.5,"Leyden Road",inbound,313,0,0,0
+6842.5,"Leyden Road",outbound,13,0,0,0
+6842.5,"Dreyersdal Road",inbound,312,3,0,0
+6842.5,"Dreyersdal Road",outbound,105,0,0,0
+6842.5,"Firgrove Way Service Road",inbound,9,0,0,0
+6842.5,"Firgrove Way Service Road",outbound,76,1,0,0
+6842.5,"Clement Road",outbound,13,0,0,0
+6842.5,"Dreyersdal Farm Road",outbound,62,1,0,0
+6842.5,"Tokai High School Internal Road",inbound,315,0,0,3
+6842.5,"Tokai High School Internal Road",outbound,316,2,0,0
+6842.5,"Homestead Avenue",inbound,81,0,0,0
+6842.5,"Homestead Avenue",outbound,65,0,0,0
+6922.5,"Childrens Way",inbound,154,1,0,0
+6922.5,"Childrens Way",outbound,46,1,0,0
+6922.5,"Tussendal Avenue",outbound,64,0,0,0
+6922.5,"Starke Road",inbound,16,0,0,0
+6922.5,"Starke Road",outbound,190,2,0,0
+6922.5,"Christopher Road",inbound,312,0,0,0
+6922.5,"Christopher Road",outbound,136,1,0,0
+6922.5,"Ruskin Road",inbound,3,0,0,0
+6922.5,"Ruskin Road",outbound,291,0,0,0
+6922.5,"Alban Road",outbound,22,0,0,0
+6922.5,"Vineyard Road",inbound,322,2,1,0
+6922.5,"Vineyard Road",outbound,226,0,0,0
+6922.5,"Aristea Road",outbound,315,2,0,0
+6922.5,"Dante Road",inbound,3,0,0,0
+6922.5,"Dante Road",outbound,291,1,0,0
+6922.5,"Airlie Road",inbound,10,0,0,0
+6922.5,"Airlie Road",outbound,154,0,0,0
+6922.5,"Leyden Road",inbound,317,0,1,1
+6922.5,"Leyden Road",outbound,13,0,0,0
+6922.5,"Dreyersdal Road",inbound,314,2,0,0
+6922.5,"Dreyersdal Road",outbound,107,1,0,0
+6922.5,"Firgrove Way Service Road",inbound,9,0,0,0
+6922.5,"Firgrove Way Service Road",outbound,77,1,0,0
+6922.5,"Clement Road",outbound,13,0,0,0
+6922.5,"Dreyersdal Farm Road",outbound,64,1,0,0
+6922.5,"Tokai High School Internal Road",inbound,318,0,0,2
+6922.5,"Tokai High School Internal Road",outbound,318,2,0,0
+6922.5,"Homestead Avenue",inbound,82,1,0,0
+6922.5,"Homestead Avenue",outbound,65,0,0,0
+7002.5,"Childrens Way",inbound,155,0,0,0
+7002.5,"Childrens Way",outbound,46,0,0,0
+7002.5,"Tussendal Avenue",outbound,65,1,0,0
+7002.5,"Starke Road",inbound,16,0,0,0
+7002.5,"Starke Road",outbound,192,3,0,0
+7002.5,"Christopher Road",inbound,314,1,0,0
+7002.5,"Christopher Road",outbound,137,0,0,0
+7002.5,"Ruskin Road",inbound,3,0,0,0
+7002.5,"Ruskin Road",outbound,294,0,0,0
+7002.5,"Alban Road",outbound,22,0,0,0
+7002.5,"Vineyard Road",inbound,323,0,0,0
+7002.5,"Vineyard Road",outbound,229,1,0,0
+7002.5,"Aristea Road",outbound,317,1,0,0
+7002.5,"Dante Road",inbound,3,0,0,0
+7002.5,"Dante Road",outbound,294,0,0,0
+7002.5,"Airlie Road",inbound,10,0,0,0
+7002.5,"Airlie Road",outbound,156,1,0,0
+7002.5,"Leyden Road",inbound,320,0,0,1
+7002.5,"Leyden Road",outbound,13,0,0,0
+7002.5,"Dreyersdal Road",inbound,318,4,0,0
+7002.5,"Dreyersdal Road",outbound,108,0,0,0
+7002.5,"Firgrove Way Service Road",inbound,9,0,0,0
+7002.5,"Firgrove Way Service Road",outbound,78,0,0,0
+7002.5,"Clement Road",outbound,13,0,0,0
+7002.5,"Dreyersdal Farm Road",outbound,64,0,0,0
+7002.5,"Tokai High School Internal Road",inbound,320,0,0,2
+7002.5,"Tokai High School Internal Road",outbound,322,3,0,0
+7002.5,"Homestead Avenue",inbound,82,0,0,0
+7002.5,"Homestead Avenue",outbound,66,0,0,0
+7077.5,"Childrens Way",inbound,156,0,0,0
+7077.5,"Childrens Way",outbound,47,0,0,1
+7077.5,"Tussendal Avenue",outbound,65,0,0,0
+7077.5,"Starke Road",inbound,16,0,0,0
+7077.5,"Starke Road",outbound,194,1,0,0
+7077.5,"Christopher Road",inbound,317,2,0,0
+7077.5,"Christopher Road",outbound,137,0,0,0
+7077.5,"Ruskin Road",inbound,3,0,0,0
+7077.5,"Ruskin Road",outbound,297,1,0,0
+7077.5,"Alban Road",outbound,22,0,0,0
+7077.5,"Vineyard Road",inbound,325,0,1,0
+7077.5,"Vineyard Road",outbound,231,1,0,0
+7077.5,"Aristea Road",outbound,320,1,0,0
+7077.5,"Dante Road",inbound,3,0,0,0
+7077.5,"Dante Road",outbound,296,0,0,0
+7077.5,"Airlie Road",inbound,10,0,0,0
+7077.5,"Airlie Road",outbound,158,0,0,0
+7077.5,"Leyden Road",inbound,321,0,0,1
+7077.5,"Leyden Road",outbound,13,0,0,0
+7077.5,"Dreyersdal Road",inbound,320,3,0,0
+7077.5,"Dreyersdal Road",outbound,110,2,0,0
+7077.5,"Firgrove Way Service Road",inbound,9,0,0,0
+7077.5,"Firgrove Way Service Road",outbound,79,1,0,0
+7077.5,"Clement Road",outbound,13,0,0,0
+7077.5,"Dreyersdal Farm Road",outbound,65,1,0,0
+7077.5,"Tokai High School Internal Road",inbound,323,0,0,1
+7077.5,"Tokai High School Internal Road",outbound,323,2,0,0
+7077.5,"Homestead Avenue",inbound,83,0,0,0
+7077.5,"Homestead Avenue",outbound,67,0,0,0
+7152.5,"Childrens Way",inbound,157,0,0,0
+7152.5,"Childrens Way",outbound,48,0,0,0
+7152.5,"Tussendal Avenue",outbound,66,1,0,0
+7152.5,"Starke Road",inbound,17,1,0,0
+7152.5,"Starke Road",outbound,195,1,0,0
+7152.5,"Christopher Road",inbound,320,2,0,0
+7152.5,"Christopher Road",outbound,139,1,0,0
+7152.5,"Ruskin Road",inbound,3,0,0,0
+7152.5,"Ruskin Road",outbound,301,1,0,0
+7152.5,"Alban Road",outbound,22,0,0,0
+7152.5,"Vineyard Road",inbound,328,1,0,0
+7152.5,"Vineyard Road",outbound,234,2,0,0
+7152.5,"Aristea Road",outbound,323,0,0,0
+7152.5,"Dante Road",inbound,3,0,0,0
+7152.5,"Dante Road",outbound,300,0,0,0
+7152.5,"Airlie Road",inbound,10,0,0,0
+7152.5,"Airlie Road",outbound,160,0,0,0
+7152.5,"Leyden Road",inbound,324,0,0,1
+7152.5,"Leyden Road",outbound,13,0,0,0
+7152.5,"Dreyersdal Road",inbound,321,1,0,0
+7152.5,"Dreyersdal Road",outbound,111,1,0,0
+7152.5,"Firgrove Way Service Road",inbound,10,0,0,0
+7152.5,"Firgrove Way Service Road",outbound,79,0,0,0
+7152.5,"Clement Road",outbound,13,0,0,0
+7152.5,"Dreyersdal Farm Road",outbound,65,0,0,0
+7152.5,"Tokai High School Internal Road",inbound,325,0,0,2
+7152.5,"Tokai High School Internal Road",outbound,326,1,0,0
+7152.5,"Homestead Avenue",inbound,83,0,0,0
+7152.5,"Homestead Avenue",outbound,67,0,0,0
+7227.5,"Childrens Way",inbound,158,1,0,0
+7227.5,"Childrens Way",outbound,48,0,0,0
+7227.5,"Tussendal Avenue",outbound,66,0,0,0
+7227.5,"Starke Road",inbound,17,1,0,0
+7227.5,"Starke Road",outbound,198,3,0,0
+7227.5,"Christopher Road",inbound,321,1,0,0
+7227.5,"Christopher Road",outbound,141,0,0,0
+7227.5,"Ruskin Road",inbound,3,0,0,0
+7227.5,"Ruskin Road",outbound,302,1,0,0
+7227.5,"Alban Road",outbound,22,0,0,0
+7227.5,"Vineyard Road",inbound,330,0,0,0
+7227.5,"Vineyard Road",outbound,235,0,0,0
+7227.5,"Aristea Road",outbound,325,1,0,0
+7227.5,"Dante Road",inbound,3,0,0,0
+7227.5,"Dante Road",outbound,301,0,0,0
+7227.5,"Airlie Road",inbound,10,0,0,0
+7227.5,"Airlie Road",outbound,160,0,0,0
+7227.5,"Leyden Road",inbound,327,1,0,1
+7227.5,"Leyden Road",outbound,13,0,0,0
+7227.5,"Dreyersdal Road",inbound,323,2,0,0
+7227.5,"Dreyersdal Road",outbound,111,0,0,0
+7227.5,"Firgrove Way Service Road",inbound,10,0,0,0
+7227.5,"Firgrove Way Service Road",outbound,79,0,0,0
+7227.5,"Clement Road",outbound,13,0,0,0
+7227.5,"Dreyersdal Farm Road",outbound,66,1,0,0
+7227.5,"Tokai High School Internal Road",inbound,328,0,0,2
+7227.5,"Tokai High School Internal Road",outbound,328,2,0,0
+7227.5,"Homestead Avenue",inbound,84,1,0,0
+7227.5,"Homestead Avenue",outbound,68,1,0,0
+7307.5,"Childrens Way",inbound,159,1,0,0
+7307.5,"Childrens Way",outbound,48,0,0,0
+7307.5,"Tussendal Avenue",outbound,66,0,0,0
+7307.5,"Starke Road",inbound,17,0,0,0
+7307.5,"Starke Road",outbound,200,2,0,0
+7307.5,"Christopher Road",inbound,324,2,0,0
+7307.5,"Christopher Road",outbound,143,0,0,0
+7307.5,"Ruskin Road",inbound,3,0,0,0
+7307.5,"Ruskin Road",outbound,304,0,0,0
+7307.5,"Alban Road",outbound,22,0,0,0
+7307.5,"Vineyard Road",inbound,332,1,0,0
+7307.5,"Vineyard Road",outbound,237,0,0,0
+7307.5,"Aristea Road",outbound,327,1,0,0
+7307.5,"Dante Road",inbound,3,0,0,0
+7307.5,"Dante Road",outbound,304,1,0,0
+7307.5,"Airlie Road",inbound,10,0,0,0
+7307.5,"Airlie Road",outbound,160,0,0,0
+7307.5,"Leyden Road",inbound,328,0,0,0
+7307.5,"Leyden Road",outbound,13,0,0,0
+7307.5,"Dreyersdal Road",inbound,325,2,0,0
+7307.5,"Dreyersdal Road",outbound,112,0,0,0
+7307.5,"Firgrove Way Service Road",inbound,10,0,0,0
+7307.5,"Firgrove Way Service Road",outbound,79,0,0,0
+7307.5,"Clement Road",outbound,13,0,0,0
+7307.5,"Dreyersdal Farm Road",outbound,66,0,0,0
+7307.5,"Tokai High School Internal Road",inbound,330,0,0,0
+7307.5,"Tokai High School Internal Road",outbound,331,4,0,0
+7307.5,"Homestead Avenue",inbound,84,0,0,0
+7307.5,"Homestead Avenue",outbound,71,1,0,0
+7382.5,"Childrens Way",inbound,159,0,0,0
+7382.5,"Childrens Way",outbound,48,0,0,0
+7382.5,"Tussendal Avenue",outbound,67,1,0,0
+7382.5,"Starke Road",inbound,17,0,0,0
+7382.5,"Starke Road",outbound,201,3,0,0
+7382.5,"Christopher Road",inbound,325,0,0,0
+7382.5,"Christopher Road",outbound,144,1,0,0
+7382.5,"Ruskin Road",inbound,3,0,0,0
+7382.5,"Ruskin Road",outbound,307,2,0,0
+7382.5,"Alban Road",outbound,23,0,0,0
+7382.5,"Vineyard Road",inbound,335,1,0,0
+7382.5,"Vineyard Road",outbound,238,0,0,0
+7382.5,"Aristea Road",outbound,330,1,0,0
+7382.5,"Dante Road",inbound,3,0,0,0
+7382.5,"Dante Road",outbound,305,0,0,0
+7382.5,"Airlie Road",inbound,10,0,0,0
+7382.5,"Airlie Road",outbound,161,0,0,0
+7382.5,"Leyden Road",inbound,331,1,0,1
+7382.5,"Leyden Road",outbound,13,0,0,0
+7382.5,"Dreyersdal Road",inbound,326,2,0,0
+7382.5,"Dreyersdal Road",outbound,112,0,0,0
+7382.5,"Firgrove Way Service Road",inbound,10,0,0,0
+7382.5,"Firgrove Way Service Road",outbound,79,0,0,0
+7382.5,"Clement Road",outbound,13,0,0,0
+7382.5,"Dreyersdal Farm Road",outbound,66,0,0,0
+7382.5,"Tokai High School Internal Road",inbound,332,0,0,1
+7382.5,"Tokai High School Internal Road",outbound,332,1,0,0
+7382.5,"Homestead Avenue",inbound,85,1,0,0
+7382.5,"Homestead Avenue",outbound,71,0,0,0
+7457.5,"Childrens Way",inbound,160,0,0,0
+7457.5,"Childrens Way",outbound,48,0,0,0
+7457.5,"Tussendal Avenue",outbound,68,1,0,0
+7457.5,"Starke Road",inbound,17,0,0,0
+7457.5,"Starke Road",outbound,202,1,0,0
+7457.5,"Christopher Road",inbound,327,0,0,0
+7457.5,"Christopher Road",outbound,144,0,0,0
+7457.5,"Ruskin Road",inbound,3,0,0,0
+7457.5,"Ruskin Road",outbound,308,0,0,0
+7457.5,"Alban Road",outbound,23,0,0,0
+7457.5,"Vineyard Road",inbound,337,1,0,0
+7457.5,"Vineyard Road",outbound,239,0,0,0
+7457.5,"Aristea Road",outbound,332,1,0,0
+7457.5,"Dante Road",inbound,3,0,0,0
+7457.5,"Dante Road",outbound,308,1,0,0
+7457.5,"Airlie Road",inbound,10,0,0,0
+7457.5,"Airlie Road",outbound,163,0,0,0
+7457.5,"Leyden Road",inbound,333,1,0,0
+7457.5,"Leyden Road",outbound,13,0,0,0
+7457.5,"Dreyersdal Road",inbound,328,2,0,0
+7457.5,"Dreyersdal Road",outbound,114,1,0,0
+7457.5,"Firgrove Way Service Road",inbound,10,0,0,0
+7457.5,"Firgrove Way Service Road",outbound,81,1,0,0
+7457.5,"Clement Road",outbound,13,0,0,0
+7457.5,"Dreyersdal Farm Road",outbound,67,0,0,0
+7457.5,"Tokai High School Internal Road",inbound,334,0,0,2
+7457.5,"Tokai High School Internal Road",outbound,335,2,0,0
+7457.5,"Homestead Avenue",inbound,85,0,0,0
+7457.5,"Homestead Avenue",outbound,72,0,0,0
+7537.5,"Childrens Way",inbound,161,0,0,0
+7537.5,"Childrens Way",outbound,49,1,0,0
+7537.5,"Tussendal Avenue",outbound,68,0,0,0
+7537.5,"Starke Road",inbound,17,0,0,0
+7537.5,"Starke Road",outbound,204,1,0,0
+7537.5,"Christopher Road",inbound,329,0,0,0
+7537.5,"Christopher Road",outbound,145,0,0,0
+7537.5,"Ruskin Road",inbound,3,0,0,0
+7537.5,"Ruskin Road",outbound,310,1,0,0
+7537.5,"Alban Road",outbound,23,0,0,0
+7537.5,"Vineyard Road",inbound,339,2,0,0
+7537.5,"Vineyard Road",outbound,241,0,0,0
+7537.5,"Aristea Road",outbound,334,1,0,0
+7537.5,"Dante Road",inbound,3,0,0,0
+7537.5,"Dante Road",outbound,309,0,0,0
+7537.5,"Airlie Road",inbound,10,0,0,0
+7537.5,"Airlie Road",outbound,164,0,0,0
+7537.5,"Leyden Road",inbound,334,0,0,0
+7537.5,"Leyden Road",outbound,13,0,0,0
+7537.5,"Dreyersdal Road",inbound,330,2,0,0
+7537.5,"Dreyersdal Road",outbound,115,1,0,0
+7537.5,"Firgrove Way Service Road",inbound,10,0,0,0
+7537.5,"Firgrove Way Service Road",outbound,81,0,0,0
+7537.5,"Clement Road",outbound,13,0,0,0
+7537.5,"Dreyersdal Farm Road",outbound,68,0,0,0
+7537.5,"Tokai High School Internal Road",inbound,337,0,0,2
+7537.5,"Tokai High School Internal Road",outbound,337,1,0,0
+7537.5,"Homestead Avenue",inbound,85,0,0,0
+7537.5,"Homestead Avenue",outbound,73,0,0,0
+7612.5,"Childrens Way",inbound,161,0,0,0
+7612.5,"Childrens Way",outbound,49,0,0,0
+7612.5,"Tussendal Avenue",outbound,68,0,0,0
+7612.5,"Starke Road",inbound,18,1,0,0
+7612.5,"Starke Road",outbound,205,2,0,0
+7612.5,"Christopher Road",inbound,329,0,0,0
+7612.5,"Christopher Road",outbound,146,0,0,0
+7612.5,"Ruskin Road",inbound,3,0,0,0
+7612.5,"Ruskin Road",outbound,313,1,0,0
+7612.5,"Alban Road",outbound,23,0,0,0
+7612.5,"Vineyard Road",inbound,339,0,0,0
+7612.5,"Vineyard Road",outbound,244,0,0,0
+7612.5,"Aristea Road",outbound,336,0,0,0
+7612.5,"Dante Road",inbound,3,0,0,0
+7612.5,"Dante Road",outbound,312,0,0,0
+7612.5,"Airlie Road",inbound,10,0,0,0
+7612.5,"Airlie Road",outbound,166,2,0,0
+7612.5,"Leyden Road",inbound,336,0,0,0
+7612.5,"Leyden Road",outbound,13,0,0,0
+7612.5,"Dreyersdal Road",inbound,330,1,0,0
+7612.5,"Dreyersdal Road",outbound,115,0,0,0
+7612.5,"Firgrove Way Service Road",inbound,10,0,0,0
+7612.5,"Firgrove Way Service Road",outbound,81,0,0,0
+7612.5,"Clement Road",outbound,13,0,0,0
+7612.5,"Dreyersdal Farm Road",outbound,68,0,0,0
+7612.5,"Tokai High School Internal Road",inbound,339,0,0,2
+7612.5,"Tokai High School Internal Road",outbound,339,1,0,0
+7612.5,"Homestead Avenue",inbound,86,1,0,0
+7612.5,"Homestead Avenue",outbound,73,0,0,0
+7687.5,"Childrens Way",inbound,162,0,0,0
+7687.5,"Childrens Way",outbound,49,0,0,0
+7687.5,"Tussendal Avenue",outbound,68,0,0,0
+7687.5,"Starke Road",inbound,18,0,0,0
+7687.5,"Starke Road",outbound,206,1,0,0
+7687.5,"Christopher Road",inbound,331,1,0,0
+7687.5,"Christopher Road",outbound,147,0,0,0
+7687.5,"Ruskin Road",inbound,3,0,0,0
+7687.5,"Ruskin Road",outbound,314,0,0,0
+7687.5,"Alban Road",outbound,23,0,0,0
+7687.5,"Vineyard Road",inbound,340,0,0,0
+7687.5,"Vineyard Road",outbound,246,1,0,0
+7687.5,"Aristea Road",outbound,338,1,0,0
+7687.5,"Dante Road",inbound,3,0,0,0
+7687.5,"Dante Road",outbound,314,0,0,0
+7687.5,"Airlie Road",inbound,10,0,0,0
+7687.5,"Airlie Road",outbound,166,0,0,0
+7687.5,"Leyden Road",inbound,337,1,0,0
+7687.5,"Leyden Road",outbound,13,0,0,0
+7687.5,"Dreyersdal Road",inbound,333,3,0,0
+7687.5,"Dreyersdal Road",outbound,117,3,0,0
+7687.5,"Firgrove Way Service Road",inbound,10,0,0,0
+7687.5,"Firgrove Way Service Road",outbound,82,1,0,0
+7687.5,"Clement Road",outbound,13,0,0,0
+7687.5,"Dreyersdal Farm Road",outbound,68,0,0,0
+7687.5,"Tokai High School Internal Road",inbound,339,0,0,0
+7687.5,"Tokai High School Internal Road",outbound,339,1,0,0
+7687.5,"Homestead Avenue",inbound,86,0,0,0
+7687.5,"Homestead Avenue",outbound,74,1,0,0
+7767.5,"Childrens Way",inbound,162,0,0,0
+7767.5,"Childrens Way",outbound,49,0,0,0
+7767.5,"Tussendal Avenue",outbound,68,0,0,0
+7767.5,"Starke Road",inbound,18,0,0,0
+7767.5,"Starke Road",outbound,207,1,0,0
+7767.5,"Christopher Road",inbound,333,0,0,0
+7767.5,"Christopher Road",outbound,149,1,0,0
+7767.5,"Ruskin Road",inbound,3,0,0,0
+7767.5,"Ruskin Road",outbound,316,0,0,0
+7767.5,"Alban Road",outbound,23,0,0,0
+7767.5,"Vineyard Road",inbound,343,1,0,0
+7767.5,"Vineyard Road",outbound,248,0,0,0
+7767.5,"Aristea Road",outbound,339,0,0,0
+7767.5,"Dante Road",inbound,3,0,0,0
+7767.5,"Dante Road",outbound,316,0,0,0
+7767.5,"Airlie Road",inbound,10,0,0,0
+7767.5,"Airlie Road",outbound,167,0,0,0
+7767.5,"Leyden Road",inbound,339,1,0,0
+7767.5,"Leyden Road",outbound,13,0,0,0
+7767.5,"Dreyersdal Road",inbound,333,1,0,0
+7767.5,"Dreyersdal Road",outbound,118,1,0,0
+7767.5,"Firgrove Way Service Road",inbound,10,0,0,0
+7767.5,"Firgrove Way Service Road",outbound,82,0,0,0
+7767.5,"Clement Road",outbound,13,0,0,0
+7767.5,"Dreyersdal Farm Road",outbound,68,0,0,0
+7767.5,"Tokai High School Internal Road",inbound,340,0,0,1
+7767.5,"Tokai High School Internal Road",outbound,341,1,0,0
+7767.5,"Homestead Avenue",inbound,86,0,0,0
+7767.5,"Homestead Avenue",outbound,75,1,0,0
+7847.5,"Childrens Way",inbound,163,0,0,0
+7847.5,"Childrens Way",outbound,49,0,0,0
+7847.5,"Tussendal Avenue",outbound,68,0,0,0
+7847.5,"Starke Road",inbound,18,0,0,0
+7847.5,"Starke Road",outbound,208,1,0,0
+7847.5,"Christopher Road",inbound,333,0,0,0
+7847.5,"Christopher Road",outbound,149,0,0,0
+7847.5,"Ruskin Road",inbound,3,0,0,0
+7847.5,"Ruskin Road",outbound,317,1,0,0
+7847.5,"Alban Road",outbound,23,0,0,0
+7847.5,"Vineyard Road",inbound,343,0,0,0
+7847.5,"Vineyard Road",outbound,248,0,0,0
+7847.5,"Aristea Road",outbound,340,0,0,0
+7847.5,"Dante Road",inbound,3,0,0,0
+7847.5,"Dante Road",outbound,316,0,0,0
+7847.5,"Airlie Road",inbound,10,0,0,0
+7847.5,"Airlie Road",outbound,167,0,0,0
+7847.5,"Leyden Road",inbound,340,0,0,0
+7847.5,"Leyden Road",outbound,13,0,0,0
+7847.5,"Dreyersdal Road",inbound,334,2,0,0
+7847.5,"Dreyersdal Road",outbound,118,0,0,0
+7847.5,"Firgrove Way Service Road",inbound,10,0,0,0
+7847.5,"Firgrove Way Service Road",outbound,82,0,0,0
+7847.5,"Clement Road",outbound,13,0,0,0
+7847.5,"Dreyersdal Farm Road",outbound,68,0,0,0
+7847.5,"Tokai High School Internal Road",inbound,343,0,0,3
+7847.5,"Tokai High School Internal Road",outbound,343,0,0,0
+7847.5,"Homestead Avenue",inbound,86,0,0,0
+7847.5,"Homestead Avenue",outbound,76,1,0,0
+7927.5,"Childrens Way",inbound,163,0,0,0
+7927.5,"Childrens Way",outbound,50,1,0,0
+7927.5,"Tussendal Avenue",outbound,68,0,0,0
+7927.5,"Starke Road",inbound,18,0,0,0
+7927.5,"Starke Road",outbound,209,0,0,0
+7927.5,"Christopher Road",inbound,335,0,0,0
+7927.5,"Christopher Road",outbound,149,0,0,0
+7927.5,"Ruskin Road",inbound,3,0,0,0
+7927.5,"Ruskin Road",outbound,319,1,0,0
+7927.5,"Alban Road",outbound,23,0,0,0
+7927.5,"Vineyard Road",inbound,345,1,0,0
+7927.5,"Vineyard Road",outbound,249,0,0,0
+7927.5,"Aristea Road",outbound,342,0,0,0
+7927.5,"Dante Road",inbound,3,0,0,0
+7927.5,"Dante Road",outbound,318,1,0,0
+7927.5,"Airlie Road",inbound,10,0,0,0
+7927.5,"Airlie Road",outbound,168,0,0,0
+7927.5,"Leyden Road",inbound,341,1,0,0
+7927.5,"Leyden Road",outbound,13,0,0,0
+7927.5,"Dreyersdal Road",inbound,335,1,0,0
+7927.5,"Dreyersdal Road",outbound,118,0,0,0
+7927.5,"Firgrove Way Service Road",inbound,10,0,0,0
+7927.5,"Firgrove Way Service Road",outbound,83,0,0,0
+7927.5,"Clement Road",outbound,13,0,0,0
+7927.5,"Dreyersdal Farm Road",outbound,68,0,0,0
+7927.5,"Tokai High School Internal Road",inbound,343,0,0,0
+7927.5,"Tokai High School Internal Road",outbound,343,1,0,0
+7927.5,"Homestead Avenue",inbound,87,0,0,0
+7927.5,"Homestead Avenue",outbound,76,0,0,0
+8002.5,"Childrens Way",inbound,164,0,0,0
+8002.5,"Childrens Way",outbound,50,0,0,0
+8002.5,"Tussendal Avenue",outbound,69,1,0,0
+8002.5,"Starke Road",inbound,18,0,0,0
+8002.5,"Starke Road",outbound,209,0,0,0
+8002.5,"Christopher Road",inbound,336,0,0,0
+8002.5,"Christopher Road",outbound,149,0,0,0
+8002.5,"Ruskin Road",inbound,3,0,0,0
+8002.5,"Ruskin Road",outbound,320,0,0,0
+8002.5,"Alban Road",outbound,23,0,0,0
+8002.5,"Vineyard Road",inbound,346,1,0,0
+8002.5,"Vineyard Road",outbound,251,1,0,0
+8002.5,"Aristea Road",outbound,343,0,0,0
+8002.5,"Dante Road",inbound,3,0,0,0
+8002.5,"Dante Road",outbound,320,0,0,0
+8002.5,"Airlie Road",inbound,10,0,0,0
+8002.5,"Airlie Road",outbound,171,2,0,0
+8002.5,"Leyden Road",inbound,342,0,0,0
+8002.5,"Leyden Road",outbound,13,0,0,0
+8002.5,"Dreyersdal Road",inbound,336,1,0,0
+8002.5,"Dreyersdal Road",outbound,119,1,0,0
+8002.5,"Firgrove Way Service Road",inbound,10,0,0,0
+8002.5,"Firgrove Way Service Road",outbound,83,0,0,0
+8002.5,"Clement Road",outbound,13,0,0,0
+8002.5,"Dreyersdal Farm Road",outbound,69,1,0,0
+8002.5,"Tokai High School Internal Road",inbound,345,0,0,2
+8002.5,"Tokai High School Internal Road",outbound,345,0,0,0
+8002.5,"Homestead Avenue",inbound,87,0,0,0
+8002.5,"Homestead Avenue",outbound,76,0,0,0
+8082.5,"Childrens Way",inbound,164,0,0,0
+8082.5,"Childrens Way",outbound,50,0,0,0
+8082.5,"Tussendal Avenue",outbound,69,0,0,0
+8082.5,"Starke Road",inbound,18,0,0,0
+8082.5,"Starke Road",outbound,209,0,0,0
+8082.5,"Christopher Road",inbound,337,0,0,0
+8082.5,"Christopher Road",outbound,149,0,0,0
+8082.5,"Ruskin Road",inbound,3,0,0,0
+8082.5,"Ruskin Road",outbound,320,0,0,0
+8082.5,"Alban Road",outbound,23,0,0,0
+8082.5,"Vineyard Road",inbound,347,1,0,0
+8082.5,"Vineyard Road",outbound,251,0,0,0
+8082.5,"Aristea Road",outbound,344,1,0,0
+8082.5,"Dante Road",inbound,3,0,0,0
+8082.5,"Dante Road",outbound,320,0,0,0
+8082.5,"Airlie Road",inbound,10,0,0,0
+8082.5,"Airlie Road",outbound,171,0,0,0
+8082.5,"Leyden Road",inbound,343,0,0,0
+8082.5,"Leyden Road",outbound,13,0,0,0
+8082.5,"Dreyersdal Road",inbound,337,1,0,0
+8082.5,"Dreyersdal Road",outbound,121,2,0,0
+8082.5,"Firgrove Way Service Road",inbound,10,0,0,0
+8082.5,"Firgrove Way Service Road",outbound,83,0,0,0
+8082.5,"Clement Road",outbound,13,0,0,0
+8082.5,"Dreyersdal Farm Road",outbound,69,0,0,0
+8082.5,"Tokai High School Internal Road",inbound,346,0,0,1
+8082.5,"Tokai High School Internal Road",outbound,346,1,0,0
+8082.5,"Homestead Avenue",inbound,87,0,0,0
+8082.5,"Homestead Avenue",outbound,76,0,0,0
+8157.5,"Childrens Way",inbound,165,1,0,0
+8157.5,"Childrens Way",outbound,50,0,0,0
+8157.5,"Tussendal Avenue",outbound,70,1,0,0
+8157.5,"Starke Road",inbound,18,0,0,0
+8157.5,"Starke Road",outbound,209,0,0,0
+8157.5,"Christopher Road",inbound,337,0,0,0
+8157.5,"Christopher Road",outbound,149,0,0,0
+8157.5,"Ruskin Road",inbound,3,0,0,0
+8157.5,"Ruskin Road",outbound,322,0,0,0
+8157.5,"Alban Road",outbound,23,0,0,0
+8157.5,"Vineyard Road",inbound,347,0,0,0
+8157.5,"Vineyard Road",outbound,252,1,0,0
+8157.5,"Aristea Road",outbound,345,0,0,0
+8157.5,"Dante Road",inbound,3,0,0,0
+8157.5,"Dante Road",outbound,322,0,0,0
+8157.5,"Airlie Road",inbound,10,0,0,0
+8157.5,"Airlie Road",outbound,172,0,0,0
+8157.5,"Leyden Road",inbound,344,0,0,0
+8157.5,"Leyden Road",outbound,13,0,0,0
+8157.5,"Dreyersdal Road",inbound,337,1,0,0
+8157.5,"Dreyersdal Road",outbound,121,0,0,0
+8157.5,"Firgrove Way Service Road",inbound,10,0,0,0
+8157.5,"Firgrove Way Service Road",outbound,83,0,0,0
+8157.5,"Clement Road",outbound,13,0,0,0
+8157.5,"Dreyersdal Farm Road",outbound,69,0,0,0
+8157.5,"Tokai High School Internal Road",inbound,347,0,0,1
+8157.5,"Tokai High School Internal Road",outbound,347,1,0,0
+8157.5,"Homestead Avenue",inbound,87,0,0,0
+8157.5,"Homestead Avenue",outbound,76,0,0,0
+8237.5,"Childrens Way",inbound,165,0,0,0
+8237.5,"Childrens Way",outbound,50,0,0,0
+8237.5,"Tussendal Avenue",outbound,70,0,0,0
+8237.5,"Starke Road",inbound,18,0,0,0
+8237.5,"Starke Road",outbound,209,0,0,0
+8237.5,"Christopher Road",inbound,339,1,0,0
+8237.5,"Christopher Road",outbound,150,1,0,0
+8237.5,"Ruskin Road",inbound,3,0,0,0
+8237.5,"Ruskin Road",outbound,323,0,0,0
+8237.5,"Alban Road",outbound,23,0,0,0
+8237.5,"Vineyard Road",inbound,348,1,0,0
+8237.5,"Vineyard Road",outbound,253,0,0,0
+8237.5,"Aristea Road",outbound,347,1,0,0
+8237.5,"Dante Road",inbound,3,0,0,0
+8237.5,"Dante Road",outbound,323,0,0,0
+8237.5,"Airlie Road",inbound,10,0,0,0
+8237.5,"Airlie Road",outbound,173,0,0,0
+8237.5,"Leyden Road",inbound,345,1,0,0
+8237.5,"Leyden Road",outbound,13,0,0,0
+8237.5,"Dreyersdal Road",inbound,338,0,0,0
+8237.5,"Dreyersdal Road",outbound,123,2,0,0
+8237.5,"Firgrove Way Service Road",inbound,10,0,0,0
+8237.5,"Firgrove Way Service Road",outbound,83,0,0,0
+8237.5,"Clement Road",outbound,13,0,0,0
+8237.5,"Dreyersdal Farm Road",outbound,70,0,0,0
+8237.5,"Tokai High School Internal Road",inbound,347,0,0,0
+8237.5,"Tokai High School Internal Road",outbound,347,1,0,0
+8237.5,"Homestead Avenue",inbound,87,0,0,0
+8237.5,"Homestead Avenue",outbound,76,0,0,0
+8312.5,"Childrens Way",inbound,165,0,0,0
+8312.5,"Childrens Way",outbound,50,0,0,0
+8312.5,"Tussendal Avenue",outbound,70,0,0,0
+8312.5,"Starke Road",inbound,18,0,0,0
+8312.5,"Starke Road",outbound,211,2,0,0
+8312.5,"Christopher Road",inbound,339,0,0,0
+8312.5,"Christopher Road",outbound,151,1,0,0
+8312.5,"Ruskin Road",inbound,3,0,0,0
+8312.5,"Ruskin Road",outbound,324,0,0,0
+8312.5,"Alban Road",outbound,23,0,0,0
+8312.5,"Vineyard Road",inbound,349,0,0,0
+8312.5,"Vineyard Road",outbound,254,0,0,0
+8312.5,"Aristea Road",outbound,347,0,0,0
+8312.5,"Dante Road",inbound,3,0,0,0
+8312.5,"Dante Road",outbound,324,0,0,0
+8312.5,"Airlie Road",inbound,10,0,0,0
+8312.5,"Airlie Road",outbound,173,0,0,0
+8312.5,"Leyden Road",inbound,346,1,0,0
+8312.5,"Leyden Road",outbound,13,0,0,0
+8312.5,"Dreyersdal Road",inbound,339,1,0,0
+8312.5,"Dreyersdal Road",outbound,123,0,0,0
+8312.5,"Firgrove Way Service Road",inbound,10,0,0,0
+8312.5,"Firgrove Way Service Road",outbound,83,0,0,0
+8312.5,"Clement Road",outbound,13,0,0,0
+8312.5,"Dreyersdal Farm Road",outbound,70,0,0,0
+8312.5,"Tokai High School Internal Road",inbound,348,0,0,1
+8312.5,"Tokai High School Internal Road",outbound,348,0,0,0
+8312.5,"Homestead Avenue",inbound,88,0,0,0
+8312.5,"Homestead Avenue",outbound,76,0,0,0
+8392.5,"Childrens Way",inbound,165,0,0,0
+8392.5,"Childrens Way",outbound,50,0,0,0
+8392.5,"Tussendal Avenue",outbound,70,0,0,0
+8392.5,"Starke Road",inbound,18,0,0,0
+8392.5,"Starke Road",outbound,211,0,0,0
+8392.5,"Christopher Road",inbound,340,0,0,0
+8392.5,"Christopher Road",outbound,151,0,0,0
+8392.5,"Ruskin Road",inbound,3,0,0,0
+8392.5,"Ruskin Road",outbound,324,0,0,0
+8392.5,"Alban Road",outbound,23,0,0,0
+8392.5,"Vineyard Road",inbound,350,1,0,0
+8392.5,"Vineyard Road",outbound,254,0,0,0
+8392.5,"Aristea Road",outbound,348,1,0,0
+8392.5,"Dante Road",inbound,3,0,0,0
+8392.5,"Dante Road",outbound,324,0,0,0
+8392.5,"Airlie Road",inbound,10,0,0,0
+8392.5,"Airlie Road",outbound,173,0,0,0
+8392.5,"Leyden Road",inbound,346,0,0,0
+8392.5,"Leyden Road",outbound,13,0,0,0
+8392.5,"Dreyersdal Road",inbound,339,0,0,0
+8392.5,"Dreyersdal Road",outbound,123,0,0,0
+8392.5,"Firgrove Way Service Road",inbound,10,0,0,0
+8392.5,"Firgrove Way Service Road",outbound,83,0,0,0
+8392.5,"Clement Road",outbound,13,0,0,0
+8392.5,"Dreyersdal Farm Road",outbound,70,0,0,0
+8392.5,"Tokai High School Internal Road",inbound,349,0,0,1
+8392.5,"Tokai High School Internal Road",outbound,349,0,0,0
+8392.5,"Homestead Avenue",inbound,88,0,0,0
+8392.5,"Homestead Avenue",outbound,78,1,0,0
+8467.5,"Childrens Way",inbound,166,0,0,0
+8467.5,"Childrens Way",outbound,50,0,0,0
+8467.5,"Tussendal Avenue",outbound,70,0,0,0
+8467.5,"Starke Road",inbound,18,0,0,0
+8467.5,"Starke Road",outbound,211,0,0,0
+8467.5,"Christopher Road",inbound,340,0,0,0
+8467.5,"Christopher Road",outbound,151,0,0,0
+8467.5,"Ruskin Road",inbound,3,0,0,0
+8467.5,"Ruskin Road",outbound,324,0,0,0
+8467.5,"Alban Road",outbound,24,0,0,0
+8467.5,"Vineyard Road",inbound,350,0,0,0
+8467.5,"Vineyard Road",outbound,254,0,0,0
+8467.5,"Aristea Road",outbound,349,1,0,0
+8467.5,"Dante Road",inbound,3,0,0,0
+8467.5,"Dante Road",outbound,324,0,0,0
+8467.5,"Airlie Road",inbound,10,0,0,0
+8467.5,"Airlie Road",outbound,173,0,0,0
+8467.5,"Leyden Road",inbound,347,0,0,0
+8467.5,"Leyden Road",outbound,13,0,0,0
+8467.5,"Dreyersdal Road",inbound,340,1,0,0
+8467.5,"Dreyersdal Road",outbound,123,0,0,0
+8467.5,"Firgrove Way Service Road",inbound,10,0,0,0
+8467.5,"Firgrove Way Service Road",outbound,83,0,0,0
+8467.5,"Clement Road",outbound,14,1,0,0
+8467.5,"Dreyersdal Farm Road",outbound,70,0,0,0
+8467.5,"Tokai High School Internal Road",inbound,349,0,0,0
+8467.5,"Tokai High School Internal Road",outbound,350,1,0,0
+8467.5,"Homestead Avenue",inbound,88,0,0,0
+8467.5,"Homestead Avenue",outbound,78,0,0,0
+8547.5,"Childrens Way",inbound,166,0,0,0
+8547.5,"Childrens Way",outbound,50,0,0,0
+8547.5,"Tussendal Avenue",outbound,70,0,0,0
+8547.5,"Starke Road",inbound,18,0,0,0
+8547.5,"Starke Road",outbound,212,1,0,0
+8547.5,"Christopher Road",inbound,341,0,0,0
+8547.5,"Christopher Road",outbound,152,0,0,0
+8547.5,"Ruskin Road",inbound,3,0,0,0
+8547.5,"Ruskin Road",outbound,325,0,0,0
+8547.5,"Alban Road",outbound,24,0,0,0
+8547.5,"Vineyard Road",inbound,351,1,0,0
+8547.5,"Vineyard Road",outbound,255,0,0,0
+8547.5,"Aristea Road",outbound,349,0,0,0
+8547.5,"Dante Road",inbound,3,0,0,0
+8547.5,"Dante Road",outbound,325,0,0,0
+8547.5,"Airlie Road",inbound,10,0,0,0
+8547.5,"Airlie Road",outbound,173,0,0,0
+8547.5,"Leyden Road",inbound,347,0,0,0
+8547.5,"Leyden Road",outbound,14,0,0,0
+8547.5,"Dreyersdal Road",inbound,340,0,0,0
+8547.5,"Dreyersdal Road",outbound,123,0,0,0
+8547.5,"Firgrove Way Service Road",inbound,10,0,0,0
+8547.5,"Firgrove Way Service Road",outbound,83,0,0,0
+8547.5,"Clement Road",outbound,14,0,0,0
+8547.5,"Dreyersdal Farm Road",outbound,70,0,0,0
+8547.5,"Tokai High School Internal Road",inbound,350,0,0,0
+8547.5,"Tokai High School Internal Road",outbound,350,1,0,0
+8547.5,"Homestead Avenue",inbound,88,0,0,0
+8547.5,"Homestead Avenue",outbound,78,0,0,0
+8622.5,"Childrens Way",inbound,166,0,0,0
+8622.5,"Childrens Way",outbound,50,0,0,0
+8622.5,"Tussendal Avenue",outbound,70,0,0,0
+8622.5,"Starke Road",inbound,18,0,0,0
+8622.5,"Starke Road",outbound,212,0,0,0
+8622.5,"Christopher Road",inbound,341,0,0,0
+8622.5,"Christopher Road",outbound,152,0,0,0
+8622.5,"Ruskin Road",inbound,3,0,0,0
+8622.5,"Ruskin Road",outbound,326,0,0,0
+8622.5,"Alban Road",outbound,24,0,0,0
+8622.5,"Vineyard Road",inbound,351,0,0,0
+8622.5,"Vineyard Road",outbound,256,1,0,0
+8622.5,"Aristea Road",outbound,350,0,0,0
+8622.5,"Dante Road",inbound,3,0,0,0
+8622.5,"Dante Road",outbound,326,0,0,0
+8622.5,"Airlie Road",inbound,10,0,0,0
+8622.5,"Airlie Road",outbound,173,0,0,0
+8622.5,"Leyden Road",inbound,348,0,0,0
+8622.5,"Leyden Road",outbound,14,0,0,0
+8622.5,"Dreyersdal Road",inbound,340,0,0,0
+8622.5,"Dreyersdal Road",outbound,123,0,0,0
+8622.5,"Firgrove Way Service Road",inbound,10,0,0,0
+8622.5,"Firgrove Way Service Road",outbound,83,0,0,0
+8622.5,"Clement Road",outbound,14,0,0,0
+8622.5,"Dreyersdal Farm Road",outbound,70,0,0,0
+8622.5,"Tokai High School Internal Road",inbound,350,0,0,0
+8622.5,"Tokai High School Internal Road",outbound,351,1,0,0
+8622.5,"Homestead Avenue",inbound,88,0,0,0
+8622.5,"Homestead Avenue",outbound,79,1,0,0
+8702.5,"Childrens Way",inbound,166,0,0,0
+8702.5,"Childrens Way",outbound,50,0,0,0
+8702.5,"Tussendal Avenue",outbound,70,0,0,0
+8702.5,"Starke Road",inbound,18,0,0,0
+8702.5,"Starke Road",outbound,213,1,0,0
+8702.5,"Christopher Road",inbound,341,0,0,0
+8702.5,"Christopher Road",outbound,153,0,0,0
+8702.5,"Ruskin Road",inbound,3,0,0,0
+8702.5,"Ruskin Road",outbound,326,0,0,0
+8702.5,"Alban Road",outbound,24,0,0,0
+8702.5,"Vineyard Road",inbound,351,0,0,0
+8702.5,"Vineyard Road",outbound,256,0,0,0
+8702.5,"Aristea Road",outbound,350,0,0,0
+8702.5,"Dante Road",inbound,3,0,0,0
+8702.5,"Dante Road",outbound,326,0,0,0
+8702.5,"Airlie Road",inbound,10,0,0,0
+8702.5,"Airlie Road",outbound,173,0,0,0
+8702.5,"Leyden Road",inbound,348,0,0,0
+8702.5,"Leyden Road",outbound,14,0,0,0
+8702.5,"Dreyersdal Road",inbound,341,1,0,0
+8702.5,"Dreyersdal Road",outbound,123,0,0,0
+8702.5,"Firgrove Way Service Road",inbound,10,0,0,0
+8702.5,"Firgrove Way Service Road",outbound,83,0,0,0
+8702.5,"Clement Road",outbound,14,0,0,0
+8702.5,"Dreyersdal Farm Road",outbound,70,0,0,0
+8702.5,"Tokai High School Internal Road",inbound,351,0,0,0
+8702.5,"Tokai High School Internal Road",outbound,351,1,0,0
+8702.5,"Homestead Avenue",inbound,88,0,0,0
+8702.5,"Homestead Avenue",outbound,79,0,0,0
+8777.5,"Childrens Way",inbound,166,0,0,0
+8777.5,"Childrens Way",outbound,50,0,0,0
+8777.5,"Tussendal Avenue",outbound,70,0,0,0
+8777.5,"Starke Road",inbound,18,0,0,0
+8777.5,"Starke Road",outbound,213,0,0,0
+8777.5,"Christopher Road",inbound,341,0,0,0
+8777.5,"Christopher Road",outbound,153,0,0,0
+8777.5,"Ruskin Road",inbound,3,0,0,0
+8777.5,"Ruskin Road",outbound,327,0,0,0
+8777.5,"Alban Road",outbound,24,0,0,0
+8777.5,"Vineyard Road",inbound,351,0,0,0
+8777.5,"Vineyard Road",outbound,257,1,0,0
+8777.5,"Aristea Road",outbound,351,0,0,0
+8777.5,"Dante Road",inbound,3,0,0,0
+8777.5,"Dante Road",outbound,327,0,0,0
+8777.5,"Airlie Road",inbound,10,0,0,0
+8777.5,"Airlie Road",outbound,173,0,0,0
+8777.5,"Leyden Road",inbound,348,0,0,0
+8777.5,"Leyden Road",outbound,14,0,0,0
+8777.5,"Dreyersdal Road",inbound,341,1,0,0
+8777.5,"Dreyersdal Road",outbound,123,0,0,0
+8777.5,"Firgrove Way Service Road",inbound,10,0,0,0
+8777.5,"Firgrove Way Service Road",outbound,83,0,0,0
+8777.5,"Clement Road",outbound,14,0,0,0
+8777.5,"Dreyersdal Farm Road",outbound,70,0,0,0
+8777.5,"Tokai High School Internal Road",inbound,351,0,0,0
+8777.5,"Tokai High School Internal Road",outbound,351,0,0,0
+8777.5,"Homestead Avenue",inbound,88,0,0,0
+8777.5,"Homestead Avenue",outbound,80,0,0,0
+8857.5,"Childrens Way",inbound,166,0,0,0
+8857.5,"Childrens Way",outbound,51,1,0,0
+8857.5,"Tussendal Avenue",outbound,70,0,0,0
+8857.5,"Starke Road",inbound,18,0,0,0
+8857.5,"Starke Road",outbound,214,0,0,0
+8857.5,"Christopher Road",inbound,341,0,0,0
+8857.5,"Christopher Road",outbound,153,0,0,0
+8857.5,"Ruskin Road",inbound,3,0,0,0
+8857.5,"Ruskin Road",outbound,327,0,0,0
+8857.5,"Alban Road",outbound,24,0,0,0
+8857.5,"Vineyard Road",inbound,351,0,0,0
+8857.5,"Vineyard Road",outbound,257,0,0,0
+8857.5,"Aristea Road",outbound,351,0,0,0
+8857.5,"Dante Road",inbound,3,0,0,0
+8857.5,"Dante Road",outbound,327,0,0,0
+8857.5,"Airlie Road",inbound,10,0,0,0
+8857.5,"Airlie Road",outbound,174,0,0,0
+8857.5,"Leyden Road",inbound,348,0,0,0
+8857.5,"Leyden Road",outbound,14,0,0,0
+8857.5,"Dreyersdal Road",inbound,341,1,0,0
+8857.5,"Dreyersdal Road",outbound,123,0,0,0
+8857.5,"Firgrove Way Service Road",inbound,10,0,0,0
+8857.5,"Firgrove Way Service Road",outbound,83,0,0,0
+8857.5,"Clement Road",outbound,14,0,0,0
+8857.5,"Dreyersdal Farm Road",outbound,70,0,0,0
+8857.5,"Tokai High School Internal Road",inbound,351,0,0,0
+8857.5,"Tokai High School Internal Road",outbound,351,0,0,0
+8857.5,"Homestead Avenue",inbound,88,0,0,0
+8857.5,"Homestead Avenue",outbound,80,0,0,0
+8932.5,"Childrens Way",inbound,167,0,0,0
+8932.5,"Childrens Way",outbound,51,0,0,0
+8932.5,"Tussendal Avenue",outbound,70,0,0,0
+8932.5,"Starke Road",inbound,18,0,0,0
+8932.5,"Starke Road",outbound,214,0,0,0
+8932.5,"Christopher Road",inbound,342,0,0,0
+8932.5,"Christopher Road",outbound,153,0,0,0
+8932.5,"Ruskin Road",inbound,3,0,0,0
+8932.5,"Ruskin Road",outbound,327,0,0,0
+8932.5,"Alban Road",outbound,24,0,0,0
+8932.5,"Vineyard Road",inbound,352,1,0,0
+8932.5,"Vineyard Road",outbound,257,0,0,0
+8932.5,"Aristea Road",outbound,351,0,0,0
+8932.5,"Dante Road",inbound,3,0,0,0
+8932.5,"Dante Road",outbound,327,0,0,0
+8932.5,"Airlie Road",inbound,10,0,0,0
+8932.5,"Airlie Road",outbound,174,0,0,0
+8932.5,"Leyden Road",inbound,348,0,0,0
+8932.5,"Leyden Road",outbound,14,0,0,0
+8932.5,"Dreyersdal Road",inbound,342,1,0,0
+8932.5,"Dreyersdal Road",outbound,123,0,0,0
+8932.5,"Firgrove Way Service Road",inbound,10,0,0,0
+8932.5,"Firgrove Way Service Road",outbound,83,0,0,0
+8932.5,"Clement Road",outbound,14,0,0,0
+8932.5,"Dreyersdal Farm Road",outbound,70,0,0,0
+8932.5,"Tokai High School Internal Road",inbound,351,0,0,0
+8932.5,"Tokai High School Internal Road",outbound,351,0,0,0
+8932.5,"Homestead Avenue",inbound,88,0,0,0
+8932.5,"Homestead Avenue",outbound,80,0,0,0

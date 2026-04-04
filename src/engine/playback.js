@@ -111,8 +111,9 @@ export class PlaybackSource {
     }
     this._avgOutDelaySec = Object.fromEntries(
       ['1A', '2A', '2B', '3A'].map(cid => {
-        const arr = outTimes[cid];
-        return [cid, arr.length > 0 ? arr.reduce((a, b) => a + b, 0) / arr.length : 0];
+        // Outbound times from JSON frames are coarse (30s timestep resolution) —
+        // not reliable enough to display. Set to 0 so UI shows '—'.
+        return [cid, 0];
       })
     );
 

@@ -83,8 +83,8 @@ const BentoBriefing = () => {
                     The TIA Highway Code
                   </h4>
                   <ul className="popover-list">
-                    <li>• <strong>Cars per hour:</strong> L: 500, M: 650, H: 840</li>
-                    <li>• <strong>Cars per entryway:</strong> Children's Way: 36% | Homestead Av: 30% | Firgrove Way: 18% | Dreyersdal North: 16%</li>
+                    <li>• <strong>Inbound vehicles:</strong> L: 336, M: 420, H: 504</li>
+                    <li>• <strong>Cars per entryway:</strong> Children's Way: 47% | Homestead Av: 25% | 1A Dreyersdal South: 14% | 1A Dreyersdal North: 11% | Firgrove/Starke: 3%</li>
                     <li>• <strong>School Drop-offs:</strong> 120 bays (98 on-site + 22 on-street)</li>
                     <li>• <strong>Avg stop time:</strong> 45 seconds | One-way system | Aristea Traffic Circle</li>
                   </ul>
@@ -110,7 +110,7 @@ const BentoBriefing = () => {
                     <li>• <strong>Speeds:</strong> Arterial: 60 | Collector: 40 | Local: 30</li>
                     <li>• <strong>Safety:</strong> 1.5 – 2.5s safe gap | 2.5s yield gap</li>
                     <li>• <strong>Scale:</strong> 11 junctions & 28 road signs</li>
-                    <li>• <strong>Logic:</strong> Rat-runs trigger at 6–10% congestion | 85% chance</li>
+                    <li>• <strong>Logic:</strong> Rat-runs trigger at 6–15% congestion | 85% chance</li>
                   </ul>
                 </div>
               </div>
@@ -173,12 +173,16 @@ const ModelsSection = () => (
           </div>
         </div>
 
-        <div className="model-entry">
+        <div className="model-entry model-entry--row3-left">
           <span className="model-chain-badge">5</span>
           <div className="model-entry-body">
             <h3>Reading the Instruments</h3>
             <p>Our Live engine and the Lab model are stochastic — each run includes realistic random variation in driver behaviour, so exact numbers shift slightly between runs. The TIA and UXSim use deterministic, averaged flows, so they always return the same result. Our Live engine also adds layers the others don't: dynamic egress holds at the Ladies Mile signal during peak, dwell time at the school, and real-time rat-run activation based on live congestion.</p>
           </div>
+        </div>
+
+        <div className="model-entry model-entry--ad">
+          <AdSlot variant="rectangle" />
         </div>
 
       </div>
@@ -263,6 +267,11 @@ const FindingsSection = () => (
           </ul>
         </div>
 
+        {/* AD CARD */}
+        <div className="findings-col findings-col--ad">
+          <AdSlot variant="rectangle" />
+        </div>
+
       </div>
 
       <div className="road-closed-block" style={{ marginTop: '4rem' }}>
@@ -314,6 +323,7 @@ const Footer = () => (
           Built by <a href="https://neill.adamson.co.za/" target="_blank" className="editorial-link">Neill Adamson</a> <a href="https://x.com/geniusboywonder" target="_blank" className="editorial-link">@geniusboywonder</a>
         </p>
         <p className="sub">Need a lift building with AI? <a href="mailto:nadamson@gmail.com" className="editorial-link">nadamson@gmail.com</a></p>
+        <p className="copyright">© Neill Adamson. 2026 All rights reserved.</p>
       </div>
     </div>
   </footer>

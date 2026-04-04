@@ -298,7 +298,7 @@ const Footer = () => (
 
 const SHARE_TEXT = '800 extra cars into Bergvliet — see what the traffic models really show.';
 const SHARE_TITLE = 'Traff✱k — Tokai High Traffic Simulator';
-const SHARE_URL = 'https://traffic-sim.vercel.app';
+const SHARE_URL = 'https://traffic.adamson.co.za';
 
 const ShareButtons = () => {
   const canNativeShare = typeof navigator !== 'undefined' && !!navigator.share;

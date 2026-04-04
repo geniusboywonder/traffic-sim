@@ -35,7 +35,7 @@ export const AccessBarrier = ({ onInitialize }) => {
             <p className="disclaimer-text">I am just a guy, with AI. I am not a traffic-assessor, or have any deep knowledge on traffic flow, stalling physics or back-pressure. My AI agents helped with that. They could be wrong. And this is just <strong>one possible scenario</strong>. It's fun and informative, but not definitive in its modelling. Don't use this site to make any life-changing decisions, or say things you might regret to WCED, City of Cape Town or anyone else.</p>
             <div className="disclaimer-lekker">
               <span className="barrier-lekker">Just be lekker!</span>
-              <span className="barrier-lekker-sub">(no cars or humans were harmed in the making of this)</span>
+              <span className="barrier-lekker-sub">(no cars or humans were harmed while making this)</span>
             </div>
           </div>
         </div>

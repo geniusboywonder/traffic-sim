@@ -571,9 +571,9 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
     
     if (isMobile) {
-      map.fitBounds([[-34.0585, 18.4435], [-34.0395, 18.4635]], { padding: [10, 10] });
+      map.fitBounds([[-34.0560, 18.4450], [-34.0410, 18.4620]], { padding: [5, 5] });
     } else {
-      map.fitBounds([[-34.0585, 18.4400], [-34.0380, 18.4650]], { padding: [20, 20] });
+      map.fitBounds([[-34.0555, 18.4435], [-34.0395, 18.4635]], { padding: [4, 4] });
     }
 
     const outer = [[-40, 14], [-40, 23], [-30, 23], [-30, 14]], study = [[-34.0585, 18.4435], [-34.0395, 18.4435], [-34.0395, 18.4635], [-34.0585, 18.4635]];

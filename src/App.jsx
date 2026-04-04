@@ -4,6 +4,7 @@ import Header from './components/Header';
 import SimMap from './components/SimMap';
 import StatsPanel from './components/StatsPanel';
 import { SmokeBackground } from './components/SmokeBackground';
+import { AccessBarrier } from './components/AccessBarrier';
 import { PlaybackSource } from './engine/playback';
 import './App.css';
 
@@ -35,43 +36,6 @@ const INITIAL_STATS = {
   },
   parking: { onSite: 0, onStreet: 0 }
 };
-
-const AccessBarrier = ({ onInitialize }) => (
-  <div className="access-barrier" id="access-barrier">
-    <div className="barrier-card">
-      <div className="barrier-smoke-bg">
-        <SmokeBackground smokeColor="#96B89A" />
-      </div>
-      <div className="barrier-content">
-        <header style={{ textAlign: 'center' }}>
-          <div className="barrier-title-box" style={{ display: 'inline-flex', alignItems: 'center', gap: '1rem' }}>
-            <Activity size={32} color="var(--c-3a)" />
-            <h2>Traff<span>✱</span>k - Tokai High Traffic Simulator</h2>
-          </div>
-        </header>
-
-        <div className="barrier-grid">
-          <div className="barrier-narrative">
-            <p>Hi there! As a Bergvliet resident, I wanted to visually understand what an additional 800 cars would do to the suburban streets of Bergvliet. And given that the WCED-commissioned Traffic Impact Assessment is woefully limited in its scope, I built a thing.</p>
-            <p>This site is also not formally associated with the <a href="https://www.facebook.com/CommunityResponseBergvlietSchool" target="_blank" className="editorial-link">Bergvliet Volunteers Association (BVA)</a>, although I am a member of the <a href="https://chat.whatsapp.com/J7ooHVb9tdr4n9PLf76wYy?mode=ems_wa_t" target="_blank" className="editorial-link">Community Response: Tokai School WhatsApp group</a>.</p>
-            <p className="barrier-lekker">Just be lekker! <span style={{ fontWeight: 400, opacity: 0.6, fontStyle: 'italic' }}>(no cars or humans were harmed in the making of this)</span><br /><span className="barrier-sig">ɲeill</span></p>
-          </div>
-          <div className="barrier-disclaimer">
-            <span className="disclaimer-label">ROAD WARNING</span>
-            <p className="disclaimer-text">I am just a guy, with AI. I am not a traffic-assessor, or have any deep knowledge on traffic flow, stalling physics or back-pressure. My AI agents helped with that. They could be wrong. And this is just <strong>one possible scenario</strong>. It's fun and informative, but not definitive in its modelling. Don't use this site to make any life-changing decisions, or say things you might regret to WCED, City of Cape Town or anyone else.</p>
-          </div>
-        </div>
-
-        <div className="barrier-action">
-          <button className="init-sim-btn" onClick={onInitialize} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            Start the Engine
-            <Play size={20} fill="currentColor" />
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-);
 
 const BentoBriefing = () => {
   const [tiaOpen, setTiaOpen] = useState(false);
@@ -202,7 +166,7 @@ const ModelsSection = () => (
         <div className="model-entry">
           <span className="model-chain-badge">4</span>
           <div className="model-entry-body">
-            <h3>UXSim — Network-Level Confirmation</h3>
+            <h3>Validation — Network-Level Confirmation</h3>
             <p>UXSim (developed by Dr. Toru Seo, Institute of Science Tokyo) operates at a different level — mesoscopic, modelling traffic as flow rather than individual cars. Its mathematics are kinematic wave theory: the same language the TIA uses for its capacity calculations. This is why UXSim is uniquely useful here: it doesn't replace the Lab model or our Live engine, it audits them from the network level.</p>
           </div>
         </div>
@@ -274,7 +238,7 @@ const FindingsSection = () => (
           <h3 className="findings-col-heading">Significant Damage</h3>
           <ul className="findings-bullets">
             <li><strong>The school gate is the single point of failure.</strong> Every model independently flags the school approach as the most congested point in the network. UXSim's average delay at the school entrance grows from <span className="stat-pill" data-source="UXSim avg_delay_in, school_internal_road, Low scenario">33s</span> to <span className="stat-pill" data-source="UXSim avg_delay_in, school_internal_road, High scenario">71s</span> between Low and High. 28 speed humps and a single-entry gate mean one stalled vehicle stalls the entire queue.</li>
-            <li><strong>Rat-run pressure is structural.</strong> Dreyersdal Road is the single most loaded road in Medium and High scenarios (Lab model). UXSim records average delays of <span className="stat-pill" data-source="UXSim avg delay, Ruskin Road across scenarios">74–106s on Ruskin Road</span> and up to <span className="stat-pill" data-source="UXSim avg delay, Vineyard Road, High scenario">86s on Vineyard Road</span>. When the main routes fill, the rat-runs fill too.</li>
+            <li><strong>Rat-run pressure is structural.</strong> Dreyersdal Road is the single most loaded road in Medium and High scenarios (Lab model). The Validation model records average delays of <span className="stat-pill" data-source="Validation model avg delay, Ruskin Road across scenarios">74–106s on Ruskin Road</span> and up to <span className="stat-pill" data-source="Validation model avg delay, Vineyard Road, High scenario">86s on Vineyard Road</span>. When the main routes fill, the rat-runs fill too.</li>
           </ul>
         </div>
 
@@ -287,7 +251,7 @@ const FindingsSection = () => (
           <h3 className="findings-col-heading">Telling Details</h3>
           <ul className="findings-bullets">
             <li><strong>The queue peaks at <span className="stat-pill" data-source="Lab model peak vehicles on network — all High/Med scenarios">08:15</span>, not 07:45.</strong> TIA analysis centres on 07:30–08:00. But Lab model peak network loading hits at 08:15–08:17. The school gate keeps queueing vehicles 30 minutes after peak demand has passed. Demand peaks at 07:45. Congestion peaks half an hour later.</li>
-            <li><strong>Three models, one conclusion.</strong> Live, Lab, and UXSim — built on entirely different mathematics — independently identify the same roads. School internal road appears in the top 3 congested roads in every model, every scenario. Starke Road and the Dreyersdal/Vineyard corridor appear in the top 5 across all models in Medium and High. That's not a modelling quirk. It's the road.</li>
+            <li><strong>Three models, one conclusion.</strong> Live, Lab, and the Validation model — built on entirely different mathematics — independently identify the same roads. School internal road appears in the top 3 congested roads in every model, every scenario. Starke Road and the Dreyersdal/Vineyard corridor appear in the top 5 across all models in Medium and High. That's not a modelling quirk. It's the road.</li>
           </ul>
         </div>
 
@@ -323,7 +287,7 @@ const Footer = () => (
       <div className="footer-credits">
         <p style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '0.5rem' }}>
           <PersonStanding size={20} color="var(--c-3a)" />
-          Built by <a href="https://x.com/geniusboywonder" target="_blank" className="editorial-link">Neill Adamson @geniusboywonder</a>
+          Built by <a href="https://neill.adamson.co.za/" target="_blank" className="editorial-link">Neill Adamson</a> <a href="https://x.com/geniusboywonder" target="_blank" className="editorial-link">@geniusboywonder</a>
         </p>
         <p className="sub">Need a lift building with AI? <a href="mailto:nadamson@gmail.com" className="editorial-link">nadamson@gmail.com</a></p>
       </div>

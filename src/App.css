@@ -357,7 +357,7 @@ a {
 /* ── Simulation Controls (Inside Map) ── */
 .sim-controls-wrapper {
   position: absolute;
-  bottom: 2rem;
+  top: 0.75rem;
   left: 0;
   right: 0;
   display: flex;
@@ -1415,7 +1415,7 @@ a {
 
 .findings-stat-num {
   font-family: 'Space Grotesk', monospace;
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
   font-weight: 800;
   letter-spacing: -0.03em;
   color: var(--on-surface);
@@ -1722,10 +1722,10 @@ a {
 .barrier-lekker-sub {
   display: block;
   font-weight: 400;
-  opacity: 0.6;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-style: italic;
   margin-top: 0.25rem;
+  color: rgba(161, 204, 165, 0.65);
 }
 
 .barrier-sig {

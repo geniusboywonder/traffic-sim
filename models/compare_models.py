@@ -119,8 +119,8 @@ def parse_idm(log_path: Path, roads_path: Path):
         "trip_p95_s": completed["total_s"].quantile(0.95),
         "delay_mean_s": completed["delay_s"].mean(),
         "delay_ratio_mean": completed["delay_ratio"].mean(),
-        "inbound_mean_s": completed["inbound_s"].mean(),
-        "outbound_mean_s": completed["outbound_s"].mean(),
+        "inbound_mean_s": completed["inbound_s"].mean() if completed["inbound_s"].notna().any() else None,
+        "egress_mean_s":  completed["outbound_s"].mean() if completed["outbound_s"].notna().any() else None,
         "stopped_time_mean_s": completed["delay_s"].mean(),  # proxy
         "peak_congestion_sim_t": peak_sim_t,
         "peak_congestion_clock": sim_to_clock(peak_sim_t),
@@ -154,6 +154,32 @@ def parse_sumo(tripinfo_path: Path, json_path: Path):
             "depart":      float(t.get("depart", 0)),
         })
     df = pd.DataFrame(rows)
+
+    # Infer inbound leg end time from FCD: first timestep vehicle appears on school_internal
+    fcd_path = tripinfo_path.parent / tripinfo_path.name.replace("tripinfo", "fcd")
+    school_arrival = {}  # vid -> abs time first seen on school_internal
+    if fcd_path.exists():
+        import xml.etree.ElementTree as ET2
+        current_t = None
+        for event, elem in ET2.iterparse(str(fcd_path), events=("start", "end")):
+            if event == "start" and elem.tag == "timestep":
+                current_t = float(elem.get("time", 0))
+            elif event == "end" and elem.tag == "vehicle":
+                vid = elem.get("id", "")
+                lane = elem.get("lane", "")
+                if "school_internal" in lane and vid not in school_arrival:
+                    school_arrival[vid] = current_t
+                elem.clear()
+        print(f"[parse_sumo] FCD school arrivals: {len(school_arrival)} vehicles")
+
+    df["school_arrival_t"] = df["id"].map(school_arrival)
+    df["inbound_s"] = df.apply(
+        lambda r: (r["school_arrival_t"] - r["depart"]) if pd.notna(r.get("school_arrival_t")) else None, axis=1
+    )
+    df["egress_s"] = df.apply(
+        lambda r: (r["duration"] - (r["school_arrival_t"] - r["depart"]) - r["stopTime"])
+                  if pd.notna(r.get("school_arrival_t")) else None, axis=1
+    )
 
     # Total trips = vehicles that were created (read from JSON)
     with open(json_path) as f:
@@ -225,7 +251,8 @@ def parse_sumo(tripinfo_path: Path, json_path: Path):
         "trip_p95_s": completed["duration"].quantile(0.95),
         "delay_mean_s": completed["timeLoss"].mean(),
         "delay_ratio_mean": (completed["timeLoss"] / FREE_FLOW_TRIP_S).mean(),
-        "inbound_mean_s": (completed["duration"] - completed["stopTime"]).mean() / 2,
+        "inbound_mean_s": completed["inbound_s"].mean() if "inbound_s" in completed and completed["inbound_s"].notna().any() else None,
+        "egress_mean_s":  completed["egress_s"].mean()  if "egress_s"  in completed and completed["egress_s"].notna().any()  else None,
         "stopped_time_mean_s": completed["waitingTime"].mean(),
         "peak_congestion_sim_t": peak_sim_t,
         "peak_congestion_clock": sim_to_clock(peak_sim_t),
@@ -352,12 +379,16 @@ def print_report(idm, sumo, uxsim, scenario):
     print("\n── 2. TRIP DURATION ───────────────────────────────────────────────────────────")
     ux_trip = fmt(uxsim['est_trip_s']) if uxsim else "—"
     ux_delay = fmt(uxsim['avg_delay_s']) if uxsim else "—"
+    sumo_ib = fmt(sumo.get('inbound_mean_s')) if sumo.get('inbound_mean_s') else "—"
+    sumo_eg = fmt(sumo.get('egress_mean_s')) if sumo.get('egress_mean_s') else "—"
     rows = [
-        ("Mean trip time",        fmt(idm['trip_mean_s']),   fmt(sumo['trip_mean_s']),   ux_trip + " (est)"),
-        ("Median trip time",      fmt(idm['trip_median_s']), fmt(sumo['trip_median_s']), "—"),
-        ("P85 trip time",         fmt(idm['trip_p85_s']),    fmt(sumo['trip_p85_s']),    "—"),
-        ("P95 trip time",         fmt(idm['trip_p95_s']),    fmt(sumo['trip_p95_s']),    "—"),
-        ("Mean delay",            fmt(idm['delay_mean_s']),  fmt(sumo['delay_mean_s']),  ux_delay),
+        ("Mean trip time (full)",     fmt(idm['trip_mean_s']),   fmt(sumo['trip_mean_s']),   ux_trip + " (est)"),
+        ("  → Inbound leg mean",      fmt(idm.get('inbound_mean_s')), sumo_ib,               "—"),
+        ("  → Egress leg mean",       fmt(idm.get('egress_mean_s')),  sumo_eg,               "—"),
+        ("Median trip time",          fmt(idm['trip_median_s']), fmt(sumo['trip_median_s']), "—"),
+        ("P85 trip time",             fmt(idm['trip_p85_s']),    fmt(sumo['trip_p85_s']),    "—"),
+        ("P95 trip time",             fmt(idm['trip_p95_s']),    fmt(sumo['trip_p95_s']),    "—"),
+        ("Mean delay",                fmt(idm['delay_mean_s']),  fmt(sumo['delay_mean_s']),  ux_delay),
     ]
     _print_table3(rows)
 

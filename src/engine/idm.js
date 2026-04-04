@@ -158,10 +158,11 @@ export function stepAllVehicles(vehicles, dt, routeConfigs, simTime) {
 
       const group = approaches.get(toJid) || [];
       
-      // PHYSICS SEARCH: Inbound vehicles now care about Outbound vehicles in front of them
-      // on the same segment (re-entry awareness).
+      // PHYSICS SEARCH: vehicles are blocked by any vehicle ahead on the same
+      // road segment regardless of state — outbound vehicles share physical road
+      // space with inbound vehicles and must queue behind them.
       const sameSegmentLeaders = group
-        .filter(o => o !== v && o.distToTarget < v.distToTarget && !o.isParking && o.state === v.state)
+        .filter(o => o !== v && o.distToTarget < v.distToTarget && !o.isParking)
         .sort((a, b) => b.distToTarget - a.distToTarget);
 
       if (sameSegmentLeaders.length > 0) {
@@ -170,16 +171,16 @@ export function stepAllVehicles(vehicles, dt, routeConfigs, simTime) {
       } else if (toJid) {
         const nextTargetJids = [];
         for (const r of Object.values(routeConfigs)) {
-          // Direction consistency for look-ahead
+          // Inbound vehicles don't look ahead onto egress routes (different road direction)
           if (v.state === 'inbound' && r.type === 'egress') continue;
-          if (v.state === 'outbound' && r.type !== 'egress') continue;
           
           const idx = r.junctions?.indexOf(toJid);
           if (idx !== -1 && idx < r.junctions.length - 1) nextTargetJids.push(r.junctions[idx + 1]);
         }
         let bGap = 9999, bLeader = null;
         for (const nid of nextTargetJids) {
-          const pot = (approaches.get(nid) || []).filter(o => !o.isParking && o.state === v.state).sort((a, b) => a.distFromStart - b.distFromStart)[0];
+          // Look ahead sees all vehicles regardless of state — shared road space
+          const pot = (approaches.get(nid) || []).filter(o => !o.isParking).sort((a, b) => a.distFromStart - b.distFromStart)[0];
           if (pot) {
             const pg = Math.max(v.distToTarget + pot.distFromStart - 4.5, 0.1);
             if (pg < bGap) { bGap = pg; bLeader = pot; }

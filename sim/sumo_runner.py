@@ -10,13 +10,14 @@ SUMO outputs captured per scenario (written to sim/sumo/):
     fcd-{L,M,H}.xml        Floating Car Data — per-vehicle position/speed per timestep
     tripinfo-{L,M,H}.xml   Per-vehicle journey stats — waitingTime, timeLoss
 
-These are then converted to public/sim-results/scenario-{L,M,H}.json
+These are then converted to public/sim-results/scenario-{L,M,H}-sumo.json
 by converters/sumo_to_json.py.
 
-Demand mirrors uxsim_runner.py exactly:
-    L=420 / M=650 / H=840 total trips
-    1A 24%  2A 20%  2B 35%  3A 21%
-    Trapezoidal arrival profile, inbound + outbound with 45s dwell offset
+Demand (TIA-aligned inbound vehicle counts):
+    L=336 / M=420 / H=504 total inbound trips
+    1A Dreyersdal (both ends) 25% | 2A Homestead 25% | 2B Children's Way 47% | 3A Firgrove/Starke 3%
+    Trapezoidal arrival profile peaking 07:30–08:00, inbound with 45s school dwell
+    All scenarios run to 09:00
 """
 
 import argparse
@@ -40,18 +41,21 @@ from sumo_network_builder import build_sumo_network, node_id
 from converters.sumo_to_json import convert
 
 SIM_START = 23400   # 06:30 seconds since midnight
-SIM_END   = 32400   # 09:00 — extended to allow traffic to clear post-peak
+SIM_END   = 32400   # 09:00 — all scenarios run to 09:00
 TIMESTEP  = 30      # output frame interval
 
-SCENARIO_DEMAND = {"L": 500, "M": 650, "H": 840}
+SCENARIO_DEMAND = {"L": 336, "M": 420, "H": 504}
 
-# Corridor shares from TIA Section 13 (external 70% normalized to 100%):
-#   Dreyersdal N=11%, Homestead=21%, Children's Way=25%, Dreyersdal S=13% → sum=70
+# TIA-aligned corridor splits (inbound only — spawned = inbound vehicle count).
+# Dreyersdal North (11%) + South (14%) both enter via N1 area — SUMO cannot
+# distinguish the two Dreyersdal entry directions at the network level, so both
+# are absorbed into N1 (25% combined), consistent with the UXSim mesoscopic approach.
+# 2B Children's Way 47% | 2A Homestead 25% | 1A Dreyersdal (both ends) 25% | 3A Firgrove/Starke 3%
 CORRIDORS = [
-    {"node_id": "N1", "share": 0.157, "label": "1A"},  # Dreyersdal N  11/70
-    {"node_id": "N4", "share": 0.300, "label": "2A"},  # Homestead     21/70
-    {"node_id": "N3", "share": 0.357, "label": "2B"},  # Children's Way 25/70
-    {"node_id": "N2", "share": 0.186, "label": "3A"},  # Dreyersdal S  13/70
+    {"node_id": "N1", "share": 0.25, "label": "1A"},   # Dreyersdal South + North combined
+    {"node_id": "N4", "share": 0.25, "label": "2A"},   # Homestead Av
+    {"node_id": "N3", "share": 0.47, "label": "2B"},   # Children's Way
+    {"node_id": "N2", "share": 0.03, "label": "3A"},   # Firgrove Way → Starke Rd (local)
 ]
 
 ARRIVAL_PROFILE = [

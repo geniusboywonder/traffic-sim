@@ -258,20 +258,20 @@ const FindingsSection = () => (
 
       </div>
 
-      <div className="road-closed-block" style={{ background: 'var(--surface-high)', border: '1.5px dashed #C47070', color: 'var(--on-surface)', marginTop: '3rem' }}>
+      <div className="road-closed-block">
         <div className="road-closed-header">
-          <OctagonX size={22} strokeWidth={3} />
+          <OctagonX size={26} strokeWidth={3} />
           <span>✕ &nbsp;ROAD CLOSED&nbsp; ✕</span>
-          <OctagonX size={22} strokeWidth={3} />
+          <OctagonX size={26} strokeWidth={3} />
         </div>
-        <p className="road-closed-intro" style={{ color: 'var(--muted-text)' }}>This modelling <strong>EXCLUDES</strong> any modelling for:</p>
+        <p className="road-closed-intro">This modelling <strong>EXCLUDES</strong> any modelling for:</p>
         <ul className="road-closed-list">
           <li>Sweet Valley School runs</li>
           <li>Bergvliet residents local traffic movements to work, school and university</li>
           <li>ALL traffic <em>exiting</em> to Firgrove Rd, Ladies Mile Rd and Main Rd</li>
           <li>New essential traffic calming measures in Dante Rd, Vineyard Rd, Ruskin Rd, Leyden Rd</li>
         </ul>
-        <p className="road-closed-footer" style={{ borderTopColor: 'rgba(0,0,0,0.1)', color: 'var(--muted-text)' }}>All Avg Time Out figures will be <strong>massively understated</strong> based on the above.</p>
+        <p className="road-closed-footer">All Avg Time Out figures will be <strong>massively understated</strong> based on the above.</p>
       </div>
 
     </div>

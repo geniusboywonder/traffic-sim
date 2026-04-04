@@ -43,7 +43,7 @@ export class PlaybackSource {
   // flow_N_in.M — groups of 5 flows per corridor in demand generation order
   static _FLOW_CORRIDORS = ['1A', '2A', '2B', '3A'];
   static _CORRIDOR_LABELS = {
-    '1A': 'Main Rd', '2A': 'Homestead Ave',
+    '1A': 'Main Rd', '2A': 'Homestead Av',
     '2B': "Children's Way",  '3A': 'Firgrove Way',
   };
   // Primary entry road for each corridor (used for delay stats)

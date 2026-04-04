@@ -127,7 +127,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
       const active  = corrVehicles.filter(v => v.v >= 2).length;
       const inD = inDelays[cid], outD = outDelays[cid];
       res.corridors[cid] = {
-        label: cid === '1A' ? 'Main Rd' : cid === '2A' ? 'Homestead Ave' : cid === '2B' ? "Children's Way" : 'Firgrove Way',
+        label: cid === '1A' ? 'Main Rd' : cid === '2A' ? 'Homestead Av' : cid === '2B' ? "Children's Way" : 'Firgrove Way',
         current: corrVehicles.length, spawned: totals[cid], exited: exits[cid],
         avgInDelay: inD.count > 0 ? (inD.total / inD.count / 60) : 0,
         avgOutDelay: outD.count > 0 ? (outD.total / outD.count / 60) : 0,
@@ -635,7 +635,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
           </span>
         </div>        {[
           { c: COLOUR['3A'].base, l: 'Firgrove Way', s: '●' },
-          { c: COLOUR['2A'].base, l: 'Homestead Ave', s: '●' },
+          { c: COLOUR['2A'].base, l: 'Homestead Av', s: '●' },
           { c: COLOUR['2B'].base, l: "Children's Way", s: '●' },
           { c: COLOUR['1A'].base, l: 'Main Rd', s: '●' },
           { c: '#fff', l: 'Rat-Run', s: '◆', stroke: '#000' },

@@ -30,7 +30,7 @@ function fmtTime(minutes) {
 const INITIAL_STATS = {
   corridors: {
     '3A': { label: 'Firgrove Way',     current: 0, spawned: 0, exited: 0, avgInDelay: 0, avgOutDelay: 0, congestion: 0, active: 0, slowing: 0, stopped: 0 },
-    '2A': { label: 'Homestead Ave',    current: 0, spawned: 0, exited: 0, avgInDelay: 0, avgOutDelay: 0, congestion: 0, active: 0, slowing: 0, stopped: 0 },
+    '2A': { label: 'Homestead Av',     current: 0, spawned: 0, exited: 0, avgInDelay: 0, avgOutDelay: 0, congestion: 0, active: 0, slowing: 0, stopped: 0 },
     '2B': { label: "Children's Way",   current: 0, spawned: 0, exited: 0, avgInDelay: 0, avgOutDelay: 0, congestion: 0, active: 0, slowing: 0, stopped: 0 },
     '1A': { label: 'Main Rd',  current: 0, spawned: 0, exited: 0, avgInDelay: 0, avgOutDelay: 0, congestion: 0, active: 0, slowing: 0, stopped: 0 },
   },
@@ -59,7 +59,7 @@ const BentoBriefing = () => {
               It models every car, every slow-down at a speed hump, and every frustrated parent trying to squeeze in a quick drop-off. The heart of the simulation is the Intelligent Driver Model — that decides how close cars follow each other, how fast they accelerate, and when they brake gently instead of slamming on the anchors.
             </p>
             <p className="narrative-text-body" style={{ textAlign: 'justify', maxWidth: 'none' }}>
-              The model uses a "main route" for each entry / exit corridor from Firgrove Way, Homestead Rd, Children's Way and Main Rd. This is the route most cars will follow — until traffic starts to build up. Then cars will find and follow multiple rat-runs to the school. The model attempts to avoid the normal Sweet Valley routes at the top of Dreyersdal Rd and exiting via Homestead.
+              The model uses a "main route" for each entry / exit corridor from Firgrove Way, Homestead Av, Children's Way and Main Rd. This is the route most cars will follow — until traffic starts to build up. Then cars will find and follow multiple rat-runs to the school. The model attempts to avoid the normal Sweet Valley routes at the top of Dreyersdal Rd and exiting via Homestead.
             </p>
           </div>
         </div>
@@ -82,7 +82,7 @@ const BentoBriefing = () => {
                   </h4>
                   <ul className="popover-list">
                     <li>• <strong>Cars per hour:</strong> L: 500, M: 650, H: 840</li>
-                    <li>• <strong>Cars per entryway:</strong> Children's Way: 36% | Homestead Ave: 30% | Firgrove Way: 18% | Dreyersdal North: 16%</li>
+                    <li>• <strong>Cars per entryway:</strong> Children's Way: 36% | Homestead Av: 30% | Firgrove Way: 18% | Dreyersdal North: 16%</li>
                     <li>• <strong>School Drop-offs:</strong> 120 bays (98 on-site + 22 on-street)</li>
                     <li>• <strong>Avg stop time:</strong> 45 seconds | One-way system | Aristea Traffic Circle</li>
                   </ul>
@@ -238,8 +238,8 @@ const FindingsSection = () => (
           <h3 className="findings-col-heading">Significant Damage</h3>
           <ul className="findings-bullets">
             <li><strong>The school gate is the single point of failure.</strong> Every model independently flags the school approach as the most congested point in the network. The Validation model's average delay at the school entrance grows from <span className="stat-pill" data-source="Validation model avg delay, school internal road, Low scenario">33s</span> to <span className="stat-pill" data-source="Validation model avg delay, school internal road, High scenario">71s</span> between Low and High. 14 speed humps and a single-entry gate mean one stalled vehicle stalls the entire queue.</li>
-            <li><strong>Rat-run pressure is structural.</strong> Dreyersdal Road is the single most loaded road in Medium and High scenarios (Lab model). The Validation model records average delays of <span className="stat-pill" data-source="Validation model avg delay, Ruskin Road across scenarios">74–106s on Ruskin Road</span> and up to <span className="stat-pill" data-source="Validation model avg delay, Vineyard Road, High scenario">86s on Vineyard Road</span>. When the main routes fill, the rat-runs fill too.</li>
-            <li><strong>Christopher Road is the final funnel.</strong> The main route and four separate rat-run paths — from all three entry corridors — converge on Christopher Road before the school gate. Two consecutive junctions compress all of that volume: a stop at <span className="stat-pill" data-source="Validation model — Christopher Rd top-5 most-loaded road, even in Low scenario">Starke/Christopher</span> and a yield at <span className="stat-pill" data-source="Lab model — all 3 entry corridors converge here; absorbs overflow from every direction in M &amp; H">Christopher/Vineyard</span>.</li>
+            <li><strong>Rat-run pressure is structural.</strong> Dreyersdal Rd is the single most loaded road in Medium and High scenarios (Lab model). The Validation model records average delays of <span className="stat-pill" data-source="Validation model avg delay, Ruskin Rd across scenarios">74–106s on Ruskin Rd</span> and up to <span className="stat-pill" data-source="Validation model avg delay, Vineyard Rd, High scenario">86s on Vineyard Rd</span>. When the main routes fill, the rat-runs fill too.</li>
+            <li><strong>Christopher Rd is the final funnel.</strong> The main route and four separate rat-run paths — from all three entry corridors — converge on Christopher Rd before the school gate. Two consecutive junctions compress all of that volume: a stop at <span className="stat-pill" data-source="Validation model — Christopher Rd top-5 most-loaded road, even in Low scenario">Starke/Christopher</span> and a yield at <span className="stat-pill" data-source="Lab model — all 3 entry corridors converge here; absorbs overflow from every direction in M &amp; H">Christopher/Vineyard</span>.</li>
           </ul>
         </div>
 
@@ -252,7 +252,7 @@ const FindingsSection = () => (
           <h3 className="findings-col-heading">Telling Details</h3>
           <ul className="findings-bullets">
             <li><strong>The queue peaks at <span className="stat-pill" data-source="Lab model peak vehicles on network — all High/Med scenarios">08:15</span>, not 07:45.</strong> TIA analysis centres on 07:30–08:00. But Lab model peak network loading hits at 08:15–08:17. The school gate keeps queueing vehicles 30 minutes after peak demand has passed. Demand peaks at 07:45. Congestion peaks half an hour later.</li>
-            <li><strong>Three models, one conclusion.</strong> Live, Lab, and the Validation model — built on entirely different mathematics — independently identify the same roads. School internal road appears in the top 3 congested roads in every model, every scenario. Starke Road and the Dreyersdal/Vineyard corridor appear in the top 5 across all models in Medium and High. That's not a modelling quirk. It's the road.</li>
+            <li><strong>Three models, one conclusion.</strong> Live, Lab, and the Validation model — built on entirely different mathematics — independently identify the same roads. School internal road appears in the top 3 congested roads in every model, every scenario. Starke Rd and the Dreyersdal/Vineyard corridor appear in the top 5 across all models in Medium and High. That's not a modelling quirk. It's the road.</li>
           </ul>
         </div>
 

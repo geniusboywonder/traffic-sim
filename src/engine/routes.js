@@ -16,8 +16,8 @@ export const JUNCTIONS = {
   6:  { lat: -34.050232, lng: 18.447228, name: 'Vineyard Rd / Leyden Rd',              control: 'none', note: 'T-junction Vineyard to Leyden' },
   7:  { lat: -34.051039, lng: 18.447309, name: 'School Ingress — Leyden Rd / Ruskin Rd', control: 'critical' },
   8:  { lat: -34.051193, lng: 18.457989, name: "Ladies Mile / Children's Way",         control: 'traffic_signal' },
-  9:  { lat: -34.044112, lng: 18.451770, name: 'Ladies Mile / Homestead Ave',          control: 'priority_stop' },
-  10: { lat: -34.045008, lng: 18.448799, name: 'Homestead Ave / Starke Rd',            control: '4way_stop' },
+  9:  { lat: -34.044112, lng: 18.451770, name: 'Ladies Mile / Homestead Av',          control: 'priority_stop' },
+  10: { lat: -34.045008, lng: 18.448799, name: 'Homestead Av / Starke Rd',            control: '4way_stop' },
   11: { lat: -34.042601, lng: 18.444545, name: 'Firgrove Way west entry',              control: 'yield' },
   12: { lat: -34.042366, lng: 18.445805, name: 'Starke Rd north / Firgrove Service Rd', control: 'merge' },
   13: { lat: -34.041334, lng: 18.448684, name: 'Firgrove Way / Dreyersdal Rd',         control: 'priority_stop' },
@@ -28,14 +28,14 @@ export const JUNCTIONS = {
   18: { lat: -34.049272, lng: 18.452509, name: 'Dreyersdal Rd / Christopher Rd east',  control: 'none', note: 'T-junction from Christopher' },
   19: { lat: -34.052900, lng: 18.453026, name: 'Vineyard Rd east / Airlie Rd',         control: 'none', note: 'T-junction Vineyard into Airlie' },
   20: { lat: -34.052454, lng: 18.450016, name: 'School Egress — Aristea Rd',           control: 'egress' },
-  21: { lat: -34.055798, lng: 18.455408, name: 'Dreyersdal Farm Rd / Tussendal Avenue',control: 'none' },
+  21: { lat: -34.055798, lng: 18.455408, name: 'Dreyersdal Farm Rd / Tussendal Av',control: 'none' },
   22: { lat: -34.052339, lng: 18.453965, name: 'Starke Rd / Airlie Rd',                control: 'stop_directional', direction_only: 'starke_onto_airlie' },
-  23: { lat: -34.053159, lng: 18.452619, name: 'Tussendal Avenue / Airlie Rd',         control: 'yield', direction_only: 'from_tussendal' },
+  23: { lat: -34.053159, lng: 18.452619, name: 'Tussendal Av / Airlie Rd',         control: 'yield', direction_only: 'from_tussendal' },
   24: { lat: -34.048973, lng: 18.450967, name: 'Starke Rd / Clement Rd',               control: 'stop', direction_only: 'from_clement' },
   25: { lat: -34.049384, lng: 18.447158, name: 'Clement Rd / Leyden Rd',               control: 'none', note: 'T-junction from Clement' },
   26: { lat: -34.052626, lng: 18.456216, name: "Children's Way / Dreyersdal Rd",       control: '4way_stop' },
   27: { lat: -34.053388, lng: 18.454687, name: "Children's Way / Starke Rd",           control: 'stop_directional' },
-  28: { lat: -34.044726, lng: 18.449741, name: 'Homestead Ave / Dreyersdal Rd',        control: '4way_stop' },
+  28: { lat: -34.044726, lng: 18.449741, name: 'Homestead Av / Dreyersdal Rd',        control: '4way_stop' },
   29: { lat: -34.051135, lng: 18.450243, name: 'Ruskin Rd / Aristea Rd — roundabout', control: 'roundabout_planned' },
   101: { lat: -34.0478486, lng: 18.4515591, name: 'Speed Hump (node/303887567)', control: 'speed_hump' },
   102: { lat: -34.0487467, lng: 18.4520261, name: 'Speed Hump (node/303887579)', control: 'speed_hump' },
@@ -232,8 +232,8 @@ const RAW_ROUTES = {
   '1A-RR5': { name: 'Rat-run 1A-5: FarmRd→Tussendal',  corridor: '1A', type: 'ratrun', junctions: [1,2,3,21,23,14,17,7],          maxVehicles: 20 },
   '1A-RR6': { name: 'Rat-run 1A-6: FarmRd→Vineyard',   corridor: '1A', type: 'ratrun', junctions: [1,2,3,21,23,19,16,5,6,7],      maxVehicles: 20 },
 
-  // ── Corridor 2A — Homestead Ave (entry J9) ────────────────────────────────
-  '2A':     { name: 'Route 2A — Homestead Ave',        corridor: '2A', type: 'main',   junctions: [9,28,18,4,5,6,7],              maxVehicles: 60 },
+  // ── Corridor 2A — Homestead Av (entry J9) ────────────────────────────────
+  '2A':     { name: 'Route 2A — Homestead Av',        corridor: '2A', type: 'main',   junctions: [9,28,18,4,5,6,7],              maxVehicles: 60 },
   '2A-RR1': { name: 'Rat-run 2A-1: →Homestead/Starke→Clement→Leyden', corridor: '2A', type: 'ratrun', junctions: [9,28,10,24,25,6,7], maxVehicles: 30 },
   '2A-RR2': { name: 'Rat-run 2A-2: →Homestead/Starke→Clement→Christopher', corridor: '2A', type: 'ratrun', junctions: [9,28,10,24,4,5,6,7], maxVehicles: 30 },
 
@@ -259,7 +259,7 @@ const RAW_ROUTES = {
   'EG-C':   { name: 'Egress C — Dante→Tussendal→Main Rd',       corridor: 'egress', type: 'egress', junctions: [7,20,29,17,14,23,21,2,1], maxVehicles: 15 },
   // EG-D (15%): Dante -> Starke -> Firgrove Service Rd (Exit J13)
   'EG-D':   { name: 'Egress D — Dante→Starke→Firgrove',         corridor: 'egress', type: 'egress', junctions: [7,20,29,17,16,5,4,24,10,12,13], maxVehicles: 20 },
-  // EG-E (15%): Dante -> Starke -> Homestead Ave (Exit J9)
+  // EG-E (15%): Dante -> Starke -> Homestead Av (Exit J9)
   'EG-E':   { name: 'Egress E — Dante→Starke→Homestead',        corridor: 'egress', type: 'egress', junctions: [7,20,29,17,16,5,4,24,10,9], maxVehicles: 20 },
 };
 

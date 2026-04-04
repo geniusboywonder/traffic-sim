@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tokai-Sim | Experimental HUD</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-abyssal: #0b1326;
+            --accent-neon: #8aebff;
+            --accent-danger: #ef4444;
+            --glass-bg: rgba(11, 19, 38, 0.75);
+            --glass-border: rgba(138, 235, 255, 0.2);
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --panel-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        * { box-sizing: border-box; }
+        body, html { margin: 0; padding: 0; height: 100%; width: 100%; background: var(--bg-abyssal); font-family: var(--font-body); overflow: hidden; }
+
+        #map { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+
+        /* Floating Panel Base */
+        .hud-panel {
+            position: absolute;
+            z-index: 100;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            box-shadow: var(--panel-shadow);
+            pointer-events: auto;
+            cursor: default;
+        }
+
+        .handle {
+            height: 24px;
+            background: rgba(138, 235, 255, 0.05);
+            border-bottom: 1px solid var(--glass-border);
+            border-radius: 12px 12px 0 0;
+            cursor: grab;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .handle::after {
+            content: "⠿";
+            color: var(--accent-neon);
+            opacity: 0.5;
+            font-size: 14px;
+        }
+        .handle:active { cursor: grabbing; }
+
+        /* Menu Panel */
+        .hud-menu { top: 20px; left: 50%; transform: translateX(-50%); padding: 0 20px; display: flex; align-items: center; height: 50px; }
+        .hud-menu nav { display: flex; gap: 30px; }
+        .hud-menu a { color: #fff; text-decoration: none; text-transform: uppercase; font-size: 11px; letter-spacing: 0.2em; font-weight: 700; opacity: 0.7; transition: 0.2s; }
+        .hud-menu a:hover { opacity: 1; color: var(--accent-neon); }
+
+        /* Controls Panel */
+        .hud-controls { bottom: 40px; left: 50%; transform: translateX(-50%); padding: 15px 25px; display: flex; align-items: center; gap: 20px; }
+        .play-btn { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--accent-neon); background: rgba(138, 235, 255, 0.1); color: var(--accent-neon); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+
+        /* Key / Legend */
+        .hud-legend { bottom: 40px; left: 40px; width: 180px; padding: 15px; }
+        .legend-item { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 10px; color: #fff; text-transform: uppercase; letter-spacing: 0.05em; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; }
+
+    /* Metrics Panel */
+        .hud-metrics { top: 40px; right: 40px; width: 360px; padding: 0; overflow: hidden; display: flex; flex-direction: column; }
+        .metrics-header { padding: 20px; border-bottom: 1px solid rgba(138, 235, 255, 0.1); }
+        .metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+        .metric-card { background: rgba(255,255,255,0.03); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); }
+        .metric-label { font-size: 8px; color: var(--accent-neon); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 2px; }
+        .metric-value { font-family: var(--font-display); font-size: 20px; font-weight: 500; color: #fff; }
+
+        /* Tactical Accordion */
+        .tactical-accordion { flex: 1; overflow-y: auto; max-height: 60vh; scrollbar-width: none; }
+        .tactical-accordion::-webkit-scrollbar { display: none; }
+        
+        .accordion-item { border-bottom: 1px solid rgba(138, 235, 255, 0.05); }
+        .accordion-trigger { 
+            width: 100%; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; 
+            background: transparent; border: none; cursor: pointer; color: #fff; text-align: left;
+        }
+        .accordion-trigger:hover { background: rgba(138, 235, 255, 0.03); }
+        .accordion-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 10px; }
+        .accordion-content { padding: 0 20px 20px; display: none; }
+        .accordion-item.active .accordion-content { display: block; }
+        .accordion-item.active .accordion-trigger { background: rgba(138, 235, 255, 0.05); }
+
+        .stat-row { display: flex; justify-content: space-between; margin-top: 15px; gap: 10px; }
+        .stat-box { flex: 1; }
+        .stat-label { font-size: 8px; color: rgba(255,255,255,0.4); text-transform: uppercase; margin-bottom: 4px; }
+        .stat-val { font-family: var(--font-display); font-size: 16px; color: #fff; }
+
+        .meter-container { margin-top: 15px; }
+        .meter-bar { height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; position: relative; }
+        .meter-fill { height: 100%; width: 0%; transition: width 1s ease; }
+        .meter-stats { display: flex; justify-content: space-between; font-size: 8px; color: rgba(255,255,255,0.4); margin-top: 6px; }
+
+        .scanline {
+            width: 100%;
+            height: 100px;
+            z-index: 2;
+            background: linear-gradient(0deg, rgba(138, 235, 255, 0) 0%, rgba(138, 235, 255, 0.03) 50%, rgba(138, 235, 255, 0) 100%);
+            opacity: 0.1;
+            position: absolute;
+            bottom: 100%;
+            pointer-events: none;
+            animation: scanline 8s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { bottom: 100%; }
+            100% { bottom: -100px; }
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .hud-metrics { position: relative; top: auto; right: auto; width: 100%; margin-top: 100vh; z-index: 10; border-radius: 20px 20px 0 0; }
+            body { overflow-y: auto; }
+            #map { height: 100vh; position: fixed; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="scanline"></div>
+    <div id="map"></div>
+
+    <div class="hud-panel hud-menu" id="menuPanel">
+        <div class="header-logo" style="margin-right: 40px; display: flex; align-items: center; gap: 10px;">
+            <div style="width: 12px; height: 12px; background: var(--accent-neon); border-radius: 2px;"></div>
+            <span style="font-family: var(--font-display); font-weight: 700; color: #fff; letter-spacing: -0.02em;">TOKAI-SIM</span>
+        </div>
+        <nav>
+            <a href="#">Simulator</a>
+            <a href="#">Models</a>
+            <a href="#">Findings</a>
+            <a href="#">Contact</a>
+        </nav>
+    </div>
+
+    <div class="hud-panel hud-metrics" id="metricsPanel">
+        <div class="handle" onmousedown="dragStart(event, 'metricsPanel')"></div>
+        
+        <div class="metrics-header">
+            <div style="font-family: var(--font-display); color: #fff; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em;">Tactical Overview</div>
+            <div class="metric-grid">
+                <div class="metric-card">
+                    <div class="metric-label">Active Units</div>
+                    <div class="metric-value">412</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">System Time</div>
+                    <div class="metric-value">07:42</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tactical-accordion">
+            <!-- Firgrove Way -->
+            <div class="accordion-item active">
+                <button class="accordion-trigger" onclick="toggleAccordion(this)">
+                    <span class="accordion-title"><div class="dot" style="background: var(--accent-neon);"></div> Firgrove Way</span>
+                    <span style="font-size: 10px; opacity: 0.5;">▼</span>
+                </button>
+                <div class="accordion-content">
+                    <div class="stat-row">
+                        <div class="stat-box"><div class="stat-label">Spawned</div><div class="stat-val">124</div></div>
+                        <div class="stat-box"><div class="stat-label">Exited</div><div class="stat-val">82</div></div>
+                        <div class="stat-box"><div class="stat-label">Avg In</div><div class="stat-val">4.2m</div></div>
+                    </div>
+                    <div class="meter-container">
+                        <div class="stat-label">Congestion Meter</div>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 65%; background: var(--accent-neon);"></div></div>
+                        <div class="meter-stats"><span>15% Stopped</span><span>65% Stress</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Homestead Ave -->
+            <div class="accordion-item">
+                <button class="accordion-trigger" onclick="toggleAccordion(this)">
+                    <span class="accordion-title"><div class="dot" style="background: #a1cca5;"></div> Homestead Ave</span>
+                    <span style="font-size: 10px; opacity: 0.5;">▼</span>
+                </button>
+                <div class="accordion-content">
+                    <div class="stat-row">
+                        <div class="stat-box"><div class="stat-label">Spawned</div><div class="stat-val">98</div></div>
+                        <div class="stat-box"><div class="stat-label">Exited</div><div class="stat-val">45</div></div>
+                        <div class="stat-box"><div class="stat-label">Avg In</div><div class="stat-val">2.1m</div></div>
+                    </div>
+                    <div class="meter-container">
+                        <div class="stat-label">Congestion Meter</div>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 30%; background: #a1cca5;"></div></div>
+                        <div class="meter-stats"><span>5% Stopped</span><span>30% Stress</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Children's Way -->
+            <div class="accordion-item">
+                <button class="accordion-trigger" onclick="toggleAccordion(this)">
+                    <span class="accordion-title"><div class="dot" style="background: #d0a679;"></div> Children's Way</span>
+                    <span style="font-size: 10px; opacity: 0.5;">▼</span>
+                </button>
+                <div class="accordion-content">
+                    <div class="stat-row">
+                        <div class="stat-box"><div class="stat-label">Spawned</div><div class="stat-val">210</div></div>
+                        <div class="stat-box"><div class="stat-label">Exited</div><div class="stat-val">120</div></div>
+                        <div class="stat-box"><div class="stat-label">Avg In</div><div class="stat-val">8.5m</div></div>
+                    </div>
+                    <div class="meter-container">
+                        <div class="stat-label">Congestion Meter</div>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 85%; background: var(--accent-danger);"></div></div>
+                        <div class="meter-stats"><span>42% Stopped</span><span>85% Stress</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Road -->
+            <div class="accordion-item">
+                <button class="accordion-trigger" onclick="toggleAccordion(this)">
+                    <span class="accordion-title"><div class="dot" style="background: #709775;"></div> Main Road</span>
+                    <span style="font-size: 10px; opacity: 0.5;">▼</span>
+                </button>
+                <div class="accordion-content">
+                    <div class="stat-row">
+                        <div class="stat-box"><div class="stat-label">Spawned</div><div class="stat-val">156</div></div>
+                        <div class="stat-box"><div class="stat-label">Exited</div><div class="stat-val">90</div></div>
+                        <div class="stat-box"><div class="stat-label">Avg In</div><div class="stat-val">3.8m</div></div>
+                    </div>
+                    <div class="meter-container">
+                        <div class="stat-label">Congestion Meter</div>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 45%; background: #709775;"></div></div>
+                        <div class="meter-stats"><span>10% Stopped</span><span>45% Stress</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="hud-panel hud-legend" id="legendPanel">
+        <div class="handle" onmousedown="dragStart(event, 'legendPanel')"></div>
+        <div style="margin-top: 10px;">
+            <div class="legend-item"><div class="dot" style="background: var(--accent-neon);"></div> Main Road</div>
+            <div class="legend-item"><div class="dot" style="background: #a1cca5;"></div> Homestead</div>
+            <div class="legend-item"><div class="dot" style="background: #d0a679;"></div> Children's Way</div>
+            <div class="legend-item"><div class="dot" style="background: var(--accent-danger);"></div> Congestion</div>
+        </div>
+    </div>
+
+    <div class="hud-panel hud-controls" id="controlsPanel">
+        <div class="handle" onmousedown="dragStart(event, 'controlsPanel')" style="position: absolute; top: 0; left: 0; width: 100%; height: 10px; border: none; background: transparent;"></div>
+        <button class="play-btn">▶</button>
+        <div style="display: flex; gap: 10px;">
+            <div style="color: var(--accent-neon); font-size: 9px; font-weight: 700; text-transform: uppercase;">Scenario</div>
+            <div style="display: flex; gap: 5px;">
+                <div style="padding: 4px 8px; border: 1px solid var(--accent-neon); color: var(--accent-neon); font-size: 10px; border-radius: 4px; cursor: pointer;">L</div>
+                <div style="padding: 4px 8px; background: var(--accent-neon); color: var(--bg-abyssal); font-size: 10px; border-radius: 4px; cursor: pointer; font-weight: 700;">M</div>
+                <div style="padding: 4px 8px; border: 1px solid var(--accent-neon); color: var(--accent-neon); font-size: 10px; border-radius: 4px; cursor: pointer;">H</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Define the specific tactical bounds of the 4 corridors
+        const studyArea = [
+            [-34.0585, 18.4435], // SW (approx Firgrove/Main)
+            [-34.0395, 18.4635]  // NE (approx Homestead/Children's)
+        ];
+
+        // Init Map with strict constraints
+        const map = L.map('map', {
+            zoomControl: false,
+            attributionControl: false,
+            maxBounds: studyArea,
+            maxBoundsViscosity: 1.0, // Stiff bounce-back at edges
+            minZoom: 14.5
+        });
+
+        // Set view to show the full study area at max zoom
+        map.fitBounds(studyArea, { padding: [20, 20] });
+
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            maxZoom: 19
+        }).addTo(map);
+
+        // Tactical Overlay (Masking the outside)
+        const outer = [[-90, -180], [-90, 180], [90, 180], [90, -180]];
+        L.polygon([outer, [
+            [-34.0585, 18.4435],
+            [-34.0395, 18.4435],
+            [-34.0395, 18.4635],
+            [-34.0585, 18.4635]
+        ]], {
+            fillColor: '#000',
+            fillOpacity: 0.6,
+            stroke: false,
+            fillRule: 'evenodd'
+        }).addTo(map);
+
+        // Dragging Logic
+        let activePanel = null;
+        let offset = { x: 0, y: 0 };
+
+        function dragStart(e, id) {
+            activePanel = document.getElementById(id);
+            const rect = activePanel.getBoundingClientRect();
+            offset.x = e.clientX - rect.left;
+            offset.y = e.clientY - rect.top;
+            
+            document.addEventListener('mousemove', dragMove);
+            document.addEventListener('mouseup', dragEnd);
+            e.preventDefault();
+        }
+
+        function dragMove(e) {
+            if (!activePanel) return;
+            let x = e.clientX - offset.x;
+            let y = e.clientY - offset.y;
+            
+            // Boundary checks
+            x = Math.max(0, Math.min(window.innerWidth - activePanel.offsetWidth, x));
+            y = Math.max(0, Math.min(window.innerHeight - activePanel.offsetHeight, y));
+            
+            activePanel.style.left = x + 'px';
+            activePanel.style.top = y + 'px';
+            activePanel.style.transform = 'none'; // Clear initial centering
+            activePanel.style.bottom = 'auto';
+            activePanel.style.right = 'auto';
+        }
+
+        function toggleAccordion(btn) {
+            const item = btn.parentElement;
+            const isActive = item.classList.contains('active');
+            
+            // Close all
+            document.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('active'));
+            
+            // Toggle current
+            if (!isActive) {
+                item.classList.add('active');
+            }
+        }
+
+        function dragEnd() {
+            activePanel = null;
+            document.removeEventListener('mousemove', dragMove);
+            document.removeEventListener('mouseup', dragEnd);
+        }
+    </script>
+</body>
+</html>

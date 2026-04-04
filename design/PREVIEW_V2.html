@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tokai-Sim | High-Contrast Tactical</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700;900&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-land: #f8faf8;
+            --road-major: #111D13; /* Carbon Black */
+            --road-minor: #2D5438; /* Dark Forest */
+            --text-main: #000000;
+            --accent-danger: #ef4444;
+            --glass-bg: rgba(255, 255, 255, 0.95);
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * { box-sizing: border-box; }
+        body, html { margin: 0; padding: 0; height: 100%; width: 100%; background: var(--bg-land); font-family: var(--font-body); overflow: hidden; color: #000; }
+
+        #map { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; background: var(--bg-land); }
+
+        /* High-Visibility Labels */
+        .tactical-label {
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            color: #000 !important;
+            font-family: var(--font-display) !important;
+            font-size: 13px !important;
+            font-weight: 900 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.15em !important;
+            opacity: 1 !important;
+            text-shadow: 
+                -2px -2px 0 #fff,  
+                 2px -2px 0 #fff,
+                -2px  2px 0 #fff,
+                 2px  2px 0 #fff,
+                 0px 0px 8px rgba(255,255,255,0.8);
+            pointer-events: none !important;
+            white-space: nowrap !important;
+        }
+        .tactical-label::before { display: none !important; }
+
+        /* Floating HUD - High Contrast */
+        .hud-panel {
+            position: absolute;
+            z-index: 100;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 3px solid #000;
+            border-radius: 2px;
+            box-shadow: 20px 20px 0 rgba(0,0,0,0.05);
+            pointer-events: auto;
+            min-width: 340px;
+        }
+
+        .handle {
+            height: 28px;
+            cursor: grab;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+        }
+        .handle::after { content: "DRAG COMMAND CENTER"; color: #fff; font-size: 9px; font-weight: 900; letter-spacing: 2px; }
+
+        .v2-card {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .v2-card--watch {
+            grid-column: span 2;
+            border: 2px solid var(--road-minor);
+            background: #f0f4f0;
+        }
+
+        .v2-roadname { font-family: var(--font-display); font-weight: 900; font-size: 15px; color: #000; text-transform: uppercase; letter-spacing: 0.1em; }
+        .v2-h { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; color: #666; }
+        .v2-big-num { font-family: var(--font-display); font-size: 28px; font-weight: 700; color: #000; }
+        .v2-avg-time { font-size: 12px; color: var(--road-minor); font-weight: 800; margin-left: 5px; }
+
+        .v2-meter-bar { height: 6px; background: #ddd; border-radius: 0; overflow: hidden; display: flex; margin-top: 4px; border: 1px solid #000; }
+        .v2-segment { height: 100%; transition: 0.3s; }
+
+        .v2-status-row { display: flex; justify-content: space-between; font-size: 9px; font-weight: 900; text-transform: uppercase; color: #444; }
+
+        .hud-menu { top: 20px; left: 20px; padding: 15px 30px; font-size: 12px; font-weight: 900; letter-spacing: 0.2em; background: #000; color: #fff; border: none; }
+        
+        .city-label {
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: 80px;
+            letter-spacing: 0.4em;
+            color: #000;
+            opacity: 0.05;
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .resizer { width: 20px; height: 20px; position: absolute; right: 0; bottom: 0; cursor: nwse-resize; background: #000; clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+    </style>
+</head>
+<body>
+
+    <div id="map"></div>
+    <div class="city-label">TOKAI-SIM</div>
+
+    <div class="hud-panel hud-menu">
+        COMMAND OPERATING SYSTEM // V2.HIGH_CONTRAST
+    </div>
+
+    <div class="hud-panel hud-metrics-v2" id="metricsV2" style="width: 560px;">
+        <div class="handle" onmousedown="dragStart(event, 'metricsV2')"></div>
+        
+        <div style="padding: 20px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px;">
+                <!-- Watch My Road Card (Span 2) -->
+                <div class="v2-card v2-card--watch">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div class="v2-roadname" style="color: var(--road-minor)">Dreyersdal Rd</div>
+                        <div style="display: flex; gap: 20px;">
+                            <div style="text-align: right;"><div class="v2-h">Traffic In</div><div class="v2-big-num">42 <span class="v2-avg-time">3.2m</span></div></div>
+                            <div style="text-align: right;"><div class="v2-h">Traffic Out</div><div class="v2-big-num">18 <span class="v2-avg-time">1.5m</span></div></div>
+                        </div>
+                    </div>
+                    <div class="v2-meter-bar">
+                        <div class="v2-segment" style="width: 40%; background: var(--road-minor);"></div>
+                        <div class="v2-segment" style="width: 25%; background: #fbbf24;"></div>
+                        <div class="v2-segment" style="width: 10%; background: var(--accent-danger);"></div>
+                    </div>
+                    <div class="v2-status-row">
+                        <span>65% ACTIVE</span>
+                        <span>25% SLOWING</span>
+                        <span>10% STOPPED</span>
+                    </div>
+                </div>
+
+                <!-- Corridor Cards -->
+                <div class="v2-card">
+                    <div class="v2-h">Corridor 3A</div>
+                    <div class="v2-roadname">Firgrove Way</div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <div class="v2-big-num">124 <span class="v2-avg-time">IN</span></div>
+                        <div class="v2-big-num">82 <span class="v2-avg-time">OUT</span></div>
+                    </div>
+                    <div class="v2-meter-bar"><div class="v2-segment" style="width: 60%; background: var(--road-major);"></div></div>
+                    <div class="v2-status-row"><span>15% STOPPED</span><span>65% STRESS</span></div>
+                </div>
+
+                <div class="v2-card">
+                    <div class="v2-h">Corridor 2A</div>
+                    <div class="v2-roadname">Homestead Ave</div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <div class="v2-big-num">98 <span class="v2-avg-time">IN</span></div>
+                        <div class="v2-big-num">45 <span class="v2-avg-time">OUT</span></div>
+                    </div>
+                    <div class="v2-meter-bar"><div class="v2-segment" style="width: 30%; background: var(--road-minor);"></div></div>
+                    <div class="v2-status-row"><span>5% STOPPED</span><span>30% STRESS</span></div>
+                </div>
+            </div>
+        </div>
+        <div class="resizer" onmousedown="resizeStart(event, 'metricsV2')"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        const map = L.map('map', { 
+            zoomControl: false, 
+            attributionControl: false,
+            minZoom: 14,
+            maxZoom: 18
+        }).setView([-34.048, 18.454], 15.5);
+
+        // Very light base for maximum foreground pop
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            opacity: 0.25
+        }).addTo(map);
+
+        fetch('data/bergvliet-roads.json')
+            .then(res => res.json())
+            .then(data => {
+                L.geoJSON(data, {
+                    style: (feature) => {
+                        const isMain = feature.properties.road_class?.includes('Arterial');
+                        return {
+                            color: isMain ? '#111D13' : '#2D5438',
+                            weight: isMain ? 6 : 3,
+                            opacity: 1,
+                            lineCap: 'square'
+                        };
+                    },
+                    onEachFeature: (feature, layer) => {
+                        if (feature.properties.name) {
+                            layer.bindTooltip(feature.properties.name, {
+                                permanent: true,
+                                direction: 'center',
+                                className: 'tactical-label'
+                            });
+                        }
+                    }
+                }).addTo(map);
+            });
+
+        // Drag/Resize Logic
+        let activePanel = null; let offset = { x: 0, y: 0 };
+        function dragStart(e, id) {
+            activePanel = document.getElementById(id);
+            const rect = activePanel.getBoundingClientRect();
+            offset.x = e.clientX - rect.left; offset.y = e.clientY - rect.top;
+            document.addEventListener('mousemove', dragMove); document.addEventListener('mouseup', dragEnd);
+            e.preventDefault();
+        }
+        function dragMove(e) {
+            if (!activePanel) return;
+            activePanel.style.left = (e.clientX - offset.x) + 'px';
+            activePanel.style.top = (e.clientY - offset.y) + 'px';
+            activePanel.style.bottom = 'auto'; activePanel.style.right = 'auto';
+        }
+        function dragEnd() { activePanel = null; document.removeEventListener('mousemove', dragMove); }
+
+        let resizablePanel = null; let startSize = { w: 0, h: 0 }; let startPos = { x: 0, y: 0 };
+        function resizeStart(e, id) {
+            resizablePanel = document.getElementById(id);
+            startSize.w = resizablePanel.offsetWidth; startSize.h = resizablePanel.offsetHeight;
+            startPos.x = e.clientX; startPos.y = e.clientY;
+            document.addEventListener('mousemove', resizeMove); document.addEventListener('mouseup', resizeEnd);
+            e.preventDefault(); e.stopPropagation();
+        }
+        function resizeMove(e) {
+            if (!resizablePanel) return;
+            resizablePanel.style.width = (startSize.w + (e.clientX - startPos.x)) + 'px';
+            resizablePanel.style.height = (startSize.h + (e.clientY - startPos.y)) + 'px';
+        }
+        function resizeEnd() { resizablePanel = null; document.removeEventListener('mousemove', resizeMove); }
+    </script>
+</body>
+</html>

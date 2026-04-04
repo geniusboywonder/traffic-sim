@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { Bot, Map, Monitor, MessageCircleMore } from 'lucide-react';
 
 const NAV_ITEMS = [
@@ -10,11 +10,13 @@ const NAV_ITEMS = [
 
 export default function Header({ activeSection }) {
   const [manualActive, setManualActive] = useState(null);
+  const [lastSection, setLastSection] = useState(activeSection);
 
-  // When the observed section changes, it clears any manual user click override
-  useEffect(() => {
+  // When scroll observer fires a new section, clear the manual override
+  if (activeSection !== lastSection) {
+    setLastSection(activeSection);
     setManualActive(null);
-  }, [activeSection]);
+  }
 
   const active = useMemo(() => {
     // If user clicked, that wins. Otherwise, the scroll-observer wins.

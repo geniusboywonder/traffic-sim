@@ -18,7 +18,7 @@ const CORR_BG = {
   '3A': { from: '#C8E0C8', to: '#A4C4A8', accent: 'var(--c-3a)', light: '#384E3E', textDark: '#0F1E13', mutedDark: 'rgba(15,30,19,0.6)',  statBg: 'rgba(255,255,255,0.28)', trackColor: 'rgba(0,0,0,0.12)' },
 };
 
-function StatBlock({ label, value, accent, dim, textColor, labelColor, bgColor, icon: Icon }) {
+function StatBlock({ label, value, accent, dim, textColor, labelColor, bgColor }) {
   const valueColor = textColor
     ? (dim ? `${textColor}99` : textColor)
     : (dim ? 'rgba(241,245,241,0.5)' : (accent || 'var(--canvas)'));

@@ -29,6 +29,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Responsive Layout:** Implemented a refined 12-column grid for large screens that stacks gracefully on mobile, with polished typography using `clamp()` for fluid scaling.
 - **Enhanced "Start" Action:** Upgraded the "Start the Engine" button to a more prominent, high-contrast pill with hover elevation and color shifts.
 
+### Changed — 2026-04-03 (Production Readiness & UI Fixes)
+- **Star Logo Integration:** Updated site title, meta tags, and favicon to use the official ✱ symbol for consistent Traff✱k branding.
+- **Ad Relocation:** Moved Google AdSense from the top of the page to the "Damage Report" (Findings) section. This ensures the simulator is the first thing users see while maintaining ad visibility near key analytical content.
+- **Header Spacing Fixed:** Eliminated the large empty gap between the navigation bar and the map by refactoring the top-level layout grid and removing redundant padding.
+- **Footer Legibility & Padding:** Refined the dark footer for better accessibility. Brightened grey text to `rgba(241, 245, 241, 0.8)`, improved link contrast using a brighter green (`#A1CCA5`), and reduced excessive padding.
+- **Log Downloads Hidden:** Commented out the "LOG" and "ROAD LOG" CSV download buttons from the simulator controls for a cleaner production UI.
+- **Build System Fix:** Corrected `vite.config.js` by removing the invalid `mockup.html` entry, allowing successful production builds.
+
 ### Fixed — 2026-04-03 (CSS)
 - **Under the Hood Grid Layout:** Fixed a layout regression where the models-content section failed to span the full width of its parent container. Implemented a refined 2-column grid: entries 1 & 2 share Row 1, entries 3 & 4 share Row 2, and entry 5 spans both columns on Row 3. Adjusted padding and typography constraints for better visual balance in the 2nd column layout.
 - **App.css line 1338 — Stray `}` removed:** Orphaned closing brace from a parallel UI edit caused PostCSS parse failure. Removed stray brace and duplicate `.model-entry-body` rule block that followed it (parallel team's version retained).

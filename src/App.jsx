@@ -1,8 +1,10 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { PersonStanding, Database, Activity, FileText, Search, Info, AlertTriangle, Clock, CheckCircle, Split, Car, Play, Monitor, Timer, Map, Bot, OctagonX, ChevronUp, ChevronDown, Share2, Mail, X } from 'lucide-react';
+
 import Header from './components/Header';
 import SimMap from './components/SimMap';
 import StatsPanel from './components/StatsPanel';
+import AdSlot from './components/AdSlot';
 import { SmokeBackground } from './components/SmokeBackground';
 import { AccessBarrier } from './components/AccessBarrier';
 import { PlaybackSource } from './engine/playback';
@@ -180,6 +182,11 @@ const ModelsSection = () => (
         </div>
 
       </div>
+
+      <div style={{ marginTop: '3rem', borderTop: '1px solid rgba(0,0,0,0.05)', paddingTop: '2rem' }}>
+        <AdSlot />
+      </div>
+
     </div>
   </section>
 );
@@ -258,20 +265,20 @@ const FindingsSection = () => (
 
       </div>
 
-      <div className="road-closed-block">
+      <div className="road-closed-block" style={{ marginTop: '4rem' }}>
         <div className="road-closed-header">
           <OctagonX size={26} strokeWidth={3} />
           <span>✕ &nbsp;ROAD CLOSED&nbsp; ✕</span>
           <OctagonX size={26} strokeWidth={3} />
         </div>
-        <p className="road-closed-intro">Everything shown is <strong>inbound school traffic only.</strong> This modelling excludes:</p>
+        <p className="road-closed-intro">Everything shown is <strong>inbound school traffic only.</strong> This modelling EXCLUDES:</p>
         <ul className="road-closed-list">
           <li><span className="stat-pill stat-pill--dark" data-source="Sweet Valley Primary is ~200m away. Their school-run parents use the same roads and are entirely unmodelled.">Sweet Valley Primary school runs</span></li>
-          <li><span className="stat-pill stat-pill--dark" data-source="All non-school trips through the study area — commuters, local errands, other school runs — are excluded. These roads carry far more than Tokai High traffic alone.">All Bergvliet local and commuter traffic</span></li>
-          <li><span className="stat-pill stat-pill--dark" data-source="Post drop-off vehicles leaving via Firgrove Rd, Ladies Mile Rd and Main Rd create a counter-flow on the same streets. None of this is modelled. Real congestion will be worse."><em>All</em> outbound traffic after drop-off</span></li>
-          <li><span className="stat-pill stat-pill--dark" data-source="The TIA proposes calming on rat-run routes. Excluding these means modelled rat-run speeds may be slightly faster than reality — which would make congestion slightly worse than shown.">Proposed traffic calming on Dante Rd, Vineyard Rd, Ruskin Rd, Leyden Rd</span></li>
+          <li><span className="stat-pill stat-pill--dark" data-source="All non-school trips through the study area — commuters, local errands, other school runs — are excluded. These roads carry far more than Tokai High traffic alone.">All Bergvliet residents local traffic movements to work, school and university</span></li>
+          <li><span className="stat-pill stat-pill--dark" data-source="Post drop-off vehicles leaving via Firgrove Rd, Ladies Mile Rd and Main Rd create a counter-flow on the same streets. None of this is modelled. Real congestion will be worse.">ALL traffic *exiting* to Firgrove Rd, Ladies Mile Rd and Main Rd</span></li>
+          <li><span className="stat-pill stat-pill--dark" data-source="The TIA proposes calming on rat-run routes. Excluding these means modelled rat-run speeds may be slightly faster than reality — which would make congestion slightly worse than shown.">New essential traffic calming measures in Dante Rd, Vineyard Rd, Ruskin Rd, Leyden Rd</span></li>
         </ul>
-        <p className="road-closed-footer">Every exit time shown is a <strong>minimum bound</strong>. The real wait is longer.</p>
+        <p className="road-closed-footer">All <strong>Avg Time Out</strong> will be <strong>massively understated</strong> based on the above.</p>
       </div>
 
     </div>
@@ -285,6 +292,22 @@ const Footer = () => (
         <h2>Traff<span>✱</span>k</h2>
         <p className="footer-slogan">"putting you in the driving seat"</p>
       </div>
+
+      <div className="footer-oss">
+        <p>Made possible by open-source contributions from:</p>
+        <div className="oss-links">
+          <a href="https://leafletjs.com/" target="_blank" rel="noopener noreferrer">Leaflet</a>
+          <span className="oss-sep">•</span>
+          <a href="https://eclipse.dev/sumo/" target="_blank" rel="noopener noreferrer">SUMO</a>
+          <span className="oss-sep">•</span>
+          <a href="https://toruseo.jp/UXsim/docs/" target="_blank" rel="noopener noreferrer">UXSim</a>
+          <span className="oss-sep">•</span>
+          <a href="https://www.shadcn.io/" target="_blank" rel="noopener noreferrer">shadcn/ui</a>
+          <span className="oss-sep">•</span>
+          <a href="https://21st.dev/home" target="_blank" rel="noopener noreferrer">21st.dev</a>
+        </div>
+      </div>
+
       <div className="footer-credits">
         <p style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '0.5rem' }}>
           <PersonStanding size={20} color="var(--c-3a)" />
@@ -304,7 +327,7 @@ const ShareButtons = () => {
   const canNativeShare = typeof navigator !== 'undefined' && !!navigator.share;
 
   const handleNativeShare = async () => {
-    try { await navigator.share({ title: SHARE_TITLE, text: SHARE_TEXT, url: SHARE_URL }); } catch (_) {}
+    try { await navigator.share({ title: SHARE_TITLE, text: SHARE_TEXT, url: SHARE_URL }); } catch { /* user cancelled or share not supported */ }
   };
 
   const waUrl  = `https://wa.me/?text=${encodeURIComponent(SHARE_TEXT + ' ' + SHARE_URL)}`;

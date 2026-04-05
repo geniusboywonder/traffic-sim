@@ -16,7 +16,8 @@
   --bezier:          cubic-bezier(0.32, 0.72, 0, 1);
   --shadow-floating: 0 24px 48px -12px rgba(17, 29, 19, 0.08);
   --app-max-width:   1700px;
-  --header-height:   78px;
+  --header-height:   calc(78px + env(safe-area-inset-top, 0px));
+  --header-inner-height: 78px;
   --glass-bg:        rgba(225, 233, 225, 0.85);
   --glass-bg-strong: rgba(225, 233, 225, 0.97);
   --glass-border:    1px solid rgba(255, 255, 255, 0.4);
@@ -90,7 +91,7 @@ a {
   z-index: 2000;
   background: rgba(241, 245, 241, 0.95);
   backdrop-filter: blur(20px);
-  padding: 0.6rem 0;
+  padding: max(env(safe-area-inset-top, 0px), 0px) 0 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   display: flex;
   justify-content: center;
@@ -100,6 +101,7 @@ a {
 .scrolling-top-bar-inner {
   max-width: var(--app-max-width);
   width: 100%;
+  min-height: var(--header-inner-height);
   padding: 0 1.5rem;
   display: flex;
   justify-content: space-between;
@@ -108,8 +110,8 @@ a {
 }
 
 .main-layout {
-  height: calc(100vh - var(--header-height));
-  height: calc(100dvh - var(--header-height));
+  min-height: calc(100vh - var(--header-height));
+  min-height: calc(100dvh - var(--header-height));
   padding-top: 0;
   display: flex;
   flex-direction: column;
@@ -2131,9 +2133,13 @@ a {
 
 /* ── Responsive Queries ── */
 @media (max-width: 1024px) {
+  :root {
+    --header-inner-height: 56px;
+    --header-height: calc(56px + env(safe-area-inset-top, 0px));
+  }
+
   .scrolling-top-bar {
-    position: fixed;
-    inset: 0 0 auto 0;
+    position: sticky;
   }
 
   .scrolling-top-bar-inner {
@@ -2203,9 +2209,10 @@ a {
   }
 
   .main-layout {
-    height: auto;
+    min-height: calc(100svh - var(--header-height));
+    min-height: calc(100dvh - var(--header-height));
     overflow: visible;
-    padding-top: 5rem;
+    padding-top: 0;
   }
 
   .content {
@@ -2221,7 +2228,8 @@ a {
   }
 
   .map-viewport-container {
-    height: 50vh;
+    height: clamp(350px, calc(100svh - var(--header-height) - 1.5rem), 520px);
+    height: clamp(350px, calc(100dvh - var(--header-height) - 1.5rem), 520px);
     min-height: 350px;
   }
 
@@ -2288,6 +2296,11 @@ a {
 }
 
 @media (max-width: 768px) {
+  :root {
+    --header-inner-height: 48px;
+    --header-height: calc(48px + env(safe-area-inset-top, 0px));
+  }
+
   /* Nav — hide desktop expanding nav, hamburger via logo */
   .desktop-nav { display: none; }
 

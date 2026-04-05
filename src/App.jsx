@@ -338,7 +338,7 @@ const Footer = () => (
   </footer>
 );
 
-const SHARE_TEXT = '800 extra cars into Bergvliet — see what the traffic models really show.';
+const SHARE_TEXT = '800 additional cars through Bergvliet — see what the traffic models really show.';
 const SHARE_TITLE = 'Traff✱k — Tokai High Traffic Simulator';
 const SHARE_URL = 'https://traffic.adamson.co.za';
 

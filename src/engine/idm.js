@@ -30,24 +30,22 @@ export function idmAccel(v, dv, s, p, holdActive = false) {
   return Math.max(accel, -9.0);
 }
 
+// ── Module-level constants for traffic-aware junction holds ──────────────────
+const STOP_CONFLICT_ROADS     = { 4: 'Christopher Road', 15: 'Dreyersdal Road', 16: 'Vineyard Road' };
+const YIELD_CONFLICT_ROADS    = { 2: 'Dreyersdal Road',  5: 'Vineyard Road',    17: 'Ruskin Road' };
+const FOURWAY_CONFLICT_ROADS  = { 10: 'Starke Road', 26: "Children's Way", 28: 'Homestead Avenue' };
+const PRIORITY_CONFLICT_ROADS = { 1: 'Dreyersdal Road', 9: 'Ladies Mile Road', 13: 'Dreyersdal Road', 15: 'Dreyersdal Road' };
+
 export function junctionHoldDuration(jid, junctionControl, simTime, lastReleaseTime, routeId = '', corridorId = '', roadCounts = null) {
   const j = JUNCTIONS[jid];
   const gap = simTime - (lastReleaseTime ?? 0);
-
-  // ── Traffic-aware hold helper ─────────────────────────────────────────────
-  // Returns additional hold seconds based on conflicting road vehicle count.
-  // base: minimum hold, perVehicle: seconds added per conflicting vehicle, max: cap.
-  const trafficHold = (roadName, base, perVehicle, max) => {
-    if (!roadCounts) return base;
-    const n = roadCounts[roadName] ?? 0;
-    return Math.min(base + n * perVehicle, max);
-  };
+  // jid is always a number from route.junctions[] — no parseInt needed
 
   // Directional logic for specific junctions
   if (j?.direction_only) {
     const route = ROUTE_CONFIG[routeId];
     if (route) {
-      const idx = route.junctions.indexOf(parseInt(jid));
+      const idx = route.junctions.indexOf(jid);
       const fromJid = idx > 0 ? route.junctions[idx - 1] : null;
       
       switch (j.direction_only) {
@@ -91,7 +89,7 @@ export function junctionHoldDuration(jid, junctionControl, simTime, lastReleaseT
   // Final Egress Points: External rush-hour back-pressure (07:20–09:00+)
   // J1: Main Rd exit, J9: Homestead Ave exit, J13: Firgrove/Dreyersdal exit
   // Peak centred at simTime=5400 (08:00 relative to 06:30 start = 75+15min into sim).
-  if ([1, 9, 13].includes(parseInt(jid)) && routeId.startsWith('EG-')) {
+  if ([1, 9, 13].includes(jid) && routeId.startsWith('EG-')) {
     if (simTime >= 3000 && simTime <= 9000) {
       const sigma = 1200;
       const peak = 20.0;
@@ -105,7 +103,7 @@ export function junctionHoldDuration(jid, junctionControl, simTime, lastReleaseT
   // J8: Children's Way / Ladies Mile traffic signal — queue overflow during peak.
   // Standard 60s cycle provides base behaviour; dynamic hold adds backlog delay
   // when more vehicles arrive per phase than can clear (peak 07:30–08:30).
-  if (parseInt(jid) === 8 && routeId.startsWith('EG-')) {
+  if (jid === 8 && routeId.startsWith('EG-')) {
     const baseSignal = (simTime % 60) < 30 ? 0 : 60 - (simTime % 60);
     if (simTime >= 3600 && simTime <= 8400) {
       const sigma = 900;
@@ -122,55 +120,35 @@ export function junctionHoldDuration(jid, junctionControl, simTime, lastReleaseT
     case 'none':          return 0;
     case 'traffic_signal': return (simTime % 60) < 30 ? 0 : 60 - (simTime % 60);
 
-    // Stop signs: base hold + traffic on cross road — directional checks above handle egress
     case 'stop': {
-      const conflictRoads = {
-        4:  'Christopher Road',
-        15: 'Dreyersdal Road',
-        16: 'Vineyard Road',
-      };
-      const road = conflictRoads[parseInt(jid)];
-      const hold = road ? trafficHold(road, 4.0, 0.4, 14.0) : 4.0;
+      const road = STOP_CONFLICT_ROADS[jid];
+      const n = road && roadCounts ? (roadCounts[road] ?? 0) : 0;
+      const hold = road ? Math.min(4.0 + n * 0.4, 14.0) : 4.0;
       return gap >= hold ? 0 : hold - gap;
     }
 
-    // Yields: light traffic-awareness
     case 'yield': {
-      const conflictRoads = {
-        2:  'Dreyersdal Road',
-        5:  'Vineyard Road',
-        17: 'Ruskin Road',
-      };
-      const road = conflictRoads[parseInt(jid)];
-      const hold = road ? trafficHold(road, 2.0, 0.2, 8.0) : 2.0;
+      const road = YIELD_CONFLICT_ROADS[jid];
+      const n = road && roadCounts ? (roadCounts[road] ?? 0) : 0;
+      const hold = road ? Math.min(2.0 + n * 0.2, 8.0) : 2.0;
       return gap >= hold ? 0 : hold - gap;
     }
 
-    // 4-way stops: traffic-aware
     case '4way_stop': {
-      const conflictRoads = {
-        10: 'Starke Road', 26: "Children's Way", 28: 'Homestead Avenue'
-      };
-      const road = conflictRoads[parseInt(jid)];
-      const hold = road ? trafficHold(road, 4.0, 0.3, 12.0) : 4.0;
+      const road = FOURWAY_CONFLICT_ROADS[jid];
+      const n = road && roadCounts ? (roadCounts[road] ?? 0) : 0;
+      const hold = road ? Math.min(4.0 + n * 0.3, 12.0) : 4.0;
       return gap >= hold ? 0 : hold - gap;
     }
 
-    // Priority stops: traffic-aware
     case 'priority_stop': {
-      const conflictRoads = {
-        1:  'Dreyersdal Road',
-        9:  'Ladies Mile Road',
-        13: 'Dreyersdal Road',
-        15: 'Dreyersdal Road',
-      };
-      const road = conflictRoads[parseInt(jid)];
-      const hold = road ? trafficHold(road, 4.0, 0.4, 15.0) : 4.0;
+      const road = PRIORITY_CONFLICT_ROADS[jid];
+      const n = road && roadCounts ? (roadCounts[road] ?? 0) : 0;
+      const hold = road ? Math.min(4.0 + n * 0.4, 15.0) : 4.0;
       return gap >= hold ? 0 : hold - gap;
     }
 
     case 'critical': {
-      // School gate: traffic-aware — more vehicles on Leyden/Ruskin = longer hold
       const leydenCount = (roadCounts?.['Leyden Road'] ?? 0) + (roadCounts?.['Ruskin Road'] ?? 0);
       const hold = Math.min(4.5 + leydenCount * 0.2, 10.0);
       return gap >= hold ? 0 : hold - gap;

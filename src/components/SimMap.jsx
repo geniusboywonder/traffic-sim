@@ -2,7 +2,7 @@
 // Leaflet map + canvas vehicle overlay + rAF animation loop.
 
 import { useEffect, useRef, useCallback, useState } from 'react';
-import { Play, Pause, RotateCcw, Download, GripVertical, Car, Map as MapIcon } from 'lucide-react';
+import { Play, Pause, RotateCcw, Download, GripVertical, Car, Map as MapIcon, GraduationCap } from 'lucide-react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import {
@@ -212,11 +212,54 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
       ctx.globalAlpha = 1.0;
     });
 
-    const internal = ROAD_LINES.find(f => f.properties.name?.toLowerCase().includes('internal road'));
-    if (internal) {
-      ctx.beginPath(); ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 2; ctx.setLineDash([4,4]); ctx.globalAlpha = 0.8;
-      internal.geometry.coordinates.forEach((cl, i) => { const pt = map.latLngToContainerPoint(L.latLng(cl[1], cl[0])); if (i === 0) ctx.moveTo(pt.x, pt.y); else ctx.lineTo(pt.x, pt.y); });
-      ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha = 1;
+    // ── School site polygon + icon ────────────────────────────────────────────
+    // Approximate school footprint: entrance (J7) → internal road curve → exit (J20)
+    // → along Aristea/Ruskin back to entrance. Filled with a semi-transparent colour.
+    {
+      // School polygon corners [lat, lng]
+      const schoolPoly = [
+        [-34.051039, 18.447309],  // J7 entrance (Leyden/Ruskin)
+        [-34.050900, 18.447800],  // along Ruskin Rd north edge
+        [-34.051000, 18.448800],  // Ruskin Rd continuing east
+        [-34.051135, 18.450243],  // J29 roundabout
+        [-34.052454, 18.450016],  // J20 exit (Aristea)
+        [-34.052830, 18.449009],  // internal road midpoint
+        [-34.051034, 18.447300],  // back to J7 area
+      ];
+      const pts = schoolPoly.map(([lat, lng]) => map.latLngToContainerPoint(L.latLng(lat, lng)));
+      ctx.globalAlpha = 0.18;
+      ctx.fillStyle = '#A1CCA5';
+      ctx.beginPath();
+      pts.forEach((pt, i) => i === 0 ? ctx.moveTo(pt.x, pt.y) : ctx.lineTo(pt.x, pt.y));
+      ctx.closePath();
+      ctx.fill();
+
+      // Internal road line
+      const internal = ROAD_LINES.find(f => f.properties.name?.toLowerCase().includes('internal road'));
+      if (internal) {
+        ctx.globalAlpha = 0.9;
+        ctx.strokeStyle = '#4A7A56';
+        ctx.lineWidth = 2.5;
+        ctx.setLineDash([5, 4]);
+        ctx.beginPath();
+        internal.geometry.coordinates.forEach((cl, i) => {
+          const pt = map.latLngToContainerPoint(L.latLng(cl[1], cl[0]));
+          i === 0 ? ctx.moveTo(pt.x, pt.y) : ctx.lineTo(pt.x, pt.y);
+        });
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      // School icon centred on the site
+      const centre = map.latLngToContainerPoint(L.latLng(-34.0518, 18.4487));
+      ctx.globalAlpha = 0.85;
+      ctx.font = `${Math.max(18, Math.min(28, canvas.width / 40))}px serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('🏫', centre.x, centre.y);
+      ctx.globalAlpha = 1.0;
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'alphabetic';
     }
   }, []);
 
@@ -618,6 +661,34 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
       const m = L.circleMarker([j.lat, j.lng], { radius: 7, color: col, weight: isE ? 2 : 1.5, opacity: isE ? 1 : 0.6, fill: true, fillColor: isE ? col : 'transparent', fillOpacity: isE ? 0.8 : 0 }).addTo(map).bindPopup(`<b>${j.name}</b><br>${j.control}`);
       junctionMarkersRef.current[jid] = { marker: m, baseColor: col };
     });
+
+    // ── School site marker — zoom-responsive GraduationCap icon ──────────────
+    // Centred on the school building, sized to fill the site at current zoom.
+    // Lucide GraduationCap SVG path rendered as a DivIcon so it geo-anchors correctly.
+    const SCHOOL_LAT = -34.0518, SCHOOL_LNG = 18.4487;
+    const schoolMarkerRef = { current: null };
+
+    const makeSchoolIcon = (zoom) => {
+      const size = Math.round(Math.pow(2, zoom - 13) * 48);
+      const clamped = Math.max(24, Math.min(120, size));
+      return L.divIcon({
+        className: '',
+        html: `<svg xmlns="http://www.w3.org/2000/svg" width="${clamped}" height="${clamped}" viewBox="0 0 24 24" fill="none" stroke="#2D5438" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 1px 3px rgba(0,0,0,0.4));opacity:0.85">
+          <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+          <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+        </svg>`,
+        iconSize: [clamped, clamped],
+        iconAnchor: [clamped / 2, clamped / 2],
+      });
+    };
+
+    const schoolMarker = L.marker([SCHOOL_LAT, SCHOOL_LNG], { icon: makeSchoolIcon(map.getZoom()), interactive: false, zIndexOffset: -100 }).addTo(map);
+    schoolMarkerRef.current = schoolMarker;
+
+    map.on('zoomend', () => {
+      schoolMarker.setIcon(makeSchoolIcon(map.getZoom()));
+    });
+
     const sync = () => { syncCanvas(); drawFrame(); };
     // invalidateSize tells Leaflet the container has resized; sync then redraws the canvas.
     const syncAll = () => { map.invalidateSize({ animate: false }); syncCanvas(); drawFrame(); };
@@ -744,12 +815,14 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
           <button className="speed-pill" onClick={onReset} title="Reset" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <RotateCcw size={14} />
           </button>
+          {/* Log download buttons — commented out for production, re-enable for analysis
           <button className="speed-pill" onClick={loggerDownload} title="Download vehicle log (CSV)" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
             <Download size={14} /> LOG
           </button>
           <button className="speed-pill" onClick={loggerDownloadRoadStats} title="Download road snapshot log (CSV)" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
             <Download size={14} /> ROAD LOG
           </button>
+          */}
         </div>
       </div>
     </div>

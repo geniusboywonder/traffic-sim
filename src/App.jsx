@@ -7,6 +7,7 @@ import StatsPanel from './components/StatsPanel';
 import AdSlot from './components/AdSlot';
 import { SmokeBackground } from './components/SmokeBackground';
 import { AccessBarrier } from './components/AccessBarrier';
+import ProductTour from './components/ProductTour';
 import { PlaybackSource } from './engine/playback';
 import './App.css';
 
@@ -504,6 +505,7 @@ export default function App() {
       <div className="noise-overlay" />
 
       {!initialized && <AccessBarrier onInitialize={() => setInitialized(true)} />}
+      <ProductTour active={initialized} />
 
       <div className="scrolling-top-bar">
         <div className="scrolling-top-bar-inner">

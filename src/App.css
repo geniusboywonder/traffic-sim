@@ -724,6 +724,8 @@ a {
   letter-spacing: 0.15em;
   color: rgba(15,30,19,0.5);
   margin-bottom: 0.15rem;
+  white-space: normal;
+  word-break: break-word;
 }
 
 /* Time values — right side of row 2, big numbers */
@@ -2182,4 +2184,141 @@ a {
 @media (max-width: 480px) {
   .sim-controls { padding: 0.25rem; gap: 0.25rem; }
   .speed-pill { padding: 0.25rem 0.4rem; font-size: 0.65rem; }
+}
+
+/* ── Mobile overflow fix — prevent horizontal scroll without breaking sticky ── */
+*, *::before, *::after { box-sizing: border-box; }
+body { max-width: 100vw; overflow-x: hidden; }
+
+@media (max-width: 768px) {
+  /* Nav — hide desktop expanding nav, hamburger via logo */
+  .desktop-nav { display: none; }
+
+  /* Header */
+  .scrolling-top-bar-inner { padding: 0.3rem 0.5rem; gap: 0.3rem; }
+  .app-logo { font-size: 1.4rem; }
+
+  /* Stats pill — show compact (overrides 1024px hide) */
+  .scrolling-stats-pill {
+    display: flex !important;
+    height: auto;
+    padding: 0.35rem 0.6rem;
+    gap: 0.5rem;
+  }
+  .scrolling-stats-pill .htc-value { font-size: 0.75rem; }
+  .scrolling-stats-pill .htc-label { font-size: 0.5rem; letter-spacing: 0.06em; }
+  .scrolling-stats-pill .htc-divider { height: 0.8rem; }
+  .scrolling-stats-pill .htc-stat { min-width: 0; }
+  /* Hide the large icons inside the stats pill on mobile */
+  .scrolling-stats-pill svg { display: none; }
+  /* Hide avg time stat on mobile — not enough room */
+  .htc-stat--hide-mobile { display: none; }
+  .htc-divider--hide-mobile { display: none; }
+
+  /* Share/help buttons — hide social icons, show only ? on mobile */
+  .share-btn--wa,
+  .share-btn--x,
+  .share-btn--mail { display: none; }
+  .share-btn--help { padding: 0.4rem 0.5rem; height: 34px; }
+  .share-btn--help svg { width: 18px; height: 18px; }
+  .share-buttons { padding: 0.2rem; gap: 0; }
+
+  /* Sim controls — wrap so Lab button doesn't get cut */
+  .sim-controls { flex-wrap: wrap; justify-content: center; border-radius: 14px; max-width: calc(100vw - 1.5rem); }
+  .speed-selector { flex-wrap: wrap; justify-content: center; }
+  .speed-pill { font-size: 9px !important; padding: 0.2rem 0.45rem !important; }
+  .play-pause-btn { width: 1.75rem !important; height: 1.75rem !important; font-size: 0.8rem; }
+  .player-control-micro-label { display: none; }
+
+  /* Legend — compact on mobile */
+  .sim-map-legend {
+    font-size: 8px !important;
+    padding: 4px 7px !important;
+    gap: 2px !important;
+    bottom: 70px !important;
+  }
+  .sim-map-legend > div { gap: 4px !important; }
+  .sim-map-legend button { font-size: 0.55rem !important; padding: 0.15rem 0.4rem !important; }
+
+  /* Modal — prevent horizontal overflow */
+  .access-barrier { overflow-x: hidden; max-width: 100vw; }
+  .barrier-content-wrapper { padding: 0.75rem; width: 100%; max-width: 100vw; box-sizing: border-box; overflow-x: hidden; }
+  .barrier-title-box { padding: 0.5rem 0.75rem; border-radius: 10px; gap: 0.5rem; max-width: 100%; box-sizing: border-box; }
+  .barrier-title-box h2 { font-size: clamp(0.8rem, 3.8vw, 1.2rem); white-space: normal; word-break: break-word; }
+  .barrier-header { margin-bottom: 0.75rem; }
+  .barrier-main-grid { gap: 1rem; }
+  .barrier-narrative p { font-size: 0.88rem; overflow-wrap: break-word; word-break: break-word; }
+  .disclaimer-text { font-size: 0.82rem; overflow-wrap: break-word; word-break: break-word; }
+  .init-sim-btn { padding: 0.9rem 1.5rem; font-size: 0.95rem; width: 100%; justify-content: center; box-sizing: border-box; }
+
+  /* Text overflow — all long-text elements */
+  .road-closed-list li, .findings-bullets li, .model-entry-body p,
+  .narrative-text-body, .models-intro p, .barrier-title-box h2 {
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  /* Road closed header — reduce letter-spacing so it doesn't overflow */
+  .road-closed-header { font-size: clamp(0.9rem, 4vw, 1.2rem); letter-spacing: 0.08em; gap: 0.5rem; }
+  .road-closed-block { padding: 1.25rem 1rem; }
+  .road-closed-intro { font-size: 0.875rem; }
+  .road-closed-list li { font-size: 0.875rem; }
+  .road-closed-footer { font-size: 0.8rem; }
+
+  /* Findings stats row — fix padding on 2-col layout */
+  .findings-stat { padding: 0.6rem 0.5rem; }
+  .findings-stat:first-child { padding-left: 0; }
+  .findings-stat:last-child { padding-left: 0.5rem; }
+  .findings-stat-num { font-size: clamp(1rem, 4vw, 1.3rem); }
+  .findings-stat-label { font-size: 0.6rem; }
+
+  /* Models section padding */
+  .models-section { padding-inline: 1rem; }
+  .bento-briefing { padding-inline: 1rem; }
+  .model-entry { padding: 1.25rem; }
+  .calibration-box { padding: 1.5rem; }
+
+  /* Narrative text sizing */
+  .narrative-text-large { font-size: clamp(1.1rem, 5vw, 1.5rem); }
+  .narrative-text-medium { font-size: 1rem; }
+  .narrative-text-body { font-size: 0.875rem; margin-top: 0.75rem; }
+
+  /* Findings — single column */
+  .findings-columns { grid-template-columns: 1fr !important; gap: 0.75rem; }
+  .findings-col--ad { min-height: 150px; }
+  .findings-col { padding: 1rem; }
+  .findings-stats-row { grid-template-columns: repeat(2, 1fr); }
+  .findings-stat:last-child { border-right: none; }
+  .findings-stat:nth-child(2) { border-right: none; }
+  .findings-intro { font-size: 0.875rem; }
+  .findings-header .models-title { font-size: clamp(1.5rem, 6vw, 2rem) !important; }
+
+  /* Models — single column */
+  .bento-content, .models-grid, .models-content { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
+  .narrative-block, .tech-hub-block, .models-header, .models-intro,
+  .road-closed-block, .models-content, .models-content > * { grid-column: 1 / -1 !important; }
+  .model-entry { grid-column: 1 / -1 !important; flex-direction: column; gap: 1rem; }
+  .models-title { font-size: clamp(2rem, 8vw, 3.5rem) !important; }
+  .models-intro p { font-size: 0.9rem; }
+  .pedigree-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+
+  /* Footer */
+  .footer-content { flex-direction: column; align-items: center; text-align: center; gap: 1.5rem; padding: 0; }
+  .footer-credits { text-align: center; min-width: unset; width: 100%; }
+  .footer-credits p, .footer-credits .sub { white-space: normal; word-break: break-word; overflow-wrap: break-word; }
+  .footer-credits p { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0.35rem; font-size: 0.8rem; }
+  .footer-oss { font-size: 0.85rem; }
+  .site-footer { padding: 2.5rem 1.25rem; }
+
+  /* Stats panel */
+  .stats-panel-container { height: auto; overflow-y: visible; }
+  .scroll-hint { display: none; }
+  .wmy-focus-hint { font-size: 0.55rem; letter-spacing: 0.06em; }
+
+  /* Mobile slide-up menu */
+  .mobile-menu-logo { font-family: "Space Grotesk", sans-serif; font-size: 1.75rem; font-weight: 800; letter-spacing: -0.05em; color: var(--on-surface); margin-bottom: 0.5rem; }
+  .mobile-menu-logo span { color: var(--c-3a); }
+  .mobile-menu-overlay { justify-content: flex-end; align-items: stretch; z-index: 20000; }
+  .mobile-menu-content { height: 100%; max-height: 100%; border-radius: 0; padding: 5rem 1.5rem 2.5rem; overflow-y: auto; }
+  .mobile-menu-link { font-size: 1.5rem; }
 }

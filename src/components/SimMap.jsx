@@ -2,7 +2,7 @@
 // Leaflet map + canvas vehicle overlay + rAF animation loop.
 
 import { useEffect, useRef, useCallback, useState } from 'react';
-import { Play, Pause, RotateCcw, Download, GripVertical, Car, Map as MapIcon, GraduationCap } from 'lucide-react';
+import { Play, Pause, RotateCcw, Download, GripVertical, Map as MapIcon } from 'lucide-react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import {
@@ -73,10 +73,12 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
   const containerRef = useRef(null), canvasRef = useRef(null), mapRef = useRef(null);
   const vehiclesRef = useRef([]), simTimeRef = useRef(0), spawnerStateRef = useRef(createSpawnerState());
   const rafRef = useRef(null), loopRef = useRef(null), lastUpdateRef = useRef(0);
+  const isMobile = window.innerWidth < 768;
 
   // Draggable controls and legend
   const [controlsOffset, setControlsOffset] = useState({ x: 0, y: 0 });
   const [legendOffset, setLegendOffset]     = useState({ x: 0, y: 0 });
+  const [legendOpen, setLegendOpen]         = useState(true);
   const controlsDragRef = useRef(null);
   const legendDragRef   = useRef(null);
 
@@ -623,18 +625,19 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
       const j = JUNCTIONS[jid], style = CTRL_STYLE[j.control] || CTRL_STYLE.stop;
       let col = style.color, isE = [1,8,9,13,20].includes(jid);
       if (jid===1) col=COLOUR['1A'].base; if (jid===9) col=COLOUR['2A'].base; if (jid===8) col=COLOUR['2B'].base; if (jid===13) col=COLOUR['3A'].base; if (jid===20) col=COLOUR['egress'].base;
-      const m = L.circleMarker([j.lat, j.lng], { radius: 7, color: col, weight: isE ? 2 : 1.5, opacity: isE ? 1 : 0.6, fill: true, fillColor: isE ? col : 'transparent', fillOpacity: isE ? 0.8 : 0 }).addTo(map).bindPopup(`<b>${j.name}</b><br>${j.control}`);
+      const isEntryPoint = [1, 8, 9, 13].includes(jid);
+      const m = L.circleMarker([j.lat, j.lng], { radius: 7, color: col, weight: isE ? 2 : 1.5, opacity: isEntryPoint ? 0 : (isE ? 1 : 0.6), fill: true, fillColor: isE ? col : 'transparent', fillOpacity: isEntryPoint ? 0 : (isE ? 0.8 : 0) }).addTo(map).bindPopup(`<b>${j.name}</b><br>${j.control}`);
       junctionMarkersRef.current[jid] = { marker: m, baseColor: col };
 
-      // Entry/exit points get a pulsing glow DivIcon overlay
-      if ([1, 8, 9, 13].includes(jid)) {
-        const pulseIcon = L.divIcon({
+      // Entry points get a ✱ DivIcon in their corridor colour with pulse
+      if (isEntryPoint) {
+        const starIcon = L.divIcon({
           className: '',
-          html: `<div style="width:22px;height:22px;border-radius:50%;border:2.5px solid ${col};animation:school-shadow-pulse 2s ease-in-out infinite;animation-delay:${jid * 0.15}s;"></div>`,
-          iconSize: [22, 22],
-          iconAnchor: [11, 11],
+          html: `<div style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:900;color:${col};animation:school-shadow-pulse 2s ease-in-out infinite;animation-delay:${jid * 0.15}s;filter:drop-shadow(0 0 6px ${col}) drop-shadow(0 0 3px rgba(0,0,0,0.8));line-height:1;">✱</div>`,
+          iconSize: [26, 26],
+          iconAnchor: [13, 13],
         });
-        L.marker([j.lat, j.lng], { icon: pulseIcon, interactive: false, zIndexOffset: -50 }).addTo(map);
+        L.marker([j.lat, j.lng], { icon: starIcon, interactive: false, zIndexOffset: -50 }).addTo(map);
       }
     });
 
@@ -646,17 +649,11 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
 
     const makeSchoolIcon = (zoom) => {
       const size = Math.round(16 * Math.pow(2, zoom - 14) * 0.8);
-      const clamped = Math.max(8, Math.min(200, size));
-      const pad = Math.max(2, Math.round(clamped * 0.12));
-      const total = clamped + pad * 2;
+      const clamped = Math.max(10, Math.min(200, size));
+      const fontSize = Math.max(10, Math.min(180, clamped));
       return L.divIcon({
         className: '',
-        html: `<svg xmlns="http://www.w3.org/2000/svg" width="${clamped}" height="${clamped}" viewBox="0 0 24 24" fill="none" stroke="#1a3d20" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation:school-shadow-pulse 2s ease-in-out infinite;">
-          <path d="M22 8.35V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8.35A2 2 0 0 1 3.26 6.5l8-3.2a2 2 0 0 1 1.48 0l8 3.2A2 2 0 0 1 22 8.35Z"/>
-          <path d="M6 18h1"/><path d="M17 18h1"/>
-          <path d="M12 2v6"/><path d="M6 10v8"/><path d="M18 10v8"/>
-          <path d="M6 14h12"/>
-        </svg>`,
+        html: `<div style="width:${clamped}px;height:${clamped}px;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:${fontSize}px;font-weight:900;color:#1a3d20;animation:school-shadow-pulse 2s ease-in-out infinite;filter:drop-shadow(0 0 6px rgba(161,204,165,0.8)) drop-shadow(0 0 3px rgba(0,0,0,0.8));line-height:1;">✱</div>`,
         iconSize: [clamped, clamped],
         iconAnchor: [clamped / 2, clamped / 2],
       });
@@ -695,45 +692,56 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
       <div ref={containerRef} style={{ width: '100%', height: '100%' }} />
       <canvas ref={canvasRef} style={{ position: 'absolute', top: 0, left: 0, pointerEvents: 'none', zIndex: 450 }} />
 
-      {/* Legend — draggable */}
-      <div style={{ position: 'absolute', bottom: 90, left: 8, zIndex: 500, background: 'var(--surface-low)', borderRadius: 10, padding: '6px 10px', fontSize: 10, color: 'var(--on-surface)', display: 'flex', flexDirection: 'column', gap: 3, opacity: 0.95, boxShadow: '0 4px 12px rgba(0,0,0,0.1)', transform: `translate(${legendOffset.x}px,${legendOffset.y}px)`, userSelect: 'none' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, paddingBottom: 4, marginBottom: 2, borderBottom: '1px solid var(--surface-high)' }}>
+      {/* Legend — collapsible + draggable */}
+      <div className="sim-map-legend" style={{ position: 'absolute', bottom: 90, left: 8, zIndex: 500, background: 'var(--surface-low)', borderRadius: 10, padding: isMobile ? '4px 7px' : '6px 10px', fontSize: isMobile ? 8 : 10, color: 'var(--on-surface)', display: 'flex', flexDirection: 'column', gap: isMobile ? 2 : 3, opacity: 0.95, boxShadow: '0 4px 12px rgba(0,0,0,0.1)', transform: `translate(${legendOffset.x}px,${legendOffset.y}px)`, userSelect: 'none' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, paddingBottom: legendOpen ? 4 : 0, marginBottom: legendOpen ? 2 : 0, borderBottom: legendOpen ? '1px solid var(--surface-high)' : 'none' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <MapIcon size={12} strokeWidth={2.5} />
-            <button 
-              className={`speed-pill${showRoutes ? ' active' : ''}`} 
-              onClick={onToggleRoutes}
-              style={{ fontSize: '0.65rem', padding: '0.2rem 0.5rem', height: 'auto', border: 'none' }}
+            <button
+              onClick={() => setLegendOpen(o => !o)}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, color: 'var(--on-surface)', padding: 0, fontSize: isMobile ? 8 : 10, fontWeight: 700 }}
+              title={legendOpen ? 'Collapse legend' : 'Expand legend'}
             >
-              Show Routes
+              <MapIcon size={isMobile ? 10 : 12} strokeWidth={2.5} />
+              <span style={{ letterSpacing: '0.05em', textTransform: 'uppercase' }}>Legend</span>
+              <span style={{ fontSize: isMobile ? 7 : 9, opacity: 0.5 }}>{legendOpen ? '▲' : '▼'}</span>
             </button>
           </div>
           <span onMouseDown={(e) => startDrag(legendDragRef, legendOffset, setLegendOffset, e)} style={{ cursor: 'grab', display: 'flex', alignItems: 'center', color: 'var(--muted-text)', padding: '0 2px' }} title="Drag to move">
-            <GripVertical size={14} />
+            <GripVertical size={isMobile ? 10 : 14} />
           </span>
-        </div>        {[
-          { c: COLOUR['3A'].base, l: 'Firgrove Way', s: '●' },
-          { c: COLOUR['2A'].base, l: 'Homestead Av', s: '●' },
-          { c: COLOUR['2B'].base, l: "Children's Way", s: '●' },
-          { c: COLOUR['1A'].base, l: 'Main Rd', s: '●' },
-          { c: '#fff', l: 'Rat-Run', s: '◆', stroke: '#000' },
-          { c: COLOUR.delayed, l: 'Delayed', s: '●' },
-          { c: COLOUR.dwell, l: 'Parked', s: '■' }
-        ].map(({c, l, s, stroke}) => (
-          <div key={l} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span style={{ 
-              color: c, 
-              fontSize: s === '■' ? 8 : 12, 
-              width: 12, 
-              textAlign: 'center',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              WebkitTextStroke: stroke ? `1px ${stroke}` : 'none'
-            }}>{s}</span>
-            {l}
-          </div>
-        ))}
+        </div>
+        {legendOpen && <>
+          <button 
+            className={`speed-pill${showRoutes ? ' active' : ''}`} 
+            onClick={onToggleRoutes}
+            style={{ fontSize: isMobile ? '0.55rem' : '0.65rem', padding: '0.2rem 0.5rem', height: 'auto', border: 'none', marginBottom: 2 }}
+          >
+            Show Routes
+          </button>
+          {[
+            { c: COLOUR['3A'].base, l: 'Firgrove Way', s: '●' },
+            { c: COLOUR['2A'].base, l: 'Homestead Av', s: '●' },
+            { c: COLOUR['2B'].base, l: "Children's Way", s: '●' },
+            { c: COLOUR['1A'].base, l: 'Main Rd', s: '●' },
+            { c: '#fff', l: 'Rat-Run', s: '◆', stroke: '#000' },
+            { c: COLOUR.delayed, l: 'Delayed', s: '●' },
+            { c: COLOUR.dwell, l: 'Parked', s: '■' }
+          ].map(({c, l, s, stroke}) => (
+            <div key={l} style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 4 : 6 }}>
+              <span style={{ 
+                color: c, 
+                fontSize: s === '■' ? (isMobile ? 6 : 8) : (isMobile ? 9 : 12), 
+                width: isMobile ? 9 : 12, 
+                textAlign: 'center',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                WebkitTextStroke: stroke ? `1px ${stroke}` : 'none'
+              }}>{s}</span>
+              {l}
+            </div>
+          ))}
+        </>}
       </div>
 
       {/* Sim Controls Island — draggable */}

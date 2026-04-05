@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { Bot, Map, Monitor, MessageCircleMore, X } from 'lucide-react';
 
 const NAV_ITEMS = [
@@ -64,8 +65,8 @@ export default function Header({ activeSection }) {
         </nav>
       </div>
 
-      {/* Mobile slide-up menu */}
-      {menuOpen && (
+      {/* Mobile menu — portalled to document.body to escape fixed header stacking context */}
+      {menuOpen && createPortal(
         <div className="mobile-menu-overlay" onClick={() => setMenuOpen(false)}>
           <div className="mobile-menu-content" onClick={e => e.stopPropagation()}>
             <button className="mobile-menu-close" onClick={() => setMenuOpen(false)} aria-label="Close menu">
@@ -101,7 +102,8 @@ export default function Header({ activeSection }) {
               </p>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

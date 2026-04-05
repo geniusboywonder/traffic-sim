@@ -138,7 +138,10 @@ export default function ProductTour({ active, restartKey = 0 }) {
   }
   // Clamp to viewport
   tipStyle.left = Math.max(12, Math.min(tipStyle.left, window.innerWidth - TIP_W - 12));
-  tipStyle.top  = Math.max(12, tipStyle.top);
+  // Clamp top — ensure tooltip fits within viewport height (tooltip ~220px tall)
+  const TIP_H = 240;
+  const maxTop = window.innerHeight - TIP_H - 12;
+  tipStyle.top = Math.max(12, Math.min(tipStyle.top, maxTop));
 
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 9999, pointerEvents: 'none' }}>
@@ -189,25 +192,8 @@ export default function ProductTour({ active, restartKey = 0 }) {
           transition: 'all 0.35s cubic-bezier(0.4,0,0.2,1)',
         }}
       >
-        {/* Step dots */}
-        <div style={{ display: 'flex', gap: 6, marginBottom: '0.75rem' }}>
-          {STEPS.map((_, i) => (
-            <div key={i} style={{
-              width: i === step ? 18 : 6, height: 6, borderRadius: 3,
-              background: i === step ? '#A1CCA5' : 'rgba(161,204,165,0.25)',
-              transition: 'all 0.3s ease',
-            }} />
-          ))}
-        </div>
-
-        <h3 style={{ color: '#f1f5f1', fontSize: '0.95rem', fontWeight: 800, margin: '0 0 0.4rem', letterSpacing: '-0.02em' }}>
-          {STEPS[step].title}
-        </h3>
-        <p style={{ color: 'rgba(241,245,241,0.72)', fontSize: '0.8rem', lineHeight: 1.5, margin: '0 0 1rem' }}>
-          {STEPS[step].body}
-        </p>
-
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        {/* Nav row — at top so it's always reachable */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
           <button
             onClick={dismiss}
             style={{ background: 'none', border: 'none', color: 'rgba(241,245,241,0.35)', fontSize: '0.7rem', cursor: 'pointer', padding: 0, letterSpacing: '0.05em' }}
@@ -232,6 +218,24 @@ export default function ProductTour({ active, restartKey = 0 }) {
             </button>
           </div>
         </div>
+
+        {/* Step dots */}
+        <div style={{ display: 'flex', gap: 6, marginBottom: '0.75rem' }}>
+          {STEPS.map((_, i) => (
+            <div key={i} style={{
+              width: i === step ? 18 : 6, height: 6, borderRadius: 3,
+              background: i === step ? '#A1CCA5' : 'rgba(161,204,165,0.25)',
+              transition: 'all 0.3s ease',
+            }} />
+          ))}
+        </div>
+
+        <h3 style={{ color: '#f1f5f1', fontSize: '0.95rem', fontWeight: 800, margin: '0 0 0.4rem', letterSpacing: '-0.02em' }}>
+          {STEPS[step].title}
+        </h3>
+        <p style={{ color: 'rgba(241,245,241,0.72)', fontSize: '0.8rem', lineHeight: 1.5, margin: 0 }}>
+          {STEPS[step].body}
+        </p>
       </div>
     </div>
   );

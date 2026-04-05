@@ -267,9 +267,9 @@ const StatsPanel = memo(({ statsData, selectedCorridors, onToggleCorridor, selec
 
         {!selectedRoad ? (
           <>
-            <div className="wmy-focus-hint" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <ArrowUpFromLine size={12} strokeWidth={3} />
-              Select any road on the map to focus on it
+            <div className="wmy-focus-hint" style={{ display: 'flex', alignItems: 'flex-start', gap: '0.4rem', flexWrap: 'wrap' }}>
+              <ArrowUpFromLine size={12} strokeWidth={3} style={{ flexShrink: 0, marginTop: '0.1rem' }} />
+              <span>Select any road on the map to focus on it</span>
             </div>
             <div className="holo-header">
               <ArrowUpFromLine size={14} strokeWidth={3} color="rgba(15,30,19,0.6)" style={{ marginRight: '0.3rem' }} />

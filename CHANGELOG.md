@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### Fixed — 2026-04-05 (Mobile Layout — iPhone 14)
+
+- **Horizontal overflow fixed:** `.narrative-block`, `.models-content`, and all 12-column grid children were overflowing the viewport on mobile. Root cause: `grid-column: span 9/12` on children forced implicit columns even when `grid-template-columns: 1fr` was set. Fixed by using `grid-column: 1 / -1 !important` on all grid children inside `.bento-content`, `.models-grid`, and `.models-content` at `max-width: 768px`.
+- **Grid gap corrected:** `.bento-content`, `.models-grid`, `.models-content` gap reduced from `3rem` to `1.5rem` on mobile to prevent overflow contribution.
+- **Footer overflow fixed:** `.footer-credits p` had `white-space: nowrap` causing `@geniusboywonder` and email to overflow. Changed to `white-space: normal; word-break: break-word; flex-wrap: wrap` on mobile. Footer padding reduced to `2.5rem 1.25rem`.
+- **Road closed block:** Reduced `letter-spacing` on `.road-closed-header` from `0.2em` to `0.08em` and clamped font size to `clamp(0.9rem, 4vw, 1.2rem)` to prevent overflow on narrow screens. Padding tightened to `1.25rem 1rem`.
+- **Findings section:** `.findings-col` padding reduced to `1rem` on mobile. `.findings-header .models-title` clamped to `clamp(1.5rem, 6vw, 2rem)`. `.findings-intro` font size reduced to `0.875rem`.
+- **Models section:** `.models-intro p` reduced to `0.9rem`. `.pedigree-grid` forced to single column. `.model-entry` padding reduced to `1.25rem`. `.calibration-box` padding reduced to `1.5rem`.
+- **Narrative text:** `.narrative-text-large` clamped to `clamp(1.1rem, 5vw, 1.5rem)`, `.narrative-text-medium` to `1rem`, `.narrative-text-body` to `0.875rem` on mobile.
+
 ### Added — 2026-04-05 (UI Polish & Production Prep)
 
 - **Product tour:** 4-step spotlight walkthrough auto-activates on first visit after the access barrier. Steps: Map → Simulation controls → Live telemetry → Corridor cards. Spotlight uses box-shadow hole technique with animated green border pulse. Stores completion in `localStorage` — never shows again. Keyboard navigation (Enter/Space/Arrow keys/Escape). Help button (bold `HelpCircle` icon) in header resets and replays the tour.

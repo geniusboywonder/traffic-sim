@@ -1,16 +1,3 @@
-comment out the Road and Roadlog code and remove the icons from the UI
-
-add to the footer, in the centre of the section, use the site names, but add suitable hyperlinks to this,
-"Made possible by open-source contributions from https://leafletjs.com/, https://eclipse.dev/sumo/, https://toruseo.jp/UXsim/docs/, https://www.shadcn.io/, https://21st.dev/home".
-style it appropriately and make sure is is readable in teh dark footer background
-
-the favicon and other references for this site should be the star logo ✱ Traff✱k
-
-as far as ad optons go - i dont want the ad to be the first thing people see - is tehre anyway we could put the ad to the right and aligned with "The Damage
-Report" or maybe as a side panel on the map? what options do we have here from Google? or ad points in the map?
-
-
-
 DONE
 Lets update the plan and continue with the traffic simulator from @Tokai_HS_Traffic_Simulator_Plan.md and add to the existing pages.
 
@@ -409,3 +396,34 @@ needs consideration "Christopher Rd is the physical funnel. . ." its the main ro
 this "A 7-minute trip ... " has ��� in it.
 
 how can we enable sharing on the site for people to share via whatsapp, email and X?
+
+on mobile the modal header/title is not showing.
+
+
+
+the stats pill text is still beyond the boundary/shading of the pill.
+
+
+
+the 4th tour guide tip renders the ok button outside the mobile viewport and it cant be clicked. the ok button needs to move to the top of the tooltip and the tooltip needs to render on screen.
+
+
+
+replace the 4 entry point circles and the school entry and exit gates with the * branding from the traff*k. keep their existing colours and pulsing intact.
+
+
+
+Set the default speed to x5
+
+
+
+comment out the Road and Roadlog code and remove the icons from the UI
+
+add to the footer, in the centre of the section, use the site names, but add suitable hyperlinks to this,
+"Made possible by open-source contributions from https://leafletjs.com/, https://eclipse.dev/sumo/, https://toruseo.jp/UXsim/docs/, https://www.shadcn.io/, https://21st.dev/home".
+style it appropriately and make sure is is readable in teh dark footer background
+
+the favicon and other references for this site should be the star logo ✱ Traff✱k
+
+as far as ad optons go - i dont want the ad to be the first thing people see - is tehre anyway we could put the ad to the right and aligned with "The Damage
+Report" or maybe as a side panel on the map? what options do we have here from Google? or ad points in the map?

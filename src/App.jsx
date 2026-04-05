@@ -370,7 +370,7 @@ export default function App() {
   const [tourKey, setTourKey]                   = useState(0);
   const [scenario, setScenario]                 = useState('M');
   const [playing, setPlaying]                   = useState(false);
-  const [speed, setSpeed]                       = useState(1);
+  const [speed, setSpeed]                       = useState(5);
   const [simTime, setSimTime]                   = useState(0);
   const [activeVehicles, setActiveVehicles]     = useState(0);
   const [statsData, setStatsData]               = useState(INITIAL_STATS);
@@ -518,8 +518,8 @@ export default function App() {
                   <span className="htc-value">{totalIn} / {totalOut}</span>
                 </div>
               </div>
-              <div className="htc-divider" />
-              <div className="htc-stat">
+              <div className="htc-divider htc-divider--hide-mobile" />
+              <div className="htc-stat htc-stat--hide-mobile">
                 <span className="htc-label">Avg Time In/Out</span>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                   <Timer size={28} strokeWidth={3} color="var(--muted-text)" />
@@ -528,7 +528,13 @@ export default function App() {
               </div>
             </div>
           </div>
-          <div className="header-share-slot"><ShareButtons onHelpClick={() => { localStorage.removeItem('traffik_tour_seen_v1'); setTourKey(k => k + 1); }} /></div>
+          <div className="header-share-slot"><ShareButtons onHelpClick={() => {
+            localStorage.removeItem('traffik_tour_seen_v1');
+            setTourKey(k => k + 1);
+            // Navigate to simulator if not already there
+            const sim = document.getElementById('simulator');
+            if (sim) sim.scrollIntoView({ behavior: 'smooth' });
+          }} /></div>
         </div>
       </div>
 

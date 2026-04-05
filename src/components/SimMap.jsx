@@ -15,7 +15,8 @@ import {
   pickEgressRoute, estimateRouteLength,
 } from '../engine/spawner';
 import { logEvent, logSchoolEvent, loggerClear, logRoadSnapshot, loggerDownload, loggerDownloadRoadStats } from '../engine/logger';
-import RoadWatcher from './RoadWatcher';
+
+const SHOW_DEBUG_LOGGER = import.meta.env.DEV;
 
 // Vehicle colours — aligned with design token palette
 const COLOUR = {
@@ -827,14 +828,16 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
           <button className="speed-pill" onClick={onReset} title="Reset" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <RotateCcw size={14} />
           </button>
-          {/* Log download buttons — commented out for production, re-enable for analysis
-          <button className="speed-pill" onClick={loggerDownload} title="Download vehicle log (CSV)" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-            <Download size={14} /> LOG
-          </button>
-          <button className="speed-pill" onClick={loggerDownloadRoadStats} title="Download road snapshot log (CSV)" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-            <Download size={14} /> ROAD LOG
-          </button>
-          */}
+          {SHOW_DEBUG_LOGGER && (
+            <>
+              <button className="speed-pill" onClick={loggerDownload} title="Download vehicle log (CSV)" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                <Download size={14} /> LOG
+              </button>
+              <button className="speed-pill" onClick={loggerDownloadRoadStats} title="Download road snapshot log (CSV)" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                <Download size={14} /> ROAD LOG
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>

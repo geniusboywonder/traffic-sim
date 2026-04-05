@@ -1,9 +1,17 @@
 *, *::before, *::after { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
+html {
+  scroll-padding-top: 80px;
+  scroll-behavior: smooth;
+}
 body {
   background: var(--canvas, #F1F5F1);
   color: var(--on-surface, #111D13);
   font-family: 'Work Sans', system-ui, 'Segoe UI', Roboto, sans-serif;
+  max-width: 100vw;
+  max-width: 100dvw;
+  overflow-x: clip;
+  overflow-y: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.6;

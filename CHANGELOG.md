@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### Fixed — 2026-04-05 (CSS Cleanup, Mobile Overflow, Header & Map Controls)
+
+- **CSS cascade simplified before further mobile fixes:** Consolidated responsive rules back into a single grouped section, removed duplicate mobile overrides, centralised shared glass/header tokens, and fixed circular custom-property definitions for `--canvas` and `--delay`. Global overflow/reset ownership was moved into `index.css` so header and layout behaviour are easier to reason about.
+- **Stats pill restored on mobile:** The iPhone 14 header now shows all three metrics again — `Time`, `Total In/Out`, and `Avg Time In/Out`. Root cause was a lower-specificity hide/show clash on `.htc-stat--hide-mobile`. Mobile layout now uses a compact 3-column pill instead of collapsing to two stats.
+- **Header proportions rebalanced on mobile:** Stats pill widened and given real height/weight; logo and share cluster tightened so the pill reads as the primary header element rather than a thin strip between controls.
+- **Editorial section overflow fixed on mobile:** Findings and models blocks were still rendering a few pixels wider than the viewport after the first mobile pass. Root cause was forcing `grid-column: 1 / -1` after collapsing those grids to a single explicit column, which expanded the track width. Fixed by resetting mobile children to `grid-column: auto` and clamping section/grid widths.
+- **Map legend and player controls draggable on touch again:** Mobile no longer hard-locks both overlays into fixed positions. `SimMap.jsx` drag handling now uses pointer events, so the legend and sim controls can be repositioned on touch devices while keeping sensible default anchors that avoid the Leaflet zoom controls.
+- **Desktop sticky header regression fixed again:** `overflow-x` on `html` had been reintroduced during the CSS cleanup, which broke `position: sticky` on desktop by changing the effective scroll container. Moved horizontal overflow control back to `body` only.
+- **Local dev console noise removed:** AdSense slots no longer attempt to initialize in local development, and production initialization now waits until the slot has non-zero size before calling `adsbygoogle.push()`. This removes the repeated `No slot size for availableWidth=0` errors during local testing.
+
 ### Added — 2026-04-05 (AdSense Integration)
 
 - **Three ad slots configured:** Findings card (300×250, slot `5022443765`), Models strip (responsive auto, slot `4973304892`), Footer leaderboard (responsive auto, slot `8443542979`). Each slot has a unique ID — previously both variants shared the same slot ID.

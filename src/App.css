@@ -1,24 +1,28 @@
 /* ── Design Tokens ── */
-html {
-  scroll-padding-top: 80px;
-  scroll-behavior: smooth;
-}
-
 :root {
-  --canvas:          var(--canvas);
+  --canvas:          #F1F5F1;
   --surface-low:     #E1E9E1;
   --surface-high:    #D1DAD1;
+  --surface-watch:   #D8E3D8;
   --on-surface:      #111D13;
   --muted-text:      #717977;
   --c-1a:            #111D13;
   --c-2a:            #A1CCA5;
   --c-2b:            #D0A679;
   --c-3a:            #709775;
+  --delay:           #A64D4D;
   --section-vpad:    clamp(2.5rem, 5vw, 4rem); /* Reduced from 3.5-7-6 */
   --card-radius:     0.875rem;
-  --delay:           var(--delay);
   --bezier:          cubic-bezier(0.32, 0.72, 0, 1);
   --shadow-floating: 0 24px 48px -12px rgba(17, 29, 19, 0.08);
+  --app-max-width:   1700px;
+  --header-height:   78px;
+  --glass-bg:        rgba(225, 233, 225, 0.85);
+  --glass-bg-strong: rgba(225, 233, 225, 0.97);
+  --glass-border:    1px solid rgba(255, 255, 255, 0.4);
+  --glass-shadow:    0 4px 12px rgba(0, 0, 0, 0.03);
+  --glass-blur:      blur(24px);
+  --pill-radius:     100px;
 }
 
 /* ── Typography baseline ── */
@@ -94,7 +98,7 @@ a {
 }
 
 .scrolling-top-bar-inner {
-  max-width: 1700px;
+  max-width: var(--app-max-width);
   width: 100%;
   padding: 0 1.5rem;
   display: flex;
@@ -104,8 +108,8 @@ a {
 }
 
 .main-layout {
-  height: calc(100vh - 78px);
-  height: calc(100dvh - 78px);
+  height: calc(100vh - var(--header-height));
+  height: calc(100dvh - var(--header-height));
   padding-top: 0;
   display: flex;
   flex-direction: column;
@@ -119,7 +123,7 @@ a {
   grid-template-columns: repeat(12, 1fr);
   gap: 1.5rem;
   padding: 1rem 1.5rem 1.5rem;
-  max-width: 1700px;
+  max-width: var(--app-max-width);
   margin: 0 auto;
   width: 100%;
 }
@@ -198,26 +202,6 @@ a {
   overflow: hidden;
 }
 
-@media (max-width: 1024px) {
-  .main-layout { height: auto; overflow: visible; padding-top: 1rem; }
-  .scrolling-top-bar { position: fixed; top: 0; width: 100%; }
-  .stats-panel-container {
-    position: relative;
-  }
-  .stats-panel-container::after {
-    content: '';
-    position: sticky;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 40px;
-    background: linear-gradient(to bottom, transparent, var(--canvas));
-    pointer-events: none;
-    z-index: 10;
-    display: block;
-  }
-}
-
 /* ── Common Components ── */
 .bezel-outer {
   background: rgba(17, 29, 19, 0.04);
@@ -278,13 +262,15 @@ a {
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  min-width: 0;
 }
 
 .stats-pill-container {
   flex: 1;
   display: flex;
   align-items: center;
-  justify-content: center; /* Center the stats pill */
+  justify-content: center;
+  min-width: 0;
 }
 
 .header-share-slot {
@@ -292,18 +278,23 @@ a {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  min-width: 0;
+}
+
+.share-buttons,
+.expanding-nav {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: var(--pill-radius);
 }
 
 .share-buttons {
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  background: rgba(225, 233, 225, 0.85);
-  backdrop-filter: blur(24px);
   padding: 0.4rem;
-  border-radius: 100px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
 .share-btn {
@@ -341,22 +332,15 @@ a {
 .share-btn--wa:hover  { color: #25D366; background: rgba(255,255,255,0.4); }
 .share-btn--x:hover   { color: #000;    background: rgba(255,255,255,0.4); }
 
-@media (max-width: 600px) {
-  .share-btn--native span { display: none; }
-  .share-btn--native { padding: 0.6rem 0.75rem; }
-}
+/* Mobile share trigger — hidden on desktop, shown in mobile media query */
+.mobile-share-trigger { display: none; }
 
 /* ── Expanding Icon Nav ── */
 .expanding-nav {
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  background: rgba(225, 233, 225, 0.85); /* Glassy surface matching stats pill */
-  backdrop-filter: blur(24px);
   padding: 0.4rem;
-  border-radius: 100px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
 .nav-pill {
@@ -413,13 +397,14 @@ a {
   display: none; /* Hide the bar, use pill background for active state */
 }
 
-/* ── Scrolling Stats Pill ── */
+/* ── Scrolling Stats Pill (Desktop) ── */
 .scrolling-stats-pill {
   width: 100%;
+  min-width: 0;
   background: rgba(225, 233, 225, 0.8);
   backdrop-filter: blur(12px);
-  border-radius: 100px;
-  height: 64px; /* Match height of nav roughly */
+  border-radius: var(--pill-radius);
+  height: 64px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -435,7 +420,7 @@ a {
   align-items: center;
   gap: 0.1rem;
   flex-shrink: 0;
-  min-width: 60px; /* Base width to prevent jumping */
+  min-width: 60px;
 }
 
 .scrolling-stats-pill .htc-label {
@@ -463,6 +448,12 @@ a {
   width: 1px;
   height: 1.5rem;
   background: rgba(0, 0, 0, 0.08);
+}
+
+.scrolling-stats-pill .htc-icon-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
 /* ── Simulation Controls (Inside Map) ── */
@@ -1730,12 +1721,6 @@ a {
   font-weight: 600;
 }
 
-@media (max-width: 1024px) {
-  .findings-columns {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
 /* ── Footer ── */
 .site-footer {
   background: var(--on-surface);
@@ -2019,28 +2004,6 @@ a {
   box-shadow: 0 25px 50px rgba(112, 151, 117, 0.35);
 }
 
-@media (max-width: 968px) {
-  .barrier-main-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-  .barrier-narrative, .barrier-disclaimer {
-    grid-column: span 1;
-  }
-  .barrier-header {
-    margin-bottom: 1.5rem;
-  }
-  .barrier-content-wrapper {
-    padding: 1.25rem 1rem;
-    min-height: 100dvh;
-  }
-  .barrier-narrative p { font-size: 0.95rem; }
-  .disclaimer-text { font-size: 0.85rem; }
-  .barrier-title-box { padding: 0.75rem 1rem; }
-  .barrier-title-box h2 { font-size: clamp(0.9rem, 4vw, 1.3rem); }
-  .init-sim-btn { padding: 1rem 2.5rem; font-size: 1rem; width: 100%; justify-content: center; }
-}
-
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -2165,80 +2128,263 @@ a {
   50%       { filter: drop-shadow(0 0 6px rgba(255,255,255,0.9)) drop-shadow(0 0 14px rgba(161,204,165,1)) drop-shadow(0 0 28px rgba(112,151,117,0.8)); opacity: 1; }
 }
 
+
+/* ── Responsive Queries ── */
 @media (max-width: 1024px) {
-  .scrolling-stats-pill { display: none; }
-  .main-layout { height: auto; overflow: visible; padding-top: 5rem; }
-  .content { grid-template-columns: 1fr; grid-auto-rows: auto; gap: 1rem; padding: 0 1rem 1rem; }
-  .map-viewport-container {
+  .scrolling-top-bar {
+    position: fixed;
+    inset: 0 0 auto 0;
+  }
+
+  .scrolling-top-bar-inner {
+    width: 100%;
+    max-width: none;
+    padding: 0.3rem 0.5rem;
+    gap: 0.25rem;
+    flex-wrap: nowrap;
+  }
+
+  .nav-container,
+  .header-share-slot {
+    flex: 0 0 auto;
+  }
+
+  .stats-pill-container {
+    flex: 1 1 0;
+  }
+
+  .scrolling-stats-pill {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    height: auto;
+    padding: 0.2rem 0.4rem;
+    gap: 0.3rem;
+    overflow: hidden;
+  }
+
+  .scrolling-stats-pill .htc-stat {
+    min-width: 0;
+    flex: 1 1 0;
+    gap: 0.05rem;
+    align-items: center;
+  }
+
+  .scrolling-stats-pill .htc-label {
+    font-size: 0.4rem;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+    line-height: 1;
+  }
+
+  .scrolling-stats-pill .htc-value {
+    font-size: 0.65rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1;
+  }
+
+  .scrolling-stats-pill .htc-divider {
+    height: 0.75rem;
+    flex-shrink: 0;
+    margin: 0 0.1rem;
+  }
+
+  .scrolling-stats-pill .htc-icon-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+  }
+
+  .scrolling-stats-pill .htc-icon-row svg {
+    display: none;
+  }
+
+  .main-layout {
+    height: auto;
+    overflow: visible;
+    padding-top: 5rem;
+  }
+
+  .content {
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+    gap: 1rem;
+    padding: 0 1rem 1rem;
+  }
+
+  .map-viewport-container,
+  .stats-panel-container {
     grid-column: span 12;
+  }
+
+  .map-viewport-container {
     height: 50vh;
     min-height: 350px;
   }
+
   .stats-panel-container {
-    grid-column: span 12;
     height: auto;
     overflow-y: visible;
+    position: relative;
+  }
+
+  .stats-panel-container::after {
+    content: '';
+    position: sticky;
+    bottom: 0;
+    inset-inline: 0;
+    height: 40px;
+    background: linear-gradient(to bottom, transparent, var(--canvas));
+    pointer-events: none;
+    z-index: 10;
   }
 }
 
-@media (max-width: 480px) {
-  .sim-controls { padding: 0.25rem; gap: 0.25rem; }
-  .speed-pill { padding: 0.25rem 0.4rem; font-size: 0.65rem; }
-}
+@media (max-width: 968px) {
+  .barrier-main-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
 
-/* ── Mobile overflow fix — prevent horizontal scroll without breaking sticky ── */
-*, *::before, *::after { box-sizing: border-box; }
-body { max-width: 100vw; overflow-x: hidden; }
+  .barrier-narrative,
+  .barrier-disclaimer {
+    grid-column: span 1;
+  }
+
+  .barrier-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .barrier-content-wrapper {
+    padding: 1.25rem 1rem;
+    min-height: 100dvh;
+  }
+
+  .barrier-narrative p {
+    font-size: 0.95rem;
+  }
+
+  .disclaimer-text {
+    font-size: 0.85rem;
+  }
+
+  .barrier-title-box {
+    padding: 0.75rem 1rem;
+  }
+
+  .barrier-title-box h2 {
+    font-size: clamp(0.9rem, 4vw, 1.3rem);
+  }
+
+  .init-sim-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 1rem 2.5rem;
+    font-size: 1rem;
+  }
+}
 
 @media (max-width: 768px) {
   /* Nav — hide desktop expanding nav, hamburger via logo */
   .desktop-nav { display: none; }
 
-  /* Header */
-  .scrolling-top-bar-inner { padding: 0.3rem 0.5rem; gap: 0.3rem; }
-  .app-logo { font-size: 1.4rem; }
-
-  /* Stats pill — show compact (overrides 1024px hide) */
+  /* Header — tighter padding on small phones */
+  .scrolling-top-bar-inner { padding: 0.3rem 0.4rem; gap: 0.25rem; }
+  .app-logo { font-size: 1rem; flex-shrink: 0; }
+  .nav-container,
+  .header-share-slot { flex: 0 0 auto; }
+  .stats-pill-container { flex: 1 1 auto; min-width: 0; }
   .scrolling-stats-pill {
-    display: flex !important;
-    height: auto;
-    padding: 0.35rem 0.6rem;
-    gap: 0.5rem;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: center;
+    gap: 0.2rem;
+    min-height: 2.25rem;
+    padding: 0.3rem 0.45rem;
+    border-radius: 1.125rem;
   }
-  .scrolling-stats-pill .htc-value { font-size: 0.75rem; }
-  .scrolling-stats-pill .htc-label { font-size: 0.5rem; letter-spacing: 0.06em; }
-  .scrolling-stats-pill .htc-divider { height: 0.8rem; }
-  .scrolling-stats-pill .htc-stat { min-width: 0; }
-  /* Hide the large icons inside the stats pill on mobile */
-  .scrolling-stats-pill svg { display: none; }
-  /* Hide avg time stat on mobile — not enough room */
-  .htc-stat--hide-mobile { display: none; }
-  .htc-divider--hide-mobile { display: none; }
+  .scrolling-stats-pill .htc-stat,
+  .scrolling-stats-pill .htc-stat--hide-mobile {
+    display: flex;
+    min-width: 0;
+    flex: initial;
+    gap: 0.08rem;
+    align-items: center;
+    justify-content: center;
+  }
+  .scrolling-stats-pill .htc-divider,
+  .scrolling-stats-pill .htc-divider--hide-mobile { display: none; }
+  .scrolling-stats-pill .htc-label {
+    font-size: 0.3rem;
+    letter-spacing: 0.025em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .scrolling-stats-pill .htc-value {
+    font-size: 0.56rem;
+    line-height: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .scrolling-stats-pill .htc-icon-row { gap: 0; }
 
-  /* Share/help buttons — hide social icons, show only ? on mobile */
-  .share-btn--wa,
-  .share-btn--x,
-  .share-btn--mail { display: none; }
-  .share-btn--help { padding: 0.4rem 0.5rem; height: 34px; }
-  .share-btn--help svg { width: 18px; height: 18px; }
-  .share-buttons { padding: 0.2rem; gap: 0; }
+  /* Share/help buttons — show ? + share icon on mobile, hide desktop-only links */
+  .share-btn--desktop { display: none !important; }
+  .mobile-share-trigger { display: inline-flex !important; }
+  .share-btn--help,
+  .mobile-share-trigger {
+    padding: 0.25rem 0.35rem;
+    height: 2rem;
+    min-width: 2rem;
+  }
+  .share-btn--help svg,
+  .mobile-share-trigger svg { width: 15px; height: 15px; }
+  .share-buttons { padding: 0.12rem; gap: 0; }
 
-  /* Sim controls — wrap so Lab button doesn't get cut */
-  .sim-controls { flex-wrap: wrap; justify-content: center; border-radius: 14px; max-width: calc(100vw - 1.5rem); }
-  .speed-selector { flex-wrap: wrap; justify-content: center; }
+  /* Mobile share popout — drops down below the share button */
+  .mobile-share-popout {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    background: rgba(225, 233, 225, 0.97);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 12px;
+    padding: 0.3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    z-index: 3000;
+  }
+  .mobile-share-popout .share-btn {
+    display: inline-flex !important;
+    width: 100%;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--on-surface);
+  }
+  /* Sim controls — compact on mobile without blocking Leaflet zoom */
+  .sim-controls-wrapper { position: absolute; top: 0.5rem; left: 0; right: 0; }
+  .sim-controls { flex-wrap: wrap; justify-content: center; border-radius: 14px; max-width: calc(100vw - 4.5rem); gap: 0.2rem; padding: 0.3rem; }
+  /* Hide the vertical dividers in sim controls on mobile to save space */
+  .sim-controls > div[style*="width: 1px"] { display: none !important; }
+  .speed-selector { flex-wrap: nowrap; }
+  .player-control-micro-label { display: none; }
   .speed-pill { font-size: 9px !important; padding: 0.2rem 0.45rem !important; }
   .play-pause-btn { width: 1.75rem !important; height: 1.75rem !important; font-size: 0.8rem; }
-  .player-control-micro-label { display: none; }
 
-  /* Legend — compact on mobile */
-  .sim-map-legend {
-    font-size: 8px !important;
-    padding: 4px 7px !important;
-    gap: 2px !important;
-    bottom: 70px !important;
-  }
-  .sim-map-legend > div { gap: 4px !important; }
-  .sim-map-legend button { font-size: 0.55rem !important; padding: 0.15rem 0.4rem !important; }
+  /* Legend — keep anchored bottom-left but allow touch dragging */
+  .sim-map-legend { bottom: 60px !important; left: 6px !important; max-width: calc(100vw - 1rem); }
 
   /* Modal — prevent horizontal overflow */
   .access-barrier { overflow-x: hidden; max-width: 100vw; }
@@ -2294,10 +2440,28 @@ body { max-width: 100vw; overflow-x: hidden; }
   .findings-header .models-title { font-size: clamp(1.5rem, 6vw, 2rem) !important; }
 
   /* Models — single column */
-  .bento-content, .models-grid, .models-content { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
+  .bento-content, .models-grid, .models-content, .findings-columns {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
   .narrative-block, .tech-hub-block, .models-header, .models-intro,
-  .road-closed-block, .models-content, .models-content > * { grid-column: 1 / -1 !important; }
-  .model-entry { grid-column: 1 / -1 !important; flex-direction: column; gap: 1rem; }
+  .road-closed-block, .models-content, .models-content > * {
+    grid-column: auto !important;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+  .model-entry,
+  .findings-col {
+    grid-column: auto !important;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+  .model-entry { flex-direction: column; gap: 1rem; }
   .models-title { font-size: clamp(2rem, 8vw, 3.5rem) !important; }
   .models-intro p { font-size: 0.9rem; }
   .pedigree-grid { grid-template-columns: 1fr; gap: 1.5rem; }
@@ -2321,4 +2485,14 @@ body { max-width: 100vw; overflow-x: hidden; }
   .mobile-menu-overlay { justify-content: flex-end; align-items: stretch; z-index: 20000; }
   .mobile-menu-content { height: 100%; max-height: 100%; border-radius: 0; padding: 5rem 1.5rem 2.5rem; overflow-y: auto; }
   .mobile-menu-link { font-size: 1.5rem; }
+}
+
+@media (max-width: 600px) {
+  .share-btn--native span { display: none; }
+  .share-btn--native { padding: 0.6rem 0.75rem; }
+}
+
+@media (max-width: 480px) {
+  .sim-controls { padding: 0.25rem; gap: 0.25rem; }
+  .speed-pill { padding: 0.25rem 0.4rem; font-size: 0.65rem; }
 }

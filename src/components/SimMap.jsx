@@ -82,20 +82,37 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
   const controlsDragRef = useRef(null);
   const legendDragRef   = useRef(null);
 
-  const startDrag = useCallback((dragRef, currentOffset, setOffset, e) => {
-    if (e.button !== 0) return;
-    dragRef.current = { startX: e.clientX, startY: e.clientY, origX: currentOffset.x, origY: currentOffset.y };
-    const onMove = (e) => {
-      if (!dragRef.current) return;
+  const startDrag = useCallback((dragRef, currentOffset, setOffset, event) => {
+    if (event.pointerType === 'mouse' && event.button !== 0) return;
+
+    dragRef.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      origX: currentOffset.x,
+      origY: currentOffset.y,
+    };
+
+    const onMove = (moveEvent) => {
+      if (!dragRef.current || moveEvent.pointerId !== dragRef.current.pointerId) return;
       setOffset({
-        x: dragRef.current.origX + (e.clientX - dragRef.current.startX),
-        y: dragRef.current.origY + (e.clientY - dragRef.current.startY),
+        x: dragRef.current.origX + (moveEvent.clientX - dragRef.current.startX),
+        y: dragRef.current.origY + (moveEvent.clientY - dragRef.current.startY),
       });
     };
-    const onUp = () => { dragRef.current = null; window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('mouseup', onUp);
-    e.preventDefault();
+
+    const onUp = (upEvent) => {
+      if (!dragRef.current || upEvent.pointerId !== dragRef.current.pointerId) return;
+      dragRef.current = null;
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+      window.removeEventListener('pointercancel', onUp);
+    };
+
+    window.addEventListener('pointermove', onMove, { passive: false });
+    window.addEventListener('pointerup', onUp);
+    window.addEventListener('pointercancel', onUp);
+    event.preventDefault();
   }, []);
   const junctionStateRef = useRef(new Map()), junctionMarkersRef = useRef({});
   const corridorTotalsRef = useRef({ '1A': 0, '1A-NORTH': 0, '2A': 0, '2B': 0, '3A': 0 });
@@ -706,7 +723,11 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
               <span style={{ fontSize: isMobile ? 7 : 9, opacity: 0.5 }}>{legendOpen ? '▲' : '▼'}</span>
             </button>
           </div>
-          <span onMouseDown={(e) => startDrag(legendDragRef, legendOffset, setLegendOffset, e)} style={{ cursor: 'grab', display: 'flex', alignItems: 'center', color: 'var(--muted-text)', padding: '0 2px' }} title="Drag to move">
+          <span
+            onPointerDown={(e) => startDrag(legendDragRef, legendOffset, setLegendOffset, e)}
+            style={{ cursor: 'grab', display: 'flex', alignItems: 'center', color: 'var(--muted-text)', padding: '0 2px', touchAction: 'none' }}
+            title="Drag to move"
+          >
             <GripVertical size={isMobile ? 10 : 14} />
           </span>
         </div>
@@ -751,8 +772,11 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
         </div>
         <div className="sim-controls">
           {/* Drag handle */}
-          <span onMouseDown={(e) => startDrag(controlsDragRef, controlsOffset, setControlsOffset, e)}
-            style={{ cursor: 'grab', display: 'flex', alignItems: 'center', color: 'var(--muted-text)', padding: '0 4px', flexShrink: 0 }} title="Drag to reposition">
+          <span
+            onPointerDown={(e) => startDrag(controlsDragRef, controlsOffset, setControlsOffset, e)}
+            style={{ cursor: 'grab', display: 'flex', alignItems: 'center', color: 'var(--muted-text)', padding: '0 4px', flexShrink: 0, touchAction: 'none' }}
+            title="Drag to reposition"
+          >
             <GripVertical size={14} />
           </span>
 

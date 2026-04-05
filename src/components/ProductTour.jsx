@@ -49,12 +49,6 @@ export default function ProductTour({ active, restartKey = 0 }) {
   const [rect, setRect] = useState(null);
   const [visible, setVisible] = useState(false);
 
-  const measure = useCallback((s) => {
-    const target = STEPS[s ?? step]?.target;
-    const r = getRect(target);
-    setRect(r ?? null);
-  }, [step]);
-
   // Start tour (auto on first visit, or when restartKey changes)
   useEffect(() => {
     if (!active) return;
@@ -62,10 +56,10 @@ export default function ProductTour({ active, restartKey = 0 }) {
     const t = setTimeout(() => {
       setStep(0);
       setVisible(true);
-      measure(0);
+      setRect(getRect(STEPS[0].target));
     }, 600);
     return () => clearTimeout(t);
-  }, [active, restartKey, measure]);
+  }, [active, restartKey]);
 
   // Re-measure whenever step changes
   useEffect(() => {

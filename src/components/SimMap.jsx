@@ -212,6 +212,20 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
       ctx.globalAlpha = 1.0;
     });
 
+    // ── School internal road — dashed grey line ───────────────────────────────
+    const internal = ROAD_LINES.find(f => f.properties.name?.toLowerCase().includes('internal road'));
+    if (internal) {
+      const map = mapRef.current;
+      if (map) {
+        ctx.beginPath(); ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 2; ctx.setLineDash([4,4]); ctx.globalAlpha = 0.8;
+        internal.geometry.coordinates.forEach((cl, i) => {
+          const pt = map.latLngToContainerPoint(L.latLng(cl[1], cl[0]));
+          i === 0 ? ctx.moveTo(pt.x, pt.y) : ctx.lineTo(pt.x, pt.y);
+        });
+        ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha = 1;
+      }
+    }
+
   }, []);
 
   const syncCanvas = useCallback(() => {
@@ -616,7 +630,8 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
     // ── School site marker — zoom-responsive GraduationCap icon ──────────────
     // Centred on the school building, sized to fill the site at current zoom.
     // Lucide GraduationCap SVG path rendered as a DivIcon so it geo-anchors correctly.
-    const SCHOOL_LAT = -34.0518, SCHOOL_LNG = 18.4487;
+    // School building sits south of the internal road — anchor icon there, not on the road
+    const SCHOOL_LAT = -34.0524, SCHOOL_LNG = 18.4485;
     const schoolMarkerRef = { current: null };
 
     const makeSchoolIcon = (zoom) => {

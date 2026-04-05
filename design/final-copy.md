@@ -286,3 +286,23 @@ Proposed: Under the Hood Rewrite
   ---
   Layout proposal: Keep the current stacked model-entry layout but add a subtle visual "chain" element — a connector line or numbered badge (①②③④) running left
   of the entries to show the validation hierarchy. No grid changes needed — the linear narrative works best here.
+
+Make these changes to the TOUR GUIDE
+Order the tour like this
+1) Map with school and 4 points
+2) Control
+3) Stats pill
+4) Corridor cards
+
+Copy should be:
+1) The Map
+The map shows the Berglivet road network. Pulsing markers highlght the 4 entry/exit points and the school. Moving dots represent cars navigating the streets. Click any road to inspect it.
+2) Run the simulation
+Pick a scenario — Low (336 cars), Medium (420, the TIA baseline), or High (504). Hit play, adjust playbackspeed, and watch the network load up in real time. Lab shows the independant model to validate results.
+3) Live telemetry
+The header stats shows the clock, total vehicles in/out, and average trip times — updating live as the simulation runs.
+4) Watch the corridors
+Each card tracks one entry point — vehicles in, vehicles out, and how congested that corridor is right now. Click a card to select/deselect it from the simulation run.
+
+tighten the spolight on the player to just highlight the player and not the full map.
+expand the corridor spotlight to include the overall stats

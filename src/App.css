@@ -2087,8 +2087,8 @@ a {
   position: relative;
 }
 @keyframes school-shadow-pulse {
-  0%, 100% { filter: drop-shadow(0 0 2px rgba(161,204,165,0.3)); opacity: 0.7; }
-  50%       { filter: drop-shadow(0 0 10px rgba(161,204,165,0.9)) drop-shadow(0 0 20px rgba(112,151,117,0.5)); opacity: 1; }
+  0%, 100% { filter: drop-shadow(0 0 3px rgba(161,204,165,0.4)); opacity: 0.6; }
+  50%       { filter: drop-shadow(0 0 6px rgba(255,255,255,0.9)) drop-shadow(0 0 14px rgba(161,204,165,1)) drop-shadow(0 0 28px rgba(112,151,117,0.8)); opacity: 1; }
 }
 
 @media (max-width: 1024px) {

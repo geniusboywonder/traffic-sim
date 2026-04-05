@@ -630,9 +630,9 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
       if ([1, 8, 9, 13].includes(jid)) {
         const pulseIcon = L.divIcon({
           className: '',
-          html: `<div style="width:18px;height:18px;border-radius:50%;border:2px solid ${col};animation:school-shadow-pulse 2s ease-in-out infinite;animation-delay:${jid * 0.15}s;"></div>`,
-          iconSize: [18, 18],
-          iconAnchor: [9, 9],
+          html: `<div style="width:22px;height:22px;border-radius:50%;border:2.5px solid ${col};animation:school-shadow-pulse 2s ease-in-out infinite;animation-delay:${jid * 0.15}s;"></div>`,
+          iconSize: [22, 22],
+          iconAnchor: [11, 11],
         });
         L.marker([j.lat, j.lng], { icon: pulseIcon, interactive: false, zIndexOffset: -50 }).addTo(map);
       }

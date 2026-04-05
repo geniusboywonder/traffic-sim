@@ -674,10 +674,10 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
       return L.divIcon({
         className: '',
         html: `<svg xmlns="http://www.w3.org/2000/svg" width="${clamped}" height="${clamped}" viewBox="0 0 24 24" fill="none" stroke="#2D5438" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 1px 3px rgba(0,0,0,0.4));opacity:0.85">
-          <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/>
-          <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/>
-          <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/>
-          <path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/>
+          <path d="M22 8.35V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8.35A2 2 0 0 1 3.26 6.5l8-3.2a2 2 0 0 1 1.48 0l8 3.2A2 2 0 0 1 22 8.35Z"/>
+          <path d="M6 18h1"/><path d="M17 18h1"/>
+          <path d="M12 2v6"/><path d="M6 10v8"/><path d="M18 10v8"/>
+          <path d="M6 14h12"/>
         </svg>`,
         iconSize: [clamped, clamped],
         iconAnchor: [clamped / 2, clamped / 2],

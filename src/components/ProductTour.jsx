@@ -9,28 +9,28 @@ const TOUR_KEY = 'traffik_tour_seen_v1';
 
 const STEPS = [
   {
-    target: '.sim-controls-wrapper',
+    target: '.map-viewport-container',
+    title: 'The Map',
+    body: 'The map shows the Bergvliet road network. Pulsing markers highlight the 4 entry/exit points and the school. Moving dots represent cars navigating the streets. Click any road to inspect it.',
+    position: 'right',
+  },
+  {
+    target: '.sim-controls',
     title: 'Run the simulation',
-    body: 'Pick a demand scenario — Low (336 cars), Medium (420, the TIA baseline), or High (504). Hit play, adjust speed, and watch the network load up in real time.',
+    body: 'Pick a scenario — Low (336 cars), Medium (420, the TIA baseline), or High (504). Hit play, adjust playback speed, and watch the network load up in real time. Lab shows the independent model to validate results.',
     position: 'bottom',
   },
   {
     target: '.scrolling-stats-pill',
     title: 'Live telemetry',
-    body: 'The header pill shows the simulation clock, total vehicles in/out, and average trip times — updating live as the simulation runs.',
+    body: 'The header stats shows the clock, total vehicles in/out, and average trip times — updating live as the simulation runs.',
     position: 'bottom',
   },
   {
-    target: '.corridor-grid',
+    target: '.stats-panel',
     title: 'Watch the corridors',
-    body: 'Each card tracks one entry point — vehicles in, vehicles out, and how congested that corridor is right now. Click a card to focus the map on that entry point.',
+    body: 'Each card tracks one entry point — vehicles in, vehicles out, and how congested that corridor is right now. Click a card to select/deselect it from the simulation run.',
     position: 'left',
-  },
-  {
-    target: '.map-viewport-container',
-    title: 'The road network',
-    body: 'The pulsing markers are the 4 entry/exit points. The warehouse icon is the school. Solid dots are inbound cars, hollow circles are leaving. Diamonds are rat-runs. Click any road to inspect it.',
-    position: 'right',
   },
 ];
 

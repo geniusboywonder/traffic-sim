@@ -49,6 +49,7 @@ export default function ProductTour({ active, restartKey = 0 }) {
   const measure = useCallback(() => {
     const r = getRect(STEPS[step]?.target);
     if (r) setRect(r);
+    else setRect(null); // target not found — hide spotlight but keep tooltip visible
   }, [step]);
 
   // Start tour (auto on first visit, or when restartKey changes)
@@ -60,10 +61,17 @@ export default function ProductTour({ active, restartKey = 0 }) {
     return () => clearTimeout(t);
   }, [active, restartKey, measure]);
 
-  // Re-measure on step change and on resize/scroll
+  // Re-measure whenever step changes
   useEffect(() => {
     if (!visible) return;
-    measure();
+    // rAF ensures DOM has settled before measuring
+    const id = requestAnimationFrame(() => measure());
+    return () => cancelAnimationFrame(id);
+  }, [step, visible, measure]);
+
+  // Re-measure on resize/scroll
+  useEffect(() => {
+    if (!visible) return;
     window.addEventListener('resize', measure);
     window.addEventListener('scroll', measure, { passive: true });
     return () => {
@@ -100,15 +108,15 @@ export default function ProductTour({ active, restartKey = 0 }) {
     return () => window.removeEventListener('keydown', handler);
   }, [visible, next, prev, dismiss]);
 
-  if (!visible || !rect) return null;
+  if (!visible) return null;
 
   const PAD = 10;
-  const spotlight = {
+  const spotlight = rect ? {
     top:    rect.top    - PAD,
     left:   rect.left   - PAD,
     width:  rect.width  + PAD * 2,
     height: rect.height + PAD * 2,
-  };
+  } : { top: -9999, left: -9999, width: 0, height: 0 };
 
   // Tooltip positioning
   const pos = STEPS[step].position;

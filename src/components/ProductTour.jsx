@@ -46,10 +46,10 @@ export default function ProductTour({ active, restartKey = 0 }) {
   const [visible, setVisible] = useState(false);
   const rafRef = useRef(null);
 
-  const measure = useCallback(() => {
-    const r = getRect(STEPS[step]?.target);
-    if (r) setRect(r);
-    else setRect(null); // target not found — hide spotlight but keep tooltip visible
+  const measure = useCallback((s) => {
+    const target = STEPS[s ?? step]?.target;
+    const r = getRect(target);
+    setRect(r ?? null);
   }, [step]);
 
   // Start tour (auto on first visit, or when restartKey changes)
@@ -57,28 +57,34 @@ export default function ProductTour({ active, restartKey = 0 }) {
     if (!active) return;
     if (restartKey === 0 && localStorage.getItem(TOUR_KEY)) return;
     setStep(0);
-    const t = setTimeout(() => { setVisible(true); measure(); }, 600);
+    const t = setTimeout(() => { setVisible(true); measure(0); }, 600);
     return () => clearTimeout(t);
-  }, [active, restartKey, measure]);
+  }, [active, restartKey]); // eslint-disable-line
 
   // Re-measure whenever step changes
   useEffect(() => {
     if (!visible) return;
-    // rAF ensures DOM has settled before measuring
-    const id = requestAnimationFrame(() => measure());
+    const id = requestAnimationFrame(() => {
+      const r = getRect(STEPS[step]?.target);
+      setRect(r ?? null);
+    });
     return () => cancelAnimationFrame(id);
-  }, [step, visible, measure]);
+  }, [step, visible]);
 
   // Re-measure on resize/scroll
   useEffect(() => {
     if (!visible) return;
-    window.addEventListener('resize', measure);
-    window.addEventListener('scroll', measure, { passive: true });
-    return () => {
-      window.removeEventListener('resize', measure);
-      window.removeEventListener('scroll', measure);
+    const handler = () => {
+      const r = getRect(STEPS[step]?.target);
+      setRect(r ?? null);
     };
-  }, [visible, measure]);
+    window.addEventListener('resize', handler);
+    window.addEventListener('scroll', handler, { passive: true });
+    return () => {
+      window.removeEventListener('resize', handler);
+      window.removeEventListener('scroll', handler);
+    };
+  }, [visible, step]);
 
   const dismiss = useCallback(() => {
     localStorage.setItem(TOUR_KEY, '1');

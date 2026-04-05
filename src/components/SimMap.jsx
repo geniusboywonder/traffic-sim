@@ -669,13 +669,15 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
     const schoolMarkerRef = { current: null };
 
     const makeSchoolIcon = (zoom) => {
-      const size = Math.round(Math.pow(2, zoom - 13) * 48);
-      const clamped = Math.max(24, Math.min(120, size));
+      const size = Math.round(Math.pow(2, zoom - 14) * 32);
+      const clamped = Math.max(16, Math.min(96, size));
       return L.divIcon({
         className: '',
         html: `<svg xmlns="http://www.w3.org/2000/svg" width="${clamped}" height="${clamped}" viewBox="0 0 24 24" fill="none" stroke="#2D5438" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 1px 3px rgba(0,0,0,0.4));opacity:0.85">
-          <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-          <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+          <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/>
+          <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/>
+          <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/>
+          <path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/>
         </svg>`,
         iconSize: [clamped, clamped],
         iconAnchor: [clamped / 2, clamped / 2],

@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Bot, Map, Monitor, MessageCircleMore, X } from 'lucide-react';
 
@@ -9,24 +9,19 @@ const NAV_ITEMS = [
   { id: 'contact',   icon: MessageCircleMore, label: 'Pit Stop',      href: '#contact' },
 ];
 
+const SECTION_TO_NAV = {
+  simulator: 'simulator',
+  briefing: 'simulator',
+  findings: 'findings',
+  models: 'models',
+  contact: 'contact',
+};
+
 export default function Header({ activeSection }) {
-  const [manualActive, setManualActive] = useState(null);
-  const [lastSection, setLastSection]   = useState(activeSection);
-  const [menuOpen, setMenuOpen]         = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const active = SECTION_TO_NAV[activeSection] || 'simulator';
 
-  if (activeSection !== lastSection) {
-    setLastSection(activeSection);
-    setManualActive(null);
-  }
-
-  const active = useMemo(() => {
-    if (manualActive) return manualActive;
-    const map = { simulator: 'simulator', briefing: 'simulator', findings: 'findings', models: 'models', contact: 'contact' };
-    return map[activeSection] || 'simulator';
-  }, [activeSection, manualActive]);
-
-  const handleNavClick = (id) => {
-    setManualActive(id);
+  const handleNavClick = () => {
     setMenuOpen(false);
   };
 
@@ -52,7 +47,7 @@ export default function Header({ activeSection }) {
               <a
                 key={item.id}
                 href={item.href}
-                onClick={() => handleNavClick(item.id)}
+                onClick={handleNavClick}
                 className={`nav-pill ${isActive ? 'active' : ''}`}
               >
                 <div className="nav-pill-content">
@@ -86,7 +81,7 @@ export default function Header({ activeSection }) {
                     href={item.href}
                     className="mobile-menu-link"
                     style={{ animationDelay: `${i * 0.07}s` }}
-                    onClick={() => handleNavClick(item.id)}
+                    onClick={handleNavClick}
                   >
                     <span className="mobile-menu-link-num">0{i + 1}</span>
                     <Icon size={20} strokeWidth={2} style={{ opacity: 0.5 }} />

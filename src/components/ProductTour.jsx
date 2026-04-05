@@ -2,8 +2,8 @@
 // 3-step spotlight tour. Auto-activates on first visit after access barrier.
 // Stores completion in localStorage — never shows again once dismissed.
 
-import { useEffect, useState, useCallback, useRef } from 'react';
-import { X, ChevronRight, ChevronLeft } from 'lucide-react';
+import { useEffect, useState, useCallback } from 'react';
+import { ChevronRight, ChevronLeft } from 'lucide-react';
 
 const TOUR_KEY = 'traffik_tour_seen_v1';
 
@@ -48,7 +48,6 @@ export default function ProductTour({ active, restartKey = 0 }) {
   const [step, setStep] = useState(0);
   const [rect, setRect] = useState(null);
   const [visible, setVisible] = useState(false);
-  const rafRef = useRef(null);
 
   const measure = useCallback((s) => {
     const target = STEPS[s ?? step]?.target;
@@ -60,10 +59,13 @@ export default function ProductTour({ active, restartKey = 0 }) {
   useEffect(() => {
     if (!active) return;
     if (restartKey === 0 && localStorage.getItem(TOUR_KEY)) return;
-    setStep(0);
-    const t = setTimeout(() => { setVisible(true); measure(0); }, 600);
+    const t = setTimeout(() => {
+      setStep(0);
+      setVisible(true);
+      measure(0);
+    }, 600);
     return () => clearTimeout(t);
-  }, [active, restartKey]); // eslint-disable-line
+  }, [active, restartKey, measure]);
 
   // Re-measure whenever step changes
   useEffect(() => {

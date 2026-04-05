@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### Changed — 2026-04-05 (Viewport Stability & SimMap Refactor)
+
+- **Mobile viewport layout stabilised under the sticky header:** Replaced the brittle mobile `position: fixed` header override and hard-coded `padding-top: 5rem` compensation with a single sticky-header model across desktop and mobile. Layout now keys off responsive `--header-height` / `--header-inner-height` variables with `env(safe-area-inset-top)` support, so installed mobile web apps and dynamic browser chrome no longer throw off the simulator viewport.
+- **Anchor scroll offset now follows the real header height:** `scroll-padding-top` in `index.css` now derives from `--header-height` instead of a fixed `80px`, so section jumps remain aligned after header-size changes.
+- **`SimMap` split into helper modules:** Extracted pure config/stat builders to `simMapUtils.js`, frame rendering/logging helpers to `simMapFrameHandlers.js`, and live vehicle state-machine logic to `simMapLiveSim.js`. `SimMap.jsx` now acts primarily as the orchestrator for playback, live stepping, and Leaflet wiring rather than owning every low-level branch inline.
+- **Dead road-watcher path removed:** The unused standalone `RoadWatcher` component and its stale tests were deleted. The active road-inspection flow remains the integrated Overall Summary / focused-road state inside `StatsPanel`.
+- **Playback made less fragile in isolation:** `PlaybackSource.getVehicles()` now falls back to `0,0` coordinates when geometry has not been injected yet, which keeps fixtures/tests usable before map bootstrapping.
+- **Debug log downloads kept local-only:** Vehicle/road CSV downloads remain available for troubleshooting in development, but the UI buttons are hidden in production builds.
+
 ### Fixed — 2026-04-05 (CSS Cleanup, Mobile Overflow, Header & Map Controls)
 
 - **CSS cascade simplified before further mobile fixes:** Consolidated responsive rules back into a single grouped section, removed duplicate mobile overrides, centralised shared glass/header tokens, and fixed circular custom-property definitions for `--canvas` and `--delay`. Global overflow/reset ownership was moved into `index.css` so header and layout behaviour are easier to reason about.

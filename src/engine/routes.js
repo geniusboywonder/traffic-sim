@@ -424,11 +424,3 @@ export function estimateRouteLength(geometry) {
   }
   return Math.max(len, 50);
 }
-
-export const EGRESS_ROUTES = [
-  { id: 'EG-A', weight: 0.30 }, // Children's Way (J8)
-  { id: 'EG-B', weight: 0.20 }, // Main Rd (J1)
-  { id: 'EG-C', weight: 0.15 }, // Main Rd (J1)
-  { id: 'EG-D', weight: 0.15 }, // Firgrove (J13)
-  { id: 'EG-E', weight: 0.20 }, // Homestead (J9)
-];

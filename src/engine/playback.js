@@ -46,12 +46,6 @@ export class PlaybackSource {
     '1A': 'Main Rd', '2A': 'Homestead Av',
     '2B': "Children's Way",  '3A': 'Firgrove Way',
   };
-  // Primary entry road for each corridor (used for delay stats)
-  static _ENTRY_ROADS = {
-    '1A': 'dreyersdal_road', '2A': 'homestead_avenue',
-    '2B': 'childrens_way',   '3A': 'timber_way',
-  };
-
   _flowToCorridor(vehicleId) {
     // Expected format: "flow_N_in.M" where N is the bucket index (0-19)
     // 0-4   -> 1A
@@ -214,8 +208,9 @@ export class PlaybackSource {
     for (const v of frame.vehicles) {
       if (PlaybackSource._EXCLUDED_ROADS.has(v.road_id)) continue;
       const coords = this._roadCoords[v.road_id] ?? [];
-      if (coords.length === 0) continue;  // no geometry → off-map road, skip
-      const { lat, lng } = progressToLatLng(coords, v.progress);
+      const { lat, lng } = coords.length > 0
+        ? progressToLatLng(coords, v.progress)
+        : { lat: 0, lng: 0 };
       results.push({ lat, lng, state: v.state, roadId: v.road_id, speed: v.speed, corridorId: this._flowToCorridor(v.id) });
     }
     return results;

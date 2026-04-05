@@ -1744,24 +1744,27 @@ a {
 
 .footer-credits {
   text-align: right;
+  min-width: 220px;
 }
 
 .footer-credits p { 
-  font-size: 1.25rem; 
-  margin-top: 1rem; 
+  font-size: 0.85rem; 
+  margin-top: 0.5rem; 
   color: rgba(241, 245, 241, 0.9);
+  white-space: nowrap;
 }
 
 .footer-credits .sub { 
   color: rgba(241, 245, 241, 0.7);
-  font-size: 1.125rem; 
+  font-size: 0.75rem; 
   font-weight: 700; 
-  text-transform: uppercase; 
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .footer-credits .copyright {
   color: rgba(241, 245, 241, 0.35);
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   font-weight: 400;
   margin-top: 0.5rem;
 }

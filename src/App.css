@@ -317,13 +317,21 @@ a {
   border: none;
   background: transparent;
   color: var(--muted-text);
-  font-size: 0.78rem;
+  font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
   text-decoration: none;
   transition: all 0.4s var(--bezier);
   white-space: nowrap;
 }
+
+.share-btn svg { width: 20px; height: 20px; }
+
+.share-btn--help {
+  color: var(--on-surface);
+  font-weight: 900;
+}
+.share-btn--help svg { stroke-width: 2.5; }
 
 .share-btn:hover {
   color: var(--on-surface);

@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### Added — 2026-04-05 (AdSense Integration)
+
+- **Three ad slots configured:** Findings card (300×250, slot `5022443765`), Models strip (responsive auto, slot `4973304892`), Footer leaderboard (responsive auto, slot `8443542979`). Each slot has a unique ID — previously both variants shared the same slot ID.
+- **`AdSlot.jsx` refactored:** Added `leaderboard` variant. Publisher ID and slot IDs centralised as constants. All three variants use correct `data-ad-format` and `data-full-width-responsive` attributes per Google spec.
+- **Footer leaderboard placed:** `<AdSlot variant="leaderboard" />` added at the top of the `<Footer>` component, rendering above the OSS credits on the dark footer background.
+
+### Changed — 2026-04-05 (Map & Simulation UX)
+
+- **Entry point beacons replaced with ✱:** J1 (Main Rd), J8 (Children's Way), J9 (Homestead), J13 (Firgrove) DivIcon overlays changed from pulsing circles to ✱ glyphs in their corridor base colour with double drop-shadow for map contrast. Underlying `L.circleMarker` set to `opacity: 0` so only the ✱ shows; marker retained for congestion pulse flash.
+- **School site marker replaced with ✱:** Zoom-responsive `GraduationCap` SVG replaced with a dark green (`#1a3d20`) ✱ glyph with sage glow drop-shadow. Scales with zoom identically to the previous icon.
+- **Default playback speed set to 5×:** `useState(1)` → `useState(5)` in `App.jsx`.
+- **Map legend collapsible:** Legend header now shows "Legend ▲/▼" toggle button. Collapsed state hides all rows but keeps the header visible. State managed via `legendOpen` useState in `SimMap.jsx`.
+- **`GraduationCap` and `Car` imports removed** from `SimMap.jsx` (no longer used).
+
+### Fixed — 2026-04-05 (Tour & Navigation)
+
+- **Product tour step 4 OK button unreachable on mobile:** Nav buttons (Skip / Prev / Next / Got it) moved from bottom to top of tooltip card so they're always visible regardless of viewport height. Tooltip bottom-clamped to `window.innerHeight - 240 - 12px` to prevent overflow off-screen.
+- **Sticky header broken on desktop:** `html { overflow-x: hidden }` was implicitly setting `overflow-y: auto` on `<html>`, making it the scroll container instead of `<body>` and breaking `position: sticky`. Fixed by moving `overflow-x: hidden` to `body` only.
+
 ### Fixed — 2026-04-05 (Mobile Layout — iPhone 14)
 
 - **Horizontal overflow fixed:** `.narrative-block`, `.models-content`, and all 12-column grid children were overflowing the viewport on mobile. Root cause: `grid-column: span 9/12` on children forced implicit columns even when `grid-template-columns: 1fr` was set. Fixed by using `grid-column: 1 / -1 !important` on all grid children inside `.bento-content`, `.models-grid`, and `.models-content` at `max-width: 768px`.

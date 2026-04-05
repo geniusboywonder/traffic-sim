@@ -299,6 +299,7 @@ const FindingsSection = () => (
 
 const Footer = () => (
   <footer className="site-footer" id="contact">
+    <AdSlot variant="leaderboard" />
     <div className="footer-content">
       <div className="footer-brand">
         <h2>Traff<span>✱</span>k</h2>

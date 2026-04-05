@@ -2081,6 +2081,19 @@ a {
 @keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
 @keyframes slideInUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
+/* ── School icon shine border ── */
+@property --school-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes school-spin { to { --school-angle: 360deg; } }
+.school-shine-border {
+  background: conic-gradient(from var(--school-angle), #2D5438 0%, #A1CCA5 30%, #709775 50%, #A1CCA5 70%, #2D5438 100%);
+  animation: school-spin 3s linear infinite;
+  position: relative;
+}
+
 @media (max-width: 1024px) {
   .scrolling-stats-pill { display: none; }
   .main-layout { height: auto; overflow: visible; padding-top: 5rem; }

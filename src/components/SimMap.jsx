@@ -634,20 +634,24 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
     const schoolMarkerRef = { current: null };
 
     const makeSchoolIcon = (zoom) => {
-      // School site ~200m wide. At zoom 15, 1m ≈ 0.5px → site ≈ 100px.
-      // Icon should fill ~80% of that. Base at zoom 14 = 16px, doubles each zoom level.
       const size = Math.round(16 * Math.pow(2, zoom - 14) * 0.8);
       const clamped = Math.max(8, Math.min(200, size));
+      const pad = Math.max(2, Math.round(clamped * 0.12));
+      const total = clamped + pad * 2;
       return L.divIcon({
         className: '',
-        html: `<svg xmlns="http://www.w3.org/2000/svg" width="${clamped}" height="${clamped}" viewBox="0 0 24 24" fill="none" stroke="#2D5438" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 1px 3px rgba(0,0,0,0.4));opacity:0.85">
-          <path d="M22 8.35V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8.35A2 2 0 0 1 3.26 6.5l8-3.2a2 2 0 0 1 1.48 0l8 3.2A2 2 0 0 1 22 8.35Z"/>
-          <path d="M6 18h1"/><path d="M17 18h1"/>
-          <path d="M12 2v6"/><path d="M6 10v8"/><path d="M18 10v8"/>
-          <path d="M6 14h12"/>
-        </svg>`,
-        iconSize: [clamped, clamped],
-        iconAnchor: [clamped / 2, clamped / 2],
+        html: `<div class="school-shine-border" style="width:${total}px;height:${total}px;padding:${pad}px;border-radius:8px;">
+          <div style="width:100%;height:100%;border-radius:5px;background:rgba(5,13,26,0.82);display:flex;align-items:center;justify-content:center;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="${clamped}" height="${clamped}" viewBox="0 0 24 24" fill="none" stroke="#A1CCA5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 8.35V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8.35A2 2 0 0 1 3.26 6.5l8-3.2a2 2 0 0 1 1.48 0l8 3.2A2 2 0 0 1 22 8.35Z"/>
+              <path d="M6 18h1"/><path d="M17 18h1"/>
+              <path d="M12 2v6"/><path d="M6 10v8"/><path d="M18 10v8"/>
+              <path d="M6 14h12"/>
+            </svg>
+          </div>
+        </div>`,
+        iconSize: [total, total],
+        iconAnchor: [total / 2, total / 2],
       });
     };
 

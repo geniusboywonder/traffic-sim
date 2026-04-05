@@ -625,6 +625,17 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
       if (jid===1) col=COLOUR['1A'].base; if (jid===9) col=COLOUR['2A'].base; if (jid===8) col=COLOUR['2B'].base; if (jid===13) col=COLOUR['3A'].base; if (jid===20) col=COLOUR['egress'].base;
       const m = L.circleMarker([j.lat, j.lng], { radius: 7, color: col, weight: isE ? 2 : 1.5, opacity: isE ? 1 : 0.6, fill: true, fillColor: isE ? col : 'transparent', fillOpacity: isE ? 0.8 : 0 }).addTo(map).bindPopup(`<b>${j.name}</b><br>${j.control}`);
       junctionMarkersRef.current[jid] = { marker: m, baseColor: col };
+
+      // Entry/exit points get a pulsing glow DivIcon overlay
+      if ([1, 8, 9, 13].includes(jid)) {
+        const pulseIcon = L.divIcon({
+          className: '',
+          html: `<div style="width:18px;height:18px;border-radius:50%;border:2px solid ${col};animation:school-shadow-pulse 2s ease-in-out infinite;animation-delay:${jid * 0.15}s;"></div>`,
+          iconSize: [18, 18],
+          iconAnchor: [9, 9],
+        });
+        L.marker([j.lat, j.lng], { icon: pulseIcon, interactive: false, zIndexOffset: -50 }).addTo(map);
+      }
     });
 
     // ── School site marker — zoom-responsive GraduationCap icon ──────────────
@@ -640,18 +651,14 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
       const total = clamped + pad * 2;
       return L.divIcon({
         className: '',
-        html: `<div class="school-shine-border" style="width:${total}px;height:${total}px;padding:${pad}px;border-radius:8px;">
-          <div style="width:100%;height:100%;border-radius:5px;background:rgba(5,13,26,0.82);display:flex;align-items:center;justify-content:center;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="${clamped}" height="${clamped}" viewBox="0 0 24 24" fill="none" stroke="#A1CCA5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M22 8.35V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8.35A2 2 0 0 1 3.26 6.5l8-3.2a2 2 0 0 1 1.48 0l8 3.2A2 2 0 0 1 22 8.35Z"/>
-              <path d="M6 18h1"/><path d="M17 18h1"/>
-              <path d="M12 2v6"/><path d="M6 10v8"/><path d="M18 10v8"/>
-              <path d="M6 14h12"/>
-            </svg>
-          </div>
-        </div>`,
-        iconSize: [total, total],
-        iconAnchor: [total / 2, total / 2],
+        html: `<svg xmlns="http://www.w3.org/2000/svg" width="${clamped}" height="${clamped}" viewBox="0 0 24 24" fill="none" stroke="#A1CCA5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="animation:school-shadow-pulse 2s ease-in-out infinite;">
+          <path d="M22 8.35V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8.35A2 2 0 0 1 3.26 6.5l8-3.2a2 2 0 0 1 1.48 0l8 3.2A2 2 0 0 1 22 8.35Z"/>
+          <path d="M6 18h1"/><path d="M17 18h1"/>
+          <path d="M12 2v6"/><path d="M6 10v8"/><path d="M18 10v8"/>
+          <path d="M6 14h12"/>
+        </svg>`,
+        iconSize: [clamped, clamped],
+        iconAnchor: [clamped / 2, clamped / 2],
       });
     };
 

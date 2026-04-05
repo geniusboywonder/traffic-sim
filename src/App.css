@@ -137,6 +137,53 @@ a {
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Scroll hint — below corridor cards ── */
+.scroll-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.75rem 0 0.5rem;
+  opacity: 0.4;
+  animation: scroll-hint-fade 3s ease-in-out infinite;
+  flex-shrink: 0;
+}
+.scroll-hint span {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--on-surface);
+}
+.scroll-hint-mouse {
+  width: 18px;
+  height: 28px;
+  border: 2px solid var(--on-surface);
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  padding-top: 5px;
+}
+.scroll-hint-wheel {
+  width: 3px;
+  height: 6px;
+  background: var(--on-surface);
+  border-radius: 2px;
+  animation: scroll-wheel 1.8s ease-in-out infinite;
+}
+@keyframes scroll-wheel {
+  0%   { transform: translateY(0); opacity: 1; }
+  60%  { transform: translateY(8px); opacity: 0; }
+  61%  { transform: translateY(0); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+@keyframes scroll-hint-fade {
+  0%, 100% { opacity: 0.35; }
+  50%       { opacity: 0.65; }
 }
 
 .ad-strip {

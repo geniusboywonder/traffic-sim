@@ -40,7 +40,7 @@ function getRect(selector) {
   return el.getBoundingClientRect();
 }
 
-export default function ProductTour({ active }) {
+export default function ProductTour({ active, restartKey = 0 }) {
   const [step, setStep] = useState(0);
   const [rect, setRect] = useState(null);
   const [visible, setVisible] = useState(false);
@@ -51,14 +51,14 @@ export default function ProductTour({ active }) {
     if (r) setRect(r);
   }, [step]);
 
-  // Start tour
+  // Start tour (auto on first visit, or when restartKey changes)
   useEffect(() => {
     if (!active) return;
-    if (localStorage.getItem(TOUR_KEY)) return;
-    // Small delay so the UI has settled after access barrier
+    if (restartKey === 0 && localStorage.getItem(TOUR_KEY)) return;
+    setStep(0);
     const t = setTimeout(() => { setVisible(true); measure(); }, 600);
     return () => clearTimeout(t);
-  }, [active, measure]);
+  }, [active, restartKey, measure]);
 
   // Re-measure on step change and on resize/scroll
   useEffect(() => {

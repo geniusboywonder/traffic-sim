@@ -313,6 +313,12 @@ const Footer = () => (
           <span className="oss-sep">•</span>
           <a href="https://toruseo.jp/UXsim/docs/" target="_blank" rel="noopener noreferrer">UXSim</a>
           <span className="oss-sep">•</span>
+          <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener noreferrer">OpenStreetMap</a>
+          <span className="oss-sep">•</span>
+          <a href="https://geojson.io/" target="_blank" rel="noopener noreferrer">geojson.io</a>
+          <span className="oss-sep">•</span>
+          <a href="https://overpass-turbo.eu/" target="_blank" rel="noopener noreferrer">Overpass Turbo</a>
+          <span className="oss-sep">•</span>
           <a href="https://www.shadcn.io/" target="_blank" rel="noopener noreferrer">shadcn/ui</a>
           <span className="oss-sep">•</span>
           <a href="https://21st.dev/home" target="_blank" rel="noopener noreferrer">21st.dev</a>

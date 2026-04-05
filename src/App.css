@@ -1880,13 +1880,17 @@ a {
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 100px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  max-width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .barrier-title-box h2 {
-  font-size: clamp(1.5rem, 4vw, 2.25rem);
+  font-size: clamp(1.1rem, 5vw, 2.25rem);
   font-weight: 800;
   letter-spacing: -0.04em;
   color: rgba(241, 245, 241, 0.95);
+  text-align: center;
 }
 
 .barrier-main-grid {
@@ -2193,6 +2197,11 @@ a {
   .scroll-hint { display: none; }
 
   /* Footer stacking */
+  /* Barrier title — tighter on mobile */
+  .barrier-title-box { padding: 0.75rem 1.25rem; border-radius: 16px; }
+  .barrier-header { margin-bottom: 1rem; }
+  .barrier-content-wrapper { padding: 1rem; }
+
   .footer-content { flex-direction: column; align-items: center; text-align: center; gap: 2rem; }
   .footer-credits { text-align: center; min-width: unset; }
   .footer-credits p { white-space: normal; }

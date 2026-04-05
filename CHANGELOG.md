@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### Added — 2026-04-05 (UI Polish & Production Prep)
+
+- **Product tour:** 4-step spotlight walkthrough auto-activates on first visit after the access barrier. Steps: Map → Simulation controls → Live telemetry → Corridor cards. Spotlight uses box-shadow hole technique with animated green border pulse. Stores completion in `localStorage` — never shows again. Keyboard navigation (Enter/Space/Arrow keys/Escape). Help button (bold `HelpCircle` icon) in header resets and replays the tour.
+- **Share buttons fixed:** Removed native Web Share API — always shows explicit WhatsApp, X, and Email buttons. Prevents macOS/iOS share sheet opening unwanted local app options. Icons enlarged to 20px for better proportion.
+- **School site marker:** Zoom-responsive `Warehouse` SVG icon anchored at school coordinates (-34.05171, 18.44881). Scales with map zoom (16px base at zoom 14, doubles per level). Drop-shadow pulse animation matches entry/exit point beacons.
+- **Entry/exit point beacons:** J1 (Main Rd), J8 (Children's Way), J9 (Homestead), J13 (Firgrove) each have a pulsing circle DivIcon overlay in their corridor colour. Same `school-shadow-pulse` animation with staggered delays.
+- **School internal road line:** Dashed grey line restored on canvas showing the internal road geometry (J7→J20).
+- **Scroll hint:** Animated mouse-wheel icon below corridor cards prompts users to scroll down to editorial sections. Slow fade pulse, disappears on mobile.
+- **Footer OSS credits expanded:** Added OpenStreetMap, geojson.io, and Overpass Turbo to the open-source contributors list.
+- **Footer credits block:** Reduced font sizes (1.25rem→0.85rem) and added `white-space: nowrap` to prevent wrapping on smaller viewports.
+- **Damage Report updated with final model numbers:** Header stats: 32min→26min (Lab H mean), 108→68 vehicles after 08:30. Write-off: corrected to 18min (Live)/26min (Lab), 11min stopped (both models agree to 6 seconds). Fender-bender: school gate rewritten as 6-min crawl; added Aristea single-exit and Dante/Vineyard egress bottleneck bullets. Side-swipe: peak timing updated to 07:52–08:14 range; rat-run updated to 1-in-4/25.6%; Vineyard/Dante egress finding added.
+- **Findings cards compressed:** Badge and heading merged onto one line. Padding/gap tightened then restored to fill available space after removing duplicate content.
+- **Log download buttons commented out:** LOG and ROAD LOG CSV buttons hidden for production. Re-enable by uncommenting in `SimMap.jsx`.
+- **Code review fixes:** `parseInt(jid)` removed from hot path (7 calls per junction per frame). `conflictRoads` objects hoisted to module-level constants. `trafficHold` closure inlined. `EGRESS_ROUTES` stale export removed from `routes.js`. `school-shadow-pulse` keyframe added to `App.css`.
+- **Sim clock starts at 06:30:** `SIM_START_OFFSET` set to 0. Clock now correctly shows 06:30 at sim start matching SUMO/UXSim playback.
+- **1A-NORTH merged into Firgrove Way corridor card:** Both Dreyersdal entry points (South 14% + North 11%) now display under the Firgrove Way card (J13 junction). Main Rd card shows Dreyersdal South only. TIA Highway Code card updated to reflect combined 14% Firgrove entry.
+
 ### Changed — 2026-04-04 (Simulation Engine — Egress & Physics Fixes)
 
 - **Egress route expansion:** Added EG-F (Ruskin→Clement→Leyden→J8) and EG-G (Ruskin→Starke→J9) — vehicles turning left from the Aristea/Ruskin roundabout (J29) onto Ruskin Rd. These routes conflict with inbound traffic at J7 (school ingress), modelling the real back-pressure where exiting parents must yield to arriving parents on Ruskin/Leyden. Share: 5–6% of egress traffic.

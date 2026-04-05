@@ -630,8 +630,8 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
     // ── School site marker — zoom-responsive GraduationCap icon ──────────────
     // Centred on the school building, sized to fill the site at current zoom.
     // Lucide GraduationCap SVG path rendered as a DivIcon so it geo-anchors correctly.
-    // School building sits south of the internal road — anchor icon there, not on the road
-    const SCHOOL_LAT = -34.0524, SCHOOL_LNG = 18.4485;
+    // School building sits between internal road and Ruskin/Aristea — south and east
+    const SCHOOL_LAT = -34.0528, SCHOOL_LNG = 18.4490;
     const schoolMarkerRef = { current: null };
 
     const makeSchoolIcon = (zoom) => {

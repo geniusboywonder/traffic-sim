@@ -651,7 +651,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
       const total = clamped + pad * 2;
       return L.divIcon({
         className: '',
-        html: `<svg xmlns="http://www.w3.org/2000/svg" width="${clamped}" height="${clamped}" viewBox="0 0 24 24" fill="none" stroke="#A1CCA5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="animation:school-shadow-pulse 2s ease-in-out infinite;">
+        html: `<svg xmlns="http://www.w3.org/2000/svg" width="${clamped}" height="${clamped}" viewBox="0 0 24 24" fill="#0a1f0e" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation:school-shadow-pulse 2s ease-in-out infinite;background:#1a3d20;border-radius:6px;padding:2px;">
           <path d="M22 8.35V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8.35A2 2 0 0 1 3.26 6.5l8-3.2a2 2 0 0 1 1.48 0l8 3.2A2 2 0 0 1 22 8.35Z"/>
           <path d="M6 18h1"/><path d="M17 18h1"/>
           <path d="M12 2v6"/><path d="M6 10v8"/><path d="M18 10v8"/>

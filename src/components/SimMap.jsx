@@ -669,8 +669,10 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
     const schoolMarkerRef = { current: null };
 
     const makeSchoolIcon = (zoom) => {
-      const size = Math.round(Math.pow(2, zoom - 14) * 32);
-      const clamped = Math.max(16, Math.min(96, size));
+      // School site ~200m wide. At zoom 15, 1m ≈ 0.5px → site ≈ 100px.
+      // Icon should fill ~80% of that. Base at zoom 14 = 16px, doubles each zoom level.
+      const size = Math.round(16 * Math.pow(2, zoom - 14));
+      const clamped = Math.max(8, Math.min(200, size));
       return L.divIcon({
         className: '',
         html: `<svg xmlns="http://www.w3.org/2000/svg" width="${clamped}" height="${clamped}" viewBox="0 0 24 24" fill="none" stroke="#2D5438" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 1px 3px rgba(0,0,0,0.4));opacity:0.85">

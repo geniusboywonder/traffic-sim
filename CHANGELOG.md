@@ -30,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed — 2026-04-05 (Tour & Navigation)
 
-- **Product tour step 4 OK button unreachable on mobile:** Nav buttons (Skip / Prev / Next / Got it) moved from bottom to top of tooltip card so they're always visible regardless of viewport height. Tooltip bottom-clamped to `window.innerHeight - 240 - 12px` to prevent overflow off-screen.
+- **Product tour step 4 dismiss button reachable on mobile again:** When the tour highlights the corridor cards below the fold, the guide now scrolls the target into view on mobile before measuring placement. Tooltip width and height are clamped to the viewport, side placements fall back to a bottom placement on narrow screens, and the panel can scroll internally so the `Got it` button stays visible.
 - **Sticky header broken on desktop:** `html { overflow-x: hidden }` was implicitly setting `overflow-y: auto` on `<html>`, making it the scroll container instead of `<body>` and breaking `position: sticky`. Fixed by moving `overflow-x: hidden` to `body` only.
 
 ### Fixed — 2026-04-05 (Mobile Layout — iPhone 14)

@@ -40,6 +40,10 @@ function getRect(selector) {
   return el.getBoundingClientRect();
 }
 
+function getElement(selector) {
+  return document.querySelector(selector);
+}
+
 export default function ProductTour({ active, restartKey = 0 }) {
   const [step, setStep] = useState(0);
   const [rect, setRect] = useState(null);
@@ -64,10 +68,30 @@ export default function ProductTour({ active, restartKey = 0 }) {
   // Re-measure whenever step changes
   useEffect(() => {
     if (!visible) return;
-    const id = requestAnimationFrame(() => {
-      const r = getRect(STEPS[step]?.target);
+    const target = STEPS[step]?.target;
+    const el = getElement(target);
+    const isMobile = window.innerWidth < 768;
+
+    const ensureVisibleAndMeasure = () => {
+      const r = getRect(target);
       setRect(r ?? null);
-    });
+    };
+
+    const maybeScrollIntoView = () => {
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      const offscreenTop = r.top < 96;
+      const offscreenBottom = r.bottom > window.innerHeight - 96;
+
+      if (isMobile && (offscreenTop || offscreenBottom)) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+        window.setTimeout(ensureVisibleAndMeasure, 320);
+      } else {
+        ensureVisibleAndMeasure();
+      }
+    };
+
+    const id = requestAnimationFrame(maybeScrollIntoView);
     return () => cancelAnimationFrame(id);
   }, [step, visible]);
 
@@ -126,20 +150,25 @@ export default function ProductTour({ active, restartKey = 0 }) {
 
   // Tooltip positioning
   const pos = STEPS[step].position;
-  const TIP_W = 320;
+  const TIP_W = Math.min(320, window.innerWidth - 24);
   const TIP_GAP = 16;
+  const TIP_H = Math.min(260, window.innerHeight - 24);
+  const isMobile = window.innerWidth < 768;
   let tipStyle = {};
   if (pos === 'bottom') {
     tipStyle = { top: spotlight.top + spotlight.height + TIP_GAP, left: spotlight.left + spotlight.width / 2 - TIP_W / 2 };
   } else if (pos === 'left') {
-    tipStyle = { top: spotlight.top + spotlight.height / 2 - 80, left: spotlight.left - TIP_W - TIP_GAP };
+    tipStyle = isMobile
+      ? { top: spotlight.top + spotlight.height + TIP_GAP, left: spotlight.left + spotlight.width / 2 - TIP_W / 2 }
+      : { top: spotlight.top + spotlight.height / 2 - 80, left: spotlight.left - TIP_W - TIP_GAP };
   } else if (pos === 'right') {
-    tipStyle = { top: spotlight.top + spotlight.height / 2 - 80, left: spotlight.left + spotlight.width + TIP_GAP };
+    tipStyle = isMobile
+      ? { top: spotlight.top + spotlight.height + TIP_GAP, left: spotlight.left + spotlight.width / 2 - TIP_W / 2 }
+      : { top: spotlight.top + spotlight.height / 2 - 80, left: spotlight.left + spotlight.width + TIP_GAP };
   }
   // Clamp to viewport
   tipStyle.left = Math.max(12, Math.min(tipStyle.left, window.innerWidth - TIP_W - 12));
-  // Clamp top — ensure tooltip fits within viewport height (tooltip ~220px tall)
-  const TIP_H = 240;
+  // Clamp top — ensure tooltip fits within viewport height
   const maxTop = window.innerHeight - TIP_H - 12;
   tipStyle.top = Math.max(12, Math.min(tipStyle.top, maxTop));
 
@@ -183,6 +212,8 @@ export default function ProductTour({ active, restartKey = 0 }) {
           position: 'absolute',
           ...tipStyle,
           width: TIP_W,
+          maxHeight: TIP_H,
+          overflowY: 'auto',
           background: 'rgba(10,20,12,0.97)',
           border: '1px solid rgba(161,204,165,0.25)',
           borderRadius: 12,

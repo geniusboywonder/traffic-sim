@@ -212,55 +212,6 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
       ctx.globalAlpha = 1.0;
     });
 
-    // ── School site polygon + icon ────────────────────────────────────────────
-    // Approximate school footprint: entrance (J7) → internal road curve → exit (J20)
-    // → along Aristea/Ruskin back to entrance. Filled with a semi-transparent colour.
-    {
-      // School polygon corners [lat, lng]
-      const schoolPoly = [
-        [-34.051039, 18.447309],  // J7 entrance (Leyden/Ruskin)
-        [-34.050900, 18.447800],  // along Ruskin Rd north edge
-        [-34.051000, 18.448800],  // Ruskin Rd continuing east
-        [-34.051135, 18.450243],  // J29 roundabout
-        [-34.052454, 18.450016],  // J20 exit (Aristea)
-        [-34.052830, 18.449009],  // internal road midpoint
-        [-34.051034, 18.447300],  // back to J7 area
-      ];
-      const pts = schoolPoly.map(([lat, lng]) => map.latLngToContainerPoint(L.latLng(lat, lng)));
-      ctx.globalAlpha = 0.18;
-      ctx.fillStyle = '#A1CCA5';
-      ctx.beginPath();
-      pts.forEach((pt, i) => i === 0 ? ctx.moveTo(pt.x, pt.y) : ctx.lineTo(pt.x, pt.y));
-      ctx.closePath();
-      ctx.fill();
-
-      // Internal road line
-      const internal = ROAD_LINES.find(f => f.properties.name?.toLowerCase().includes('internal road'));
-      if (internal) {
-        ctx.globalAlpha = 0.9;
-        ctx.strokeStyle = '#4A7A56';
-        ctx.lineWidth = 2.5;
-        ctx.setLineDash([5, 4]);
-        ctx.beginPath();
-        internal.geometry.coordinates.forEach((cl, i) => {
-          const pt = map.latLngToContainerPoint(L.latLng(cl[1], cl[0]));
-          i === 0 ? ctx.moveTo(pt.x, pt.y) : ctx.lineTo(pt.x, pt.y);
-        });
-        ctx.stroke();
-        ctx.setLineDash([]);
-      }
-
-      // School icon centred on the site
-      const centre = map.latLngToContainerPoint(L.latLng(-34.0518, 18.4487));
-      ctx.globalAlpha = 0.85;
-      ctx.font = `${Math.max(18, Math.min(28, canvas.width / 40))}px serif`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('🏫', centre.x, centre.y);
-      ctx.globalAlpha = 1.0;
-      ctx.textAlign = 'left';
-      ctx.textBaseline = 'alphabetic';
-    }
   }, []);
 
   const syncCanvas = useCallback(() => {

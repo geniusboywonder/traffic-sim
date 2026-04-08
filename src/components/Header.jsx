@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Bot, Map, Monitor, MessageCircleMore, X } from 'lucide-react';
+import { trackEvent } from '../analytics';
 
 const NAV_ITEMS = [
   { id: 'simulator', icon: Map,             label: 'The Road Map',    href: '#simulator' },
@@ -21,8 +22,9 @@ export default function Header({ activeSection }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const active = SECTION_TO_NAV[activeSection] || 'simulator';
 
-  const handleNavClick = () => {
+  const handleNavClick = (id) => {
     setMenuOpen(false);
+    trackEvent('nav_clicked', { section: id });
   };
 
   return (
@@ -47,7 +49,7 @@ export default function Header({ activeSection }) {
               <a
                 key={item.id}
                 href={item.href}
-                onClick={handleNavClick}
+                onClick={() => handleNavClick(item.id)}
                 className={`nav-pill ${isActive ? 'active' : ''}`}
               >
                 <div className="nav-pill-content">
@@ -81,7 +83,7 @@ export default function Header({ activeSection }) {
                     href={item.href}
                     className="mobile-menu-link"
                     style={{ animationDelay: `${i * 0.07}s` }}
-                    onClick={handleNavClick}
+                    onClick={() => handleNavClick(item.id)}
                   >
                     <span className="mobile-menu-link-num">0{i + 1}</span>
                     <Icon size={20} strokeWidth={2} style={{ opacity: 0.5 }} />

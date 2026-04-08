@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { Bot, Map, Monitor, MessageCircleMore, X } from 'lucide-react';
+import { trackEvent } from '../analytics';
 
 const NAV_ITEMS = [
   { id: 'simulator', icon: Map,             label: 'The Road Map',    href: '#simulator' },
@@ -28,6 +29,7 @@ export default function Header({ activeSection }) {
   const handleNavClick = (id) => {
     setManualActive(id);
     setMenuOpen(false);
+    trackEvent('nav_clicked', { section: id });
   };
 
   return (

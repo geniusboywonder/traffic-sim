@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### Added — 2026-04-08 (Google Analytics 4)
+
+- **GA4 property created:** New "Traffik Sim" property under the Adamson GA account. Measurement ID `G-Q7WXXV3PGW`.
+- **GTM replaced with direct GA4 tag:** `index.html` previously contained an invalid GTM container ID (`GTM-60147474`, which was the GA account number — not a real container). Replaced with a direct `gtag.js` snippet pointing to the new GA4 property.
+- **`src/analytics.js` utility added:** Thin `trackEvent(name, params)` wrapper around `window.gtag` — guards against gtag not yet loaded, keeps event calls clean throughout the app.
+- **Simulation events tracked:** `scenario_selected` (with `scenario` param), `simulation_played`, `simulation_paused`, `simulation_reset`, `speed_changed` (with `speed` param), `source_selected` (with `source` param).
+- **Engagement events tracked:** `road_focused` (with `road_name` param) when a user clicks a road on the map; `share_clicked` (with `platform: whatsapp|x|email`) on all share buttons (mobile popout + desktop); `tour_started` when the help/replay button is clicked.
+- **Content scroll events tracked:** `section_viewed` (with `section` param) fires via `IntersectionObserver` when a user scrolls into Findings, Models, or Contact sections. `nav_clicked` (with `section` param) fires on any nav pill click (desktop + mobile menu), both handled in `Header.jsx`.
+
 ### Fixed — 2026-04-05 (CSS Cleanup, Mobile Overflow, Header & Map Controls)
 
 - **CSS cascade simplified before further mobile fixes:** Consolidated responsive rules back into a single grouped section, removed duplicate mobile overrides, centralised shared glass/header tokens, and fixed circular custom-property definitions for `--canvas` and `--delay`. Global overflow/reset ownership was moved into `index.css` so header and layout behaviour are easier to reason about.

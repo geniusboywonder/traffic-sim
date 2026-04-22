@@ -336,18 +336,23 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
       const ctx = canvasRef.current?.getContext('2d');
       if (ctx && mapRef.current) {
         ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-        const vr = window.innerWidth < 768 ? 3 : 4;
         for (const v of vehicles) {
           const pt = mapRef.current.latLngToContainerPoint([v.lat, v.lng]);
           const c = COLOUR[v.corridorId] ?? COLOUR.egress;
           let colour;
-          if (v.state === 'queued')                      colour = COLOUR.delayed;
+          if (v.state === 'queued')        colour = COLOUR.delayed;
           else if (v.state === 'outbound') colour = v.speed < 2 ? COLOUR.delayed : c.light;
-          else if (v.speed < 2)                          colour = COLOUR.delayed;
-          else                                           colour = c.dark;
+          else if (v.speed < 2)            colour = COLOUR.delayed;
+          else                             colour = c.dark;
           const isSelected = selectedCorridorsRef.current.has(v.corridorId);
           ctx.globalAlpha = isSelected ? 1.0 : 0.2;
-          ctx.beginPath(); ctx.arc(pt.x, pt.y, vr, 0, Math.PI * 2); ctx.fillStyle = colour; ctx.fill();
+          ctx.fillStyle   = colour;
+          ctx.strokeStyle = colour;
+          ctx.lineWidth   = 1.5;
+          ctx.beginPath();
+          ctx.arc(pt.x, pt.y, 4, 0, Math.PI * 2);
+          if (v.state === 'outbound') ctx.stroke(); // hollow ○
+          else                        ctx.fill();   // solid ●
           ctx.globalAlpha = 1.0;
         }
       }
@@ -686,7 +691,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
 
     const sync = () => { syncCanvas(); drawFrame(); };
     // invalidateSize tells Leaflet the container has resized; sync then redraws the canvas.
-    const syncAll = () => { map.invalidateSize({ animate: false }); syncCanvas(); drawFrame(); };
+    const syncAll = () => { if (map._mapPane?._leaflet_pos) map.invalidateSize({ animate: false }); syncCanvas(); drawFrame(); };
     map.on('moveend zoomend', sync);
     map.whenReady(() => requestAnimationFrame(() => { syncAll(); }));
     const ro = new ResizeObserver(syncAll); ro.observe(containerRef.current);
@@ -825,7 +830,7 @@ export default function SimMap({ scenario, playing, speed, showRoutes, onToggleR
           <div style={{ width: 1, height: '1.25rem', background: 'var(--surface-high)', flexShrink: 0 }} />
 
           {/* Reset + Logs */}
-          <button className="speed-pill" onClick={onReset} title="Reset" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <button className="speed-pill" onClick={() => { resetSim(); onReset(); }} title="Reset" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <RotateCcw size={14} />
           </button>
           {SHOW_DEBUG_LOGGER && (

@@ -171,6 +171,8 @@ def convert(
 
     # Track which vehicles have completed their school drop-off (been on school
     # internal road).  Subsequent appearances on other roads → state "outbound".
+    # Also, flow_N_out.* vehicles are explicitly outbound by ID — they spawn on
+    # Aristea Rd (school exit) and never pass through school_internal_in.
     visited_school: set[str] = set()
     SCHOOL_SLUG = "school_internal_road"
 
@@ -199,7 +201,9 @@ def convert(
             # Mark vehicle as having visited school; detect outbound state.
             if slug == SCHOOL_SLUG:
                 visited_school.add(vid)
-            is_outbound = (vid in visited_school) and (slug != SCHOOL_SLUG)
+            is_outbound = ("_out." in vid) or (
+                (vid in visited_school) and (slug != SCHOOL_SLUG)
+            )
 
             # Use cumulative offset map for accurate road-level progress.
             # Falls back to pos/edge_length for edges not in the map.

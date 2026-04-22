@@ -44,6 +44,10 @@ SIM_START = 23400   # 06:30 seconds since midnight
 SIM_END   = 32400   # 09:00 — all scenarios run to 09:00
 TIMESTEP  = 30      # output frame interval
 
+# Outbound departure edge: OSM way 27669895 reverse segment 0, confirmed via sumo-gui.
+# Runs from school exit junction (294) toward Aristea/Ruskin junction (240).
+SCHOOL_EXIT_EDGE = "-27669895#0"
+
 SCENARIO_DEMAND = {"L": 336, "M": 420, "H": 504}
 
 # TIA-aligned corridor splits (inbound only — spawned = inbound vehicle count).
@@ -121,14 +125,18 @@ def lonlat_to_sumo_xy(lon, lat, net_offset):
 def write_demand(scenario, total_trips, overlay_snap, net_path, out_path):
     """
     Write a SUMO routes file (.rou.xml) with <flow> elements for each
-    corridor × time bucket (inbound + outbound).
+    corridor × time bucket, interleaved inbound + outbound per bucket.
 
-    Uses closest edges to overlay node coordinates.
+    Inbound:  corridor_edge → school_internal_in  (45s drop-off stop)
+    Outbound: SCHOOL_EXIT_EDGE → corridor_edge    (depart from Aristea Rd exit)
+
+    Flows are emitted time-bucket-first so SUMO's departure-order requirement
+    is satisfied without a post-sort step.
     """
     import sumolib
     net = sumolib.net.readNet(str(net_path), withInternal=False)
 
-    net_offset = net.getLocationOffset()  # [dx, dy] from UTM to SUMO internal
+    net_offset = net.getLocationOffset()
 
     def nearest_edge(nid):
         info = overlay_snap[nid]
@@ -139,65 +147,59 @@ def write_demand(scenario, total_trips, overlay_snap, net_path, out_path):
         return sorted(edges, key=lambda e: e[1])[0][0].getID()
 
     corridor_edges = {c["node_id"]: nearest_edge(c["node_id"]) for c in CORRIDORS}
+    print(f"[sumo_runner] Corridor edges: {corridor_edges}")
 
     root = ET.Element("routes")
 
-    # Vehicle type: car with max speed and typical school-run accel/decel
     vtype = ET.SubElement(root, "vType")
-    vtype.set("id",         "car")
-    vtype.set("accel",      "2.6")
-    vtype.set("decel",      "4.5")
-    vtype.set("sigma",      "0.5")    # driver imperfection
-    vtype.set("length",     "5.0")
-    vtype.set("maxSpeed",   "16.7")   # 60 km/h
-    vtype.set("minGap",     "2.5")
+    vtype.set("id",       "car")
+    vtype.set("accel",    "2.6")
+    vtype.set("decel",    "4.5")
+    vtype.set("sigma",    "0.5")
+    vtype.set("length",   "5.0")
+    vtype.set("maxSpeed", "16.7")   # 60 km/h
+    vtype.set("minGap",   "2.5")
 
-    # Collect all flows, then sort by begin time — SUMO requires departure-time order.
-    flows = []
+    # Emit flows time-bucket-first → naturally sorted by begin time.
     flow_id = 0
-    for corridor in CORRIDORS:
-        nid           = corridor["node_id"]
-        share         = corridor["share"]
-        corridor_edge = corridor_edges[nid]
-        trips         = total_trips * share
+    for t_start, t_end, time_share in ARRIVAL_PROFILE:
+        duration = t_end - t_start
+        for corridor in CORRIDORS:
+            nid           = corridor["node_id"]
+            corridor_edge = corridor_edges[nid]
+            veh_per_hour  = total_trips * corridor["share"] * time_share / duration * 3600
 
-        for t_start, t_end, time_share in ARRIVAL_PROFILE:
-            bucket_trips = trips * time_share
-            duration     = t_end - t_start
-            veh_per_hour = bucket_trips / duration * 3600
+            # Inbound: corridor entry → school_internal_in, stop 45s for drop-off
+            f_in = ET.SubElement(root, "flow")
+            f_in.set("id",          f"flow_{flow_id}_in")
+            f_in.set("type",        "car")
+            f_in.set("from",        corridor_edge)
+            f_in.set("to",          "school_internal_in")
+            f_in.set("begin",       str(t_start))
+            f_in.set("end",         str(t_end))
+            f_in.set("vehsPerHour", f"{veh_per_hour:.2f}")
+            f_in.set("departSpeed", "max")
+            stop = ET.SubElement(f_in, "stop")
+            stop.set("lane",     "school_internal_in_0")
+            stop.set("startPos", "10")
+            stop.set("endPos",   "50")
+            stop.set("duration", str(DWELL_OFFSET_S))
 
-            # Inbound flow: corridor → school parking (vehicles stop 45s then exit).
-            # to=corridor_edge so SUMO routes them back after dwell automatically.
-            flows.append({
-                "id": f"flow_{flow_id}_in", "type": "car",
-                "from": corridor_edge, "to": corridor_edge,
-                "begin": t_start, "end": t_end,
-                "vehsPerHour": veh_per_hour,
-            })
+            # Outbound: school exit (Aristea Rd) → corridor exit
+            f_out = ET.SubElement(root, "flow")
+            f_out.set("id",          f"flow_{flow_id}_out")
+            f_out.set("type",        "car")
+            f_out.set("from",        SCHOOL_EXIT_EDGE)
+            f_out.set("to",          corridor_edge)
+            f_out.set("begin",       str(t_start))
+            f_out.set("end",         str(t_end))
+            f_out.set("vehsPerHour", f"{veh_per_hour:.2f}")
+            f_out.set("departSpeed", "max")
+
             flow_id += 1
 
-    for fd in sorted(flows, key=lambda x: x["begin"]):
-        f = ET.SubElement(root, "flow")
-        f.set("id",          fd["id"])
-        f.set("type",        fd["type"])
-        f.set("from",        fd["from"])
-        f.set("to",          fd["to"])
-        f.set("begin",       str(fd["begin"]))
-        f.set("end",         str(fd["end"]))
-        f.set("vehsPerHour", f"{fd['vehsPerHour']:.2f}")
-        f.set("departSpeed", "max")
-        # Inbound vehicles stop ON school_internal_in for 45s (drop-off dwell).
-        # Stopping on the single lane forces queuing behind each waiting vehicle
-        # → natural backpressure onto Leyden/Ruskin Rd when demand is high.
-        if fd["id"].endswith("_in"):
-            stop = ET.SubElement(f, "stop")
-            stop.set("lane",      "school_internal_in_0")
-            stop.set("startPos",  "10")
-            stop.set("endPos",    "50")
-            stop.set("duration",  str(DWELL_OFFSET_S))
-
     out_path.write_text(_pretty(root), encoding="utf-8")
-    print(f"[sumo_runner] Demand written: {total_trips} trips -> {out_path.name}")
+    print(f"[sumo_runner] Demand written: {total_trips} trips ({flow_id * 2} flows) -> {out_path.name}")
 
 
 PARKING_CAPACITY = 98   # on-site bays along school_internal_in
@@ -242,7 +244,6 @@ def write_config(scenario, net_path, rou_path, fcd_path, tripinfo_path, cfg_path
     ET.SubElement(time, "step-length").set("value", "1")
 
     proc = ET.SubElement(root, "processing")
-    ET.SubElement(proc, "ignore-route-errors").set("value", "true")
     ET.SubElement(proc, "routing-algorithm").set("value", "astar")
     # Dynamic rerouting: vehicles re-evaluate routes every 60 s to model rat-runs.
     ET.SubElement(proc, "device.rerouting.probability").set("value", "1.0")
@@ -250,7 +251,7 @@ def write_config(scenario, net_path, rou_path, fcd_path, tripinfo_path, cfg_path
     ET.SubElement(proc, "device.rerouting.pre-period").set("value", "0")
 
     rpt = ET.SubElement(root, "report")
-    ET.SubElement(rpt, "no-warnings").set("value", "true")
+    ET.SubElement(rpt, "no-warnings").set("value", "false")
     ET.SubElement(rpt, "no-step-log").set("value", "true")
 
     cfg_path.write_text(_pretty(root), encoding="utf-8")
@@ -266,23 +267,38 @@ def run_sumo(cfg_path):
     print(f"[sumo_runner] SUMO complete.")
 
 
+def write_edge_counts_additional(scenario: str, out_path: Path) -> None:
+    """Write edge-counts.add.xml for this scenario — 5-minute interval counts."""
+    counts_path = SUMO_DIR / f"edge-counts-{scenario}.xml"
+    root = ET.Element("additional")
+    ed = ET.SubElement(root, "edgeData")
+    ed.set("id",     f"ed_{scenario}")
+    ed.set("file",   str(counts_path))
+    ed.set("period", "300")
+    out_path.write_text(_pretty(root), encoding="utf-8")
+
+
 def run_scenario(scenario, net_path, overlay_snap, humps_path=None):
     total_trips = SCENARIO_DEMAND[scenario]
     print(f"\n{'='*60}")
     print(f"Running SUMO scenario {scenario} ({total_trips} trips)")
     print(f"{'='*60}")
 
-    rou_path      = SUMO_DIR / f"demand-{scenario}.rou.xml"
-    fcd_path      = SUMO_DIR / f"fcd-{scenario}.xml"
-    tripinfo_path = SUMO_DIR / f"tripinfo-{scenario}.xml"
-    cfg_path      = SUMO_DIR / f"bergvliet-{scenario}.sumocfg"
+    rou_path        = SUMO_DIR / f"demand-{scenario}.rou.xml"
+    fcd_path        = SUMO_DIR / f"fcd-{scenario}.xml"
+    tripinfo_path   = SUMO_DIR / f"tripinfo-{scenario}.xml"
+    cfg_path        = SUMO_DIR / f"bergvliet-{scenario}.sumocfg"
+    edge_counts_add = SUMO_DIR / f"edge-counts-{scenario}.add.xml"
+
     add_paths = []
     if humps_path and humps_path.exists():
         add_paths.append(humps_path)
+    write_edge_counts_additional(scenario, edge_counts_add)
+    add_paths.append(edge_counts_add)
 
     write_demand(scenario, total_trips, overlay_snap, net_path, rou_path)
     write_config(scenario, net_path, rou_path, fcd_path, tripinfo_path, cfg_path,
-                 add_paths if add_paths else None)
+                 add_paths)
     run_sumo(cfg_path)
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)

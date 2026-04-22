@@ -16,14 +16,13 @@
     <step-length value="1"/>
   </time>
   <processing>
-    <ignore-route-errors value="true"/>
     <routing-algorithm value="astar"/>
     <device.rerouting.probability value="1.0"/>
     <device.rerouting.period value="60"/>
     <device.rerouting.pre-period value="0"/>
   </processing>
   <report>
-    <no-warnings value="true"/>
+    <no-warnings value="false"/>
     <no-step-log value="true"/>
   </report>
 </configuration>

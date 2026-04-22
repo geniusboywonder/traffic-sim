@@ -53,15 +53,13 @@ export class PlaybackSource {
   };
 
   _flowToCorridor(vehicleId) {
-    // Expected format: "flow_N_in.M" where N is the bucket index (0-19)
-    // 0-4   -> 1A
-    // 5-9   -> 2A
-    // 10-14 -> 2B
-    // 15-19 -> 3A
+    // Demand is generated time-bucket-first, 4 corridors per bucket:
+    // flow 0,4,8,12,16 → 1A | flow 1,5,9,13,17 → 2A
+    // flow 2,6,10,14,18 → 2B | flow 3,7,11,15,19 → 3A
     const m = vehicleId.match(/^flow_(\d+)_/);
     if (!m) return null;
     const flowIdx = parseInt(m[1]);
-    const corridorIdx = Math.floor(flowIdx / 5);
+    const corridorIdx = flowIdx % PlaybackSource._FLOW_CORRIDORS.length;
     return PlaybackSource._FLOW_CORRIDORS[corridorIdx] ?? null;
   }
 
@@ -88,43 +86,46 @@ export class PlaybackSource {
     const seenRoadIn   = {};   // road_id → Set of inbound vehicle IDs
     const seenRoadOut  = {};   // road_id → Set of outbound vehicle IDs
 
-    // Pre-pass: compute per-corridor avg outbound journey time.
-    // firstOutbound[vid] = abs time when vehicle first appears as outbound.
-    // lastSeen[vid]      = abs time when vehicle last appears in any frame.
-    const firstOutbound = {};
-    const lastSeen = {};
+    // Pre-pass: build per-corridor sorted list of outbound journey completions so
+    // avgOutDelay can grow progressively frame-by-frame (mirrors Live mode behaviour).
+    // firstOut[vid] = abs time the vehicle starts its outbound journey.
+    // lastSeen[vid] = abs time the vehicle last appears in any frame (= journey end).
+    const firstOut  = {};
+    const lastSeen  = {};
     for (const frame of this._data.frames) {
       for (const v of frame.vehicles) {
         lastSeen[v.id] = frame.t;
-        if (v.state === 'outbound' && firstOutbound[v.id] === undefined) {
-          firstOutbound[v.id] = frame.t;
-        }
+        // _out.* vehicles may be 'queued' at the school exit for their first frames —
+        // use first appearance as journey start.  For _in.* vehicles use first
+        // frame where state transitions to 'outbound'.
+        const isOut = v.id.includes('_out.') || v.state === 'outbound';
+        if (isOut && firstOut[v.id] === undefined) firstOut[v.id] = frame.t;
       }
     }
-    const outTimes = { '1A': [], '2A': [], '2B': [], '3A': [] };
-    for (const [vid, ft] of Object.entries(firstOutbound)) {
+    // Build sorted completion lists: { completedAt, duration } per corridor
+    const outCompletions = { '1A': [], '2A': [], '2B': [], '3A': [] };
+    for (const [vid, ft] of Object.entries(firstOut)) {
       const ls = lastSeen[vid];
       if (ls !== undefined && ls > ft) {
         const cid = this._flowToCorridor(vid);
-        if (cid) outTimes[cid].push(ls - ft);
+        if (cid) outCompletions[cid].push({ completedAt: ls, duration: ls - ft });
       }
     }
-    this._avgOutDelaySec = Object.fromEntries(
-      ['1A', '2A', '2B', '3A'].map(cid => {
-        // Outbound times from JSON frames are coarse (30s timestep resolution) —
-        // not reliable enough to display. Set to 0 so UI shows '—'.
-        return [cid, 0];
-      })
-    );
+    for (const cid of ['1A', '2A', '2B', '3A'])
+      outCompletions[cid].sort((a, b) => a.completedAt - b.completedAt);
+
+    // Main pass: build per-frame cumulative stats.
+    // outPtr / outboundAcc track progressive outbound averages.
+    const outPtr      = { '1A': 0, '2A': 0, '2B': 0, '3A': 0 };
+    const outboundAcc = { '1A': { total: 0, count: 0 }, '2A': { total: 0, count: 0 }, '2B': { total: 0, count: 0 }, '3A': { total: 0, count: 0 } };
 
     this._frameStats = this._data.frames.map(frame => {
       for (const v of frame.vehicles) {
         const cid = this._flowToCorridor(v.id);
-        if (cid) {
-          seenCorridor[cid].add(v.id);
-          if (v.speed < 2) slowAcc[cid] += dt;
+        if (cid && !v.id.includes('_out.')) {
+          seenCorridor[cid].add(v.id);          // inbound trips only
+          if (v.speed < 2) slowAcc[cid] += dt;  // inbound slow time only
         }
-        // Track inbound and outbound visits separately per road
         if (v.state === 'outbound') {
           if (!seenRoadOut[v.road_id]) seenRoadOut[v.road_id] = new Set();
           seenRoadOut[v.road_id].add(v.id);
@@ -133,10 +134,20 @@ export class PlaybackSource {
           seenRoadIn[v.road_id].add(v.id);
         }
       }
+      // Advance progressive outbound averages for vehicles that completed by this frame
+      for (const cid of ['1A', '2A', '2B', '3A']) {
+        const completions = outCompletions[cid];
+        while (outPtr[cid] < completions.length && completions[outPtr[cid]].completedAt <= frame.t) {
+          outboundAcc[cid].total += completions[outPtr[cid]].duration;
+          outboundAcc[cid].count++;
+          outPtr[cid]++;
+        }
+      }
       return {
-        spawned:  { '1A': seenCorridor['1A'].size, '2A': seenCorridor['2A'].size, '2B': seenCorridor['2B'].size, '3A': seenCorridor['3A'].size },
-        slowTime: { ...slowAcc },
-        roadVisitsIn:  Object.fromEntries(Object.entries(seenRoadIn).map(([k, s])  => [k, s.size])),
+        spawned:      { '1A': seenCorridor['1A'].size, '2A': seenCorridor['2A'].size, '2B': seenCorridor['2B'].size, '3A': seenCorridor['3A'].size },
+        slowTime:     { ...slowAcc },
+        outboundTime: { '1A': { ...outboundAcc['1A'] }, '2A': { ...outboundAcc['2A'] }, '2B': { ...outboundAcc['2B'] }, '3A': { ...outboundAcc['3A'] } },
+        roadVisitsIn:  Object.fromEntries(Object.entries(seenRoadIn).map(([k, s]) => [k, s.size])),
         roadVisitsOut: Object.fromEntries(Object.entries(seenRoadOut).map(([k, s]) => [k, s.size])),
       };
     });
@@ -268,17 +279,20 @@ export class PlaybackSource {
       const slowing   = vehicles.filter(v => v.speed >= 0.5 && v.speed < 2).length;
       const active    = vehicles.filter(v => v.speed >= 2).length;
       const spawned   = fs.spawned[cid] ?? 0;
-      const current   = vehicles.length;
-      const exited    = Math.max(0, spawned - current);
+      // exited = inbound trips that have left the map (outbound vehicles are separate flows)
+      const inboundNow = vehicles.filter(v => !v.id.includes('_out.')).length;
+      const exited     = Math.max(0, spawned - inboundNow);
+      const current    = vehicles.length;
       const congestion = current > 0 ? (stopped + slowing) / current : 0;
       // Avg delay: cumulative slow-vehicle-seconds divided by total spawned vehicles, in minutes
       const slowSec   = fs.slowTime[cid] ?? 0;
-      const avgInDelay = spawned > 0 ? (slowSec / spawned) / 60 : 0;
+      const avgInDelay  = spawned > 0 ? (slowSec / spawned) / 60 : 0;
+      const outT        = fs.outboundTime?.[cid] ?? { total: 0, count: 0 };
+      const avgOutDelay = outT.count > 0 ? (outT.total / outT.count) / 60 : 0;
       corridors[cid] = {
         label: PlaybackSource._CORRIDOR_LABELS[cid],
         current, spawned, exited, active, slowing, stopped, congestion,
-        avgInDelay,
-        avgOutDelay: (this._avgOutDelaySec?.[cid] ?? 0) / 60,
+        avgInDelay, avgOutDelay,
       };
     }
 

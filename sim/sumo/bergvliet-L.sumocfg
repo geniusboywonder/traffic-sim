@@ -20,6 +20,7 @@
     <device.rerouting.probability value="1.0"/>
     <device.rerouting.period value="60"/>
     <device.rerouting.pre-period value="0"/>
+    <time-to-teleport value="-1"/>
   </processing>
   <report>
     <no-warnings value="false"/>

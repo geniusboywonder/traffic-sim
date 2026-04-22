@@ -1,0 +1,595 @@
+- generic [ref=e3]:
+  - generic [ref=e7]:
+    - banner [ref=e8]:
+      - generic [ref=e9]:
+        - img [ref=e10]
+        - heading "Traff✱k - Tokai High Traffic Simulator" [level=2] [ref=e12]
+    - generic [ref=e13]:
+      - generic [ref=e14]:
+        - paragraph [ref=e15]: Hi there! I wanted to visually understand what 800 additional cars through the suburban streets of Bergvliet would look like. What roads would be impacted? Where would the backlogs build? And given that the WCED-commissioned Traffic Impact Assessment is woefully limited in its scope, I built a thing.
+        - paragraph [ref=e16]:
+          - text: This site is not formally associated with the WCED, the City of Cape Town, and the
+          - link "Bergvliet Volunteers Association (BVA)" [ref=e17] [cursor=pointer]:
+            - /url: https://www.facebook.com/CommunityResponseBergvlietSchool
+          - text: ", although I am a member of the"
+          - 'link "Community Response: Tokai School WhatsApp group" [ref=e18] [cursor=pointer]':
+            - /url: https://chat.whatsapp.com/J7ooHVb9tdr4n9PLf76wYy?mode=ems_wa_t
+          - text: .
+        - button "Start the Engine" [ref=e20] [cursor=pointer]:
+          - text: Start the Engine
+          - img [ref=e21]
+      - generic [ref=e23]:
+        - generic [ref=e24]: ROAD WARNING
+        - paragraph [ref=e25]:
+          - text: I am just a guy, with AI. I am not a traffic-assessor, or have any deep knowledge on traffic flow, stalling physics or back-pressure. My AI agents helped with that. They could be wrong. And this is just
+          - strong [ref=e26]: one possible scenario
+          - text: . It's fun and informative, but not definitive in its modelling. Don't use this site to make any life-changing decisions, or say things you might regret to WCED, City of Cape Town or anyone else.
+        - generic [ref=e27]:
+          - generic [ref=e28]: Just be lekker!
+          - generic [ref=e29]: (no cars or humans were harmed while making this)
+  - generic [ref=e31]:
+    - generic [ref=e33]:
+      - button "Open navigation" [ref=e34] [cursor=pointer]: Traff✱k
+      - navigation [ref=e35]:
+        - link "The Road Map" [ref=e36] [cursor=pointer]:
+          - /url: "#simulator"
+          - generic [ref=e37]:
+            - img [ref=e38]
+            - generic [ref=e40]: The Road Map
+        - link "The Damage Report" [ref=e41] [cursor=pointer]:
+          - /url: "#findings"
+          - generic [ref=e42]:
+            - img [ref=e43]
+            - generic: The Damage Report
+        - link "Under the Hood" [ref=e45] [cursor=pointer]:
+          - /url: "#models"
+          - generic [ref=e46]:
+            - img [ref=e47]
+            - generic: Under the Hood
+        - link "Pit Stop" [ref=e50] [cursor=pointer]:
+          - /url: "#contact"
+          - generic [ref=e51]:
+            - img [ref=e52]
+            - generic: Pit Stop
+    - generic [ref=e55]:
+      - generic [ref=e56]:
+        - generic [ref=e57]: Time
+        - generic [ref=e59]: 6:30 AM
+      - generic [ref=e61]:
+        - generic [ref=e62]: Total In/Out
+        - generic [ref=e64]: 0 / 0
+      - generic [ref=e66]:
+        - generic [ref=e67]: Avg Time In/Out
+        - generic [ref=e69]: — / —
+    - generic [ref=e71]:
+      - button "Replay tour" [ref=e72] [cursor=pointer]:
+        - img [ref=e73]
+      - link "Share on WhatsApp" [ref=e76] [cursor=pointer]:
+        - /url: https://wa.me/?text=800%20additional%20cars%20through%20Bergvliet%20%E2%80%94%20see%20what%20the%20traffic%20models%20really%20show.%20https%3A%2F%2Ftraffic.adamson.co.za
+        - img [ref=e77]
+      - link "Share on X" [ref=e79] [cursor=pointer]:
+        - /url: https://twitter.com/intent/tweet?text=800%20additional%20cars%20through%20Bergvliet%20%E2%80%94%20see%20what%20the%20traffic%20models%20really%20show.&url=https%3A%2F%2Ftraffic.adamson.co.za
+        - img [ref=e80]
+      - link "Share via Email" [ref=e83] [cursor=pointer]:
+        - /url: mailto:?subject=Traff%E2%9C%B1k%20%E2%80%94%20Tokai%20High%20Traffic%20Simulator&body=800%20additional%20cars%20through%20Bergvliet%20%E2%80%94%20see%20what%20the%20traffic%20models%20really%20show.%0A%0Ahttps%3A%2F%2Ftraffic.adamson.co.za
+        - img [ref=e84]
+  - main [ref=e87]:
+    - generic [ref=e88]:
+      - generic [ref=e91]:
+        - generic [ref=e92]:
+          - generic:
+            - generic:
+              - img
+            - generic:
+              - button "✱":
+                - generic: ✱
+              - button "✱":
+                - generic: ✱
+              - button "✱":
+                - generic: ✱
+              - button "✱":
+                - generic: ✱
+              - button "✱":
+                - generic: ✱
+          - generic:
+            - generic [ref=e163]:
+              - button "Zoom in" [ref=e164] [cursor=pointer]: +
+              - button "Zoom out" [ref=e165] [cursor=pointer]: −
+            - link "Leaflet" [ref=e167] [cursor=pointer]:
+              - /url: https://leafletjs.com
+              - img [ref=e168]
+              - text: Leaflet
+        - generic [ref=e172]:
+          - generic [ref=e173]:
+            - button "Legend ▲" [ref=e175] [cursor=pointer]:
+              - img [ref=e176]
+              - generic [ref=e178]: Legend
+              - generic [ref=e179]: ▲
+            - generic "Drag to move" [ref=e180]:
+              - img [ref=e181]
+          - button "Show Routes" [ref=e188] [cursor=pointer]
+          - generic [ref=e189]:
+            - generic [ref=e190]: ●
+            - text: Firgrove Way
+          - generic [ref=e191]:
+            - generic [ref=e192]: ●
+            - text: Homestead Av
+          - generic [ref=e193]:
+            - generic [ref=e194]: ●
+            - text: Children's Way
+          - generic [ref=e195]:
+            - generic [ref=e196]: ●
+            - text: Main Rd
+          - generic [ref=e197]:
+            - generic [ref=e198]: ◆
+            - text: Rat-Run
+          - generic [ref=e199]:
+            - generic [ref=e200]: ●
+            - text: Delayed
+          - generic [ref=e201]:
+            - generic [ref=e202]: ■
+            - text: Parked
+        - generic:
+          - generic: Play a scenario and watch the traffic wiggle!
+          - generic [ref=e203]:
+            - generic "Drag to reposition" [ref=e204]:
+              - img [ref=e205]
+            - generic [ref=e213]:
+              - button "L" [ref=e214] [cursor=pointer]
+              - button "M" [ref=e215] [cursor=pointer]
+              - button "H" [ref=e216] [cursor=pointer]
+            - button "Play" [ref=e218] [cursor=pointer]:
+              - img [ref=e219]
+            - generic [ref=e221]:
+              - button "1×" [ref=e222] [cursor=pointer]
+              - button "2×" [ref=e223] [cursor=pointer]
+              - button "5×" [ref=e224] [cursor=pointer]
+              - button "10×" [ref=e225] [cursor=pointer]
+            - generic [ref=e227]:
+              - button "Live" [ref=e228] [cursor=pointer]
+              - button "Lab" [ref=e229] [cursor=pointer]
+            - button "Reset" [ref=e231] [cursor=pointer]:
+              - img [ref=e232]
+            - button "LOG" [ref=e235] [cursor=pointer]:
+              - img [ref=e236]
+              - text: LOG
+            - button "ROAD LOG" [ref=e239] [cursor=pointer]:
+              - img [ref=e240]
+              - text: ROAD LOG
+      - generic [ref=e243]:
+        - complementary [ref=e244]:
+          - generic [ref=e245]:
+            - generic [ref=e246]:
+              - img [ref=e247]
+              - generic [ref=e249]: Select any road on the map to focus on it
+            - generic [ref=e250]:
+              - img [ref=e251]
+              - generic [ref=e253]: Overall Summary
+            - generic [ref=e254]:
+              - generic [ref=e255]:
+                - img [ref=e256]
+                - generic [ref=e260]:
+                  - generic [ref=e261]: In
+                  - generic [ref=e262]: "0"
+                - generic [ref=e263]:
+                  - generic [ref=e264]: Out
+                  - generic [ref=e265]: "0"
+              - generic [ref=e266]:
+                - img [ref=e267]
+                - generic [ref=e270]:
+                  - generic [ref=e271]: In
+                  - generic [ref=e272]: —
+                - generic [ref=e273]:
+                  - generic [ref=e274]: Out
+                  - generic [ref=e275]: —
+            - generic [ref=e278]:
+              - generic [ref=e279]: 0% active
+              - generic [ref=e280]: 0% slowing
+              - generic [ref=e281]: 0% stopped
+          - generic [ref=e282]:
+            - generic [ref=e284] [cursor=pointer]:
+              - generic [ref=e285]:
+                - generic [ref=e286]:
+                  - generic [ref=e287]: 3A
+                  - generic [ref=e288]: Firgrove Way
+                - img [ref=e290]
+              - generic [ref=e293]:
+                - generic [ref=e294]:
+                  - img [ref=e295]
+                  - generic [ref=e299]:
+                    - generic [ref=e300]: In
+                    - generic [ref=e301]: "0"
+                  - generic [ref=e302]:
+                    - generic [ref=e303]: Out
+                    - generic [ref=e304]: "0"
+                - generic [ref=e305]:
+                  - img [ref=e306]
+                  - generic [ref=e309]:
+                    - generic [ref=e310]: In
+                    - generic [ref=e311]: —
+                  - generic [ref=e312]:
+                    - generic [ref=e313]: Out
+                    - generic [ref=e314]: —
+              - generic [ref=e317]:
+                - generic [ref=e318]: 0% active
+                - generic [ref=e319]: 0% slowing
+                - generic [ref=e320]: 0% stopped
+            - generic [ref=e322] [cursor=pointer]:
+              - generic [ref=e323]:
+                - generic [ref=e324]:
+                  - generic [ref=e325]: 2B
+                  - generic [ref=e326]: Children's Way
+                - img [ref=e328]
+              - generic [ref=e331]:
+                - generic [ref=e332]:
+                  - img [ref=e333]
+                  - generic [ref=e337]:
+                    - generic [ref=e338]: In
+                    - generic [ref=e339]: "0"
+                  - generic [ref=e340]:
+                    - generic [ref=e341]: Out
+                    - generic [ref=e342]: "0"
+                - generic [ref=e343]:
+                  - img [ref=e344]
+                  - generic [ref=e347]:
+                    - generic [ref=e348]: In
+                    - generic [ref=e349]: —
+                  - generic [ref=e350]:
+                    - generic [ref=e351]: Out
+                    - generic [ref=e352]: —
+              - generic [ref=e355]:
+                - generic [ref=e356]: 0% active
+                - generic [ref=e357]: 0% slowing
+                - generic [ref=e358]: 0% stopped
+            - generic [ref=e360] [cursor=pointer]:
+              - generic [ref=e361]:
+                - generic [ref=e362]:
+                  - generic [ref=e363]: 2A
+                  - generic [ref=e364]: Homestead Av
+                - img [ref=e366]
+              - generic [ref=e369]:
+                - generic [ref=e370]:
+                  - img [ref=e371]
+                  - generic [ref=e375]:
+                    - generic [ref=e376]: In
+                    - generic [ref=e377]: "0"
+                  - generic [ref=e378]:
+                    - generic [ref=e379]: Out
+                    - generic [ref=e380]: "0"
+                - generic [ref=e381]:
+                  - img [ref=e382]
+                  - generic [ref=e385]:
+                    - generic [ref=e386]: In
+                    - generic [ref=e387]: —
+                  - generic [ref=e388]:
+                    - generic [ref=e389]: Out
+                    - generic [ref=e390]: —
+              - generic [ref=e393]:
+                - generic [ref=e394]: 0% active
+                - generic [ref=e395]: 0% slowing
+                - generic [ref=e396]: 0% stopped
+            - generic [ref=e398] [cursor=pointer]:
+              - generic [ref=e399]:
+                - generic [ref=e400]:
+                  - generic [ref=e401]: 1A
+                  - generic [ref=e402]: Main Rd
+                - img [ref=e404]
+              - generic [ref=e407]:
+                - generic [ref=e408]:
+                  - img [ref=e409]
+                  - generic [ref=e413]:
+                    - generic [ref=e414]: In
+                    - generic [ref=e415]: "0"
+                  - generic [ref=e416]:
+                    - generic [ref=e417]: Out
+                    - generic [ref=e418]: "0"
+                - generic [ref=e419]:
+                  - img [ref=e420]
+                  - generic [ref=e423]:
+                    - generic [ref=e424]: In
+                    - generic [ref=e425]: —
+                  - generic [ref=e426]:
+                    - generic [ref=e427]: Out
+                    - generic [ref=e428]: —
+              - generic [ref=e431]:
+                - generic [ref=e432]: 0% active
+                - generic [ref=e433]: 0% slowing
+                - generic [ref=e434]: 0% stopped
+        - generic [ref=e438]: scroll
+  - generic [ref=e440]:
+    - generic [ref=e441]:
+      - generic [ref=e442]:
+        - heading "Under the Hood" [level=3] [ref=e443]:
+          - img [ref=e444]
+          - text: Under the Hood
+        - paragraph [ref=e446]: Traff✱k is the dashcam you never knew you needed for Tokai's morning rush.
+      - generic [ref=e447]:
+        - paragraph [ref=e448]: It models every car, every slow-down at a speed hump, and every frustrated parent trying to squeeze in a quick drop-off. The heart of the simulation is the Intelligent Driver Model — that decides how close cars follow each other, how fast they accelerate, and when they brake gently instead of slamming on the anchors.
+        - paragraph [ref=e449]: The model uses a "main route" for each entry / exit corridor from Firgrove Way, Homestead Av, Children's Way and Main Rd. This is the route most cars will follow — until traffic starts to build up. Then cars will find and follow multiple rat-runs to the school. The model attempts to avoid the normal Sweet Valley routes at the top of Dreyersdal Rd and exiting via Homestead.
+    - generic [ref=e451]:
+      - generic [ref=e452] [cursor=pointer]:
+        - generic [ref=e454]:
+          - img [ref=e455]
+          - text: The TIA Highway Code
+        - generic [ref=e460]:
+          - heading "The TIA Highway Code" [level=4] [ref=e461]: The TIA Highway Code
+          - list [ref=e464]:
+            - listitem [ref=e465]:
+              - text: •
+              - strong [ref=e466]: "Inbound vehicles:"
+              - text: "L: 336, M: 420, H: 504"
+            - listitem [ref=e467]:
+              - text: •
+              - strong [ref=e468]: "Cars per entryway:"
+              - text: "Children's Way: 47% | Homestead Av: 25% | Main Rd (Dreyersdal South): 14% | Firgrove Way (Dreyersdal North + Starke): 14%"
+            - listitem [ref=e469]:
+              - text: •
+              - strong [ref=e470]: "School Drop-offs:"
+              - text: 120 bays (98 on-site + 22 on-street)
+            - listitem [ref=e471]:
+              - text: •
+              - strong [ref=e472]: "Avg stop time:"
+              - text: 45 seconds | One-way system | Aristea Traffic Circle
+      - generic [ref=e473] [cursor=pointer]:
+        - generic [ref=e475]:
+          - img [ref=e476]
+          - text: Engine Specs
+        - generic [ref=e481]:
+          - heading "Engine Specs" [level=4] [ref=e482]: Engine Specs
+          - list [ref=e485]:
+            - listitem [ref=e486]:
+              - text: •
+              - strong [ref=e487]: "Speeds:"
+              - text: "Arterial: 60 | Collector: 40 | Local: 30"
+            - listitem [ref=e488]:
+              - text: •
+              - strong [ref=e489]: "Safety:"
+              - text: 1.5 – 2.5s safe gap | 2.5s yield gap
+            - listitem [ref=e490]:
+              - text: •
+              - strong [ref=e491]: "Scale:"
+              - text: 11 junctions & 28 road signs
+            - listitem [ref=e492]:
+              - text: •
+              - strong [ref=e493]: "Logic:"
+              - text: Rat-runs trigger at 6–15% congestion | 85% chance
+  - generic [ref=e495]:
+    - generic [ref=e496]:
+      - generic [ref=e497]: Incident Report
+      - heading "The Damage Report" [level=2] [ref=e498]:
+        - img [ref=e499]
+        - text: The Damage Report
+      - generic [ref=e501]:
+        - generic [ref=e502]:
+          - generic [ref=e503]: ~7 min
+          - generic [ref=e504]: free-flow trip — TIA baseline
+        - generic [ref=e505]:
+          - generic [ref=e506]: ~26 min
+          - generic [ref=e507]: Lab model mean trip — High scenario
+        - generic [ref=e508]:
+          - generic [ref=e509]: "68"
+          - generic [ref=e510]: vehicles still arriving at school after 08:30 — High scenario
+        - generic [ref=e511]:
+          - generic [ref=e512]: "3"
+          - generic [ref=e513]: independent models — same conclusion
+    - generic [ref=e514]:
+      - generic [ref=e515]:
+        - generic [ref=e516]:
+          - generic [ref=e517]: Write-off
+          - heading "The Congestion" [level=3] [ref=e518]
+          - img [ref=e519]
+        - list [ref=e521]:
+          - listitem [ref=e522]:
+            - text: —
+            - strong [ref=e523]: Traffic does not clear by 08:30.
+            - text: The TIA assumes the school run is done by 08:30. The Live engine shows
+            - generic [ref=e524]: 68 vehicles IDM Live — 68 vehicles still arriving at school between 08:30 and 09:00, High scenario
+            - text: still arriving at school after 08:30 in the High scenario. The Lab model confirms vehicles still queued at 09:00 in every scenario — including Low demand.
+          - listitem [ref=e525]:
+            - text: —
+            - strong [ref=e526]: A 7-minute trip becomes a 26-minute ordeal.
+            - text: That's the
+            - generic [ref=e527]: Lab model mean Lab model (SUMO) mean trip duration, High scenario — 394 vehicles, TIA-aligned volumes
+            - text: under High demand. The Live engine shows
+            - generic [ref=e528]: 18 minutes IDM Live mean trip, High scenario — 508 vehicles, TIA×1.2 demand
+            - text: ". Both models agree on what matters most:"
+            - generic [ref=e529]: 11 minutes spent completely stopped IDM Live avg stopped 11.2 min, SUMO avg stopped 11.1 min — High scenario. Two independent models, 6-second difference.
+            - text: .
+            - generic [ref=e530]: "1 in 20 drivers P95 trip time: IDM Live 34 min, Lab model 59 min — High scenario"
+            - text: takes over half an hour for a 3km trip.
+          - listitem [ref=e531]:
+            - text: —
+            - strong [ref=e532]: Three models, one answer.
+            - text: Live, Lab and the Validation model each use different mathematics — and each independently identifies
+            - strong [ref=e533]: Dreyersdal Rd
+            - text: ","
+            - strong [ref=e534]: Vineyard Rd
+            - text: and the
+            - emphasis [ref=e535]: Starke/Christopher
+            - text: corridor as the most congested roads in Medium and High demand. That's not a modelling quirk. It's the infrastructure.
+      - generic [ref=e536]:
+        - generic [ref=e537]:
+          - generic [ref=e538]: Fender-bender
+          - heading "The Bottlenecks" [level=3] [ref=e539]
+          - img [ref=e540]
+        - list [ref=e543]:
+          - listitem [ref=e544]:
+            - text: —
+            - strong [ref=e545]: The school gate is a single-entry hard stop.
+            - text: One gate. 14 speed humps on the approach. The Lab model shows vehicles spending
+            - generic [ref=e546]: 6 minutes on the school internal road SUMO Lab — vehicles spend mean 6 minutes on the school internal road, crawling bumper-to-bumper at walking pace (0.6 km/h vs 5 km/h free-flow) while bays fill and empty. All scenarios.
+            - text: — crawling bumper-to-bumper at walking pace while waiting for a drop-off bay. The 45-second stop is embedded inside that crawl. One stalled car stalls the entire queue.
+          - listitem [ref=e547]:
+            - text: —
+            - strong [ref=e548]: Christopher Rd is where the main routes converge.
+            - text: All four entry corridors reach the school via
+            - strong [ref=e549]: Christopher Rd
+            - text: — through a stop at
+            - generic [ref=e550]:
+              - emphasis [ref=e551]: Starke/Christopher
+              - text: All-way stop at Starke/Christopher — every main route passes through here
+            - text: and a yield at
+            - generic [ref=e552]:
+              - emphasis [ref=e553]: Christopher/Vineyard
+              - text: Yield-controlled junction at Christopher/Vineyard — final turn before the Leyden/Ruskin school approach
+            - text: . Rat-runs that bypass it exit via
+            - emphasis [ref=e554]: Clement/Leyden
+            - text: or
+            - emphasis [ref=e555]: Dante/Ruskin
+            - text: — different queue, same gate.
+          - listitem [ref=e556]:
+            - text: —
+            - strong [ref=e557]: Aristea Rd is the only way out.
+            - text: Every vehicle leaving the school must exit via
+            - strong [ref=e558]: Aristea Rd
+            - text: onto the Ruskin/Aristea roundabout — there is no alternative. From there every exiting vehicle turns onto
+            - strong [ref=e559]: Dante Rd
+            - text: first, making it a structural pinch point regardless of which exit they're heading for.
+      - generic [ref=e560]:
+        - generic [ref=e561]:
+          - generic [ref=e562]: Side-swipe
+          - heading "The Routes" [level=3] [ref=e563]
+          - img [ref=e564]
+        - list [ref=e567]:
+          - listitem [ref=e568]:
+            - text: —
+            - strong [ref=e569]: The crunch peaks after 08:00 — not 07:45.
+            - text: The TIA's window is 07:30–08:00. But the school gate can't process vehicles as fast as they arrive. All three models show peak loading between
+            - generic [ref=e570]: "07:52 and 08:14 IDM Live: L=7:56, M=8:08, H=7:58 — SUMO Lab: L=8:04, M=8:13, H=8:14 — UXSim Validation: L=7:52, M=7:55, H=8:00"
+            - text: — well after the TIA's window closes. The TIA captures when parents arrive. It misses when the queue is longest.
+          - listitem [ref=e571]:
+            - text: —
+            - strong [ref=e572]: Rat-runs don't save time — they join a different queue.
+            - text: At High demand,
+            - generic [ref=e573]: "1 in 4 vehicles IDM Live High scenario — 130 of 508 vehicles (25.6%) assigned to rat-run routes. Top route: Starke→Vineyard→Ruskin (5.5% of all vehicles)."
+            - text: "takes an alternative route through the suburb. Every one of those routes still connects to the same final approach: via"
+            - emphasis [ref=e574]: Christopher/Vineyard
+            - text: ","
+            - emphasis [ref=e575]: Clement/Leyden
+            - text: ", or"
+            - emphasis [ref=e576]: Dante/Ruskin
+            - text: . Those final segments carry the combined load of main-route and rat-run traffic. The shortcut ends in the same jam.
+          - listitem [ref=e577]:
+            - text: —
+            - strong [ref=e578]: Exiting is no easier.
+            - strong [ref=e579]: Dante Rd
+            - text: is the first turn every vehicle makes leaving the school — every egress route starts there. From Dante, 4 of 5 routes pass through
+            - strong [ref=e580]: Vineyard Rd
+            - text: .
+            - generic [ref=e581]: Vineyard Rd backs up at 08:17 IDM Live — Vineyard Rd outbound, 6 vehicles stopped simultaneously at peak 08:17, High scenario. Inbound and outbound traffic competing for the same road.
+            - text: under High demand — inbound parents still arriving, outbound parents trying to leave, on the same residential road.
+      - insertion [ref=e584]
+    - generic [ref=e585]:
+      - generic [ref=e586]:
+        - img [ref=e587]
+        - generic [ref=e591]: ✕ ROAD CLOSED ✕
+        - img [ref=e592]
+      - paragraph [ref=e596]:
+        - text: Everything shown is
+        - strong [ref=e597]: inbound school traffic only.
+        - text: "This modelling EXCLUDES:"
+      - list [ref=e598]:
+        - listitem [ref=e599]:
+          - text: ✕
+          - generic [ref=e600]: Sweet Valley Primary school runs Sweet Valley Primary is ~200m away. Their school-run parents use the same roads and are entirely unmodelled.
+        - listitem [ref=e601]:
+          - text: ✕
+          - generic [ref=e602]: All Bergvliet residents local traffic movements to work, school and university All non-school trips through the study area — commuters, local errands, other school runs — are excluded. These roads carry far more than Tokai High traffic alone.
+        - listitem [ref=e603]:
+          - text: ✕
+          - generic [ref=e604]: ALL traffic *exiting* to Firgrove Rd, Ladies Mile Rd and Main Rd Post drop-off vehicles leaving via Firgrove Rd, Ladies Mile Rd and Main Rd create a counter-flow on the same streets. None of this is modelled. Real congestion will be worse.
+        - listitem [ref=e605]:
+          - text: ✕
+          - generic [ref=e606]: New essential traffic calming measures in Dante Rd, Vineyard Rd, Ruskin Rd, Leyden Rd The TIA proposes calming on rat-run routes. Excluding these means modelled rat-run speeds may be slightly faster than reality — which would make congestion slightly worse than shown.
+      - paragraph [ref=e607]:
+        - text: All
+        - strong [ref=e608]: Avg Time Out
+        - text: will be
+        - strong [ref=e609]: massively understated
+        - text: based on the above.
+  - generic [ref=e611]:
+    - generic [ref=e612]:
+      - generic [ref=e613]: Under the Hood
+      - heading "Road Tested" [level=2] [ref=e614]:
+        - img [ref=e615]
+        - text: Road Tested
+    - paragraph [ref=e618]: Three independent models. One consistent conclusion. Here's how we built them — and why you can trust what they show.
+    - generic [ref=e619]:
+      - generic [ref=e620]:
+        - generic [ref=e621]: "1"
+        - generic [ref=e622]:
+          - heading "The Foundation — The Official TIA" [level=3] [ref=e623]
+          - paragraph [ref=e624]:
+            - text: The Traffic Impact Assessment (TIA) is the starting point — and the rulebook. Commissioned under Western Cape Mobility Department
+            - link "(WCMD)" [ref=e625] [cursor=pointer]:
+              - /url: https://www.westerncape.gov.za/mobility
+            - text: "guidelines and following South Africa's TMH 16 standard, it sets the study area's trip counts, directional splits, and the 840-vehicle High scenario demand baseline. The TIA's method is analytical: standardised traffic engineering formulas applied to the worst-case 15-minute peak window. It's a snapshot, not a simulation — but that snapshot defines the problem."
+      - generic [ref=e626]:
+        - generic [ref=e627]: "2"
+        - generic [ref=e628]:
+          - heading "Our Live Simulation" [level=3] [ref=e629]
+          - paragraph [ref=e630]: "The interactive engine running on your screen is calibrated directly to the TIA's figures — same trip volumes, same origin splits, same peak-hour demand curve peaking at 07:45. It then goes where the TIA cannot: every vehicle moves individually using the Intelligent Driver Model (IDM), the same car-following mathematics used by professional-grade simulators. Speed humps, junction holds, rat-run decisions, school dwell time — all modelled car by car, second by second."
+      - generic [ref=e631]:
+        - generic [ref=e632]: "3"
+        - generic [ref=e633]:
+          - heading "Lab — Professional Cross-Check" [level=3] [ref=e634]
+          - paragraph [ref=e635]: Once we had a live model, we needed an independent referee. The Lab model runs on SUMO (Simulation of Urban MObility), developed by the German Aerospace Center (DLR) — one of the world's most widely used microscopic traffic simulators, trusted by governments, universities, and transport authorities globally. The Lab model's outputs closely match our Live engine across all three scenarios. That agreement is the institutional stamp on our custom model.
+      - generic [ref=e636]:
+        - generic [ref=e637]: "4"
+        - generic [ref=e638]:
+          - heading "Validation — Network-Level Confirmation" [level=3] [ref=e639]
+          - paragraph [ref=e640]: "UXSim (developed by Dr. Toru Seo, Institute of Science Tokyo) operates at a different level — mesoscopic, modelling traffic as flow rather than individual cars. Its mathematics are kinematic wave theory: the same language the TIA uses for its capacity calculations. This is why UXSim is uniquely useful here: it doesn't replace the Lab model or our Live engine, it audits them from the network level."
+      - generic [ref=e641]:
+        - generic [ref=e642]: "5"
+        - generic [ref=e643]:
+          - heading "Reading the Instruments" [level=3] [ref=e644]
+          - paragraph [ref=e645]: "Our Live engine and the Lab model are stochastic — each run includes realistic random variation in driver behaviour, so exact numbers shift slightly between runs. The TIA and UXSim use deterministic, averaged flows, so they always return the same result. Our Live engine also adds layers the others don't: dynamic egress holds at the Ladies Mile signal during peak, dwell time at the school, and real-time rat-run activation based on live congestion."
+      - insertion [ref=e648]
+    - generic [ref=e649]:
+      - generic:
+        - insertion
+  - contentinfo [ref=e650]:
+    - generic [ref=e651]:
+      - insertion
+    - generic [ref=e652]:
+      - generic [ref=e653]:
+        - heading "Traff✱k" [level=2] [ref=e654]
+        - paragraph [ref=e655]: "\"putting you in the driving seat\""
+      - generic [ref=e656]:
+        - paragraph [ref=e657]: "Made possible by open-source contributions from:"
+        - generic [ref=e658]:
+          - link "Leaflet" [ref=e659] [cursor=pointer]:
+            - /url: https://leafletjs.com/
+          - generic [ref=e660]: •
+          - link "SUMO" [ref=e661] [cursor=pointer]:
+            - /url: https://eclipse.dev/sumo/
+          - generic [ref=e662]: •
+          - link "UXSim" [ref=e663] [cursor=pointer]:
+            - /url: https://toruseo.jp/UXsim/docs/
+          - generic [ref=e664]: •
+          - link "OpenStreetMap" [ref=e665] [cursor=pointer]:
+            - /url: https://www.openstreetmap.org/
+          - generic [ref=e666]: •
+          - link "geojson.io" [ref=e667] [cursor=pointer]:
+            - /url: https://geojson.io/
+          - generic [ref=e668]: •
+          - link "Overpass Turbo" [ref=e669] [cursor=pointer]:
+            - /url: https://overpass-turbo.eu/
+          - generic [ref=e670]: •
+          - link "shadcn/ui" [ref=e671] [cursor=pointer]:
+            - /url: https://www.shadcn.io/
+          - generic [ref=e672]: •
+          - link "21st.dev" [ref=e673] [cursor=pointer]:
+            - /url: https://21st.dev/home
+      - generic [ref=e674]:
+        - paragraph [ref=e675]:
+          - text: Built by
+          - link "Neill Adamson" [ref=e679] [cursor=pointer]:
+            - /url: https://neill.adamson.co.za/
+          - link "@geniusboywonder" [ref=e680] [cursor=pointer]:
+            - /url: https://x.com/geniusboywonder
+        - paragraph [ref=e681]:
+          - text: Need a lift building with AI?
+          - link "nadamson@gmail.com" [ref=e682] [cursor=pointer]:
+            - /url: mailto:nadamson@gmail.com
+        - paragraph [ref=e683]: © Neill Adamson. 2026 All rights reserved.

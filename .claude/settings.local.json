@@ -85,7 +85,9 @@
       "mcp__plugin_context7_context7__resolve-library-id",
       "mcp__read-website-fast__read_website",
       "Bash(pdftotext --version)",
-      "Read(//Users/neill/Downloads/**)"
+      "Read(//Users/neill/Downloads/**)",
+      "Skill(commit-commands:commit-push-pr)",
+      "Skill(commit-commands:commit-push-pr:*)"
     ]
   }
 }

@@ -1,0 +1,4 @@
+<additional>
+  <!-- Edge traffic counts every 5 minutes — readable after headless run -->
+  <edgeData id="ed_5min" file="C:\Users\neill\Github\tokai-sim\sim\sumo\edge-counts-H.xml" period="300"/>
+</additional>

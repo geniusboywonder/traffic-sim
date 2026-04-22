@@ -1,0 +1,9 @@
+[     370ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:5173/src/App.jsx?t=1776849726697:0
+[    1799ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=aac9e50a:14337
+[    3017ms] TypeError: Cannot read properties of undefined (reading '_leaflet_pos')
+    at getPosition (http://localhost:5173/node_modules/.vite/deps/leaflet.js?v=aac9e50a:1114:14)
+    at NewClass._getMapPanePos (http://localhost:5173/node_modules/.vite/deps/leaflet.js?v=aac9e50a:2043:12)
+    at NewClass._rawPanBy (http://localhost:5173/node_modules/.vite/deps/leaflet.js?v=aac9e50a:1931:37)
+    at NewClass.invalidateSize (http://localhost:5173/node_modules/.vite/deps/leaflet.js?v=aac9e50a:1643:28)
+    at syncAll (http://localhost:5173/src/components/SimMap.jsx?t=1776849815272:1050:8)
+    at http://localhost:5173/src/components/SimMap.jsx?t=1776849815272:1056:4

@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design Review – Tokai Traffic Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #0b1326;
+    --surface:   #131b2e;
+    --surface-hi:#1e2840;
+    --surface-hh:#222a3d;
+    --primary:   #22d3ee;
+    --secondary: #a78bfa;
+    --error:     #ffaab2;
+    --warn:      #fbbf24;
+    --ok:        #34d399;
+    --text:      #dae2fd;
+    --muted:     #64748b;
+    --dim:       #334155;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    padding: 0;
+  }
+
+  /* ── HEADER ── */
+  .doc-header {
+    background: var(--surface);
+    padding: 48px 64px 40px;
+  }
+  .doc-header .eyebrow {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--primary);
+    margin-bottom: 12px;
+  }
+  .doc-header h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  .doc-header .subtitle {
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .meta-pills {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+  .pill {
+    background: var(--surface-hi);
+    color: var(--muted);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 12px;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .pill.pri { background: oklch(30% 0.06 200); color: var(--primary); }
+  .pill.sec { background: oklch(25% 0.06 280); color: var(--secondary); }
+  .pill.err { background: oklch(25% 0.06 10);  color: var(--error); }
+
+  /* ── BODY LAYOUT ── */
+  .doc-body {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 56px 40px 80px;
+  }
+
+  /* ── SECTION ── */
+  .section {
+    margin-bottom: 64px;
+  }
+  .section-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--surface-hi);
+  }
+  .section h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 12px;
+  }
+  .section p {
+    color: oklch(80% 0.02 230);
+    font-size: 14px;
+    line-height: 1.75;
+    max-width: 700px;
+  }
+
+  /* ── FINDING CARDS ── */
+  .findings {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 28px;
+  }
+
+  .finding {
+    background: var(--surface);
+    border-radius: 10px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 4px 1fr;
+  }
+  .finding-stripe { background: var(--error); }
+  .finding-stripe.warn { background: var(--warn); }
+  .finding-stripe.ok   { background: var(--ok); }
+  .finding-stripe.info { background: var(--secondary); }
+
+  .finding-body {
+    padding: 20px 24px;
+  }
+  .finding-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 8px;
+  }
+  .finding-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+  }
+  .finding-badge {
+    font-size: 10px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .badge-critical { background: oklch(25% 0.06 10);  color: var(--error); }
+  .badge-moderate { background: oklch(30% 0.06 60);  color: var(--warn); }
+  .badge-positive { background: oklch(25% 0.06 160); color: var(--ok); }
+  .badge-note     { background: oklch(25% 0.06 280); color: var(--secondary); }
+
+  .finding-desc {
+    font-size: 13.5px;
+    color: oklch(72% 0.02 230);
+    line-height: 1.7;
+    margin-bottom: 14px;
+  }
+
+  .finding-rec {
+    background: var(--surface-hi);
+    border-radius: 7px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: oklch(78% 0.02 230);
+    line-height: 1.65;
+  }
+  .finding-rec strong {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 5px;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+
+  /* ── BEFORE / AFTER PANELS ── */
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--surface-hh);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 28px;
+  }
+  .compare-side {
+    background: var(--surface);
+    padding: 24px;
+  }
+  .compare-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Space Grotesk', sans-serif;
+    margin-bottom: 14px;
+  }
+  .compare-label.before { color: var(--muted); }
+  .compare-label.after  { color: var(--primary); }
+
+  /* mini mock elements */
+  .mock-card {
+    background: var(--surface-hi);
+    border-radius: 7px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .mock-card.bordered {
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+  .mock-card.no-border {
+    background: oklch(20% 0.02 230);
+  }
+  .mock-card .mock-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--error);
+    line-height: 1.2;
+    margin-top: 4px;
+  }
+  .mock-card .mock-value.ok { color: var(--ok); }
+  .mock-card .mock-sub {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+  .mock-border-demo {
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 7px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 8px;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .mock-tonal-demo {
+    background: oklch(19% 0.025 230);
+    border-radius: 7px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 8px;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .mock-glass {
+    background: rgba(34, 40, 61, 0.7);
+    backdrop-filter: blur(20px);
+    border-radius: 9px;
+    padding: 14px 16px;
+    font-size: 12px;
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .mock-header {
+    background: oklch(14% 0.03 230);
+    border-radius: 7px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'Space Grotesk', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .mock-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--error);
+    flex-shrink: 0;
+  }
+  .mock-dot.ok { background: var(--ok); }
+
+  /* ── PRIORITY GRID ── */
+  .priority-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 28px;
+  }
+  .priority-item {
+    background: var(--surface);
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .priority-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+  .priority-num.p1 { color: var(--error); }
+  .priority-num.p2 { color: var(--warn); }
+  .priority-num.p3 { color: var(--secondary); }
+  .priority-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .priority-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── QUOTE BLOCK ── */
+  .spec-quote {
+    background: var(--surface);
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-top: 20px;
+    position: relative;
+  }
+  .spec-quote::before {
+    content: '"';
+    position: absolute;
+    top: 8px;
+    left: 20px;
+    font-size: 60px;
+    color: var(--primary);
+    opacity: 0.2;
+    font-family: 'Space Grotesk', sans-serif;
+    line-height: 1;
+  }
+  .spec-quote p {
+    font-size: 13.5px;
+    font-style: italic;
+    color: oklch(72% 0.02 230);
+    padding-left: 16px;
+  }
+  .spec-quote .source {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 8px;
+    padding-left: 16px;
+    font-style: normal;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--dim); border-radius: 2px; }
+
+  @media (max-width: 700px) {
+    .doc-header { padding: 32px 24px; }
+    .doc-body { padding: 40px 24px 60px; }
+    .compare { grid-template-columns: 1fr; }
+    .priority-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="doc-header">
+  <div class="eyebrow">Design Review · April 2026</div>
+  <h1>Tokai Traffic Simulator<br>UI Design Critique</h1>
+  <div class="subtitle">Reviewed against the Kinetic Sentinel design spec — audience: community residents</div>
+  <div class="meta-pills">
+    <span class="pill">Source: App.jsx · 42kb</span>
+    <span class="pill">Spec: DESIGN.md · Kinetic Sentinel</span>
+    <span class="pill pri">5 Critical Findings</span>
+    <span class="pill sec">3 Moderate Findings</span>
+    <span class="pill err">Audience: Community / Residents</span>
+  </div>
+</div>
+
+<div class="doc-body">
+
+  <!-- SUMMARY -->
+  <div class="section">
+    <div class="section-label">Overview</div>
+    <h2>Strong foundation, spec compliance gaps</h2>
+    <p>The simulator's data model and interaction logic are solid — scenario switching, what-if toggles, and the LOS calculation engine all work well. The design intent (dark control-center aesthetic) is clear. However, the implementation diverges from the Kinetic Sentinel spec in several structural ways, and the interface assumes a level of technical fluency that community residents may not have. The findings below are prioritised for maximum impact with minimal refactoring.</p>
+  </div>
+
+  <!-- FINDING 1 -->
+  <div class="section">
+    <div class="section-label">Finding 01 — Critical</div>
+    <h2>The "No-Line Rule" is not followed</h2>
+    <p>The spec explicitly prohibits 1px solid borders for layout containment. The current app uses them extensively — on every card, the sidebar, the header, zone counter rows, and what-if group panels. This creates a "wireframe" quality that undercuts the depth the spec is trying to achieve.</p>
+
+    <div class="compare">
+      <div class="compare-side">
+        <div class="compare-label before">Current — Bordered</div>
+        <div class="mock-border-demo">Ruskin Rd / Leyden Rd Ingress</div>
+        <div class="mock-border-demo">Main Rd / Dreyersdal Rd</div>
+        <div class="mock-border-demo">Starke Rd</div>
+        <div style="font-size:11px;color:#475569;margin-top:8px;font-family:'Space Grotesk',sans-serif;">border: 1px solid #ffffff15 everywhere</div>
+      </div>
+      <div class="compare-side">
+        <div class="compare-label after">Recommended — Tonal</div>
+        <div class="mock-tonal-demo">Ruskin Rd / Leyden Rd Ingress</div>
+        <div class="mock-tonal-demo">Main Rd / Dreyersdal Rd</div>
+        <div class="mock-tonal-demo">Starke Rd</div>
+        <div style="font-size:11px;color:#22d3ee88;margin-top:8px;font-family:'Space Grotesk',sans-serif;">background shifts only — no border property</div>
+      </div>
+    </div>
+
+    <div class="findings">
+      <div class="finding">
+        <div class="finding-stripe"></div>
+        <div class="finding-body">
+          <div class="finding-header">
+            <div class="finding-title">Remove all structural border declarations</div>
+            <div class="finding-badge badge-critical">Critical</div>
+          </div>
+          <div class="finding-desc">The spec says: "Boundaries must be defined solely through background color shifts, tonal transitions, or negative space." Currently ~40+ instances of <code style="background:#1e2840;padding:1px 6px;border-radius:3px;font-size:12px;">border: 1px solid</code> exist for layout containment. Only the "Ghost Border" fallback (for inputs) and the left-accent strips on zone counters should remain.</div>
+          <div class="finding-rec">
+            <strong>Recommendation</strong>
+            Replace structural borders with a one-step darker background — e.g. swap <code style="background:#0b1326;padding:1px 5px;border-radius:3px;font-size:12px;">#0f1117</code> cards on a <code style="background:#0b1326;padding:1px 5px;border-radius:3px;font-size:12px;">#0a0e1a</code> sidebar by bumping the card to <code style="background:#0b1326;padding:1px 5px;border-radius:3px;font-size:12px;">surface_container_high (#222a3d)</code> instead. The contrast does the separation work.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINDING 2 -->
+  <div class="section">
+    <div class="section-label">Finding 02 — Critical</div>
+    <h2>Glassmorphism is completely absent</h2>
+    <p>The spec's "Glass & Gradient Rule" defines the visual identity of the product. The HUD overlays, floating status indicators, and the "WHAT IF... ACTIVE" badge should all use the glassmorphism recipe. Currently every element is fully opaque.</p>
+
+    <div class="compare">
+      <div class="compare-side">
+        <div class="compare-label before">Current — Flat opaque badge</div>
+        <div style="background:#7c3aed22;border:1px solid #7c3aed;border-radius:6px;padding:6px 14px;color:#a78bfa;font-size:12px;font-family:'Space Grotesk',sans-serif;display:inline-block;margin-bottom:8px;">⚠ WHAT IF... ACTIVE (2 groups)</div>
+        <div style="font-size:11px;color:#475569;font-family:'Space Grotesk',sans-serif;">Flat fill, solid border — feels like a chip, not a HUD</div>
+      </div>
+      <div class="compare-side">
+        <div class="compare-label after">Recommended — Glass HUD</div>
+        <div class="mock-glass" style="display:inline-block;margin-bottom:8px;">
+          <div style="font-size:10px;letter-spacing:2px;color:#22d3ee;font-family:'Space Grotesk',sans-serif;margin-bottom:4px;text-transform:uppercase;">System Override Active</div>
+          <div style="font-size:12px;color:#dae2fd;">2 what-if groups enabled</div>
+        </div>
+        <div style="font-size:11px;color:#22d3ee88;font-family:'Space Grotesk',sans-serif;">backdrop-filter: blur(24px), 70% opacity surface</div>
+      </div>
+    </div>
+
+    <div class="findings">
+      <div class="finding">
+        <div class="finding-stripe"></div>
+        <div class="finding-body">
+          <div class="finding-header">
+            <div class="finding-title">Apply glassmorphism to floating / overlay elements</div>
+            <div class="finding-badge badge-critical">Critical</div>
+          </div>
+          <div class="finding-desc">The spec's recipe: <code style="background:#1e2840;padding:1px 6px;border-radius:3px;font-size:12px;">surface_container</code> at 60–80% opacity + <code style="background:#1e2840;padding:1px 6px;border-radius:3px;font-size:12px;">backdrop-filter: blur(20–40px)</code>. Apply to: (1) the "WHAT IF ACTIVE" status banner, (2) the "WHAT IF ACTIVE" map overlay text, (3) the intersection tooltip labels on hover, (4) the LOS legend panel on the map.</div>
+          <div class="finding-rec">
+            <strong>Recommendation</strong>
+            <code style="background:#0b1326;padding:2px 6px;border-radius:3px;font-size:12px;display:block;margin-top:4px;">background: rgba(34, 42, 61, 0.72); backdrop-filter: blur(24px);</code>
+            This one CSS change transforms the flat overlays into the layered HUD feel the spec describes. Combine with a very subtle inset shadow: <code style="background:#0b1326;padding:2px 6px;border-radius:3px;font-size:12px;">box-shadow: inset 0 1px 0 rgba(218,226,253,0.06)</code>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINDING 3 -->
+  <div class="section">
+    <div class="section-label">Finding 03 — Critical</div>
+    <h2>Resident audience cannot parse the technical labels</h2>
+    <p>The audience is community residents, not traffic engineers. Labels like "v/c ratio 1.25", "LOS F", "VHT", and "peakMin" are presented without plain-language explanation. The what-if toggle items have good descriptions but they're buried in collapsed accordions.</p>
+
+    <div class="findings">
+      <div class="finding">
+        <div class="finding-stripe"></div>
+        <div class="finding-body">
+          <div class="finding-header">
+            <div class="finding-title">Add plain-English status callouts above the technical data</div>
+            <div class="finding-badge badge-critical">Critical</div>
+          </div>
+          <div class="finding-desc">Before any metric card, give residents a one-line verdict in plain language. "LOS F — this road will be at breaking point" is far more useful to a resident than a raw v/c ratio. The technical data can still show below for anyone who wants it.</div>
+          <div class="finding-rec">
+            <strong>Pattern to implement</strong>
+            Add a "verdict banner" at the top of the sidebar (above Layer 1) that reads, e.g.: <em style="color:#dae2fd">"Under the TIA's own worst-case figures, Ruskin Rd will operate beyond capacity every morning. The TIA never modelled this road."</em> Update it reactively as scenario changes.
+          </div>
+        </div>
+      </div>
+      <div class="finding">
+        <div class="finding-stripe warn"></div>
+        <div class="finding-body">
+          <div class="finding-header">
+            <div class="finding-title">Expand what-if groups by default (or one of them)</div>
+            <div class="finding-badge badge-moderate">Moderate</div>
+          </div>
+          <div class="finding-desc">All three what-if groups are collapsed on load. A resident opening the tool for the first time has no idea these controls exist. At least one group — Road Capacity Realities — should be expanded by default to invite exploration.</div>
+          <div class="finding-rec">
+            <strong>Recommendation</strong>
+            Set <code style="background:#0b1326;padding:2px 6px;border-radius:3px;font-size:12px;">const [expanded, setExpanded] = useState(group.id === 'road_capacity')</code> in <code style="background:#0b1326;padding:2px 6px;border-radius:3px;font-size:12px;">WhatIfGroup</code>. Also add a subtle pulsing dot on collapsed groups that have items not yet seen.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINDING 4 -->
+  <div class="section">
+    <div class="section-label">Finding 04 — Critical</div>
+    <h2>Emoji in the header violates spec + reads as informal</h2>
+    <p>The header uses "🏫 Tokai High School" and the school map marker uses a school emoji. The spec's Director's Note says "every pixel should feel like it was placed by a system that knows more than the user" — emoji undercut that authority, especially for a planning context where credibility matters to residents.</p>
+
+    <div class="findings">
+      <div class="finding">
+        <div class="finding-stripe"></div>
+        <div class="finding-body">
+          <div class="finding-header">
+            <div class="finding-title">Replace emoji with geometric SVG markers and text labels</div>
+            <div class="finding-badge badge-critical">Critical</div>
+          </div>
+          <div class="finding-desc">The header title, the school map marker, and the what-if group icons (🚗, 📋, 🚶) all use emoji. These feel consumer-grade and inconsistent with the control-centre aesthetic.</div>
+          <div class="finding-rec">
+            <strong>Recommendation</strong>
+            For the header: remove the emoji, let the typography carry the weight — <em style="color:#dae2fd">"Tokai High School — Traffic Impact Simulator"</em> in Space Grotesk 700 needs no decoration. For the school map marker: use a filled square with a bold "HS" monogram in primary colour. For what-if icons: use simple SVG glyphs (car outline, clipboard, walker silhouette) at 14px.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINDING 5 -->
+  <div class="section">
+    <div class="section-label">Finding 05 — Critical</div>
+    <h2>The header font uses DM Mono — spec calls for Space Grotesk + Inter</h2>
+    <p>The entire app uses DM Mono as its font family, including the main title and all UI text. The spec defines a two-font system: Space Grotesk for display/headlines (the "big data" indicators), Inter for labels and body. DM Mono is a code-editor font — fine for telemetry readouts, but using it for everything creates a monotone typographic texture.</p>
+
+    <div class="findings">
+      <div class="finding">
+        <div class="finding-stripe warn"></div>
+        <div class="finding-body">
+          <div class="finding-header">
+            <div class="finding-title">Apply the two-font hierarchy from the spec</div>
+            <div class="finding-badge badge-moderate">Moderate</div>
+          </div>
+          <div class="finding-desc">DM Mono should be reserved for: v/c ratios, LOS codes, numeric readouts, code-like labels. Space Grotesk should own: the app title, scenario labels, section headers, zone names. Inter should handle: descriptions, what-if item copy, footer disclaimers.</div>
+          <div class="finding-rec">
+            <strong>Font assignment map</strong><br>
+            <code style="background:#0b1326;padding:2px 6px;border-radius:3px;font-size:12px;">Space Grotesk 700</code> → App title, scenario H/M/L, section eyebrows<br><br>
+            <code style="background:#0b1326;padding:2px 6px;border-radius:3px;font-size:12px;">Inter 400/500</code> → Descriptions, what-if copy, footer<br><br>
+            <code style="background:#0b1326;padding:2px 6px;border-radius:3px;font-size:12px;">DM Mono 400</code> → v/c values, LOS codes, %, queue counts
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINDING 6 -->
+  <div class="section">
+    <div class="section-label">Finding 06 — Moderate</div>
+    <h2>The map has no interactivity or hover states</h2>
+    <p>The SVG road map is static. Clicking on a road segment, intersection marker, or school icon does nothing. For a community audience exploring the map, hover tooltips with plain-English explanations of what each road is and why it matters would significantly improve comprehension.</p>
+
+    <div class="findings">
+      <div class="finding">
+        <div class="finding-stripe warn"></div>
+        <div class="finding-body">
+          <div class="finding-header">
+            <div class="finding-title">Add hover/click tooltips to road segments and intersection markers</div>
+            <div class="finding-badge badge-moderate">Moderate</div>
+          </div>
+          <div class="finding-desc">Each road polyline and intersection circle should respond to hover with a glass HUD tooltip showing: road name, current LOS in plain English, capacity vs load, and whether it was studied in the TIA. This turns the map from a static diagram into an exploration surface.</div>
+          <div class="finding-rec">
+            <strong>Recommendation</strong>
+            Implement a <code style="background:#0b1326;padding:2px 6px;border-radius:3px;font-size:12px;">hoveredSeg</code> state in the parent. On <code style="background:#0b1326;padding:2px 6px;border-radius:3px;font-size:12px;">onMouseEnter</code> per polyline, show a glassmorphic tooltip positioned near the cursor using a <code style="background:#0b1326;padding:2px 6px;border-radius:3px;font-size:12px;">foreignObject</code> or an absolutely-positioned div above the SVG. Include a "Why does this matter?" line written for residents.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINDING 7 -->
+  <div class="section">
+    <div class="section-label">Finding 07 — Moderate</div>
+    <h2>Scenario descriptions are too technical for residents</h2>
+    <p>The scenario description text (e.g. "TIA worst-case — 840 trips, sharp 45-min peak, no reductions applied") is written for planners. Residents need to understand what that means for their morning.</p>
+
+    <div class="findings">
+      <div class="finding">
+        <div class="finding-stripe warn"></div>
+        <div class="finding-body">
+          <div class="finding-header">
+            <div class="finding-title">Add resident-facing scenario summary text</div>
+            <div class="finding-badge badge-moderate">Moderate</div>
+          </div>
+          <div class="finding-desc">Each SCENARIOS entry should include a second description field written in plain English. Display it prominently, with the technical description collapsed or shown in a smaller muted style below.</div>
+          <div class="finding-rec">
+            <strong>Suggested copy additions to SCENARIOS data</strong><br><br>
+            <span style="color:#dae2fd"><strong>H:</strong></span> <em style="color:#94a3b8">"This is the council's own worst-case projection — 840 cars arriving within 45 minutes, with no mitigations. This is the baseline the TIA submitted to council."</em><br><br>
+            <span style="color:#dae2fd"><strong>M:</strong></span> <em style="color:#94a3b8">"A 15% reduction in car trips — possible if a School Travel Plan is in place. Still significantly exceeds road capacity."</em><br><br>
+            <span style="color:#dae2fd"><strong>L:</strong></span> <em style="color:#94a3b8">"A 40% reduction — only achievable with active modal shift. The TIA made no commitment to achieving this."</em>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINDING 8 — POSITIVE -->
+  <div class="section">
+    <div class="section-label">Finding 08 — Positive</div>
+    <h2>What's working well</h2>
+
+    <div class="findings">
+      <div class="finding">
+        <div class="finding-stripe ok"></div>
+        <div class="finding-body">
+          <div class="finding-header">
+            <div class="finding-title">The data model is excellent</div>
+            <div class="finding-badge badge-positive">Keep</div>
+          </div>
+          <div class="finding-desc">The LOS calculation engine, capacity modifiers, and delta tracking in <code style="background:#1e2840;padding:1px 6px;border-radius:3px;font-size:12px;">calcVC()</code> are well-structured and accurate. The what-if system layering on top of the baseline is the right architecture. The SVG road network is also a strong foundation for interactivity.</div>
+        </div>
+      </div>
+      <div class="finding">
+        <div class="finding-stripe ok"></div>
+        <div class="finding-body">
+          <div class="finding-header">
+            <div class="finding-title">Color-coded LOS system is clear and consistent</div>
+            <div class="finding-badge badge-positive">Keep</div>
+          </div>
+          <div class="finding-desc">The green → yellow → orange → red → dark-red gradient for LOS A through F is immediately legible. The glow effect on road segments (shadow polyline + main polyline) gives the map a professional depth that already leans into the spec's neon aesthetic. Keep and strengthen this.</div>
+        </div>
+      </div>
+      <div class="finding">
+        <div class="finding-stripe ok"></div>
+        <div class="finding-body">
+          <div class="finding-header">
+            <div class="finding-title">The left-accent stripe on zone counters is the right pattern</div>
+            <div class="finding-badge badge-positive">Refine</div>
+          </div>
+          <div class="finding-desc">Using a coloured left border as an accent (not a structural border) is spec-compliant. This is the correct way to use colour emphasis in the design system. It should be extended: remove the surrounding container border but keep and intensify the left stripe with a matching subtle glow (<code style="background:#1e2840;padding:1px 6px;border-radius:3px;font-size:12px;">box-shadow: -2px 0 12px color</code>).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRIORITY SUMMARY -->
+  <div class="section">
+    <div class="section-label">Summary — Implementation Priority</div>
+    <h2>Where to start</h2>
+
+    <div class="priority-grid">
+      <div class="priority-item">
+        <div class="priority-num p1">01</div>
+        <div class="priority-title">Remove structural borders</div>
+        <div class="priority-desc">Highest visual impact, one CSS pass. Replace <code style="background:#1e2840;padding:1px 4px;border-radius:3px;font-size:11px;">border: 1px solid</code> with background tonal shifts throughout. ~30 min.</div>
+      </div>
+      <div class="priority-item">
+        <div class="priority-num p1">02</div>
+        <div class="priority-title">Add resident-facing copy</div>
+        <div class="priority-desc">A verdict banner + plain-English scenario text. Transforms this from a planner's tool into a community tool. Pure data change, no layout work.</div>
+      </div>
+      <div class="priority-item">
+        <div class="priority-num p1">03</div>
+        <div class="priority-title">Apply glassmorphism</div>
+        <div class="priority-desc">Two lines of CSS on the WHAT IF badge and map overlay. Instantly delivers the control-room feel the spec promises.</div>
+      </div>
+      <div class="priority-item">
+        <div class="priority-num p2">04</div>
+        <div class="priority-title">Fix font hierarchy</div>
+        <div class="priority-desc">Swap DM Mono out of headlines/descriptions. Keep it for numeric readouts only. Space Grotesk already imported.</div>
+      </div>
+      <div class="priority-item">
+        <div class="priority-num p2">05</div>
+        <div class="priority-title">Remove emoji</div>
+        <div class="priority-desc">Replace header emoji and what-if group icons with SVG glyphs. Replaces the school emoji map marker with a geometric marker.</div>
+      </div>
+      <div class="priority-item">
+        <div class="priority-num p3">06</div>
+        <div class="priority-title">Map interactivity</div>
+        <div class="priority-desc">Hover tooltips on road segments and intersections. Medium effort but high reward for resident comprehension. Do after the above.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLOSING QUOTE -->
+  <div class="section">
+    <div class="section-label">Closing Note</div>
+    <h2>The design system's intent is clear — close the gap</h2>
+    <p>The Kinetic Sentinel spec is well-written and has a strong aesthetic point of view. The implementation just hasn't caught up to it yet. The six changes above are all achievable without touching the data model or layout structure — they're purely visual and copy refinements that would significantly close the gap between what was designed and what was built.</p>
+    <div class="spec-quote">
+      <p>Every pixel should feel like it was placed by a system that knows more than the user. Keep it dark, keep it glowing, and keep it deep.</p>
+      <div class="source">— DESIGN.md Director's Note, Kinetic Sentinel spec</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://agentskills.io/schemas/index/v0.2.0.json",
+  "skills": [
+    {
+      "name": "traffic-simulation",
+      "type": "interactive-tool",
+      "description": "Microscopic traffic simulation of Bergvliet/Tokai road network showing impact of proposed school development on morning drop-off traffic.",
+      "url": "https://traffic.adamson.co.za/"
+    },
+    {
+      "name": "scenario-comparison",
+      "type": "data-analysis",
+      "description": "Side-by-side comparison of baseline vs development traffic scenarios with queue length, delay, and vehicle count statistics.",
+      "url": "https://traffic.adamson.co.za/"
+    }
+  ]
+}

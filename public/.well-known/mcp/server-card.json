@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "serverInfo": {
+    "name": "Traffik Traffic Simulator",
+    "version": "1.0.0",
+    "description": "Interactive microscopic traffic simulation of the proposed Tokai High School development and its impact on Bergvliet streets during morning school drop-off.",
+    "url": "https://traffic.adamson.co.za"
+  },
+  "transport": {
+    "type": "http",
+    "url": "https://traffic.adamson.co.za"
+  },
+  "capabilities": {
+    "tools": false,
+    "resources": false,
+    "prompts": false
+  }
+}

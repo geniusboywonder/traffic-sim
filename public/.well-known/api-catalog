@@ -1,0 +1,19 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://traffic.adamson.co.za/",
+      "service-doc": [
+        {
+          "href": "https://traffic.adamson.co.za/",
+          "type": "text/html"
+        }
+      ],
+      "describedby": [
+        {
+          "href": "https://traffic.adamson.co.za/.well-known/agent-card.json",
+          "type": "application/json"
+        }
+      ]
+    }
+  ]
+}

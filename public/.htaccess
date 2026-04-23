@@ -1,0 +1,24 @@
+# Enable mod_headers for Link response headers
+<IfModule mod_headers.c>
+  # RFC 8288 Link headers for agent discovery
+  # Applied to the homepage only
+  <FilesMatch "^(index\.html)?$">
+    Header set Link "</.well-known/api-catalog>; rel=\"api-catalog\", </.well-known/agent-card.json>; rel=\"https://a2a-protocol.org/agent-card\", </.well-known/agent-skills/index.json>; rel=\"https://agentskills.io/index\", </index.md>; rel=\"alternate\"; type=\"text/markdown\""
+  </FilesMatch>
+
+  # Serve correct MIME types for .well-known JSON files
+  <FilesMatch "\.json$">
+    Header set Content-Type "application/json"
+  </FilesMatch>
+
+  # api-catalog must be application/linkset+json
+  <Files "api-catalog">
+    Header set Content-Type "application/linkset+json"
+  </Files>
+</IfModule>
+
+# Allow .well-known directory to be accessible
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^\.well-known/ - [L]
+</IfModule>

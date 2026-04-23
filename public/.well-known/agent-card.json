@@ -1,0 +1,34 @@
+{
+  "name": "Traffik Traffic Simulator",
+  "version": "1.0.0",
+  "description": "Interactive microscopic traffic simulation visualising what 800 extra cars do to Bergvliet's streets during morning school drop-off at the proposed Tokai High School.",
+  "url": "https://traffic.adamson.co.za",
+  "supportedInterfaces": [
+    {
+      "serviceUrl": "https://traffic.adamson.co.za",
+      "transport": "HTTP"
+    }
+  ],
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "stateTransitionHistory": false
+  },
+  "skills": [
+    {
+      "id": "traffic-simulation",
+      "name": "Traffic Simulation",
+      "description": "Runs and visualises a microscopic traffic simulation of the Bergvliet/Tokai road network, comparing baseline and proposed school development scenarios."
+    },
+    {
+      "id": "scenario-comparison",
+      "name": "Scenario Comparison",
+      "description": "Compare traffic flow, queue lengths, and delay statistics between baseline and development scenarios across multiple corridors."
+    },
+    {
+      "id": "statistics-export",
+      "name": "Statistics Export",
+      "description": "View and export simulation statistics including vehicle counts, average delays, and corridor-level performance metrics."
+    }
+  ]
+}

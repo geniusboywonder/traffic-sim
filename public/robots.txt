@@ -1,0 +1,56 @@
+# robots.txt for https://traffic.adamson.co.za
+# RFC 9309 compliant
+
+User-agent: *
+Allow: /
+Disallow: /src/
+
+# AI crawlers — allowed to index, not to train
+User-agent: GPTBot
+Allow: /
+Disallow: /src/
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /src/
+
+User-agent: Claude-Web
+Allow: /
+Disallow: /src/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /src/
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /src/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /src/
+
+User-agent: Amazonbot
+Allow: /
+Disallow: /src/
+
+User-agent: anthropic-ai
+Allow: /
+Disallow: /src/
+
+User-agent: cohere-ai
+Allow: /
+Disallow: /src/
+
+User-agent: Meta-ExternalAgent
+Allow: /
+Disallow: /src/
+
+# Content Signals — declare AI usage preferences
+# https://contentsignals.org/
+Content-Signal: ai-train=no, search=yes, ai-input=no
+
+Sitemap: https://traffic.adamson.co.za/sitemap.xml
+
+# Markdown version for agents
+# https://traffic.adamson.co.za/index.md

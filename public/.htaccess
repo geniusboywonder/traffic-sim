@@ -17,14 +17,17 @@
   </Files>
 </IfModule>
 
-# Markdown content negotiation — serve index.md when Accept: text/markdown
-AddType text/markdown .md
+<IfModule mod_headers.c>
+  <FilesMatch "\.md$">
+    Header always set Content-Type "text/markdown; charset=UTF-8"
+  </FilesMatch>
+</IfModule>
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
   # Pass .well-known through untouched
   RewriteRule ^\.well-known/ - [L]
-  # Content negotiation: serve markdown to agents that request it
+  # Content negotiation: redirect agents requesting text/markdown to the markdown file
   RewriteCond %{HTTP_ACCEPT} text/markdown
-  RewriteRule ^(index\.html)?$ /index.md [L]
+  RewriteRule ^(index\.html)?$ /index.md [R=302,L]
 </IfModule>

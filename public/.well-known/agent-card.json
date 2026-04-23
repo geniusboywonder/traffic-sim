@@ -5,7 +5,7 @@
   "url": "https://traffic.adamson.co.za",
   "supportedInterfaces": [
     {
-      "serviceUrl": "https://traffic.adamson.co.za",
+      "url": "https://traffic.adamson.co.za",
       "transport": "HTTP"
     }
   ],

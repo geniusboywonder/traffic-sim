@@ -17,8 +17,14 @@
   </Files>
 </IfModule>
 
-# Allow .well-known directory to be accessible
+# Markdown content negotiation — serve index.md when Accept: text/markdown
+AddType text/markdown .md
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
+  # Pass .well-known through untouched
   RewriteRule ^\.well-known/ - [L]
+  # Content negotiation: serve markdown to agents that request it
+  RewriteCond %{HTTP_ACCEPT} text/markdown
+  RewriteRule ^(index\.html)?$ /index.md [L]
 </IfModule>
